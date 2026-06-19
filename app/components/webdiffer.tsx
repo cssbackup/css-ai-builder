@@ -54,7 +54,7 @@ export default function Webdiffer({ onStart }: WebdifferProps) {
         {cards.map((card) => (
           <div
             key={card.id}
-            className="flex flex-col items-center justify-between bg-white border border-gray-300 rounded-2xl py-3 px-8 shadow-xl hover:shadow-md hover:scale-[1.01] transition-all duration-300 text-center min-h-[170px]"
+            className="flex flex-col items-center justify-between bg-white border border-gray-300 rounded-2xl py-3 px-8 shadow-xl hover:shadow-md hover:scale-[1.01] transition-all duration-300 text-center min-h-[170px] 2xl:min-h-[240px]"
           >
             <div className="flex items-center justify-center h-13 w-13 mb-1 rounded-full bg-red-50/40">
               {card.icon}

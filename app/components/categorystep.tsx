@@ -53,11 +53,11 @@ export default function CategoryStep() {
   const active = categories.find((item) => item.id === selected)!;
 
   return (
-    <section className="w-full overflow-hidden rounded-2xl bg-white border border-gray-200 p-3 shadow-[0_2px_16px_rgba(15,23,42,0.10)] sm:p-5 lg:p-2">
-      <div className="mx-auto w-full max-w-5xl">
+    <section className="w-full mx-auto overflow-hidden rounded-2xl border bg-white border-gray-400 shadow-[0_2px_16px_rgba(15,23,42,0.10)] ">
+      <div className="mx-auto md:max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl py-8 2xl:py-10 lg:py-12 md:py-12 sm:py-12 px-6 sm:px-10 ">
         <Stepper currentStep={1} />
 
-        <div className="mt-3 text-center sm:mt-5">
+        <div className="mt-6 text-center 2xl:mt-10 md:mt-8 sm:mt-9">
           <h2 className="text-lg font-bold text-slate-900 sm:text-xl lg:text-2xl">
             Let&apos;s start with your business
           </h2>
@@ -66,10 +66,10 @@ export default function CategoryStep() {
           </p>
         </div>
 
-        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-6">
+        <div className="mt-8 2xl:mt-6 lg:mt-10 md:mt-8 sm:mt-10 grid grid-cols-1 gap-4 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-6">
           <div className="hidden lg:block">
             <div className="rounded-[36px] bg-gradient-to-br from-red-50 to-white p-6">
-              <div className="flex h-full items-center justify-center text-red-500 bg-blue-500">
+              <div className="flex h-full items-center justify-center">
                 <Image
                   src="/business_type.png"
                   alt="bussinesscategory"
@@ -81,7 +81,7 @@ export default function CategoryStep() {
           </div>
 
           <div className="min-w-0">
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 gap-5 sm:gap-3">
               {categories.map((item) => {
                 const Icon = item.icon;
                 const isActive = selected === item.id;
@@ -128,7 +128,7 @@ export default function CategoryStep() {
               })}
             </div>
 
-            <form className="mt-4 space-y-3">
+            <form className="mt-8 2xl:mt-8 lg:mt-10 md:mt-8 sm:mt-8 space-y-6 2xl:space-y-6 lg:space-y-8 md:space-y-6 sm:space-y-6">
               <div>
                 <label className="mb-1 block text-sm font-bold text-slate-950">
                   {active.labels.name}

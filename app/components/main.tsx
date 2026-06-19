@@ -43,8 +43,6 @@ export default function Main() {
     return () => clearTimeout(timeout);
   }, [text, isDeleting, wordIndex, words]);
 
-  
-
   return (
     <div className="w-full h-screen flex flex-col md:justify-center items-center relative">
       <div className="absolute left-0 top-0 h-full w-full max-w-[600px] pointer-events-none">
@@ -70,7 +68,7 @@ export default function Main() {
       {!showOnboarding ? (
         <>
           <div className="w-full text-center flex flex-col gap-3 px-4 z-10">
-            <h1 className="text-4xl sm:text-4xl md:text-6xl lg:text-[60px] font-bold tracking-tight mt-25 lg:mt-10">
+            <h1 className="text-4xl sm:text-4xl md:text-6xl lg:text-[60px] 2xl:text-[95px] font-bold tracking-tight mt-25 lg:mt-10">
               Build Your <br />
               <span className="relative inline-block whitespace-nowrap">
                 <span className="text-[var(--red)]">Website</span>

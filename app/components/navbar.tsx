@@ -32,7 +32,7 @@ export default function Navbar() {
     },
     {
       code: "HI",
-      name: "India",
+      name: "Hindi",
       flag: "https://flagcdn.com/w40/in.png",
     },
   ];
@@ -57,8 +57,8 @@ export default function Navbar() {
             />
           </Link>
 
-          <div className="flex gap-4">
-            <div className="flex items-center gap-40">
+          <div className="flex gap-4 ">
+            <div className="flex items-center gap-30 lg:gap-10 xl:gap-25">
               <div className="hidden h-16 items-center gap-8 lg:flex">
                 {navItems.map((item) => {
                   const isActive = activeItem === item.label;
@@ -84,7 +84,7 @@ export default function Navbar() {
                 })}
               </div>
 
-              <div className="flex items-center gap-4 sm:gap-3">
+              <div className="flex items-center gap-4 sm:gap-3 ">
                 <div className="flex items-center gap-3">
                   <div className="relative inline-block">
                     <button
@@ -154,7 +154,7 @@ export default function Navbar() {
 
                 <Link
                   href="#"
-                  className="hidden cursor-pointer rounded-md bg-red-700 px-6 py-3 font-medium text-white lg:block"
+                  className="hidden cursor-pointer rounded-md bg-red-700 px-6 py-3 font-medium text-white lg:block lg:text-sm"
                   title="Start Now"
                 >
                   Get Started Free
