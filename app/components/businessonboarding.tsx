@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useFooter } from "./footercontext";
 import Categorystep from "./categorystep";
 import CategoryType from "./categorytype";
+import TemplatePreview from "./templatepreview"
 
 const steps: { title: string; subtitle: string }[] = [
   { title: "Category", subtitle: "" },
@@ -37,7 +38,7 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
         <div>
           {step === 0 && <Categorystep />}
           {step === 1 && <CategoryType />}
-          {step === 2 && <div>Design data here</div>}
+          {step === 2 && <TemplatePreview/>}
         </div>
       </div>
 

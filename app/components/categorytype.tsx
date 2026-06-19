@@ -20,12 +20,12 @@ import {
 const types = [
   {
     title: "Business",
-    desc: "Corporate, company or organization",
+    desc: "Grow your business",
     icon: Briefcase,
   },
   {
     title: "Portfolio",
-    desc: "Showcase your work and projects",
+    desc: "Showcase your work",
     icon: FileText,
   },
   {
@@ -35,32 +35,32 @@ const types = [
   },
   {
     title: "Realestate",
-    desc: "Property listings and agents",
+    desc: "List homes for sale",
     icon: Home,
   },
   {
     title: "Education",
-    desc: "Schools, courses, e-learning",
+    desc: "Create online courses",
     icon: GraduationCap,
   },
   {
     title: "Hospitals",
-    desc: "Clinics, doctors, healthcare",
+    desc: "Manage patient care",
     icon: Heart,
   },
   {
     title: "Fashion",
-    desc: "Clothing, boutiques, trends",
+    desc: "Promote fashion brands",
     icon: ShoppingBag,
   },
   {
     title: "Games",
-    desc: "Gaming portals, clans",
+    desc: "Build gaming communities",
     icon: Gamepad2,
   },
   {
     title: "Financial",
-    desc: "Banks, finance, accounting",
+    desc: "Offer financial services",
     icon: Briefcase,
   },
 ];
@@ -97,17 +97,18 @@ export default function Categorystep() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full ">
       <div
         className="
-          mx-auto flex w-full max-w-5xl flex-col
-          rounded-[22px] border border-gray-200 bg-white shadow-sm
-         lg:p-2
-          sm:rounded-[26px] sm:px-6 sm:py-6
-          md:px-8
-          lg:rounded-[28px] lg:px-10
-          max-h-[calc(100dvh-160px)]
-          min-h-0
+          mx-auto flex max-w-4xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl flex-col
+          rounded-[22px] border border-gray-300 bg-white shadow-sm
+          sm:p-10
+          md:p-8
+         lg:p-5
+         xl:p-4
+         2xl:p-10
+        px-4
+        py-6
         "
       >
         <div className="shrink-0 text-center">
@@ -117,21 +118,25 @@ export default function Categorystep() {
               text-[20px] font-bold leading-tight tracking-tight text-slate-950
               min-[375px]:text-[18px]
               sm:text-2xl
-              md:text-2xl
-              lg:text-3xl
+              md:text-[25px]
+              lg:text-[30px]
+              lg:mt-3
+              xl:text-[30px]
+              2xl:mt-6
+              2xl:text-4xl 
             "
           >
             What type of website do you need?
           </h2>
 
-          <p className="mx-auto mt-2 max-w-md text-xs leading-5 text-slate-500 sm:text-sm md:text-base">
+          <p className="mx-auto mt-2 max-w-md text-xs leading-5 text-slate-500 2xl:text-lg text-base sm:text-sm md:text-sm">
             Choose the option that best describes your goal.
           </p>
         </div>
 
-        <div className="mt-4 flex shrink-0 flex-col gap-2 sm:gap-3 md:flex-row md:gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 sm:left-5 sm:h-5 sm:w-5" />
+        <div className="mt-4 lg:mt-3 xl:mt-4 2xl:mt-8 md:mt-6 flex shrink-0 flex-col gap-2 sm:gap-3 md:flex-row md:gap-4">
+          <div className="relative flex-1 flex items-center">
+            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 sm:left-5 sm:h-4 2xl:h-10 sm:w-4" />
 
             <input
               value={search}
@@ -139,10 +144,10 @@ export default function Categorystep() {
               type="text"
               placeholder="Search for a category (e.g., Realestate, Education)..."
               className="
-                h-12 w-full rounded-full border border-slate-100 bg-slate-50
+                h-12 sm:h-13 md:h-15 lg:h-10 2xl:h-14  w-full rounded-full border border-slate-100 bg-slate-50
                 pl-11 pr-11 text-xs text-slate-700 outline-none
                 placeholder:text-slate-700 focus:border-red-200
-                sm:h-14 sm:pl-14 sm:pr-12 sm:text-sm
+                 sm:pl-14 sm:pr-12 sm:text-sm
               "
             />
 
@@ -161,7 +166,7 @@ export default function Categorystep() {
             <button
               type="button"
               onClick={() => setOpen(!open)}
-              className={`flex h-12 w-full items-center justify-between gap-4 rounded-full border px-5 text-xs font-bold cursor-pointer sm:h-14 sm:text-sm md:w-[190px] ${
+              className={`flex h-12 lg:h-10 2xl:h-14 w-full items-center justify-between gap-4 rounded-full border px-5 text-xs font-bold cursor-pointer sm:h-13 md:h-15 sm:text-sm md:w-[190px] ${
                 open
                   ? "border-red-200 bg-red-50 text-red-700"
                   : "border-slate-100 bg-slate-50 text-slate-900"
@@ -216,7 +221,7 @@ export default function Categorystep() {
           </div>
         </div>
 
-        <div className="mt-4 min-h-0 flex-1 overflow-y-auto px-1 pt-2 sm:px-2 sm:pt-3">
+        <div className="mt-3 flex-1 overflow-y-auto px-1 pt-2 sm:px-2 sm:pt-1 2xl:mt-8 xl:mt-3 lg:mt-2 md:mt-6 max-[479px]:max-h-[300px] max-[550px]:max-h-[280px] ">
           <div
             className="
               grid grid-cols-1 gap-3
@@ -235,33 +240,35 @@ export default function Categorystep() {
                   key={item.title}
                   type="button"
                   onClick={() => handleSelect(item.title)}
-                  className={`relative min-h-[116px] cursor-pointer rounded-2xl border p-4 text-left transition hover:border-red-300 sm:min-h-[132px] sm:p-5 ${
+                  className={`relative max-h-[90px] cursor-pointer rounded-2xl border py-2 px-5 text-left transition hover:border-red-300 sm:min-h-[80px] 2xl:py-5 2xl:px-5 sm:py-2 sm:px-4 ${
                     isActive
                       ? "border-red-500 bg-red-50"
-                      : "border-slate-200 bg-white"
+                      : "border-slate-300 bg-white"
                   }`}
                 >
                   {isActive && (
-                    <span className="absolute right-2 top-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white shadow">
+                    <span className="absolute -right-2 -top-1 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white shadow">
                       <Check size={15} />
                     </span>
                   )}
 
-                  <div
-                    className={`mb-3 flex h-9 w-9 items-center justify-center rounded-xl sm:mb-4 sm:h-10 sm:w-10 ${
-                      isActive
-                        ? "bg-red-600 text-white"
-                        : "bg-slate-100 text-slate-600"
-                    }`}
-                  >
-                    <Icon size={19} />
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-sm font-extrabold text-slate-950 sm:text-base lg:text-[14px]">
+                      {item.title}
+                    </h3>
+
+                    <div
+                      className={`flex h-9 w-9 items-center justify-center rounded-xl sm:h-8 sm:w-8 ${
+                        isActive
+                          ? "bg-red-600 text-white"
+                          : "bg-slate-100 text-slate-600"
+                      }`}
+                    >
+                      <Icon size={14} />
+                    </div>
                   </div>
 
-                  <h3 className="text-sm font-extrabold text-slate-950 sm:text-base">
-                    {item.title}
-                  </h3>
-
-                  <p className="mt-1.5 text-xs leading-5 text-slate-500 sm:mt-2 sm:text-sm sm:leading-6">
+                  <p className="mt-1 text-xs leading-5 text-slate-500 sm:mt-0 sm:text-[14px] sm:leading-6">
                     {item.desc}
                   </p>
                 </button>
@@ -312,7 +319,7 @@ function Stepper({ currentStep }: { currentStep: number }) {
                 {isCompleted ? <Check size={12} strokeWidth={3} /> : index + 1}
               </span>
 
-              <span className="truncate">{step}</span>
+              <span className="truncate 2xl:text-md semibold">{step}</span>
             </div>
 
             {index < steps.length - 1 && (

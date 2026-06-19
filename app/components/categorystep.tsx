@@ -53,11 +53,11 @@ export default function CategoryStep() {
   const active = categories.find((item) => item.id === selected)!;
 
   return (
-    <section className="w-full mx-auto overflow-hidden rounded-2xl border bg-white border-gray-400 shadow-[0_2px_16px_rgba(15,23,42,0.10)] ">
-      <div className="mx-auto md:max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl py-8 2xl:py-10 lg:py-12 md:py-12 sm:py-12 px-6 sm:px-10 ">
+    <section className="w-full mx-auto overflow-hidden rounded-2xl border bg-white border-gray-300 shadow-[0_2px_16px_rgba(15,23,42,0.10)] ">
+      <div className="mx-auto md:max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl 2xl:py-10 lg:py-4 md:py-5 sm:py-4 py-6 px-6 sm:px-10 ">
         <Stepper currentStep={1} />
 
-        <div className="mt-6 text-center 2xl:mt-10 md:mt-8 sm:mt-9">
+        <div className="mt-0 text-center 2xl:mt-10 md:mt-4 sm:mt-4">
           <h2 className="text-lg font-bold text-slate-900 sm:text-xl lg:text-2xl">
             Let&apos;s start with your business
           </h2>
@@ -66,22 +66,21 @@ export default function CategoryStep() {
           </p>
         </div>
 
-        <div className="mt-8 2xl:mt-6 lg:mt-10 md:mt-8 sm:mt-10 grid grid-cols-1 gap-4 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-6">
-          <div className="hidden lg:block">
-            <div className="rounded-[36px] bg-gradient-to-br from-red-50 to-white p-6">
-              <div className="flex h-full items-center justify-center">
-                <Image
-                  src="/business_type.png"
-                  alt="bussinesscategory"
-                  width="900"
-                  height="900"
-                />
-              </div>
+        <div className="mt-4 2xl:mt-6 lg:mt-4 md:mt-6 sm:mt-4 grid grid-cols-1 gap-4 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-6">
+          <div className="hidden lg:block ">
+            <div className="rounded h-full bg-gradient-to-br from-red-50 to-white p-2">
+              <Image
+                src="/category_type.png"
+                alt="bussinesscategory"
+                width="300"
+                height="200"
+                className="object-cover rounded-lg"
+              />
             </div>
           </div>
 
           <div className="min-w-0">
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 gap-5 sm:gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
               {categories.map((item) => {
                 const Icon = item.icon;
                 const isActive = selected === item.id;
@@ -92,10 +91,10 @@ export default function CategoryStep() {
                     type="button"
                     onClick={() => setSelected(item.id)}
                     className={[
-                      "relative flex min-h-14 items-center justify-center rounded-xl border px-3 py-2 text-center cursor-pointer transition-all sm:min-h-24 sm:flex-col sm:py-3",
+                      "relative flex min-h-12 items-center justify-center rounded-xl border px-3 py-2 text-center cursor-pointer transition-all sm:min-h-24 sm:flex-col sm:py-3",
                       isActive
                         ? "border-red-600 bg-red-50"
-                        : "border-slate-200 hover:border-slate-300",
+                        : "border-slate-300 hover:border-slate-300",
                     ].join(" ")}
                   >
                     {isActive && (
@@ -128,7 +127,7 @@ export default function CategoryStep() {
               })}
             </div>
 
-            <form className="mt-8 2xl:mt-8 lg:mt-10 md:mt-8 sm:mt-8 space-y-6 2xl:space-y-6 lg:space-y-8 md:space-y-6 sm:space-y-6">
+            <form className="mt-4 2xl:mt-8 lg:mt-4 md:mt-4 sm:mt-5 space-y-4 2xl:space-y-6 lg:space-y-4 md:space-y-4 sm:space-y-4">
               <div>
                 <label className="mb-1 block text-sm font-bold text-slate-950">
                   {active.labels.name}
@@ -136,7 +135,7 @@ export default function CategoryStep() {
                 <input
                   type="text"
                   placeholder={active.labels.namePlaceholder}
-                  className="h-11 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 sm:h-14 sm:px-5"
+                  className="h-11 w-full rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 sm:h-14 sm:px-5"
                 />
               </div>
 
@@ -149,7 +148,7 @@ export default function CategoryStep() {
                   <textarea
                     maxLength={300}
                     placeholder={active.labels.descPlaceholder}
-                    className="h-20 w-full resize-none rounded-xl border border-slate-200 bg-white px-4 py-3 pr-16 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 sm:h-24 sm:px-5 sm:py-4"
+                    className="h-20 w-full resize-none rounded-xl border border-slate-300 bg-white overflow-hidden px-4 py-3 pr-16 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 sm:h-24 sm:px-5 sm:py-4"
                   />
 
                   <span className="absolute bottom-3 right-4 text-xs font-semibold text-slate-400 sm:text-sm">
