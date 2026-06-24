@@ -2,10 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./main.css";
-import Navbar from "./components/navbar";
-import Footer from "./components/footer";
-import { FooterProvider } from "./components/footercontext";
-import FooterWrapper from "./components/footerwrapper";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "CSS AI Builder",
@@ -15,8 +13,6 @@ export const metadata: Metadata = {
   },
 };
 
-const inter = Inter({ subsets: ["latin"] });
-
 export default function RootLayout({
   children,
 }: {
@@ -24,13 +20,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`h-full ${inter.className}`}>
-      <body className="min-h-dvh flex flex-col overflow-x-hidden overflow-y-auto">
-        <Navbar />
-
-        <FooterProvider>
-          {children}
-          <FooterWrapper />
-        </FooterProvider>
+      <body className="min-h-dvh overflow-x-hidden overflow-y-auto">
+        {children}
       </body>
     </html>
   );
