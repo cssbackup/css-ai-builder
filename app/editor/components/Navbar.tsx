@@ -9,13 +9,16 @@ import {
   SwatchBook,
   LaptopMinimal,
   Smartphone,
+  EyeOff,
 } from "lucide-react";
+import { usePreview } from "../layout/src/components/context/PreviewContext";
 
 type HeaderProps = {
   onMenuClick: () => void;
 };
 
 export default function Navbar({ onMenuClick }: HeaderProps) {
+  const { isPreview, togglePreview } = usePreview();
   return (
     <header className="fixed left-0 top-0 z-20 flex h-14 w-full items-center justify-between border-b border-gray-200 px-4">
       <div className="flex justify-between items-center w-full ">
@@ -33,21 +36,22 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
         </div>
 
         <div className="hidden md:flex justify-between items-center gap-50">
-          <div className="flex items-center gap-3 ">
-            <Link href="/">
-              <LaptopMinimal
-                size={38}
-                className="text-gray-500 bg-gray-50 border border-gray-200 py-2 rounded"
-              />
-            </Link>
-            <Link href="/">
-              {" "}
-              <Smartphone
-                size={38}
-                className="text-gray-500 bg-gray-50 border border-gray-200 py-2 rounded"
-              />
-            </Link>
-          </div>
+          {isPreview ? (
+            <div className="flex items-center gap-3 bg-gray-100 px-6 py-1 rounded-full">
+              <Link href="/">
+                <LaptopMinimal
+                  size={28}
+                  className="text-gray-600 py-1 rounded"
+                />
+              </Link>
+              <Link href="/">
+                {" "}
+                <Smartphone size={28} className="text-gray-600 py-1 rounded" />
+              </Link>
+            </div>
+          ) : (
+            " "
+          )}
 
           <nav className="hidden items-center gap-6 p-2 md:flex">
             <Link href="#" className="text-sm flex items-center gap-2">
@@ -58,13 +62,14 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
               <PenTool size="20" className="text-gray-600" />
               Customize
             </Link>
-            <Link
-              href="#"
+            <button
+              type="button"
+              onClick={togglePreview}
               className="px-3 py-2 bg-gray-100 flex items-center gap-2 text-gray-600 rounded-lg text-sm"
             >
-              <Eye size="17" />
+              {isPreview ? <Eye size={17} /> : <EyeOff size={17} />}
               Preview
-            </Link>
+            </button>
             <Link
               href="#"
               className="px-3 py-2 bg-blue-500 flex items-center gap-1 rounded-lg text-white text-sm font-bold"
@@ -75,9 +80,19 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
           </nav>
         </div>
       </div>
-      <button className="md:hidden cursor-pointer" onClick={onMenuClick}>
-        <Menu size={22} />
-      </button>
+      <div className="md:hidden flex gap-4">
+        <button
+          type="button"
+          onClick={togglePreview}
+          className="px-3 py-2 bg-gray-100 flex items-center gap-2 text-gray-600 rounded-lg text-sm"
+        >
+          {isPreview ? <Eye size={17} /> : <EyeOff size={17} />}
+          Preview
+        </button>
+        <button className="cursor-pointer" onClick={onMenuClick}>
+          <Menu size={22} />
+        </button>
+      </div>
     </header>
   );
 }
