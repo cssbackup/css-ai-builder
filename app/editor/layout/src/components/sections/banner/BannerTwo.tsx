@@ -11,12 +11,12 @@ export default function BannerTwo({ data }: SectionProps) {
           <p className="mt-5 text-xl text-(--hero-title)">{data.subtitle}</p>
         )}
 
-        {data.button && (
+        {data.buttons?.[0] && (
           <Link
-            href={data.button.href}
+            href={data.buttons[0].href}
             className="inline-block mt-6 px-6 py-3 bg-(--primary-link-bg) text-(--primary-link-color)"
           >
-            {data.button.label}
+            {data.buttons[0].label}
           </Link>
         )}
       </div>
