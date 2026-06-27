@@ -13,6 +13,8 @@
 body {
     font-family: var(--font-inter); 
 }
+
+
 .btn_red{
     background-color: var(--red);
     color: white;
@@ -57,3 +59,4 @@ body {
 button{
   cursor: pointer;
 }
+

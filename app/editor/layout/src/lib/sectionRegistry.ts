@@ -4,6 +4,8 @@ import HeaderOne from "../components/sections/header/HeaderOne";
 import HeaderTwo from "../components/sections/header/HeaderTwo";
 import BannerOne from "../components/sections/banner/BannerOne";
 import BannerTwo from "../components/sections/banner/BannerTwo";
+import AboutOne from "../components/sections/about/AboutOne";
+import AboutTwo from "../components/sections/about/AboutTwo";
 
 import { SectionProps } from "../types/section";
 
@@ -12,4 +14,6 @@ export const sectionRegistry: Record<string, ComponentType<SectionProps>> = {
   "header-2": HeaderTwo,
   "banner-1": BannerOne,
   "banner-2": BannerTwo,
+  "about-1": AboutOne,
+  "about-2": AboutTwo,
 };

@@ -97,7 +97,7 @@ export default function Sidebar({
 
       <aside
         className={`fixed left-0 top-14 hidden h-[calc(100vh-3.5rem)] border-r border-gray-200 bg-white transition-all duration-300 md:block ${
-          collapsed ? "w-14" : "w-50"
+          collapsed ? "w-12" : "w-40"
         }`}
       >
         <SidebarContent collapsed={collapsed} />
@@ -189,7 +189,7 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
       {!collapsed && activeItem?.children && (
         <div
           style={{ top: dropdownTop }}
-          className="absolute right-0 z-50 w-60 border border-gray-300 bg-white rounded p-3 shadow-md md:-right-55 md:w-55"
+          className="absolute right-0 z-50 w-52 border border-gray-300 bg-white rounded p-3 shadow-md md:-right-48 md:w-48"
         >
           <button
             onClick={() => setOpenItem(null)}

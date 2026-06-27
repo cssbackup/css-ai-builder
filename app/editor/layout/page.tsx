@@ -16,6 +16,9 @@ type SectionItem = {
   data: Record<string, unknown>;
 };
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
 export default function Page() {
   return <EditorPage />;
 }
@@ -58,11 +61,12 @@ function EditorPage() {
     <main style={template.variables as React.CSSProperties}>
       {sections.map((section) => {
         const Component = sectionRegistry[section.variant];
+        const defaultVariant = `${section.type}-1`;
+        const variantData =
+          section.data?.[section.variant] ?? section.data?.[defaultVariant];
 
         const sectionData = (
-          section.type === "header"
-            ? (section.data?.[section.variant] ?? section.data?.["header-1"])
-            : section.data
+          isRecord(variantData) ? variantData : section.data
         ) as SectionData;
 
         if (!Component) return null;

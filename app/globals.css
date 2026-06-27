@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+.font-agrandir-bolt {
+  font-family: var(--font-agrandir-bolt), sans-serif;
+}

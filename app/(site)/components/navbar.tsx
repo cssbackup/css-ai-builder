@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -43,7 +42,7 @@ export default function Navbar() {
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
 
   return (
-    <nav className="fixed top-0 z-10 w-full bg-white shadow-sm">
+    <nav className="fixed top-0 z-30 w-full bg-white shadow-sm">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex shrink-0 items-center">
@@ -113,7 +112,7 @@ export default function Navbar() {
                     </button>
 
                     {languageOpen && (
-                      <div className="absolute left-0 top-full z-50 mt-2 w-[140px] rounded-2xl bg-white overflow-hidden  shadow-xl ring-1 ring-gray-100">
+                      <div className="absolute left-0 top-full z-50 mt-2 w-35 rounded-2xl bg-white overflow-hidden  shadow-xl ring-1 ring-gray-100">
                         {languages.map((language) => (
                           <button
                             key={language.code}

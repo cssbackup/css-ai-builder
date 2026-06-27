@@ -2,14 +2,24 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, ChevronRight, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { SectionProps } from "./../../../types/section";
 
 export default function HeaderOne({ data }: SectionProps) {
   const [open, setOpen] = useState(false);
+  const headerSolidColor = data.headerBackgroundColor ?? "var(--header-bg)";
+  const headerGradientColor =
+    data.headerGradientColor ?? "var(--blue-bg, #0668ff)";
+  const headerBackground =
+    data.headerBackgroundType === "gradient"
+      ? `linear-gradient(90deg, ${headerSolidColor}, ${headerGradientColor})`
+      : headerSolidColor;
 
   return (
-    <header className="relative w-full bg-(--header-bg) px-4">
+    <header
+      className="relative w-full px-4"
+      style={{ background: headerBackground }}
+    >
       <div className="mx-auto flex h-16 w-full items-center justify-between gap-4">
         <Link
           href="/"
@@ -60,15 +70,24 @@ export default function HeaderOne({ data }: SectionProps) {
 
         {!!data.buttons?.length && (
           <div className="hidden items-center gap-2 md:flex">
-            {data.buttons.map((button) => (
-              <Link
-                key={button.label}
-                href={button.href}
-                className="flex items-center gap-1 rounded bg-(--primary-link-bg) px-3 py-2 text-sm font-semibold text-(--primary-link-color)"
-              >
-                {button.label}
-              </Link>
-            ))}
+            {data.buttons.map((button, index) => {
+              const variant =
+                button.variant || (index === 0 ? "primary" : "secondary");
+
+              return (
+                <Link
+                  key={button.label}
+                  href={button.href}
+                  className={`flex items-center rounded-sm gap-1 px-3 py-2 text-sm font-semibold ${
+                    variant === "primary"
+                      ? "bg-(--primary-link-bg) text-(--primary-link-color)"
+                      : "bg-(--secondary-link-bg) text-white"
+                  }`}
+                >
+                  {button.label}
+                </Link>
+              );
+            })}
           </div>
         )}
 
@@ -84,7 +103,10 @@ export default function HeaderOne({ data }: SectionProps) {
       </div>
 
       {open && (
-        <div className="absolute left-0 top-16 z-[1000] w-full border-t bg-(--header-bg) px-4 py-4 shadow-lg md:hidden">
+        <div
+          className="absolute left-0 top-16 z-[1000] w-full border-t px-4 py-4 shadow-lg md:hidden"
+          style={{ background: headerBackground }}
+        >
           <nav className="flex flex-col gap-3">
             {data.menu?.map((item) => {
               const hasDropdown = !!item.children?.length;

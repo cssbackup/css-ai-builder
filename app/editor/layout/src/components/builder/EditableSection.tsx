@@ -20,7 +20,7 @@ export default function EditableSection({
   return (
     <div className="group relative">
       {!isPreview && (
-        <div className="absolute inset-0 z-20 hidden bg-black/10 backdrop-blur-xs group-hover:flex items-center justify-center">
+        <div className="absolute inset-0 z-20 hidden bg-black/10 backdrop-blur-[1px] group-hover:flex items-center justify-center">
           <button
             type="button"
             onClick={onEdit}

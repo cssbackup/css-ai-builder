@@ -5,8 +5,19 @@ import { Menu } from "lucide-react";
 import { SectionProps } from "./../../../types/section";
 
 export default function HeaderTwo({ data }: SectionProps) {
+  const headerSolidColor = data.headerBackgroundColor ?? "var(--header-bg)";
+  const headerGradientColor =
+    data.headerGradientColor ?? "var(--blue-bg, #0668ff)";
+  const headerBackground =
+    data.headerBackgroundType === "gradient"
+      ? `linear-gradient(90deg, ${headerSolidColor}, ${headerGradientColor})`
+      : headerSolidColor;
+
   return (
-    <header className="flex h-16 w-full items-center bg-blue-400 px-4">
+    <header
+      className="flex h-16 w-full items-center px-4"
+      style={{ background: headerBackground }}
+    >
       <div className="flex w-full items-center justify-between gap-4">
         <Link
           href="/"

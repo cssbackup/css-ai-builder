@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { agrandirBolt } from "./fonts";
 import "./globals.css";
 import "./main.css";
 
@@ -19,7 +20,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`h-full ${inter.className}`}>
+    <html
+      lang="en"
+      className={`h-full ${inter.className} ${agrandirBolt.variable}`}
+    >
       <body className="min-h-dvh overflow-x-hidden overflow-y-auto">
         {children}
       </body>
