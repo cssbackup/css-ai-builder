@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { SectionProps } from "./../../../types/section";
+import { agrandirBolt } from "@/app/fonts";
 
 export default function BannerOne({ data }: SectionProps) {
   return (
@@ -27,7 +28,9 @@ export default function BannerOne({ data }: SectionProps) {
             </p>
           )}
 
-          <h1 className="text-3xl font-semibold leading-tight text-(--primary-title-text) lg:text-5xl">
+          <h1
+            className={`${agrandirBolt.className} text-3xl font-semibold leading-tight text-(--primary-title-text) lg:text-5xl`}
+          >
             {data.title}
           </h1>
 

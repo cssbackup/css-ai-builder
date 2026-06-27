@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { SectionProps } from "./../../../types/section";
+import { generalSansMedium } from "@/app/fonts";
 
 export default function HeaderOne({ data }: SectionProps) {
   const [open, setOpen] = useState(false);
@@ -78,7 +79,7 @@ export default function HeaderOne({ data }: SectionProps) {
                 <Link
                   key={button.label}
                   href={button.href}
-                  className={`flex items-center rounded-sm gap-1 px-3 py-2 text-sm font-semibold ${
+                  className={`flex items-center rounded-sm gap-1 px-3 py-2 text-sm font-medium ${
                     variant === "primary"
                       ? "bg-(--primary-link-bg) text-(--primary-link-color)"
                       : "bg-(--secondary-link-bg) text-white"
