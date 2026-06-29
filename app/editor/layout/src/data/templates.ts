@@ -21,12 +21,12 @@ export const templates = [
       "--blue-bg":"#0668ff",
       "--lightcream-bg":"#fbfaf6"
     },
-    allowedSections: {
-      header: ["header-1", "header-2"],
-      banner: ["banner-1", "banner-2"],
-      about: ["about-1", "about-2"],
-      product: ["product-1"],
-    },
+      allowedSections: {
+        header: ["header-1", "header-2"],
+        banner: ["banner-1", "banner-2"],
+        about: ["about-1", "about-2"],
+        product: ["product-1", "product-2", "product-3"],
+      },
   }, 
   {
     id: "template-2",

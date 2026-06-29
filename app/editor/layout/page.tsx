@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { templates } from "./src/data/templates";
 import { selectedConfig } from "./src/data/selectedConfig";
 import { sectionRegistry } from "./src/lib/sectionRegistry";
@@ -19,6 +19,9 @@ type SectionItem = {
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
+const formatSectionName = (sectionType: string) =>
+  sectionType.charAt(0).toUpperCase() + sectionType.slice(1);
+
 export default function Page() {
   return <EditorPage />;
 }
@@ -33,6 +36,19 @@ function EditorPage() {
   );
 
   const [editingSection, setEditingSection] = useState<string | null>(null);
+  const [savedToastSection, setSavedToastSection] = useState<string | null>(
+    null,
+  );
+
+  useEffect(() => {
+    if (!savedToastSection) return;
+
+    const timeout = window.setTimeout(() => {
+      setSavedToastSection(null);
+    }, 2400);
+
+    return () => window.clearTimeout(timeout);
+  }, [savedToastSection]);
 
   if (!template) return null;
 
@@ -55,6 +71,11 @@ function EditorPage() {
           : section,
       ),
     );
+  };
+
+  const handleSectionSave = (sectionType: string) => {
+    setEditingSection(null);
+    setSavedToastSection(sectionType);
   };
 
   return (
@@ -87,9 +108,21 @@ function EditorPage() {
           sectionType={editingSection}
           sections={sections}
           onClose={() => setEditingSection(null)}
+          onSave={handleSectionSave}
           onSelectVariant={updateSectionVariant}
           onUpdateSectionData={updateSectionData}
         />
+      )}
+
+      {savedToastSection && (
+        <div
+          key={savedToastSection}
+          className="fixed bottom-3 left-1/2 z-[10000] w-[min(92vw,300px)] -translate-x-1/2 rounded-[22px] border border-gray-500 bg-blue-600 px-1 py-3 text-center text-lg font-medium text-white shadow-[0_18px_45px_rgba(15,23,42,0.12)]"
+          role="status"
+          aria-live="polite"
+        >
+          {formatSectionName(savedToastSection)} changes saved
+        </div>
       )}
     </main>
   );

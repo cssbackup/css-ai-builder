@@ -1,6 +1,6 @@
-import Navbar from "./components/navbar";
-import { FooterProvider } from "./components/footercontext";
-import FooterWrapper from "./components/footerwrapper";
+import Navbar from "../../components/navbar";
+import { FooterProvider } from "../../components/footercontext";
+import FooterWrapper from "../..//components/footerwrapper";
 
 export default function SiteLayout({
   children,

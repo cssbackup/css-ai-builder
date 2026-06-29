@@ -33,6 +33,15 @@ export type ProductSlideData = {
   button?: ButtonData;
 };
 
+export type ProductCardData = {
+  title: string;
+  category: string;
+  desc: string;
+  image: string;
+  alt?: string;
+  imageTitle?: string;
+};
+
 export type SectionData = {
   logo?: string;
   menu?: MenuItem[];
@@ -60,8 +69,6 @@ export type SectionData = {
   buttonColor?: string;
 
   length?: number;
-
-  /* Add only these */
   sideImage?: string;
   sideImageTitle?: string;
   philosophyTitle?: string;
@@ -76,6 +83,8 @@ export type SectionData = {
   productTotalPrice?: string;
   productShippingText?: string;
   productSlides?: ProductSlideData[];
+  productSectionTitle?: string;
+  productItems?: ProductCardData[];
 };
 
 export type SectionProps = {

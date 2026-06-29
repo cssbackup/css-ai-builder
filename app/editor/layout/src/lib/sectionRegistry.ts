@@ -7,6 +7,8 @@ import BannerTwo from "../components/sections/banner/BannerTwo";
 import AboutOne from "../components/sections/about/AboutOne";
 import AboutTwo from "../components/sections/about/AboutTwo";
 import ProductOne from "../components/sections/product/ProductOne";
+import ProductTwo from "../components/sections/product/ProductTwo";
+import ProductThree from "../components/sections/product/ProductThree";
 
 import { SectionProps } from "../types/section";
 
@@ -18,4 +20,6 @@ export const sectionRegistry: Record<string, ComponentType<SectionProps>> = {
   "about-1": AboutOne,
   "about-2": AboutTwo,
   "product-1": ProductOne,
+  "product-2": ProductTwo,
+  "product-3": ProductThree,
 };

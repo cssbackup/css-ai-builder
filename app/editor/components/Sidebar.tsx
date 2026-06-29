@@ -78,7 +78,7 @@ export default function Sidebar({
   return (
     <>
       {mobileOpen && (
-        <div className="fixed inset-0 z-20 bg-black/30 md:hidden">
+        <div className="fixed inset-0 z-50 bg-black/30 md:hidden">
           <aside className="relative h-full w-64 border-r border-black bg-white">
             <div className="flex h-14 items-center justify-between border-b border-black px-4">
               <span className="underline">Menu</span>
@@ -96,7 +96,7 @@ export default function Sidebar({
       )}
 
       <aside
-        className={`fixed left-0 top-14 hidden h-[calc(100vh-3.5rem)] border-r border-gray-200 bg-white transition-all duration-300 md:block ${
+        className={`fixed left-0 top-14 z-40 hidden h-[calc(100vh-3.5rem)] overflow-visible border-r border-gray-200 bg-white transition-all duration-300 md:block ${
           collapsed ? "w-12" : "w-40"
         }`}
       >
@@ -123,7 +123,7 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
   const activeItem = sidebarItems.find((item) => item.label === openItem);
 
   return (
-    <div className="relative flex h-full flex-col p-2 ">
+    <div className="relative flex h-full flex-col overflow-visible p-2">
       <div className="space-y-2 h-full relative pt-2">
         {sidebarItems.map((item) => {
           const Icon = item.icon;
@@ -138,6 +138,8 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
                   const buttonTop = e.currentTarget.offsetTop;
                   setDropdownTop(buttonTop);
                   setOpenItem(openItem === item.label ? null : item.label);
+                } else {
+                  setOpenItem(null);
                 }
               }}
               className={`group flex w-full cursor-pointer items-center gap-3 rounded-md px-2 py-2 text-left transition-colors ${
@@ -186,26 +188,26 @@ function SidebarContent({ collapsed }: { collapsed: boolean }) {
         })}
       </div>
 
-      {!collapsed && activeItem?.children && (
+      {activeItem?.children && (
         <div
           style={{ top: dropdownTop }}
-          className="absolute right-0 z-50 w-52 border border-gray-300 bg-white rounded p-3 shadow-md md:-right-48 md:w-48"
+          className="absolute left-full z-50 ml-2 w-52 rounded border border-gray-300 bg-white p-2 shadow-xl md:w-48"
         >
           <button
             onClick={() => setOpenItem(null)}
-            className="absolute right-2 top-1 mb-2 cursor-pointer"
+            className="absolute right-1 top-1 inline-block cursor-pointer"
           >
             <X size={18} />
           </button>
 
-          <div className="space-y-3">
+          <div className="space-y-1">
             {activeItem.children.map((child, index) => {
               const Icon = child.icon;
 
               return (
                 <button
                   key={`${child.label}-${index}`}
-                  className="flex w-full cursor-pointer items-center gap-5 rounded-md bg-gray-50 px-2 py-2 text-left hover:bg-gray-200"
+                  className="flex w-full cursor-pointer items-center gap-2 rounded-md bg-gray-50/50 px-2 py-2 text-left hover:bg-gray-200"
                 >
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full">
                     <Icon size={15} />

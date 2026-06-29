@@ -62,7 +62,7 @@ export default function HeaderOne({ data }: SectionProps) {
                         </Link>
                       ))}
                     </div>
-                  </div>
+                  </div> 
                 )}
               </div>
             );

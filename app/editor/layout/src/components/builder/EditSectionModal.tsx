@@ -25,6 +25,7 @@ type EditSectionModalProps = {
   sectionType: string;
   sections: SectionItem[];
   onClose: () => void;
+  onSave: (sectionType: string) => void;
   onSelectVariant: (type: string, variant: string) => void;
   onUpdateSectionData: (type: string, newData: Record<string, unknown>) => void;
 };
@@ -44,6 +45,12 @@ const aboutLayouts = [
   { id: "about-2", name: "About 2" },
 ];
 
+const productLayouts = [
+  { id: "product-1", name: "Product 1" },
+  { id: "product-2", name: "Product 2" },
+  { id: "product-3", name: "Product 3" },
+];
+
 const MAX_MENU_LINKS = 7;
 
 const sidebarItems = [
@@ -53,6 +60,7 @@ const sidebarItems = [
   "Banner Layout",
   "Header Buttons",
   "About Layout",
+  "Product Layout",
   "Social Icons",
   "Color Settings",
 ];
@@ -61,6 +69,7 @@ export default function EditSectionModal({
   sectionType,
   sections,
   onClose,
+  onSave,
   onSelectVariant,
   onUpdateSectionData,
 }: EditSectionModalProps) {
@@ -69,17 +78,23 @@ export default function EditSectionModal({
       ? "Banner Layout"
       : sectionType === "about"
         ? "About Layout"
-        : "Header Layout",
+        : sectionType === "product"
+          ? "Product Layout"
+          : "Header Layout",
   );
   const [colorPanelOpen, setColorPanelOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+  const [lastChangedSection, setLastChangedSection] = useState(sectionType);
 
   const activeSectionType =
     activeTab === "Banner Layout"
       ? "banner"
       : activeTab === "About Layout"
         ? "about"
-        : "header";
+        : activeTab === "Product Layout"
+          ? "product"
+          : "header";
   const currentSection = sections.find(
     (item) => item.type === activeSectionType,
   );
@@ -114,6 +129,8 @@ export default function EditSectionModal({
   const updateActiveHeaderData = (newData: Record<string, unknown>) => {
     if (!currentSection || !activeHeaderData) return;
 
+    setHasChanges(true);
+    setLastChangedSection(activeSectionType);
     onUpdateSectionData(activeSectionType, {
       ...currentSection.data,
       [activeVariant]: {
@@ -131,7 +148,22 @@ export default function EditSectionModal({
   const selectSectionVariant = (variant: string) => {
     if (!variant.startsWith(`${activeSectionType}-`)) return;
 
+    if (currentSection?.variant !== variant) {
+      setHasChanges(true);
+      setLastChangedSection(activeSectionType);
+    }
+
     onSelectVariant(activeSectionType, variant);
+    onSave(activeSectionType);
+  };
+
+  const handleDone = () => {
+    if (hasChanges) {
+      onSave(lastChangedSection);
+      return;
+    }
+
+    onClose();
   };
 
   const updateMenuItem = (
@@ -570,6 +602,72 @@ export default function EditSectionModal({
               </div>
             )}
 
+            {activeSectionType === "product" &&
+              activeTab === "Product Layout" && (
+                <div className="space-y-4">
+                  {productLayouts.map((layout) => {
+                    const isActive = currentSection?.variant === layout.id;
+
+                    return (
+                      <button
+                        key={layout.id}
+                        type="button"
+                        onClick={() => selectSectionVariant(layout.id)}
+                        className={`w-full overflow-hidden rounded-2xl border bg-white text-left ${
+                          isActive ? "border-gray-400" : "border-gray-200"
+                        }`}
+                      >
+                        <div className="h-32 bg-gray-100">
+                          {layout.id === "product-1" && (
+                            <div className="grid h-full grid-cols-[1fr_1.4fr_1fr] items-center gap-3 bg-blue-50 px-5">
+                              <div className="space-y-2">
+                                <div className="h-4 w-20 rounded bg-slate-900" />
+                                <div className="h-2 w-16 rounded bg-slate-500" />
+                                <div className="mt-4 h-16 rounded bg-white shadow-sm" />
+                              </div>
+                              <div className="mx-auto h-24 w-24 rounded-full bg-slate-300" />
+                              <div className="space-y-2">
+                                <div className="h-4 w-24 rounded bg-slate-900" />
+                                <div className="h-2 w-full rounded bg-slate-400" />
+                                <div className="h-2 w-4/5 rounded bg-slate-400" />
+                              </div>
+                            </div>
+                          )}
+
+                          {layout.id === "product-2" && (
+                            <div className="h-full bg-sky-100 p-4">
+                              <div className="mx-auto mb-3 h-4 w-32 rounded bg-slate-900" />
+                              <div className="grid h-20 grid-cols-3 gap-3">
+                                <div className="rounded-lg border border-slate-400 bg-sky-50" />
+                                <div className="rounded-lg border border-slate-400 bg-sky-50" />
+                                <div className="rounded-lg border border-slate-400 bg-sky-50" />
+                              </div>
+                            </div>
+                          )}
+
+                          {layout.id === "product-3" && (
+                            <div className="grid h-full grid-cols-[1fr_1.1fr] gap-4 bg-[#0d1f2a] p-4">
+                              <div className="space-y-2">
+                                <div className="h-2 w-16 rounded bg-blue-200" />
+                                <div className="h-5 w-full rounded bg-white" />
+                                <div className="h-5 w-4/5 rounded bg-white" />
+                                <div className="mt-3 h-3 w-24 rounded bg-blue-600" />
+                              </div>
+                              <div className="grid grid-cols-2 gap-2">
+                                <div className="rounded-lg bg-white/25" />
+                                <div className="rounded-lg bg-white/25" />
+                                <div className="rounded-lg bg-white/25" />
+                                <div className="rounded-lg bg-white/25" />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
             {activeSectionType === "header" &&
               activeTab === "Navigation Menu" && (
                 <div className="space-y-4">
@@ -729,7 +827,7 @@ export default function EditSectionModal({
 
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleDone}
             className="rounded-full border bg-white px-5 py-2 text-sm font-semibold text-green-700 shadow-sm"
           >
             Done
