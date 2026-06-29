@@ -20,6 +20,7 @@ type SectionItem = {
 };
 
 type HeaderBackgroundType = "solid" | "gradient";
+type FooterBackgroundType = "solid" | "gradient";
 
 type EditSectionModalProps = {
   sectionType: string;
@@ -51,6 +52,8 @@ const productLayouts = [
   { id: "product-3", name: "Product 3" },
 ];
 
+const footerLayouts = [{ id: "footer-1", name: "Footer 1" }];
+
 const MAX_MENU_LINKS = 7;
 
 const sidebarItems = [
@@ -61,6 +64,7 @@ const sidebarItems = [
   "Header Buttons",
   "About Layout",
   "Product Layout",
+  "Footer Layout",
   "Social Icons",
   "Color Settings",
 ];
@@ -80,7 +84,9 @@ export default function EditSectionModal({
         ? "About Layout"
         : sectionType === "product"
           ? "Product Layout"
-          : "Header Layout",
+          : sectionType === "footer"
+            ? "Footer Layout"
+            : "Header Layout",
   );
   const [colorPanelOpen, setColorPanelOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -94,7 +100,9 @@ export default function EditSectionModal({
         ? "about"
         : activeTab === "Product Layout"
           ? "product"
-          : "header";
+          : activeTab === "Footer Layout"
+            ? "footer"
+            : "header";
   const currentSection = sections.find(
     (item) => item.type === activeSectionType,
   );
@@ -126,6 +134,23 @@ export default function EditSectionModal({
       ? `linear-gradient(90deg, ${headerSolidColor}, ${headerGradientColor})`
       : headerSolidColor;
 
+  const activeFooterData = currentSection?.data?.[activeVariant] as
+    | {
+        footerBackgroundType?: FooterBackgroundType;
+        footerBackgroundColor?: string;
+        footerGradientColor?: string;
+      }
+    | undefined;
+  const footerBackgroundType =
+    activeFooterData?.footerBackgroundType ?? "solid";
+  const footerSolidColor = activeFooterData?.footerBackgroundColor ?? "#0d1f2a";
+  const footerGradientColor =
+    activeFooterData?.footerGradientColor ?? "#1d4ed8";
+  const footerPreviewBackground =
+    footerBackgroundType === "gradient"
+      ? `linear-gradient(90deg, ${footerSolidColor}, ${footerGradientColor})`
+      : footerSolidColor;
+
   const updateActiveHeaderData = (newData: Record<string, unknown>) => {
     if (!currentSection || !activeHeaderData) return;
 
@@ -135,6 +160,20 @@ export default function EditSectionModal({
       ...currentSection.data,
       [activeVariant]: {
         ...activeHeaderData,
+        ...newData,
+      },
+    });
+  };
+
+  const updateActiveFooterData = (newData: Record<string, unknown>) => {
+    if (!currentSection || !activeFooterData) return;
+
+    setHasChanges(true);
+    setLastChangedSection(activeSectionType);
+    onUpdateSectionData(activeSectionType, {
+      ...currentSection.data,
+      [activeVariant]: {
+        ...activeFooterData,
         ...newData,
       },
     });
@@ -203,6 +242,19 @@ export default function EditSectionModal({
 
   const updateHeaderGradientColor = (color: string) => {
     updateActiveHeaderData({ headerGradientColor: color });
+  };
+
+  const updateFooterBackgroundType = (type: FooterBackgroundType) => {
+    setColorPanelOpen(type === "gradient");
+    updateActiveFooterData({ footerBackgroundType: type });
+  };
+
+  const updateFooterSolidColor = (color: string) => {
+    updateActiveFooterData({ footerBackgroundColor: color });
+  };
+
+  const updateFooterGradientColor = (color: string) => {
+    updateActiveFooterData({ footerGradientColor: color });
   };
 
   const addDropdownItem = (menuIndex: number) => {
@@ -450,6 +502,106 @@ export default function EditSectionModal({
                     )}
                   </div>
                 )}
+
+              {activeSectionType === "footer" &&
+                activeTab === "Footer Layout" && (
+                  <div className="relative flex w-full flex-wrap items-center gap-3 sm:w-auto sm:shrink-0 sm:gap-5">
+                    {footerBackgroundType === "solid" ? (
+                      <label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-gray-950">
+                        Change color
+                        <span
+                          className="h-5 w-5 rounded-full border-2 border-gray-400"
+                          style={{ background: footerSolidColor }}
+                        />
+                        <input
+                          type="color"
+                          value={footerSolidColor}
+                          onChange={(event) =>
+                            updateFooterSolidColor(event.target.value)
+                          }
+                          className="h-8 w-8 cursor-pointer rounded border-0 bg-transparent p-0"
+                          aria-label="Footer solid color"
+                        />
+                      </label>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setColorPanelOpen((open) => !open)}
+                        className="flex items-center gap-2 text-sm font-semibold text-gray-950"
+                      >
+                        Change color
+                        <span
+                          className="h-5 w-10 rounded-full border-2 border-gray-400"
+                          style={{ background: footerPreviewBackground }}
+                        />
+                      </button>
+                    )}
+
+                    {(["solid", "gradient"] as const).map((type) => {
+                      const isActive = footerBackgroundType === type;
+
+                      return (
+                        <button
+                          key={type}
+                          type="button"
+                          onClick={() => updateFooterBackgroundType(type)}
+                          className={`min-w-24 rounded-lg border px-5 py-1.5 text-sm font-semibold capitalize text-gray-950 transition ${
+                            isActive
+                              ? "border-gray-300 bg-white shadow-sm"
+                              : "border-gray-500 bg-transparent hover:bg-white"
+                          }`}
+                        >
+                          {type}
+                        </button>
+                      );
+                    })}
+
+                    {footerBackgroundType === "gradient" && colorPanelOpen && (
+                      <div className="absolute right-0 top-11 z-20 grid w-72 grid-cols-2 gap-6 rounded-xl border border-gray-300 bg-white p-4 pt-7 shadow-xl">
+                        <button
+                          type="button"
+                          onClick={() => setColorPanelOpen(false)}
+                          className="absolute right-3 top-2 rounded-full p-1 text-gray-950 hover:bg-gray-100"
+                          aria-label="Close footer gradient color picker"
+                        >
+                          <X size={18} />
+                        </button>
+
+                        <label className="space-y-4 text-sm font-semibold text-gray-950">
+                          <span className="underline">Left Side</span>
+                          <span className="flex items-center justify-between gap-3">
+                            Color
+                            <input
+                              type="color"
+                              value={footerSolidColor}
+                              onChange={(event) =>
+                                updateFooterSolidColor(event.target.value)
+                              }
+                              className="h-9 w-9 cursor-pointer rounded border-0 bg-transparent p-0"
+                              aria-label="Footer gradient left color"
+                            />
+                          </span>
+                        </label>
+
+                        <label className="space-y-4 text-sm font-semibold text-gray-950">
+                          <span className="underline">Right Side</span>
+                          <span className="flex items-center justify-between gap-3">
+                            Color
+                            <input
+                              type="color"
+                              value={footerGradientColor}
+                              onChange={(event) =>
+                                updateFooterGradientColor(event.target.value)
+                              }
+                              className="h-9 w-9 cursor-pointer rounded border-0 bg-transparent p-0"
+                              aria-label="Footer gradient right color"
+                            />
+                          </span>
+                        </label>
+                      </div>
+                    )}
+                  </div>
+                )}
             </div>
             {activeSectionType === "header" &&
               activeTab === "Header Layout" && (
@@ -661,6 +813,50 @@ export default function EditSectionModal({
                               </div>
                             </div>
                           )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+            {activeSectionType === "footer" &&
+              activeTab === "Footer Layout" && (
+                <div className="space-y-4">
+                  {footerLayouts.map((layout) => {
+                    const isActive = currentSection?.variant === layout.id;
+
+                    return (
+                      <button
+                        key={layout.id}
+                        type="button"
+                        onClick={() => selectSectionVariant(layout.id)}
+                        className={`w-full overflow-hidden rounded-2xl border bg-white text-left ${
+                          isActive ? "border-gray-400" : "border-gray-200"
+                        }`}
+                      >
+                        <div
+                          className="grid h-32 grid-cols-[1.2fr_1fr_1fr_1fr] gap-4 p-4"
+                          style={{ background: footerPreviewBackground }}
+                        >
+                          <div className="space-y-2">
+                            <div className="h-4 w-20 rounded bg-white" />
+                            <div className="h-2 w-full rounded bg-white/60" />
+                            <div className="h-2 w-4/5 rounded bg-white/60" />
+                            <div className="mt-4 flex gap-2">
+                              <div className="h-5 w-5 rounded-full bg-white/25" />
+                              <div className="h-5 w-5 rounded-full bg-white/25" />
+                              <div className="h-5 w-5 rounded-full bg-white/25" />
+                            </div>
+                          </div>
+                          {[1, 2, 3].map((item) => (
+                            <div key={item} className="space-y-2">
+                              <div className="h-3 w-16 rounded bg-white" />
+                              <div className="h-2 w-20 rounded bg-white/50" />
+                              <div className="h-2 w-24 rounded bg-white/50" />
+                              <div className="h-2 w-16 rounded bg-white/50" />
+                            </div>
+                          ))}
                         </div>
                       </button>
                     );

@@ -26,6 +26,7 @@ export const templates = [
         banner: ["banner-1", "banner-2"],
         about: ["about-1", "about-2"],
         product: ["product-1", "product-2", "product-3"],
+        footer: ["footer-1"],
       },
   }, 
   {

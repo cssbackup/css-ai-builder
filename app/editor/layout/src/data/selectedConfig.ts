@@ -299,5 +299,58 @@ export const selectedConfig = {
         },
       },
     },
+    {
+      type: "footer",
+      variant: "footer-1",
+      data: {
+        "footer-1": {
+          logo: "BlackBay",
+          desc: "We create modern websites that are fast, responsive, and AI-powered to help your business grow online.",
+          footerBackgroundType: "solid",
+          footerBackgroundColor: "#0d1f2a",
+          footerGradientColor: "#1d4ed8",
+          footerTextColor: "#ffffff",
+          footerMutedTextColor: "#cbd5e1",
+          footerSocialLinks: [
+            { label: "facebook", href: "#" },
+            { label: "instagram", href: "#" },
+            { label: "twitter", href: "#" },
+            { label: "linkedin", href: "#" },
+          ],
+          footerColumns: [
+            {
+              title: "Quick Links",
+              links: [
+                { label: "Home", href: "/" },
+                { label: "About", href: "/about" },
+                { label: "Services", href: "/services" },
+                { label: "Pricing", href: "/pricing" },
+                { label: "Contact", href: "/contact" },
+              ],
+            },
+            {
+              title: "Services",
+              links: [
+                { label: "Website Design", href: "#" },
+                { label: "Landing Pages", href: "#" },
+                { label: "AI Website Builder", href: "#" },
+                { label: "SEO Optimization", href: "#" },
+                { label: "Website Maintenance", href: "#" },
+              ],
+            },
+          ],
+          footerContact: {
+            location: "New Delhi, India",
+            email: "hello@example.com",
+            phone: "+91 12345 67890",
+          },
+          footerLegalLinks: [
+            { label: "Privacy Policy", href: "#" },
+            { label: "Terms & Conditions", href: "#" },
+          ],
+          copyrightText: "© 2026 BlackBay. All rights reserved.",
+        },
+      },
+    },
   ],
 };

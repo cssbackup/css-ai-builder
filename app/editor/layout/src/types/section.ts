@@ -42,6 +42,27 @@ export type ProductCardData = {
   imageTitle?: string;
 };
 
+export type FooterSocialData = {
+  label: "facebook" | "instagram" | "twitter" | "linkedin";
+  href: string;
+};
+
+export type FooterLinkData = {
+  label: string;
+  href: string;
+};
+
+export type FooterColumnData = {
+  title: string;
+  links: FooterLinkData[];
+};
+
+export type FooterContactData = {
+  location: string;
+  email: string;
+  phone: string;
+};
+
 export type SectionData = {
   logo?: string;
   menu?: MenuItem[];
@@ -85,6 +106,17 @@ export type SectionData = {
   productSlides?: ProductSlideData[];
   productSectionTitle?: string;
   productItems?: ProductCardData[];
+
+  footerBackgroundType?: "solid" | "gradient";
+  footerBackgroundColor?: string;
+  footerGradientColor?: string;
+  footerTextColor?: string;
+  footerMutedTextColor?: string;
+  footerSocialLinks?: FooterSocialData[];
+  footerColumns?: FooterColumnData[];
+  footerContact?: FooterContactData;
+  footerLegalLinks?: FooterLinkData[];
+  copyrightText?: string;
 };
 
 export type SectionProps = {
