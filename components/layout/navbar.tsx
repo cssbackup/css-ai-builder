@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X, User, ChevronDown } from "lucide-react";
+import Button from "@/components/ui/Button";
 
 export default function Navbar() {
   const navItems = [

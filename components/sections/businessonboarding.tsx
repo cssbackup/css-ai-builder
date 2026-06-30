@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useFooter } from "./footercontext";
+import { useFooter } from "../layout/footercontext";
 import Categorystep from "./categorystep";
 import CategoryType from "./categorytype";
 import TemplatePreview from "./templatepreview";
