@@ -8,19 +8,57 @@ import { sectionRegistry } from "./src/lib/sectionRegistry";
 import EditableSection from "./src/components/builder/EditableSection";
 import EditSectionModal from "./src/components/builder/EditSectionModal";
 
-import { SectionData } from "./src/types/section";
-
-type SectionItem = {
-  type: string;
-  variant: string;
-  data: Record<string, unknown>;
-};
+import { SectionData, SectionItem } from "./src/types/section";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
 const formatSectionName = (sectionType: string) =>
   sectionType.charAt(0).toUpperCase() + sectionType.slice(1);
+
+const replaceFirstTextValue = (
+  value: unknown,
+  oldText: string,
+  newText: string,
+): { value: unknown; replaced: boolean } => {
+  if (typeof value === "string") {
+    return value.trim() === oldText.trim()
+      ? { value: newText, replaced: true }
+      : { value, replaced: false };
+  }
+
+  if (Array.isArray(value)) {
+    let replaced = false;
+    const nextValue = value.map((item) => {
+      if (replaced) return item;
+
+      const result = replaceFirstTextValue(item, oldText, newText);
+      replaced = result.replaced;
+
+      return result.value;
+    });
+
+    return { value: nextValue, replaced };
+  }
+
+  if (isRecord(value)) {
+    let replaced = false;
+    const nextValue = Object.fromEntries(
+      Object.entries(value).map(([key, item]) => {
+        if (replaced) return [key, item];
+
+        const result = replaceFirstTextValue(item, oldText, newText);
+        replaced = result.replaced;
+
+        return [key, result.value];
+      }),
+    );
+
+    return { value: nextValue, replaced };
+  }
+
+  return { value, replaced: false };
+};
 
 export default function Page() {
   return <EditorPage />;
@@ -62,7 +100,7 @@ function EditorPage() {
 
   const updateSectionData = (
     type: string,
-    newData: Record<string, unknown>,
+    newData: Record<string, SectionData>,
   ) => {
     setSections((prev) =>
       prev.map((section) =>
@@ -72,6 +110,42 @@ function EditorPage() {
       ),
     );
   };
+
+  const updateInlineText = (
+    sectionType: string,
+    variant: string,
+    oldText: string,
+    newText: string,
+  ) => {
+    setSections((prev) =>
+      prev.map((section) => {
+        if (section.type !== sectionType) return section;
+
+        const activeData = section.data[variant];
+        if (!activeData) return section;
+
+        const result = replaceFirstTextValue(activeData, oldText, newText);
+
+        if (!result.replaced || !isRecord(result.value)) return section;
+
+        return {
+          ...section,
+          data: {
+            ...section.data,
+            [variant]: result.value as SectionData,
+          },
+        };
+      }),
+    );
+  };
+
+  const deleteSection = (sectionType: string) => {
+  setSections((prevSections) =>
+    prevSections.filter((section) => section.type !== sectionType)
+  );
+
+  setEditingSection(null);
+};
 
   const handleSectionSave = (sectionType: string) => {
     setEditingSection(null);
@@ -97,6 +171,10 @@ function EditorPage() {
             key={section.type}
             label={section.type}
             onEdit={() => setEditingSection(section.type)}
+            onDelete={() => deleteSection(section.type)}
+            onInlineTextEdit={(oldText, newText) =>
+              updateInlineText(section.type, section.variant, oldText, newText)
+            }
           >
             <Component data={sectionData} />
           </EditableSection>
@@ -105,6 +183,7 @@ function EditorPage() {
 
       {editingSection && (
         <EditSectionModal
+          key={editingSection}
           sectionType={editingSection}
           sections={sections}
           onClose={() => setEditingSection(null)}

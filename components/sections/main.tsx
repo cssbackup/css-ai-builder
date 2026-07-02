@@ -60,7 +60,7 @@ export default function Main() {
           src="/texture-right.png"
           alt="right-texture"
           fill
-          className="object-contain object-right-top"
+          className="object-contain object-top-right"
           priority
         />
       </div>

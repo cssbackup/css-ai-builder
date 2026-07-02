@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   House,
   LayoutPanelLeft,
@@ -22,17 +22,7 @@ const sidebarItems = [
     label: "Home",
     icon: House,
   },
-  {
-    label: "Section",
-    icon: LayoutPanelLeft,
-    children: [
-      { label: "Home", icon: House },
-      { label: "Hero Section", icon: PanelsTopLeft },
-      { label: "Features", icon: Layers3 },
-      { label: "Testimonials", icon: Monitor },
-      { label: "Footer", icon: FileText },
-    ],
-  },
+
   {
     label: "Theme Color",
     icon: Palette,
@@ -74,7 +64,7 @@ export default function Sidebar({
   setCollapsed,
   mobileOpen,
   setMobileOpen,
-}: SidebarProps) {
+}: SidebarProps) { 
   return (
     <>
       {mobileOpen && (
@@ -119,11 +109,32 @@ export default function Sidebar({
 function SidebarContent({ collapsed }: { collapsed: boolean }) {
   const [openItem, setOpenItem] = useState<string | null>(null);
   const [dropdownTop, setDropdownTop] = useState(0);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const activeItem = sidebarItems.find((item) => item.label === openItem);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpenItem(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative flex h-full flex-col overflow-visible p-2">
+    <div
+      ref={dropdownRef}
+      className="relative flex h-full flex-col overflow-visible p-2"
+    >
       <div className="space-y-2 h-full relative pt-2">
         {sidebarItems.map((item) => {
           const Icon = item.icon;

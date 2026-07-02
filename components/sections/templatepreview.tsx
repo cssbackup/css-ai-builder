@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, Search, ChevronDown, ChevronUp, X } from "lucide-react";
 
 const pageFilters = [
@@ -151,6 +151,7 @@ export default function Templatepreview() {
   const [open, setOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(4);
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (previewTemplate) {
@@ -163,6 +164,23 @@ export default function Templatepreview() {
       document.body.style.overflow = "";
     };
   }, [previewTemplate]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const closePreview = () => {
     setPreviewTemplate(null);
@@ -319,7 +337,7 @@ export default function Templatepreview() {
             )}
           </div>
 
-          <div className="relative shrink-0">
+          <div ref={dropdownRef} className="relative shrink-0">
             <button
               type="button"
               onClick={() => setOpen(!open)}

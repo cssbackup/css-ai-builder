@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Briefcase, Check, User, Users } from "lucide-react";
+import Button from "@/components/ui/Button";
 
 type Category = "clients" | "myself" | "company";
 

@@ -4,16 +4,47 @@ import { SectionProps } from "./../../../types/section";
 import { agrandirBolt } from "@/app/fonts";
 
 export default function BannerOne({ data }: SectionProps) {
+  const backgroundMode = data.bannerBackgroundMode ?? "image";
+  const bannerHeight = data.bannerHeight ?? 70;
+  const bannerBackground =
+    backgroundMode === "gradient"
+      ? `linear-gradient(90deg, ${data.bannerBackgroundColor ?? "#0f172a"}, ${
+          data.bannerGradientColor ?? "#0ea5e9"
+        })`
+      : backgroundMode === "solid"
+        ? (data.bannerBackgroundColor ?? "#0f172a")
+        : undefined;
+  const buttons = data.buttons?.slice(0, 3) ?? [];
+
   return (
-    <section className="flex h-[70dvh] w-full items-center">
-      <div className="relative h-full w-full overflow-hidden">
+    <section
+      className="flex w-full items-center"
+      style={{ height: `${bannerHeight}dvh` }}
+    >
+      <div
+        className="relative h-full w-full overflow-hidden"
+        style={{ background: bannerBackground }}
+      >
         {/* Background Image */}
-        {data.backgroundImage && (
+        {backgroundMode === "image" && data.backgroundImage && (
           <Image
             src={data.backgroundImage}
-            alt={data.backgroundImageTitle}
+            alt={data.backgroundImageTitle ?? data.title ?? "Banner image"}
             fill
+            sizes="100vw"
+            unoptimized={data.backgroundImage.startsWith("data:")}
             className="object-cover"
+          />
+        )}
+
+        {backgroundMode === "video" && data.backgroundVideo && (
+          <video
+            src={data.backgroundVideo}
+            className="absolute inset-0 h-full w-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
           />
         )}
 
@@ -40,11 +71,11 @@ export default function BannerOne({ data }: SectionProps) {
             </p>
           )}
 
-          {!!data.buttons?.length && (
+          {!!buttons.length && (
             <div className="flex items-center gap-2">
-              {data.buttons.map((button) => (
+              {buttons.map((button, index) => (
                 <Link
-                  key={button.label}
+                  key={`${button.label}-${index}`}
                   href={button.href}
                   className="mt-2 inline-block bg-(--primary-link-bg) px-4 py-2 text-(--primary-link-color)"
                 >

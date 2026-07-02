@@ -1,16 +1,55 @@
-export const selectedConfig = {
+import { SelectedConfig } from "../types/section";
+
+export const selectedConfig: SelectedConfig = {
   templateId: "template-1",
 
   sections: [
     {
-      type: "header",
-      variant: "header-1",
+      type: "Topbar",
+      variant: "Topbar-1",
       data: {
-        "header-1": {
+        "Topbar-1": {
+          topbarBackgroundType: "solid",
+          topbarBackgroundColor: "#000f3c",
+          topbarGradientColor: "#0668ff",
+          topbarTextColor: "#ffffff",
+          text: ["Your smile, our priority!"],
+          phone: "+1 (555) 123-4567",
+          email: "hello@smilecare.com",
+          location: "New Delhi, India",
+          socialLinks: [
+            { label: "facebook", href: "#" },
+            { label: "twitter", href: "#" },
+            { label: "linkedin", href: "#" },
+          ],
+        },
+        "Topbar-2": {
+          topbarBackgroundType: "gradient",
+          topbarBackgroundColor: "#245c6e",
+          topbarGradientColor: "#0668ff",
+          topbarTextColor: "#ffffff",
+          text: ["Trusted Healthcare For Every Family"],
+          phone: "+1 (555) 123-4567",
+          email: "hello@smilecare.com",
+          location: "New Delhi, India",
+          socialLinks: [
+            { label: "facebook", href: "#" },
+            { label: "twitter", href: "#" },
+            { label: "linkedin", href: "#" },
+          ],
+        },
+      },
+    },
+    {
+      type: "Header",
+      variant: "Header-1",
+      data: {
+        "Header-1": {
           logo: "Header1",
           headerBackgroundType: "solid",
           headerBackgroundColor: "#245c6e",
           headerGradientColor: "#0668ff",
+          headerTextColor: "#ffffff",
           menu: [
             { label: "Home", href: "#" },
             { label: "About", href: "#" },
@@ -32,11 +71,12 @@ export const selectedConfig = {
           ],
         },
 
-        "header-2": {
+        "Header-2": {
           logo: "Header2",
           headerBackgroundType: "solid",
           headerBackgroundColor: "#245c6e",
           headerGradientColor: "#0668ff",
+          headerTextColor: "#ffffff",
           menu: [
             { label: "Home", href: "#" },
             { label: "Services", href: "#" },
@@ -47,12 +87,17 @@ export const selectedConfig = {
       },
     },
     {
-      type: "banner",
-      variant: "banner-1",
+      type: "Banner",
+      variant: "Banner-1",
       data: {
-        "banner-1": {
+        "Banner-1": {
+          bannerBackgroundMode: "image",
           backgroundImage: "/bg1.jpg",
           backgroundImageTitle: "BG1",
+          backgroundVideo: "",
+          bannerBackgroundColor: "#0f172a",
+          bannerGradientColor: "#0ea5e9",
+          bannerHeight: 70,
           pretitle: "Free AI tools from Google Cloud",
           title: "Watch your cart shrink.",
           desc: "Google AI Studio is the fast path for developers, students, and researchers who want to try Gemini models and start building with the Gemini Developer API. We also offer free tools for common AI use cases, including translation, image and video analysis, speech-to-text, and more.",
@@ -63,9 +108,14 @@ export const selectedConfig = {
             },
           ],
         },
-        "banner-2": {
+        "Banner-2": {
+          bannerBackgroundMode: "image",
           backgroundImage: "/bg2.jpg",
           backgroundImageTitle: "AI rays",
+          backgroundVideo: "",
+          bannerBackgroundColor: "#0f172a",
+          bannerGradientColor: "#0ea5e9",
+          bannerHeight: 70,
           pretitle: "Launch faster with AI",
           title: "Build smarter pages in minutes.",
           desc: "You can build AI agents with Gemini Enterprise Agent Platform. Get started by exploring Agent Garden for pre-built, customizable blueprints, complete with source code and configuration files.",
@@ -79,10 +129,10 @@ export const selectedConfig = {
       },
     },
     {
-      type: "about",
-      variant: "about-1",
+      type: "About",
+      variant: "About-1",
       data: {
-        "about-1": {
+        "About-1": {
           pretitle: "Know more of us",
           title: "About Us",
           desc: "Google AI Studio is the fast path for developers, students, and researchers who want to try Gemini models and start building with the Gemini Developer API. We also offer free tools for common AI use cases, including translation, image and video analysis, speech-to-text, and more.",
@@ -97,7 +147,7 @@ export const selectedConfig = {
             },
           ],
         },
-        "about-2": {
+        "About-2": {
           pretitle: "Know More of Us",
           title: "About Us",
           subtitle: "Luxurious Interior and Industrial Design",
@@ -120,10 +170,10 @@ export const selectedConfig = {
       },
     },
     {
-      type: "product",
-      variant: "product-1",
+      type: "Product",
+      variant: "Product-1",
       data: {
-        "product-1": {
+        "Product-1": {
           productSlides: [
              {
               image: "/prod2.jpg",
@@ -196,7 +246,7 @@ export const selectedConfig = {
            
           ],
         },
-        "product-2": {
+        "Product-2": {
           productSectionTitle: "Featured Products",
           productItems: [
             {
@@ -236,7 +286,7 @@ export const selectedConfig = {
             },
           ],
         },
-        "product-3": {
+        "Product-3": {
           pretitle: "How we build",
           title: "Most web builders get in your way. We don't.",
           desc: "We build sites that load fast and work harder. No bloated themes, no unnecessary code, just clean digital solutions from New Delhi.",
@@ -300,10 +350,10 @@ export const selectedConfig = {
       },
     },
     {
-      type: "footer",
-      variant: "footer-1",
+      type: "Footer",
+      variant: "Footer-1",
       data: {
-        "footer-1": {
+        "Footer-1": {
           logo: "BlackBay",
           desc: "We create modern websites that are fast, responsive, and AI-powered to help your business grow online.",
           footerBackgroundType: "solid",

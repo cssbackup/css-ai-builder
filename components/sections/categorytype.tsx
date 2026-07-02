@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Briefcase,
   FileText,
@@ -71,6 +71,24 @@ export default function Categorystep() {
   const [selected, setSelected] = useState("Business");
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const filteredTypes = useMemo(() => {
     if (!search.trim()) return types;
@@ -162,7 +180,7 @@ export default function Categorystep() {
             )}
           </div>
 
-          <div className="relative shrink-0">
+          <div ref={dropdownRef} className="relative shrink-0">
             <button
               type="button"
               onClick={() => setOpen(!open)}

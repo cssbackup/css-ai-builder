@@ -3,6 +3,10 @@ export const templates = [
     id: "template-1",
     name: "Aero Blue",
     variables: {
+      "--primary-bg": "#00cadd",
+      "--primary-text": "#ffffff",
+      "--secondary-bg": "#ffffff",
+      "--secondary-text": "#000000",
       "--header-bg": "#245c6e",
       "--header-text": "#ffffff",
       "--hero-bg": "#000000",
@@ -22,6 +26,7 @@ export const templates = [
       "--lightcream-bg":"#fbfaf6"
     },
       allowedSections: {
+        topbar: ["topbar-1"],
         header: ["header-1", "header-2"],
         banner: ["banner-1", "banner-2"],
         about: ["about-1", "about-2"],

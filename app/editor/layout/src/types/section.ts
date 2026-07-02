@@ -4,6 +4,23 @@ type MenuItem = {
   children?: MenuItem[];
 };
 
+export type SocialLinkData = {
+  label: "facebook" | "instagram" | "twitter" | "linkedin";
+  href: string;
+};
+
+export type TopbarData = {
+  topbarBackgroundType?: "solid" | "gradient";
+  topbarBackgroundColor?: string;
+  topbarGradientColor?: string;
+  topbarTextColor?: string;
+  text?: string[];
+  phone?: string;
+  email?: string;
+  location?: string;
+  socialLinks?: SocialLinkData[];
+};
+
 export type ButtonData = {
   label: string;
   href: string;
@@ -64,6 +81,16 @@ export type FooterContactData = {
 };
 
 export type SectionData = {
+  topbarBackgroundType?: "solid" | "gradient";
+  topbarBackgroundColor?: string;
+  topbarGradientColor?: string;
+  topbarTextColor?: string;
+  text?: string[];
+  phone?: string;
+  email?: string;
+  location?: string;
+  socialLinks?: SocialLinkData[];
+
   logo?: string;
   menu?: MenuItem[];
   buttons?: ButtonData[];
@@ -71,13 +98,19 @@ export type SectionData = {
   headerBackgroundType?: "solid" | "gradient";
   headerBackgroundColor?: string;
   headerGradientColor?: string;
+  headerTextColor?: string;
 
   pretitle?: string;
   title?: string;
   subtitle?: string;
 
   backgroundImage?: string;
-  backgroundImageTitle: string;
+  backgroundImageTitle?: string;
+  backgroundVideo?: string;
+  bannerBackgroundMode?: "image" | "video" | "solid" | "gradient";
+  bannerBackgroundColor?: string;
+  bannerGradientColor?: string;
+  bannerHeight?: number;
 
   eyebrowColor?: string;
   titleColor?: string;
@@ -85,6 +118,7 @@ export type SectionData = {
   overlayColor?: string;
 
   desc?: string;
+  desc2?: string;
 
   buttonBackground?: string;
   buttonColor?: string;
@@ -121,4 +155,15 @@ export type SectionData = {
 
 export type SectionProps = {
   data: SectionData;
+};
+
+export type SectionItem = {
+  type: string;
+  variant: string;
+  data: Record<string, SectionData>;
+};
+
+export type SelectedConfig = {
+  templateId: string;
+  sections: SectionItem[];
 };

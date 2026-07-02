@@ -1,5 +1,7 @@
 import { ComponentType } from "react";
 
+import TopbarOne from "../components/sections/topbar/TopbarOne";
+import TopbarTwo from "../components/sections/topbar/TopbarTwo";
 import HeaderOne from "../components/sections/header/HeaderOne";
 import HeaderTwo from "../components/sections/header/HeaderTwo";
 import BannerOne from "../components/sections/banner/BannerOne";
@@ -14,14 +16,16 @@ import FooterOne from "../components/sections/footer/FooterOne";
 import { SectionProps } from "../types/section";
 
 export const sectionRegistry: Record<string, ComponentType<SectionProps>> = {
-  "header-1": HeaderOne,
-  "header-2": HeaderTwo,
-  "banner-1": BannerOne,
-  "banner-2": BannerTwo,
-  "about-1": AboutOne,
-  "about-2": AboutTwo,
-  "product-1": ProductOne,
-  "product-2": ProductTwo,
-  "product-3": ProductThree,
-  "footer-1": FooterOne,
+  "Topbar-1": TopbarOne,
+  "Topbar-2": TopbarTwo,
+  "Header-1": HeaderOne,
+  "Header-2": HeaderTwo,
+  "Banner-1": BannerOne,
+  "Banner-2": BannerTwo,
+  "About-1": AboutOne,
+  "About-2": AboutTwo,
+  "Product-1": ProductOne,
+  "Product-2": ProductTwo,
+  "Product-3": ProductThree,
+  "Footer-1": FooterOne,
 };

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X, User, ChevronDown } from "lucide-react";
@@ -41,9 +41,25 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
+  const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+        setLanguageOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
-    <nav className="fixed top-0 z-30 w-full bg-white shadow-sm">
+    <nav ref={navRef} className="fixed top-0 z-30 w-full bg-white shadow-sm">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex shrink-0 items-center">
@@ -152,13 +168,9 @@ export default function Navbar() {
                   </a>
                 </div>
 
-                <Link
-                  href="#"
-                  className="hidden cursor-pointer rounded-md bg-red-700 px-6 py-3 font-medium text-white lg:block lg:text-sm"
-                  title="Start Now"
-                >
+                <Button href="#" variant="danger" title="Start Now">
                   Get Started Free
-                </Link>
+                </Button>
               </div>
             </div>
 

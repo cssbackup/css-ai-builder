@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { SectionProps } from "./../../../types/section";
@@ -8,6 +8,7 @@ import { generalSansMedium } from "@/app/fonts";
 
 export default function HeaderOne({ data }: SectionProps) {
   const [open, setOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const headerSolidColor = data.headerBackgroundColor ?? "var(--header-bg)";
   const headerGradientColor =
     data.headerGradientColor ?? "var(--blue-bg, #0668ff)";
@@ -15,11 +16,35 @@ export default function HeaderOne({ data }: SectionProps) {
     data.headerBackgroundType === "gradient"
       ? `linear-gradient(90deg, ${headerSolidColor}, ${headerGradientColor})`
       : headerSolidColor;
+  const headerTextColor = data.headerTextColor ?? "var(--header-text)";
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        headerRef.current &&
+        !headerRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <header
+      ref={headerRef}
       className="relative w-full px-4"
-      style={{ background: headerBackground }}
+      style={
+        {
+          background: headerBackground,
+          "--header-text": headerTextColor,
+        } as React.CSSProperties
+      }
     >
       <div className="mx-auto flex h-16 w-full items-center justify-between gap-4">
         <Link
@@ -62,7 +87,7 @@ export default function HeaderOne({ data }: SectionProps) {
                         </Link>
                       ))}
                     </div>
-                  </div> 
+                  </div>
                 )}
               </div>
             );
@@ -82,7 +107,7 @@ export default function HeaderOne({ data }: SectionProps) {
                   className={`flex items-center rounded-sm gap-1 px-3 py-2 text-sm font-medium ${
                     variant === "primary"
                       ? "bg-(--primary-link-bg) text-(--primary-link-color)"
-                      : "bg-(--secondary-link-bg) text-white"
+                      : "bg-(--secondary-link-bg) text-(--text-white)"
                   }`}
                 >
                   {button.label}

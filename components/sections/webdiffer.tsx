@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Zap, Users, PenTool } from "lucide-react";
+import Button from "@/components/ui/Button";
 type WebdifferProps = {
   onStart: () => void;
 };
@@ -70,18 +71,14 @@ export default function Webdiffer({ onStart }: WebdifferProps) {
             </div>
 
             <div className="w-full mt-4">
-              <button
+              <Button
                 type="button"
                 onClick={onStart}
-                title="Start Building"
-                className={`block w-full py-2.5 px-6 rounded-lg font-bold text-sm tracking-wide transition-all duration-200 text-center cursor-pointer ${
-                  card.isDarkButton
-                    ? "bg-[#111111] hover:bg-black text-white shadow-sm"
-                    : "bg-[var(--red)] hover:opacity-95 text-white shadow-sm"
-                }`}
+                variant={card.isDarkButton ? "dark" : "danger"}
+                className="w-full rounded-lg px-6 py-2.5 font-bold text-sm tracking-wide"
               >
                 {card.buttonText}
-              </button>
+              </Button>
             </div>
           </div>
         ))}

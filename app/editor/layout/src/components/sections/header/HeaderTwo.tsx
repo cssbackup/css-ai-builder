@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Menu } from "lucide-react";
+import React from "react";
 import { SectionProps } from "./../../../types/section";
 
 export default function HeaderTwo({ data }: SectionProps) {
@@ -12,11 +13,17 @@ export default function HeaderTwo({ data }: SectionProps) {
     data.headerBackgroundType === "gradient"
       ? `linear-gradient(90deg, ${headerSolidColor}, ${headerGradientColor})`
       : headerSolidColor;
+  const headerTextColor = data.headerTextColor ?? "var(--header-text)";
 
   return (
     <header
       className="flex h-16 w-full items-center px-4"
-      style={{ background: headerBackground }}
+      style={
+        {
+          background: headerBackground,
+          "--header-text": headerTextColor,
+        } as React.CSSProperties
+      }
     >
       <div className="flex w-full items-center justify-between gap-4">
         <Link

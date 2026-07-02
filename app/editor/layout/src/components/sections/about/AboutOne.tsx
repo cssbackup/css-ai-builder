@@ -26,7 +26,7 @@ export default function AboutOne({ data }: SectionProps) {
         {data.backgroundImage && (
           <Image
             src={data.backgroundImage}
-            alt={data.backgroundImageTitle}
+            alt={data.backgroundImageTitle ?? data.title ?? "About image"}
             fill
             className="object-cover"
           />

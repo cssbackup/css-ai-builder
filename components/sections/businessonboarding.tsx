@@ -5,6 +5,7 @@ import { useFooter } from "../layout/footercontext";
 import Categorystep from "./categorystep";
 import CategoryType from "./categorytype";
 import TemplatePreview from "./templatepreview";
+import Button from "@/components/ui/Button";
 
 const steps: { title: string; subtitle: string }[] = [
   { title: "Category", subtitle: "" },
@@ -50,26 +51,26 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
       </div>
 
       <div className="w-full bg-white flex justify-between py-1 px-5 lg:px-17 fixed bottom-0 border-t border-gray-200">
-        <button
+        <Button
           type="button"
           onClick={step === 0 ? onBack : () => setStep((prev) => prev - 1)}
-          className="cursor-pointer px-8 py-2.5 border border-gray-300 rounded-xl"
+          variant="secondary"
         >
           Back
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
           onClick={handleContinue}
           disabled={loadspinner}
-          className="bg-[var(--red)] text-white px-8 py-2.5 rounded-xl font-bold disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+          variant="danger"
         >
           {loadspinner && (
-            <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+            <span className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" />
           )}
 
           {loadspinner ? "Loading..." : "Continue"}
-        </button>
+        </Button>
       </div>
     </div>
   );
