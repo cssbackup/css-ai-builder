@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { usePreview } from "../layout/src/components/context/PreviewContext";
 
-const pages = ["Home", "About", "Services", "Product", "Contact"];
+const pages = ["Home", "About", "Services", "Contact"];
 
 type HeaderProps = {
   onMenuClick: () => void;
@@ -75,8 +75,15 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
 
       return nextPages;
     });
-
+  
     setPageToDelete(null);
+  };
+
+  const addNewPage = () => {
+    const newPageName = `Page ${pageItems.length + 1}`;
+    setPageItems((prevPages) => [...prevPages, newPageName]);
+    setSelectedPage(newPageName);
+    setOpen(false);
   };
 
   return (
@@ -115,7 +122,7 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
             </div>
 
             {open && (
-              <div className="absolute -right-22 top-[50px] z-[200] w-[220px] border-2 border-slate-200 bg-white">
+              <div className="absolute -right-22 top-[50px] z-[200] w-55 border-2 border-slate-200 bg-white">
                 {pageItems.map((page) => (
                   <div
                     key={page}
@@ -155,6 +162,15 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
                     </button>
                   </div>
                 ))}
+
+                <div className="flex justify-end px-2 py-2">
+                  <button
+                    className="bg-blue-600 text-white px-5 py-2 text-xs rounded"
+                    onClick={addNewPage}
+                  >
+                    Add More{" "}
+                  </button>
+                </div>
               </div>
             )}
           </div>

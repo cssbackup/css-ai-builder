@@ -3,7 +3,12 @@
 import { useRef, useState, type ChangeEvent } from "react";
 import { Menu, Plus, Trash, X } from "lucide-react";
 import { agrandirBolt, generalSansMedium } from "@/app/fonts";
-import { ButtonData, SectionData, SocialLinkData } from "../../types/section";
+import {
+  BannerSlideData,
+  ButtonData,
+  SectionData,
+  SocialLinkData,
+} from "../../types/section";
 
 type MenuItem = {
   label: string;
@@ -46,6 +51,7 @@ const topbarLayouts = [
 const bannerLayouts = [
   { id: "Banner-1", name: "Banner 1" },
   { id: "Banner-2", name: "Banner 2" },
+  { id: "Banner-3", name: "Banner 3" },
 ];
 
 const aboutLayouts = [
@@ -84,8 +90,6 @@ const sidebarItemsBySection: Record<string, string[]> = {
   Banner: [
     "Banner Content",
     "Banner Layout",
-    "Banner Buttons",
-    "Banner Background",
   ],
   About: ["About Layout"],
   Product: ["Product Layout"],
@@ -111,6 +115,49 @@ const clampBannerHeight = (height: number) => {
   if (!Number.isFinite(height)) return 70;
 
   return Math.min(100, Math.max(40, height));
+};
+
+const getDefaultBannerData = (variant: string): SectionData | undefined => {
+  if (variant !== "Banner-3") return undefined;
+
+  return {
+    bannerHeight: 70,
+    bannerSlides: [
+      {
+        image: "/bg1.jpg",
+        alt: "AI website builder dashboard",
+        title: "Build Your Website Today",
+        desc: "Create polished pages from reusable blocks that your backend can update with clean JSON.",
+        button: {
+          label: "Get Started",
+          href: "#",
+          variant: "primary",
+        },
+      },
+      {
+        image: "/bg2.jpg",
+        alt: "AI powered banner design",
+        title: "Change Every Slide",
+        desc: "Each slide has its own image, title, description, and button so content stays simple to manage.",
+        button: {
+          label: "View Demo",
+          href: "#",
+          variant: "primary",
+        },
+      },
+      {
+        image: "/ai_rays.png",
+        alt: "AI rays visual",
+        title: "Ready For Backend Data",
+        desc: "Send bannerSlides from the backend and this layout will render the slider automatically.",
+        button: {
+          label: "Learn More",
+          href: "#",
+          variant: "primary",
+        },
+      },
+    ],
+  };
 };
 
 const getVisibleSocialLinks = (
@@ -176,7 +223,12 @@ export default function EditSectionModal({
       }
     | undefined;
 
-  const activeBannerData = currentSection?.data?.[activeVariant] as
+  const activeBannerData = (
+    currentSection?.data?.[activeVariant] ??
+    (activeSectionType === "Banner"
+      ? getDefaultBannerData(activeVariant)
+      : undefined)
+  ) as
     | {
         backgroundImage?: string;
         backgroundImageTitle?: string;
@@ -190,6 +242,7 @@ export default function EditSectionModal({
         bannerGradientColor?: string;
         backgroundVideo?: string;
         bannerHeight?: number;
+        bannerSlides?: BannerSlideData[];
         buttons?: ButtonData[];
       }
     | undefined;
@@ -215,8 +268,8 @@ export default function EditSectionModal({
     headerBackgroundType === "gradient"
       ? `linear-gradient(90deg, ${headerSolidColor}, ${headerGradientColor})`
       : headerSolidColor;
-  const bannerBackgroundMode =
-    activeBannerData?.bannerBackgroundMode ?? "image";
+  const explicitBannerBackgroundMode = activeBannerData?.bannerBackgroundMode;
+  const bannerBackgroundMode = explicitBannerBackgroundMode ?? "image";
   const bannerSolidColor = activeBannerData?.bannerBackgroundColor ?? "#0f172a";
   const bannerGradientColor =
     activeBannerData?.bannerGradientColor ?? "#0ea5e9";
@@ -227,6 +280,16 @@ export default function EditSectionModal({
       : bannerBackgroundMode === "solid"
         ? bannerSolidColor
         : "linear-gradient(90deg, #020617, #0f172a, #0369a1)";
+  const hasBannerImageField = explicitBannerBackgroundMode === "image";
+  const hasBannerVideoField = explicitBannerBackgroundMode === "video";
+  const hasBannerColorField =
+    explicitBannerBackgroundMode === "solid" ||
+    explicitBannerBackgroundMode === "gradient";
+  const hasBannerButtonsField = "buttons" in (activeBannerData ?? {});
+  const hasBannerMediaField =
+    hasBannerImageField || hasBannerVideoField || hasBannerColorField;
+  const hasBannerHeightField = "bannerHeight" in (activeBannerData ?? {});
+  const hasBannerSlidesField = Array.isArray(activeBannerData?.bannerSlides);
 
   const activeFooterData = currentSection?.data?.[activeVariant] as
     | {
@@ -318,13 +381,27 @@ export default function EditSectionModal({
   const selectSectionVariant = (variant: string) => {
     if (!variant.startsWith(`${activeSectionType}-`)) return;
 
+    if (
+      activeSectionType === "Banner" &&
+      currentSection &&
+      !currentSection.data[variant]
+    ) {
+      const defaultBannerData = getDefaultBannerData(variant);
+
+      if (defaultBannerData) {
+        onUpdateSectionData(activeSectionKey, {
+          ...currentSection.data,
+          [variant]: defaultBannerData,
+        });
+      }
+    }
+
     if (currentSection?.variant !== variant) {
       setHasChanges(true);
       setLastChangedSection(activeSectionKey);
     }
 
     onSelectVariant(activeSectionKey, variant);
-    onSave(activeSectionKey);
   };
 
   const handleDone = () => {
@@ -589,6 +666,72 @@ export default function EditSectionModal({
     );
 
     updateActiveBannerData({ buttons: updatedButtons });
+  };
+
+  const updateBannerSlide = (
+    index: number,
+    field: keyof Omit<BannerSlideData, "button">,
+    value: string,
+  ) => {
+    const updatedSlides = (activeBannerData?.bannerSlides ?? []).map(
+      (slide, slideIndex) =>
+        slideIndex === index ? { ...slide, [field]: value } : slide,
+    );
+
+    updateActiveBannerData({ bannerSlides: updatedSlides });
+  };
+
+  const updateBannerSlideButton = (
+    index: number,
+    field: "label" | "href",
+    value: string,
+  ) => {
+    const nextValue = field === "label" ? limitLinkText(value) : value;
+    const updatedSlides = (activeBannerData?.bannerSlides ?? []).map(
+      (slide, slideIndex) => {
+        if (slideIndex !== index) return slide;
+
+        return {
+          ...slide,
+          button: {
+            label: "Learn more",
+            href: "#",
+            ...slide.button,
+            [field]: nextValue,
+          },
+        };
+      },
+    );
+
+    updateActiveBannerData({ bannerSlides: updatedSlides });
+  };
+
+  const addBannerSlide = () => {
+    const nextIndex = (activeBannerData?.bannerSlides ?? []).length + 1;
+    const updatedSlides = [
+      ...(activeBannerData?.bannerSlides ?? []),
+      {
+        image: "/bg1.jpg",
+        alt: `Banner slide ${nextIndex}`,
+        title: "New banner slide",
+        desc: "Update this slide text from Banner Content.",
+        button: {
+          label: "Learn more",
+          href: "#",
+          variant: "primary" as const,
+        },
+      },
+    ];
+
+    updateActiveBannerData({ bannerSlides: updatedSlides });
+  };
+
+  const deleteBannerSlide = (index: number) => {
+    const updatedSlides = (activeBannerData?.bannerSlides ?? []).filter(
+      (_, slideIndex) => slideIndex !== index,
+    );
+
+    updateActiveBannerData({ bannerSlides: updatedSlides });
   };
 
   const updateFooterBackgroundType = (type: FooterBackgroundType) => {
@@ -1292,47 +1435,434 @@ export default function EditSectionModal({
             {activeSectionType === "Banner" &&
               activeTab === "Banner Content" && (
                 <div className="space-y-4">
-                  <div className="rounded-xl border border-gray-200 bg-white p-4">
-                    <label className="block text-sm font-semibold text-gray-900">
-                      Pretitle
-                    </label>
-                    <input
-                      value={activeBannerData?.pretitle ?? ""}
-                      onChange={(event) =>
-                        updateBannerField("pretitle", event.target.value)
-                      }
-                      className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
-                      placeholder="Enter banner pretitle"
-                    />
-                  </div>
+                  <input
+                    ref={bannerImageInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleBannerImageFileChange}
+                    className="hidden"
+                    aria-label="Choose banner image"
+                  />
+                  <input
+                    ref={bannerVideoInputRef}
+                    type="file"
+                    accept="video/*"
+                    onChange={handleBannerVideoFileChange}
+                    className="hidden"
+                    aria-label="Choose banner video"
+                  />
 
-                  <div className="rounded-xl border border-gray-200 bg-white p-4">
-                    <label className="block text-sm font-semibold text-gray-900">
-                      Title
-                    </label>
-                    <input
-                      value={activeBannerData?.title ?? ""}
-                      onChange={(event) =>
-                        updateBannerField("title", event.target.value)
-                      }
-                      className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
-                      placeholder="Enter banner title"
-                    />
-                  </div>
+                  {"pretitle" in (activeBannerData ?? {}) && (
+                    <div className="rounded-xl border border-gray-200 bg-white p-4">
+                      <label className="block text-sm font-semibold text-gray-900">
+                        Pretitle
+                      </label>
+                      <input
+                        value={activeBannerData?.pretitle ?? ""}
+                        onChange={(event) =>
+                          updateBannerField("pretitle", event.target.value)
+                        }
+                        className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                        placeholder="Enter banner pretitle"
+                      />
+                    </div>
+                  )}
 
-                  <div className="rounded-xl border border-gray-200 bg-white p-4">
-                    <label className="block text-sm font-semibold text-gray-900">
-                      Description
-                    </label>
-                    <textarea
-                      value={activeBannerData?.desc ?? ""}
+                  {"title" in (activeBannerData ?? {}) && (
+                    <div className="rounded-xl border border-gray-200 bg-white p-4">
+                      <label className="block text-sm font-semibold text-gray-900">
+                        Title
+                      </label>
+                      <input
+                        value={activeBannerData?.title ?? ""}
+                        onChange={(event) =>
+                          updateBannerField("title", event.target.value)
+                        }
+                        className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                        placeholder="Enter banner title"
+                      />
+                    </div>
+                  )}
+
+                  {"desc" in (activeBannerData ?? {}) && (
+                    <div className="rounded-xl border border-gray-200 bg-white p-4">
+                      <label className="block text-sm font-semibold text-gray-900">
+                        Description
+                      </label>
+                      <textarea
+                        value={activeBannerData?.desc ?? ""}
+                        onChange={(event) =>
+                          updateBannerField("desc", event.target.value)
+                        }
+                        className="mt-2 min-h-28 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-900 outline-none focus:border-blue-600"
+                        placeholder="Enter banner description"
+                      />
+                    </div>
+                  )}
+
+                  {hasBannerSlidesField && (
+                    <section className="space-y-4 rounded-xl border border-gray-200 bg-white p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <h4 className="text-sm font-semibold text-gray-900">
+                          Banner Slider
+                        </h4>
+                        <button
+                          type="button"
+                          onClick={addBannerSlide}
+                          className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-xs font-medium text-white"
+                        >
+                          <Plus size={14} />
+                          Add Slide
+                        </button>
+                      </div>
+
+                      {(activeBannerData?.bannerSlides ?? []).map(
+                        (slide, index) => (
+                          <div
+                            key={index}
+                            className="space-y-3 rounded-xl border border-gray-300 bg-white p-3 shadow-sm"
+                          >
+                            <div className="flex items-center justify-between gap-3">
+                              <h5 className="text-sm font-semibold text-gray-900">
+                                Slide {index + 1}
+                              </h5>
+                              <button
+                                type="button"
+                                onClick={() => deleteBannerSlide(index)}
+                                className="flex h-8 w-8 items-center justify-center rounded-lg border border-red-500 bg-white text-red-600"
+                                aria-label="Delete banner slide"
+                              >
+                                <Trash size={18} />
+                              </button>
+                            </div>
+
+                            <div className="grid gap-3 lg:grid-cols-2">
+                              <div>
+                                <label className="block text-sm font-semibold text-gray-900">
+                                  Slide Image
+                                </label>
+                                <input
+                                  value={slide.image}
+                                  onChange={(event) =>
+                                    updateBannerSlide(
+                                      index,
+                                      "image",
+                                      event.target.value,
+                                    )
+                                  }
+                                  className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                                  placeholder="/bg1.jpg"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="block text-sm font-semibold text-gray-900">
+                                  Image Alt Text
+                                </label>
+                                <input
+                                  value={slide.alt ?? ""}
+                                  onChange={(event) =>
+                                    updateBannerSlide(
+                                      index,
+                                      "alt",
+                                      event.target.value,
+                                    )
+                                  }
+                                  className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                                  placeholder="Slide image"
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-semibold text-gray-900">
+                                Slide Title
+                              </label>
+                              <input
+                                value={slide.title}
+                                onChange={(event) =>
+                                  updateBannerSlide(
+                                    index,
+                                    "title",
+                                    event.target.value,
+                                  )
+                                }
+                                className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                                placeholder="Enter slide title"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-semibold text-gray-900">
+                                Slide Description
+                              </label>
+                              <textarea
+                                value={slide.desc ?? ""}
+                                onChange={(event) =>
+                                  updateBannerSlide(
+                                    index,
+                                    "desc",
+                                    event.target.value,
+                                  )
+                                }
+                                className="mt-2 min-h-24 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-900 outline-none focus:border-blue-600"
+                                placeholder="Enter slide description"
+                              />
+                            </div>
+
+                            <div className="grid gap-3 lg:grid-cols-2">
+                              <div>
+                                <label className="block text-sm font-semibold text-gray-900">
+                                  Button Label
+                                </label>
+                                <input
+                                  value={slide.button?.label ?? ""}
+                                  onChange={(event) =>
+                                    updateBannerSlideButton(
+                                      index,
+                                      "label",
+                                      event.target.value,
+                                    )
+                                  }
+                                  className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                                  placeholder="Learn more"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="block text-sm font-semibold text-gray-900">
+                                  Button Link
+                                </label>
+                                <input
+                                  value={slide.button?.href ?? ""}
+                                  onChange={(event) =>
+                                    updateBannerSlideButton(
+                                      index,
+                                      "href",
+                                      event.target.value,
+                                    )
+                                  }
+                                  className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                                  placeholder="#"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ),
+                      )}
+                    </section>
+                  )}
+
+                  {hasBannerMediaField && (
+                    <section className="rounded-xl border border-gray-200 bg-white p-4">
+                    <h4 className="text-sm font-semibold text-gray-900">
+                      Banner Media
+                    </h4>
+
+                    {hasBannerImageField && (
+                      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-900">
+                            Background Image
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => bannerImageInputRef.current?.click()}
+                            className="mt-2 flex h-11 w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-left text-sm text-gray-900 transition hover:border-blue-500 focus:border-blue-600 focus:outline-none"
+                          >
+                            <span className="font-medium">
+                              {activeBannerData?.backgroundImage
+                                ? "Change image"
+                                : "Upload image"}
+                            </span>
+                            <span className="max-w-[55%] truncate text-xs text-gray-500">
+                              {activeBannerData?.backgroundImage?.startsWith(
+                                "data:",
+                              )
+                                ? "Selected from desktop"
+                                : activeBannerData?.backgroundImage ||
+                                  "Image path"}
+                            </span>
+                          </button>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-900">
+                            Image Alt Text
+                          </label>
+                          <input
+                            value={activeBannerData?.backgroundImageTitle ?? ""}
+                            onChange={(event) =>
+                              updateBannerField(
+                                "backgroundImageTitle",
+                                event.target.value,
+                              )
+                            }
+                            className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                            placeholder="Banner image"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {hasBannerVideoField && (
+                      <div className="mt-4">
+                        <label className="block text-sm font-semibold text-gray-900">
+                          Background Video
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => bannerVideoInputRef.current?.click()}
+                          className="mt-2 flex h-11 w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-left text-sm text-gray-900 transition hover:border-blue-500 focus:border-blue-600 focus:outline-none"
+                        >
+                          <span className="font-medium">
+                            {activeBannerData?.backgroundVideo
+                              ? "Change video"
+                              : "Upload video"}
+                          </span>
+                          <span className="max-w-[55%] truncate text-xs text-gray-500">
+                            {activeBannerData?.backgroundVideo?.startsWith(
+                              "data:",
+                            )
+                              ? "Selected from desktop"
+                              : activeBannerData?.backgroundVideo ||
+                                "Video path"}
+                          </span>
+                        </button>
+                      </div>
+                    )}
+
+                    {hasBannerColorField && (
+                      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                        <ColorInput
+                          label={
+                            bannerBackgroundMode === "gradient"
+                              ? "Background left"
+                              : "Background color"
+                          }
+                          value={bannerSolidColor}
+                          onChange={(color) =>
+                            updateBannerField("bannerBackgroundColor", color)
+                          }
+                        />
+
+                        {bannerBackgroundMode === "gradient" && (
+                          <ColorInput
+                            label="Background right"
+                            value={bannerGradientColor}
+                            onChange={(color) =>
+                              updateBannerField("bannerGradientColor", color)
+                            }
+                          />
+                        )}
+                      </div>
+                    )}
+                    </section>
+                  )}
+
+                  {hasBannerHeightField && (
+                    <div className="rounded-xl border border-gray-200 bg-white p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <label className="text-sm font-semibold text-gray-900">
+                        Banner Height
+                      </label>
+                      <input
+                        type="number"
+                        min={40}
+                        max={100}
+                        value={bannerHeight}
+                        onChange={(event) =>
+                          updateBannerHeight(Number(event.target.value))
+                        }
+                        className="h-10 w-24 rounded-lg border border-gray-300 px-3 text-sm text-gray-900 outline-none focus:border-blue-600"
+                      />
+                    </div>
+                    <input
+                      type="range"
+                      min={40}
+                      max={100}
+                      value={bannerHeight}
                       onChange={(event) =>
-                        updateBannerField("desc", event.target.value)
+                        updateBannerHeight(Number(event.target.value))
                       }
-                      className="mt-2 min-h-28 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-900 outline-none focus:border-blue-600"
-                      placeholder="Enter banner description"
+                      className="mt-4 w-full accent-blue-600"
                     />
-                  </div>
+                    </div>
+                  )}
+
+                  {hasBannerButtonsField && (
+                    <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <h4 className="text-sm font-semibold text-gray-900">
+                          Banner Buttons
+                        </h4>
+
+                        <button
+                          type="button"
+                          onClick={addBannerButton}
+                          disabled={
+                            (activeBannerData?.buttons ?? []).length >=
+                            MAX_BANNER_BUTTONS
+                          }
+                          className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-xs font-medium text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+                        >
+                          <Plus size={14} />
+                          Add Button
+                        </button>
+                      </div>
+
+                      <p className="text-xs text-gray-500">
+                        {(activeBannerData?.buttons ?? []).length}/
+                        {MAX_BANNER_BUTTONS} banner buttons added
+                      </p>
+
+                      <div className="space-y-3">
+                        {(activeBannerData?.buttons ?? []).map(
+                          (button, index) => (
+                            <div
+                              key={index}
+                              className="grid grid-cols-1 gap-3 rounded-xl border border-gray-300 bg-white p-3 shadow-sm lg:grid-cols-[minmax(8rem,1fr)_minmax(8rem,1fr)_3.5rem]"
+                            >
+                              <input
+                                value={button.label}
+                                onChange={(event) =>
+                                  updateBannerButton(
+                                    index,
+                                    "label",
+                                    event.target.value,
+                                  )
+                                }
+                                className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
+                                placeholder="Button label"
+                              />
+
+                              <input
+                                value={button.href}
+                                onChange={(event) =>
+                                  updateBannerButton(
+                                    index,
+                                    "href",
+                                    event.target.value,
+                                  )
+                                }
+                                className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
+                                placeholder="/link"
+                              />
+
+                              <button
+                                type="button"
+                                onClick={() => deleteBannerButton(index)}
+                                className="flex h-8 w-8 items-center justify-center rounded-lg border border-red-500 bg-white text-red-600"
+                                aria-label="Delete banner button"
+                              >
+                                <Trash size={18} />
+                              </button>
+                            </div>
+                          ),
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   {activeVariant === "Banner-2" && (
                     <div className="grid gap-4 lg:grid-cols-2">
@@ -1420,6 +1950,23 @@ export default function EditSectionModal({
                               </div>
                             </div>
                           )}
+
+                          {layout.id === "Banner-3" && (
+                            <div className="relative flex h-full items-center overflow-hidden bg-slate-900 px-5">
+                              <div className="absolute inset-0 bg-linear-to-r from-slate-950 via-slate-800 to-blue-700" />
+                              <div className="relative z-10 w-2/3 space-y-2">
+                                <div className="h-3 w-44 rounded bg-white" />
+                                <div className="h-1.5 w-full rounded bg-white/60" />
+                                <div className="h-1.5 w-4/5 rounded bg-white/60" />
+                                <div className="h-5 w-20 rounded-md bg-blue-600" />
+                              </div>
+                              <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1">
+                                <span className="h-1.5 w-6 rounded bg-white" />
+                                <span className="h-1.5 w-1.5 rounded bg-white/50" />
+                                <span className="h-1.5 w-1.5 rounded bg-white/50" />
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </button>
                     );
@@ -1430,16 +1977,7 @@ export default function EditSectionModal({
             {activeSectionType === "Banner" &&
               activeTab === "Banner Background" && (
                 <div className="space-y-4">
-                  <section className="rounded-xl bg-[#f4f4f5] px-4 py-3">
-                    <div className="border-b border-gray-300 pb-3">
-                      <h4 className="text-lg font-semibold text-gray-950">
-                        Banner Background
-                      </h4>
-                      <p className="mt-1 text-sm font-medium text-gray-500">
-                        Customize banner background settings
-                      </p>
-                    </div>
-
+                  <section className="rounded-xl bg-[#f4f4f5] py-1">
                     <input
                       ref={bannerImageInputRef}
                       type="file"
@@ -1457,7 +1995,7 @@ export default function EditSectionModal({
                       aria-label="Choose banner video"
                     />
 
-                    <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                       {(
                         [
                           [
@@ -1483,10 +2021,10 @@ export default function EditSectionModal({
                             key={mode}
                             type="button"
                             onClick={() => updateBannerBackgroundMode(mode)}
-                            className={`h-11 rounded-lg px-4 text-sm font-semibold transition ${
+                            className={`h-11 rounded-lg px-4 text-sm font-medium transition ${
                               isActive
                                 ? "bg-blue-600 text-white"
-                                : "bg-sky-200 text-slate-950 hover:bg-sky-300"
+                                : "bg-gray-300 text-slate-950 hover:bg-gray-500"
                             }`}
                           >
                             {label}

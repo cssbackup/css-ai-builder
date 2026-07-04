@@ -4,9 +4,14 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { SectionProps } from "./../../../types/section";
-import { generalSansMedium } from "@/app/fonts";
+import { getBlock, getBlocksByType, resolveSectionBlocks } from "../types/section";
+import BlockRenderer from "../blocks/BlockRenderer";
 
-export default function HeaderOne({ data }: SectionProps) {
+export default function HeaderOne({ data = {}, blocks }: SectionProps) {
+  const resolvedBlocks = resolveSectionBlocks({ blocks, data });
+  const logo = getBlock(resolvedBlocks, "logo");
+  const menu = getBlock(resolvedBlocks, "menu");
+  const buttonBlocks = getBlocksByType(resolvedBlocks, "button");
   const [open, setOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
   const headerSolidColor = data.headerBackgroundColor ?? "var(--header-bg)";
@@ -51,11 +56,11 @@ export default function HeaderOne({ data }: SectionProps) {
           href="/"
           className="shrink-0 text-base font-semibold text-(--header-text) sm:text-lg"
         >
-          {data.logo}
+          {logo?.text}
         </Link>
 
         <nav className="hidden items-center gap-4 md:flex lg:gap-6">
-          {data.menu?.map((item) => {
+          {menu?.items.map((item) => {
             const hasDropdown = !!item.children?.length;
 
             return (
@@ -94,24 +99,22 @@ export default function HeaderOne({ data }: SectionProps) {
           })}
         </nav>
 
-        {!!data.buttons?.length && (
+        {!!buttonBlocks.length && (
           <div className="hidden items-center gap-2 md:flex">
-            {data.buttons.map((button, index) => {
+            {buttonBlocks.map((button, index) => {
               const variant =
                 button.variant || (index === 0 ? "primary" : "secondary");
 
               return (
-                <Link
-                  key={button.label}
-                  href={button.href}
+                <BlockRenderer
+                  key={button.id}
+                  block={button}
                   className={`flex items-center rounded-sm gap-1 px-3 py-2 text-sm font-medium ${
                     variant === "primary"
                       ? "bg-(--primary-link-bg) text-(--primary-link-color)"
                       : "bg-(--secondary-link-bg) text-(--text-white)"
                   }`}
-                >
-                  {button.label}
-                </Link>
+                />
               );
             })}
           </div>
@@ -134,7 +137,7 @@ export default function HeaderOne({ data }: SectionProps) {
           style={{ background: headerBackground }}
         >
           <nav className="flex flex-col gap-3">
-            {data.menu?.map((item) => {
+            {menu?.items.map((item) => {
               const hasDropdown = !!item.children?.length;
 
               return (
@@ -166,16 +169,13 @@ export default function HeaderOne({ data }: SectionProps) {
               );
             })}
 
-            {!!data.buttons?.length &&
-              data.buttons.map((button) => (
-                <Link
-                  key={button.label}
-                  href={button.href}
-                  onClick={() => setOpen(false)}
+            {!!buttonBlocks.length &&
+              buttonBlocks.map((button) => (
+                <BlockRenderer
+                  key={button.id}
+                  block={button}
                   className="mt-2 inline-flex w-fit items-center gap-1 rounded bg-(--primary-link-bg) px-3 py-2 text-sm font-semibold text-(--primary-link-color)"
-                >
-                  {button.label}
-                </Link>
+                />
               ))}
           </nav>
         </div>

@@ -1,0 +1,76 @@
+{
+  "sections": [
+    {
+      "id": "topbar-1",
+      "type": "topbar",
+      "layoutId": "topbar-one",
+      "blocks": [
+        {
+          "id": "text-1",
+          "type": "text",
+          "content": "Free shipping on all orders"
+        },
+        {
+          "id": "button-1",
+          "type": "button",
+          "label": "Shop Now",
+          "href": "/shop"
+        }
+      ]
+    },
+    {
+      "id": "header-1",
+      "type": "header",
+      "layoutId": "header-one",
+      "blocks": [
+        {
+          "id": "logo-1",
+          "type": "logo",
+          "text": "BrandName",
+          "href": "/"
+        },
+        {
+          "id": "menu-1",
+          "type": "menu",
+          "items": [
+            { "label": "Home", "href": "/" },
+            { "label": "About", "href": "/about" },
+            { "label": "Contact", "href": "/contact" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "banner-1",
+      "type": "banner",
+      "layoutId": "banner-one",
+      "blocks": [
+        {
+          "id": "heading-1",
+          "type": "text",
+          "role": "heading",
+          "content": "Build Your Website Today"
+        },
+        {
+          "id": "desc-1",
+          "type": "text",
+          "role": "paragraph",
+          "content": "Create websites in minutes using AI."
+        },
+        {
+          "id": "image-1",
+          "type": "image",
+          "src": "/banner.jpg",
+          "alt": "Banner image"
+        },
+        {
+          "id": "button-1",
+          "type": "button",
+          "label": "Get Started",
+          "href": "/start",
+          "variant": "primary"
+        }
+      ]
+    }
+  ]
+}

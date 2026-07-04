@@ -109,10 +109,10 @@ export const selectedConfig: SelectedConfig = {
           ],
         },
         "Banner-2": {
-          bannerBackgroundMode: "image",
+          bannerBackgroundMode: "video",
           backgroundImage: "/bg2.jpg",
           backgroundImageTitle: "AI rays",
-          backgroundVideo: "",
+          backgroundVideo: "/video.mp4",
           bannerBackgroundColor: "#0f172a",
           bannerGradientColor: "#0ea5e9",
           bannerHeight: 70,
@@ -123,6 +123,44 @@ export const selectedConfig: SelectedConfig = {
             {
               label: "Start building",
               href: "#",
+            },
+          ],
+        },
+        "Banner-3": {
+          bannerHeight: 70,
+          bannerSlides: [
+            {
+              image: "/bg1.jpg",
+              alt: "AI website builder dashboard",
+              title: "Build Your Website Today",
+              desc: "Create polished pages from reusable blocks that your backend can update with clean JSON.",
+              button: {
+                label: "Get Started",
+                href: "#",
+                variant: "primary",
+              },
+            },
+            {
+              image: "/bg2.jpg",
+              alt: "AI powered banner design",
+              title: "Change Every Slide",
+              desc: "Each slide has its own image, title, description, and button so content stays simple to manage.",
+              button: {
+                label: "View Demo",
+                href: "#",
+                variant: "primary",
+              },
+            },
+            {
+              image: "/ai_rays.png",
+              alt: "AI rays visual",
+              title: "Ready For Backend Data",
+              desc: "Send bannerSlides from the backend and this layout will render the slider automatically.",
+              button: {
+                label: "Learn More",
+                href: "#",
+                variant: "primary",
+              },
             },
           ],
         },

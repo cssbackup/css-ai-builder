@@ -1,3 +1,25 @@
+import type {
+  Block,
+  BlockSection,
+  LayoutComponentProps,
+} from "../components/sections/types/section";
+
+export type {
+  Block,
+  BlockSection,
+  SectionType,
+  TextBlock,
+  ImageBlock,
+  VideoBlock,
+  ButtonBlock,
+  SliderBlock,
+  CarouselBlock,
+  CardBlock,
+  ListBlock,
+  MenuBlock,
+  LogoBlock,
+} from "../components/sections/types/section";
+
 type MenuItem = {
   label: string;
   href: string;
@@ -25,6 +47,14 @@ export type ButtonData = {
   label: string;
   href: string;
   variant?: "primary" | "secondary";
+};
+
+export type BannerSlideData = {
+  image: string;
+  alt?: string;
+  title: string;
+  desc?: string;
+  button?: ButtonData;
 };
 
 export type ProductImageData = {
@@ -111,6 +141,7 @@ export type SectionData = {
   bannerBackgroundColor?: string;
   bannerGradientColor?: string;
   bannerHeight?: number;
+  bannerSlides?: BannerSlideData[];
 
   eyebrowColor?: string;
   titleColor?: string;
@@ -154,8 +185,11 @@ export type SectionData = {
 };
 
 export type SectionProps = {
-  data: SectionData;
-};
+  data?: SectionData;
+} & Partial<LayoutComponentProps> & {
+    blocks?: Block[];
+    section?: BlockSection;
+  };
 
 export type SectionItem = {
   type: string;

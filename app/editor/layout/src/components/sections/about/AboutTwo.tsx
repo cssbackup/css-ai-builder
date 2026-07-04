@@ -1,50 +1,60 @@
-import Image from "next/image";
-import Link from "next/link";
 import { SectionProps } from "./../../../types/section";
+import {
+  getBlocksByType,
+  getTextBlockByRole,
+  resolveSectionBlocks,
+} from "../types/section";
+import BlockRenderer from "../blocks/BlockRenderer";
 
-export default function AboutTwo({ data }: SectionProps) {
+export default function AboutTwo({ data = {}, blocks }: SectionProps) {
+  const resolvedBlocks = resolveSectionBlocks({ blocks, data });
+  const imageBlocks = getBlocksByType(resolvedBlocks, "image");
+  const backgroundImage = imageBlocks.find(
+    (block) => block.role === "background" || !block.role,
+  );
+  const sideImage = imageBlocks.find((block) => block.role === "side");
+  const buttonBlocks = getBlocksByType(resolvedBlocks, "button");
+
   return (
     <section className="w-full bg-white px-4 py-10 md:px-10 lg:px-16">
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_1.6fr_1fr] lg:items-end">
         {/* Left Content */}
         <div className="flex flex-col gap-10">
           <div>
-            {data.pretitle && (
-              <p className="mb-4 text-sm font-medium uppercase tracking-widest text-gray-500">
-                {data.pretitle}
-              </p>
-            )}
+            <BlockRenderer
+              block={getTextBlockByRole(resolvedBlocks, "pretitle")}
+              className="mb-4 text-sm font-medium uppercase tracking-widest text-gray-500"
+            />
 
-            <h2 className="text-7xl font-black uppercase leading-[0.85] tracking-tight text-black sm:text-8xl lg:text-9xl">
-              {data.title}
-            </h2>
+            <BlockRenderer
+              block={getTextBlockByRole(resolvedBlocks, "heading")}
+              className="text-7xl font-black uppercase leading-[0.85] tracking-tight text-black sm:text-8xl lg:text-9xl"
+            />
           </div>
 
           <div className="space-y-4">
-            {data.subtitle && (
-              <p className="text-sm font-medium text-black">{data.subtitle}</p>
-            )}
+            <BlockRenderer
+              block={getTextBlockByRole(resolvedBlocks, "subheading")}
+              className="text-sm font-medium text-black"
+            />
 
-            {data.desc && (
-              <p className="max-w-xs text-base leading-relaxed text-black">
-                {data.desc}
-              </p>
-            )}
+            <BlockRenderer
+              block={getTextBlockByRole(resolvedBlocks, "paragraph")}
+              className="max-w-xs text-base leading-relaxed text-black"
+            />
 
-            {data.buttons?.length ? (
+            {buttonBlocks.length ? (
               <div className="flex flex-wrap gap-4">
-                {data.buttons.map((button) => (
-                  <Link
-                    key={button.label}
-                    href={button.href}
+                {buttonBlocks.map((button) => (
+                  <BlockRenderer
+                    key={button.id}
+                    block={button}
                     className={`rounded-lg px-6 py-3 text-sm font-semibold transition ${
                       button.variant === "primary"
                         ? "bg-black text-white"
                         : "border border-black text-black"
                     }`}
-                  >
-                    {button.label}
-                  </Link>
+                  />
                 ))}
               </div>
             ) : null}
@@ -53,37 +63,25 @@ export default function AboutTwo({ data }: SectionProps) {
 
         {/* Center Image */}
         <div className="relative h-[260px] overflow-hidden rounded-[28px] sm:h-[360px] lg:h-[420px]">
-          <Image
-            src={data.backgroundImage ?? ""}
-            alt={data.backgroundImageTitle ?? ""}
-            fill
-            className="object-cover"
-          />
+          <BlockRenderer block={backgroundImage} className="object-cover" />
         </div>
 
         {/* Right Content */}
         <div className="flex flex-col gap-8">
           <div className="relative h-[150px] overflow-hidden rounded-[28px] sm:h-[200px]">
-            <Image
-              src={data.sideImage ?? ""}
-              alt={data.sideImageTitle ?? ""}
-              fill
-              className="object-cover"
-            />
+            <BlockRenderer block={sideImage} className="object-cover" />
           </div>
 
           <div>
-            {data.philosophyTitle && (
-              <h3 className="mb-6 text-3xl font-bold text-black lg:text-4xl">
-                {data.philosophyTitle}
-              </h3>
-            )}
+            <BlockRenderer
+              block={getTextBlockByRole(resolvedBlocks, "philosophy-heading")}
+              className="mb-6 text-3xl font-bold text-black lg:text-4xl"
+            />
 
-            {data.philosophyDesc && (
-              <p className="text-base leading-relaxed text-black">
-                {data.philosophyDesc}
-              </p>
-            )}
+            <BlockRenderer
+              block={getTextBlockByRole(resolvedBlocks, "paragraph-secondary")}
+              className="text-base leading-relaxed text-black"
+            />
           </div>
         </div>
       </div>

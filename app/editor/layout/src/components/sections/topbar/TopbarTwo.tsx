@@ -10,6 +10,12 @@ import {
   FaLinkedinIn,
 } from "react-icons/fa";
 import { SectionProps, SocialLinkData } from "./../../../types/section";
+import {
+  getBlocksByType,
+  getTextBlockByRole,
+  resolveSectionBlocks,
+} from "../types/section";
+import BlockRenderer from "../blocks/BlockRenderer";
 
 const socialIcons: Record<SocialLinkData["label"], ElementType> = {
   facebook: FaFacebookF,
@@ -21,7 +27,12 @@ const socialIcons: Record<SocialLinkData["label"], ElementType> = {
 const getVisibleSocialLinks = (socialLinks: SocialLinkData[] = []) =>
   socialLinks.slice(0, 4);
 
-export default function TopbarTwo({ data }: SectionProps) {
+export default function TopbarTwo({ data = {}, blocks }: SectionProps) {
+  const resolvedBlocks = resolveSectionBlocks({ blocks, data });
+  const announcement = getTextBlockByRole(resolvedBlocks, "announcement");
+  const buttonBlocks = getBlocksByType(resolvedBlocks, "button").filter(
+    (button) => button.role !== "social",
+  );
   const topbarSolidColor = data.topbarBackgroundColor ?? "var(--secondary-bg)";
   const topbarGradientColor = data.topbarGradientColor ?? "#0668ff";
   const topbarBackground =
@@ -29,7 +40,7 @@ export default function TopbarTwo({ data }: SectionProps) {
       ? `linear-gradient(90deg, ${topbarSolidColor}, ${topbarGradientColor})`
       : topbarSolidColor;
   const topbarTextColor = data.topbarTextColor ?? "var(--primary-text)";
-  const topbarText = data.text?.join(" ") ?? "";
+  const topbarText = announcement?.content ?? "";
   const phone = data.phone ?? "";
   const email = data.email ?? "";
   const location = data.location ?? "";
@@ -38,7 +49,11 @@ export default function TopbarTwo({ data }: SectionProps) {
   return (
     <section style={{ background: topbarBackground, color: topbarTextColor }}>
       <div className="mx-auto flex h-11 max-w-7xl items-center justify-between px-4 lg:px-6">
-        {topbarText && <p className="text-sm font-semibold">{topbarText}</p>}
+        {announcement ? (
+          <BlockRenderer block={announcement} className="text-sm font-semibold" />
+        ) : (
+          topbarText && <p className="text-sm font-semibold">{topbarText}</p>
+        )}
 
         <div className="flex items-center divide-x divide-white/20">
           {phone && (
@@ -69,6 +84,13 @@ export default function TopbarTwo({ data }: SectionProps) {
           )}
 
           <div className="flex items-center">
+            {buttonBlocks.map((button) => (
+              <BlockRenderer
+                key={button.id}
+                block={button}
+                className="px-4 text-sm font-semibold transition hover:opacity-80"
+              />
+            ))}
             {socialLinks.map((socialLink, index) => {
               const Icon = socialIcons[socialLink.label];
 

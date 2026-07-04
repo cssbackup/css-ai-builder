@@ -141,8 +141,8 @@ export default function EditableSection({
           data-editor-toolbar
           className="pointer-events-none absolute inset-0 z-40 hidden group-hover:block"
         >
-          <div className="sticky top-1/2 flex -translate-y-1/2 justify-center px-3">
-            <div className="pointer-events-auto flex max-w-[calc(100vw-2rem)] flex-wrap items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-3 py-2 shadow-lg">
+          <div className="sticky top-1/2 flex  justify-center px-3">
+            <div className="pointer-events-auto flex max-w-[calc(100vw-2rem)] flex-wrap items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-3 py-1 shadow-lg">
               <span className="text-sm font-medium text-gray-900">
                 {label} :
               </span>
@@ -180,35 +180,35 @@ export default function EditableSection({
 
       {showDeleteConfirm &&
         createPortal(
-        <div className="pointer-events-none fixed inset-0 z-[10001] flex items-center justify-center px-4">
-          <div className="pointer-events-auto w-[min(92vw,390px)] rounded-2xl border border-slate-300 bg-white p-6 text-center shadow-2xl">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-red-600">
-              Delete {sectionName}
-            </p>
+          <div className="pointer-events-none fixed inset-0 z-[10001] flex items-center justify-center px-4">
+            <div className="pointer-events-auto w-[min(92vw,390px)] rounded-2xl border border-slate-300 bg-white p-6 text-center shadow-2xl">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-red-600">
+                Delete {sectionName}
+              </p>
 
-            <h3 className="mt-2 text-xl font-semibold text-slate-950">
-              Are you sure you want to delete {label} section?
-            </h3>
+              <h3 className="mt-2 text-xl font-semibold text-slate-950">
+                Are you sure you want to delete {label} section?
+              </h3>
 
-            <div className="mt-6 flex justify-center gap-3">
-              <button
-                type="button"
-                onClick={handleConfirmDelete}
-                className="rounded-full bg-red-600 px-7 py-2 text-sm font-semibold text-white hover:bg-red-700"
-              >
-                Yes
-              </button>
+              <div className="mt-6 flex justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleConfirmDelete}
+                  className="rounded-full bg-red-600 px-7 py-2 text-sm font-semibold text-white hover:bg-red-700"
+                >
+                  Yes
+                </button>
 
-              <button
-                type="button"
-                onClick={() => setShowDeleteConfirm(false)}
-                className="rounded-full border border-slate-300 px-7 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
-              >
-                Cancel
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="rounded-full border border-slate-300 px-7 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
-          </div>
-        </div>,
+          </div>,
           document.body,
         )}
 

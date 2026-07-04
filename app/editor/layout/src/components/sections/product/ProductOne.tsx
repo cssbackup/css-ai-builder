@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { ProductSlideData, SectionProps } from "./../../../types/section";
+import { getBlocksByType, resolveSectionBlocks } from "../types/section";
+import BlockRenderer from "../blocks/BlockRenderer";
 
 const fallbackSlides: ProductSlideData[] = [
   {
@@ -31,12 +32,34 @@ const fallbackSlides: ProductSlideData[] = [
   },
 ];
 
-export default function ProductOne({ data }: SectionProps) {
+export default function ProductOne({ data = {}, blocks }: SectionProps) {
+  const resolvedBlocks = resolveSectionBlocks({ blocks, data });
+  const cardBlocks = getBlocksByType(resolvedBlocks, "card");
   const [activeIndex, setActiveIndex] = useState(0);
-  const slides = data.productSlides?.length
-    ? data.productSlides
-    : fallbackSlides;
+  const slides = cardBlocks.length
+    ? cardBlocks
+    : fallbackSlides.map((slide, index) => ({
+        id: `fallback-slide-${index + 1}`,
+        type: "card" as const,
+        title: slide.productTitle,
+        category: slide.productSubtitle,
+        desc: slide.productInfoDesc,
+        image: slide.image,
+        alt: slide.alt,
+        blocks: slide.button
+          ? [
+              {
+                id: `fallback-slide-button-${index + 1}`,
+                type: "button" as const,
+                label: slide.button.label,
+                href: slide.button.href,
+                variant: slide.button.variant,
+              },
+            ]
+          : [],
+      }));
   const activeSlide = slides[activeIndex] ?? slides[0];
+  const slideButton = activeSlide?.blocks?.find((block) => block.type === "button");
 
   const nextImage = () => {
     setActiveIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
@@ -52,15 +75,15 @@ export default function ProductOne({ data }: SectionProps) {
         <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.4fr_1fr]">
           <div>
             <h1 className="text-4xl font-bold leading-tight text-black md:text-5xl">
-              {activeSlide.productTitle}
+              {activeSlide.title}
             </h1>
 
             <p className="mt-3 text-sm text-black">
-              {activeSlide.productSubtitle}
+              {activeSlide.category}
             </p>
 
             <div className="mt-8 w-full max-w-[210px] rounded-sm bg-white p-4 shadow">
-              {activeSlide.productFeatures.map((item) => (
+              {(data.productFeatures ?? []).map((item) => (
                 <div
                   key={item.label}
                   className="flex justify-between border-b border-dashed border-gray-300 py-2 text-xs text-black"
@@ -76,22 +99,20 @@ export default function ProductOne({ data }: SectionProps) {
                     Total Price:
                   </p>
                   <p className="text-[9px] text-gray-500">
-                    {activeSlide.productShippingText}
+                    {data.productShippingText}
                   </p>
                 </div>
                 <p className="text-xl text-black">
-                  {activeSlide.productTotalPrice}
+                  {data.productTotalPrice}
                 </p>
               </div>
             </div>
 
-            {activeSlide.button && (
-              <Link
-                href={activeSlide.button.href}
+            {slideButton && (
+              <BlockRenderer
+                block={slideButton}
                 className="mt-4 inline-block rounded bg-blue-600 px-6 py-2 text-xs font-bold text-white"
-              >
-                {activeSlide.button.label}
-              </Link>
+              />
             )}
           </div>
 
@@ -100,8 +121,8 @@ export default function ProductOne({ data }: SectionProps) {
               <div className="absolute bottom-2 left-1/2 h-12 w-[80%] -translate-x-1/2 rounded-full bg-slate-500/90 blur-2xl" />
 
               <Image
-                src={activeSlide.image}
-                alt={activeSlide.alt}
+                src={activeSlide.image ?? "/55.jpg"}
+                alt={activeSlide.alt ?? activeSlide.title ?? "Product"}
                 fill
                 className="object-contain drop-shadow-[0_28px_24px_rgba(15,23,42,0.18)]"
                 priority
@@ -129,15 +150,15 @@ export default function ProductOne({ data }: SectionProps) {
 
           <div>
             <h2 className="text-3xl font-bold text-black">
-              {activeSlide.productInfoTitle}
+              {activeSlide.title}
             </h2>
 
             <p className="mt-3 max-w-xs text-xs leading-relaxed text-black">
-              {activeSlide.productInfoDesc}
+              {activeSlide.desc}
             </p>
 
             <div className="mt-8 rounded-sm bg-white p-5 shadow">
-              {activeSlide.productFeatures.map((item) => (
+              {(data.productFeatures ?? []).map((item) => (
                 <div
                   key={item.label}
                   className="flex justify-between border-b border-dashed border-gray-300 py-3 text-sm text-black"
@@ -151,17 +172,15 @@ export default function ProductOne({ data }: SectionProps) {
                 <div>
                   <p className="text-xs font-bold text-black">Total Price:</p>
                   <p className="text-[10px] text-gray-500">
-                    {activeSlide.productShippingText}
+                    {data.productShippingText}
                   </p>
                 </div>
 
-                {activeSlide.button && (
-                  <Link
-                    href={activeSlide.button.href}
+                {slideButton && (
+                  <BlockRenderer
+                    block={slideButton}
                     className="rounded-lg bg-blue-600 px-5 py-3 text-xs font-bold text-white"
-                  >
-                    {activeSlide.button.label}
-                  </Link>
+                  />
                 )}
               </div>
             </div>

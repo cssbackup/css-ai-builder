@@ -1,6 +1,11 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ProductCardData, SectionProps } from "./../../../types/section";
+import {
+  getBlocksByType,
+  getTextBlockByRole,
+  resolveSectionBlocks,
+} from "../types/section";
+import BlockRenderer from "../blocks/BlockRenderer";
 
 const fallbackCards: ProductCardData[] = [
   {
@@ -47,22 +52,11 @@ const fallbackCards: ProductCardData[] = [
   },
 ];
 
-export default function ProductThree({ data }: SectionProps) {
-  const productCards = data.productItems?.length
-    ? data.productItems
-    : fallbackCards;
-  const pretitle = data.pretitle ?? "How we build";
-  const title =
-    data.title ?? "Most web builders get in your way. We don't.";
-  const desc =
-    data.desc ??
-    "We build sites that load fast and work harder. No bloated themes, no unnecessary code, just clean digital solutions from New Delhi.";
-  const buttons = data.buttons?.length
-    ? data.buttons
-    : [
-        { label: "Take the virtual walkthrough", href: "#" },
-        { label: "Email us", href: "mailto:hello@example.com" },
-      ];
+export default function ProductThree({ data = {}, blocks }: SectionProps) {
+  const resolvedBlocks = resolveSectionBlocks({ blocks, data });
+  const cardBlocks = getBlocksByType(resolvedBlocks, "card");
+  const productCards = cardBlocks.length ? cardBlocks : fallbackCards;
+  const buttonBlocks = getBlocksByType(resolvedBlocks, "button");
 
   return (
     <section className="w-full bg-[#0d1f2a] px-4 py-12 text-white md:px-8 lg:px-14">
@@ -70,32 +64,33 @@ export default function ProductThree({ data }: SectionProps) {
         <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
           <div>
             <p className="mb-8 text-sm font-bold uppercase tracking-wide">
-              {pretitle}
+              {getTextBlockByRole(resolvedBlocks, "pretitle")?.content ??
+                "How we build"}
             </p>
 
-            <h2 className="max-w-xl text-5xl font-bold leading-tight tracking-tight md:text-6xl lg:text-7xl">
-              {title}
-            </h2>
+            <BlockRenderer
+              block={getTextBlockByRole(resolvedBlocks, "heading")}
+              className="max-w-xl text-5xl font-bold leading-tight tracking-tight md:text-6xl lg:text-7xl"
+            />
           </div>
 
           <div className="lg:pt-12">
-            <p className="max-w-2xl text-xl font-medium leading-relaxed md:text-2xl">
-              {desc}
-            </p>
+            <BlockRenderer
+              block={getTextBlockByRole(resolvedBlocks, "paragraph")}
+              className="max-w-2xl text-xl font-medium leading-relaxed md:text-2xl"
+            />
 
             <div className="mt-10 flex flex-wrap gap-5">
-              {buttons.map((button, index) => (
-                <Link
-                  key={`${button.label}-${index}`}
-                  href={button.href}
+              {buttonBlocks.map((button, index) => (
+                <BlockRenderer
+                  key={button.id}
+                  block={button}
                   className={`rounded-2xl px-8 py-5 text-base font-bold transition ${
                     index === 0
                       ? "bg-blue-600 text-white hover:bg-blue-700"
                       : "bg-blue-200 text-black hover:bg-blue-300"
                   }`}
-                >
-                  {button.label}
-                </Link>
+                />
               ))}
             </div>
           </div>
@@ -103,11 +98,11 @@ export default function ProductThree({ data }: SectionProps) {
 
         <div className="mt-24 grid gap-x-9 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
           {productCards.map((card) => (
-            <article key={card.title}>
+            <article key={"id" in card ? card.id : card.title}>
               <div className="relative h-[280px] overflow-hidden rounded-2xl md:h-[320px]">
                 <Image
-                  src={card.image}
-                  alt={card.imageTitle ?? card.alt ?? card.title}
+                  src={card.image ?? "/bg1.jpg"}
+                  alt={card.alt ?? card.title ?? "Product"}
                   fill
                   className="object-cover"
                 />

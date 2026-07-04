@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ProductCardData, SectionProps } from "./../../../types/section";
 import { generalSansMedium } from "@/app/fonts";
+import { getBlocksByType, getTextBlockByRole, resolveSectionBlocks } from "../types/section";
 
 const fallbackProducts: ProductCardData[] = [
   {
@@ -44,15 +45,17 @@ const fallbackProducts: ProductCardData[] = [
   },
 ];
 
-export default function ProductTwo({ data }: SectionProps) {
+export default function ProductTwo({ data = {}, blocks }: SectionProps) {
+  const resolvedBlocks = resolveSectionBlocks({ blocks, data });
+  const cardBlocks = getBlocksByType(resolvedBlocks, "card");
   const [startIndex, setStartIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState<"next" | "prev">("next");
   const [animationKey, setAnimationKey] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const products = data.productItems?.length
-    ? data.productItems
-    : fallbackProducts;
-  const sectionTitle = data.productSectionTitle ?? "Products Overview";
+  const products = cardBlocks.length ? cardBlocks : fallbackProducts;
+  const sectionTitle =
+    getTextBlockByRole(resolvedBlocks, "heading")?.content ??
+    "Products Overview";
   const visibleCards = 3;
   const animationDuration = 420;
 
@@ -114,7 +117,7 @@ export default function ProductTwo({ data }: SectionProps) {
         >
           {shownProducts.map((product, index) => (
             <div
-              key={product.category}
+              key={"id" in product ? product.id : product.category}
               className="overflow-hidden rounded-3xl border border-gray-300 bg-white"
               style={{
                 animation: `productTwoCardLift ${animationDuration}ms cubic-bezier(0.22, 1, 0.36, 1) both`,
@@ -123,8 +126,8 @@ export default function ProductTwo({ data }: SectionProps) {
             >
               <div className="relative h-60 w-full">
                 <Image
-                  src={product.image}
-                  alt={product.alt ?? product.title}
+                  src={product.image ?? "/prod2.jpg"}
+                  alt={product.alt ?? product.title ?? "Product"}
                   fill
                   className="object-cover"
                 />

@@ -1,0 +1,166 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  getBlock,
+  resolveSectionBlocks,
+  type ButtonBlock,
+  type CardBlock,
+} from "../types/section";
+import { SectionProps } from "./../../../types/section";
+import BlockRenderer from "../blocks/BlockRenderer";
+
+const fallbackSlides: CardBlock[] = [
+  {
+    id: "fallback-slide-1",
+    type: "card",
+    role: "slide",
+    title: "Build Your Website Today",
+    desc: "Create websites in minutes using AI-powered layouts.",
+    image: "/bg1.jpg",
+    alt: "AI website builder preview",
+    blocks: [
+      {
+        id: "fallback-button-1",
+        type: "button",
+        label: "Get Started",
+        href: "#",
+        variant: "primary",
+      },
+    ],
+  },
+  {
+    id: "fallback-slide-2",
+    type: "card",
+    role: "slide",
+    title: "Launch Pages Faster",
+    desc: "Use reusable blocks that your backend can control cleanly.",
+    image: "/bg2.jpg",
+    alt: "Website launch banner",
+    blocks: [
+      {
+        id: "fallback-button-2",
+        type: "button",
+        label: "Explore",
+        href: "#",
+        variant: "primary",
+      },
+    ],
+  },
+];
+
+export default function BannerThree({ data = {}, blocks }: SectionProps) {
+  const resolvedBlocks = resolveSectionBlocks({ blocks, data });
+  const carousel = getBlock(resolvedBlocks, "carousel", "banner-slider");
+  const slides = useMemo(
+    () =>
+      (carousel?.items.filter(
+        (item): item is CardBlock => item.type === "card",
+      ) ?? fallbackSlides).filter((slide) => slide.image),
+    [carousel],
+  );
+  const [activeIndex, setActiveIndex] = useState(0);
+  const bannerHeight = data.bannerHeight ?? 70;
+  const safeActiveIndex = slides.length ? activeIndex % slides.length : 0;
+  const activeSlide = slides[safeActiveIndex] ?? slides[0];
+  const slideButton = activeSlide?.blocks?.find(
+    (block): block is ButtonBlock => block.type === "button",
+  );
+
+  useEffect(() => {
+    if (slides.length <= 1) return;
+
+    const timer = window.setInterval(() => {
+      setActiveIndex((index) => (index + 1) % slides.length);
+    }, 3000);
+
+    return () => window.clearInterval(timer);
+  }, [slides.length]);
+
+  const goToPreviousSlide = () => {
+    setActiveIndex((index) => (index - 1 + slides.length) % slides.length);
+  };
+
+  const goToNextSlide = () => {
+    setActiveIndex((index) => (index + 1) % slides.length);
+  };
+
+  if (!activeSlide) return null;
+
+  return (
+    <section
+      className="relative w-full overflow-hidden"
+      style={{ height: `${bannerHeight}dvh` }}
+    >
+      <Image
+        key={activeSlide.id}
+        src={activeSlide.image ?? "/bg1.jpg"}
+        alt={activeSlide.alt ?? activeSlide.title ?? "Banner slide"}
+        fill
+        priority
+        sizes="100vw"
+        unoptimized={activeSlide.image?.startsWith("data:")}
+        className="object-cover transition-opacity duration-500"
+      />
+      <div className="absolute inset-0 bg-black/50" />
+
+      <div className="relative z-10 flex h-full items-center px-6 md:px-12">
+        <div className="max-w-2xl space-y-4 text-white">
+          {activeSlide.title && (
+            <h1 className="text-3xl font-semibold leading-tight md:text-5xl">
+              {activeSlide.title}
+            </h1>
+          )}
+          {activeSlide.desc && (
+            <p className="max-w-xl text-base leading-relaxed text-white/85 md:text-lg">
+              {activeSlide.desc}
+            </p>
+          )}
+          {slideButton && (
+            <BlockRenderer
+              block={slideButton}
+              className="inline-flex rounded-md bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+            />
+          )}
+        </div>
+      </div>
+
+      {slides.length > 1 && (
+        <>
+          <button
+            type="button"
+            onClick={goToPreviousSlide}
+            className="absolute left-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-950 shadow-lg transition hover:bg-white"
+            aria-label="Previous banner slide"
+          >
+            <ChevronLeft size={22} />
+          </button>
+          <button
+            type="button"
+            onClick={goToNextSlide}
+            className="absolute right-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-950 shadow-lg transition hover:bg-white"
+            aria-label="Next banner slide"
+          >
+            <ChevronRight size={22} />
+          </button>
+
+          <div className="absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+            {slides.map((slide, index) => (
+              <button
+                key={slide.id}
+                type="button"
+                onClick={() => setActiveIndex(index)}
+                className={`h-2 rounded-full transition-all ${
+                  index === safeActiveIndex ? "w-8 bg-white" : "w-2 bg-white/50"
+                }`}
+                aria-label={`Show banner slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </section>
+  );
+}

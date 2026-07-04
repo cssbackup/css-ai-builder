@@ -6,6 +6,7 @@ import HeaderOne from "../components/sections/header/HeaderOne";
 import HeaderTwo from "../components/sections/header/HeaderTwo";
 import BannerOne from "../components/sections/banner/BannerOne";
 import BannerTwo from "../components/sections/banner/BannerTwo";
+import BannerThree from "../components/sections/banner/BannerThree";
 import AboutOne from "../components/sections/about/AboutOne";
 import AboutTwo from "../components/sections/about/AboutTwo";
 import ProductOne from "../components/sections/product/ProductOne";
@@ -22,6 +23,7 @@ export const sectionRegistry: Record<string, ComponentType<SectionProps>> = {
   "Header-2": HeaderTwo,
   "Banner-1": BannerOne,
   "Banner-2": BannerTwo,
+  "Banner-3": BannerThree,
   "About-1": AboutOne,
   "About-2": AboutTwo,
   "Product-1": ProductOne,
