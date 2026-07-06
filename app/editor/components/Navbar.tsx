@@ -32,6 +32,8 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { isPreview, togglePreview } = usePreview();
+  const [showPopup, setShowPopup] = useState(false);
+  const [newPageName, setNewPageName] = useState("");
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -75,15 +77,23 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
 
       return nextPages;
     });
-  
+
     setPageToDelete(null);
   };
 
   const addNewPage = () => {
-    const newPageName = `Page ${pageItems.length + 1}`;
-    setPageItems((prevPages) => [...prevPages, newPageName]);
-    setSelectedPage(newPageName);
+    setShowPopup(true);
     setOpen(false);
+  };
+
+  const handleCreatePage = () => {
+    if (!newPageName.trim()) return;
+
+    setPageItems((prevPages) => [...prevPages, newPageName.trim()]);
+    setSelectedPage(newPageName.trim());
+
+    setNewPageName("");
+    setShowPopup(false);
   };
 
   return (
@@ -170,6 +180,45 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
                   >
                     Add More{" "}
                   </button>
+
+                  {showPopup && (
+                    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/30 backdrop-blur-sm">
+                      <div className="w-full max-w-sm rounded-xl bg-white p-5 shadow-xl">
+                        <h2 className="mb-4 text-lg font-semibold text-slate-900">
+                          Add New Page
+                        </h2>
+
+                        <input
+                          type="text"
+                          value={newPageName}
+                          onChange={(e) => setNewPageName(e.target.value)}
+                          placeholder="Enter page name"
+                          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-500"
+                        />
+
+                        <div className="mt-4 flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setNewPageName("");
+                              setShowPopup(false);
+                            }}
+                            className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-700"
+                          >
+                            Cancel
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={handleCreatePage}
+                            className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white"
+                          >
+                            Add Page
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

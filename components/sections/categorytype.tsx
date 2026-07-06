@@ -16,6 +16,7 @@ import {
   ChevronUp,
   X,
 } from "lucide-react";
+import { getCategoryNamesWithContent } from "@/app/editor/layout/src/data/templateFlow";
 
 const types = [
   {
@@ -39,8 +40,8 @@ const types = [
     icon: Home,
   },
   {
-    title: "Education",
-    desc: "Create online courses",
+    title: "School",
+    desc: "Manage admissions",
     icon: GraduationCap,
   },
   {
@@ -66,9 +67,21 @@ const types = [
 ];
 
 const steps = ["Business Info", "Category", "Choose Design"];
+const availableCategoryNames = getCategoryNamesWithContent();
+const availableTypes = types.filter((item) =>
+  availableCategoryNames.includes(item.title),
+);
 
-export default function Categorystep() {
-  const [selected, setSelected] = useState("Business");
+type CategoryTypeProps = {
+  selectedCategory: string;
+  onCategoryChange: (category: string) => void;
+};
+
+export default function Categorystep({
+  selectedCategory,
+  onCategoryChange,
+}: CategoryTypeProps) {
+  const [selected, setSelected] = useState(selectedCategory);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -91,21 +104,22 @@ export default function Categorystep() {
   }, []);
 
   const filteredTypes = useMemo(() => {
-    if (!search.trim()) return types;
+    if (!search.trim()) return availableTypes;
 
-    return types.filter((item) =>
+    return availableTypes.filter((item) =>
       item.title.toLowerCase().includes(search.toLowerCase()),
     );
   }, [search]);
 
   const handleSelect = (title: string) => {
     setSelected(title);
-    setSearch(title);
+    onCategoryChange(title);
     setOpen(false);
   };
 
   const handleAllItems = () => {
     setSelected("");
+    onCategoryChange("");
     setSearch("");
     setOpen(false);
   };
@@ -190,7 +204,7 @@ export default function Categorystep() {
                   : "border-slate-100 bg-slate-50 text-slate-900"
               }`}
             >
-              <span className="truncate">{selected || "Popular Types"}</span>
+              <span className="truncate">Popular Types</span>
               {open ? (
                 <ChevronUp className="shrink-0" size={16} />
               ) : (
@@ -220,18 +234,21 @@ export default function Categorystep() {
 
                 <div className="my-1 border-t border-slate-100" />
 
-                {types.map((item) => (
+                {availableTypes.map((item) => (
                   <button
                     key={item.title}
                     type="button"
                     onClick={() => handleSelect(item.title)}
-                    className={`block w-full px-5 py-3 text-left text-sm transition cursor-pointer hover:bg-red-50 hover:text-red-600 ${
+                    className={`flex w-full cursor-pointer items-center justify-between gap-3 px-5 py-3 text-left text-sm transition hover:bg-red-50 hover:text-red-600 ${
                       selected === item.title
                         ? "bg-red-50 font-bold text-red-600"
                         : "text-slate-700"
                     }`}
                   >
-                    {item.title}
+                    <span>{item.title}</span>
+                    {selected === item.title && (
+                      <Check size={14} strokeWidth={3} />
+                    )}
                   </button>
                 ))}
               </div>

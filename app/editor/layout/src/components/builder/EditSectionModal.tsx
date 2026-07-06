@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type ChangeEvent } from "react";
+import { useRef, useState, type ChangeEvent, type MouseEvent } from "react";
 import { Menu, Plus, Trash, X } from "lucide-react";
 import { agrandirBolt, generalSansMedium } from "@/app/fonts";
 import {
@@ -49,9 +49,10 @@ const topbarLayouts = [
 ];
 
 const bannerLayouts = [
-  { id: "Banner-1", name: "Banner 1" },
-  { id: "Banner-2", name: "Banner 2" },
-  { id: "Banner-3", name: "Banner 3" },
+  { id: "Banner-1", name: "Image Banner" },
+  { id: "Banner-2", name: "Video Banner" },
+  { id: "Banner-3", name: "Image Slider" },
+  { id: "Banner-4", name: "Video Slider" },
 ];
 
 const aboutLayouts = [
@@ -87,10 +88,7 @@ const sidebarItemsBySection: Record<string, string[]> = {
     "Navigation Menu",
     "Header Buttons",
   ],
-  Banner: [
-    "Banner Content",
-    "Banner Layout",
-  ],
+  Banner: ["Banner Content", "Banner Layout"],
   About: ["About Layout"],
   Product: ["Product Layout"],
   Footer: ["Footer Layout"],
@@ -118,6 +116,38 @@ const clampBannerHeight = (height: number) => {
 };
 
 const getDefaultBannerData = (variant: string): SectionData | undefined => {
+  if (variant === "Banner-4") {
+    return {
+      bannerHeight: 70,
+      bannerSlides: [
+        {
+          image: "/bg1.jpg",
+          video: "/video.mp4",
+          alt: "Video slide one",
+          title: "Video background slide",
+          desc: "Upload videos from desktop and edit every slide CTA.",
+          button: {
+            label: "Watch now",
+            href: "#",
+            variant: "primary",
+          },
+        },
+        {
+          image: "/bg2.jpg",
+          video: "/video.mp4",
+          alt: "Video slide two",
+          title: "Motion-led website hero",
+          desc: "Use this layout when video should play behind every slide.",
+          button: {
+            label: "Explore",
+            href: "#",
+            variant: "primary",
+          },
+        },
+      ],
+    };
+  }
+
   if (variant !== "Banner-3") return undefined;
 
   return {
@@ -177,6 +207,13 @@ export default function EditSectionModal({
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const [lastChangedSection, setLastChangedSection] = useState(sectionType);
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const [dragStart, setDragStart] = useState<{
+    pointerX: number;
+    pointerY: number;
+    modalX: number;
+    modalY: number;
+  } | null>(null);
   const [bannerGenerationType, setBannerGenerationType] = useState<
     "image" | "video" | null
   >(null);
@@ -223,12 +260,10 @@ export default function EditSectionModal({
       }
     | undefined;
 
-  const activeBannerData = (
-    currentSection?.data?.[activeVariant] ??
+  const activeBannerData = (currentSection?.data?.[activeVariant] ??
     (activeSectionType === "Banner"
       ? getDefaultBannerData(activeVariant)
-      : undefined)
-  ) as
+      : undefined)) as
     | {
         backgroundImage?: string;
         backgroundImageTitle?: string;
@@ -274,22 +309,18 @@ export default function EditSectionModal({
   const bannerGradientColor =
     activeBannerData?.bannerGradientColor ?? "#0ea5e9";
   const bannerHeight = activeBannerData?.bannerHeight ?? 70;
-  const bannerPreviewBackground =
-    bannerBackgroundMode === "gradient"
-      ? `linear-gradient(90deg, ${bannerSolidColor}, ${bannerGradientColor})`
-      : bannerBackgroundMode === "solid"
-        ? bannerSolidColor
-        : "linear-gradient(90deg, #020617, #0f172a, #0369a1)";
-  const hasBannerImageField = explicitBannerBackgroundMode === "image";
-  const hasBannerVideoField = explicitBannerBackgroundMode === "video";
+  const hasBannerImageField = bannerBackgroundMode === "image";
+  const hasBannerVideoField = bannerBackgroundMode === "video";
   const hasBannerColorField =
-    explicitBannerBackgroundMode === "solid" ||
-    explicitBannerBackgroundMode === "gradient";
+    bannerBackgroundMode === "solid" || bannerBackgroundMode === "gradient";
   const hasBannerButtonsField = "buttons" in (activeBannerData ?? {});
   const hasBannerMediaField =
     hasBannerImageField || hasBannerVideoField || hasBannerColorField;
   const hasBannerHeightField = "bannerHeight" in (activeBannerData ?? {});
   const hasBannerSlidesField = Array.isArray(activeBannerData?.bannerSlides);
+  const isSliderBanner = activeVariant === "Banner-3" || activeVariant === "Banner-4";
+  const isVideoSliderBanner = activeVariant === "Banner-4";
+  const isSimpleBanner = activeVariant === "Banner-1" || activeVariant === "Banner-2";
 
   const activeFooterData = currentSection?.data?.[activeVariant] as
     | {
@@ -316,6 +347,32 @@ export default function EditSectionModal({
     (activeSectionType === "Topbar" && activeTab === "Topbar Layout") ||
     (activeSectionType === "Header" && activeTab === "Header Layout") ||
     (activeSectionType === "Footer" && activeTab === "Footer Layout");
+
+  const handleModalMouseDown = (event: MouseEvent<HTMLDivElement>) => {
+    if ((event.target as HTMLElement).closest("button,input,textarea,select")) {
+      return;
+    }
+
+    setDragStart({
+      pointerX: event.clientX,
+      pointerY: event.clientY,
+      modalX: modalPosition.x,
+      modalY: modalPosition.y,
+    });
+  };
+
+  const handleModalMouseMove = (event: MouseEvent<HTMLDivElement>) => {
+    if (!dragStart) return;
+
+    setModalPosition({
+      x: dragStart.modalX + event.clientX - dragStart.pointerX,
+      y: dragStart.modalY + event.clientY - dragStart.pointerY,
+    });
+  };
+
+  const handleModalMouseUp = () => {
+    setDragStart(null);
+  };
 
   const updateActiveTopbarData = (newData: Record<string, unknown>) => {
     if (!currentSection || !activeTopbarData) return;
@@ -380,6 +437,32 @@ export default function EditSectionModal({
 
   const selectSectionVariant = (variant: string) => {
     if (!variant.startsWith(`${activeSectionType}-`)) return;
+
+    if (activeSectionType === "Banner" && currentSection) {
+      const currentVariantData = currentSection.data[variant];
+      const nextVariantData =
+        variant === "Banner-1"
+          ? {
+              ...currentVariantData,
+              bannerBackgroundMode: "image" as const,
+              backgroundImage: currentVariantData?.backgroundImage ?? "/bg1.jpg",
+            }
+          : variant === "Banner-2"
+            ? {
+                ...currentVariantData,
+                bannerBackgroundMode: "video" as const,
+                backgroundVideo:
+                  currentVariantData?.backgroundVideo ?? "/video.mp4",
+              }
+            : undefined;
+
+      if (nextVariantData) {
+        onUpdateSectionData(activeSectionKey, {
+          ...currentSection.data,
+          [variant]: nextVariantData,
+        });
+      }
+    }
 
     if (
       activeSectionType === "Banner" &&
@@ -631,6 +714,40 @@ export default function EditSectionModal({
     event.target.value = "";
   };
 
+  const handleBannerSlideImageFileChange = (
+    index: number,
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    showBannerGenerationLoader("image");
+    readBannerBackgroundFile(file, (dataUrl) => {
+      updateBannerSlide(index, "image", dataUrl);
+      updateBannerSlide(index, "alt", file.name);
+    });
+    event.target.value = "";
+  };
+
+  const handleBannerSlideVideoFileChange = (
+    index: number,
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    showBannerGenerationLoader("video");
+    readBannerBackgroundFile(file, (dataUrl) => {
+      updateBannerSlide(index, "video", dataUrl);
+      updateBannerSlide(index, "alt", file.name);
+    });
+    event.target.value = "";
+  };
+
+  const deleteBannerSlideVideo = (index: number) => {
+    updateBannerSlide(index, "video", "");
+  };
+
   const updateBannerHeight = (height: number) => {
     updateActiveBannerData({ bannerHeight: clampBannerHeight(height) });
   };
@@ -712,6 +829,7 @@ export default function EditSectionModal({
       ...(activeBannerData?.bannerSlides ?? []),
       {
         image: "/bg1.jpg",
+        ...(isVideoSliderBanner ? { video: "/video.mp4" } : {}),
         alt: `Banner slide ${nextIndex}`,
         title: "New banner slide",
         desc: "Update this slide text from Banner Content.",
@@ -831,9 +949,24 @@ export default function EditSectionModal({
   const MAX_DROPDOWN_LINKS = 10;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[9999] flex items-end justify-center p-3">
-      <div className="pointer-events-auto relative mx-3 flex h-[70vh] w-full max-w-[880px] flex-col overflow-hidden rounded-3xl bg-[#f4f4f5] shadow-2xl">
-        <div className="relative flex items-center justify-between border-b border-gray-400 px-5 py-3">
+    <div
+      className="pointer-events-none fixed inset-0 z-[9999] flex items-end justify-center p-3"
+      onMouseMove={handleModalMouseMove}
+      onMouseUp={handleModalMouseUp}
+      onMouseLeave={handleModalMouseUp}
+    >
+      <div
+        className="pointer-events-auto relative mx-3 flex h-[70vh] w-full max-w-[880px] flex-col overflow-hidden rounded-3xl bg-[#f4f4f5] shadow-2xl"
+        style={{
+          transform: `translate(${modalPosition.x}px, ${modalPosition.y}px)`,
+        }}
+      >
+        <div
+          className={`relative flex items-center justify-between border-b border-gray-400 px-5 py-3 ${
+            dragStart ? "cursor-grabbing" : "cursor-grab"
+          }`}
+          onMouseDown={handleModalMouseDown}
+        >
           <h3 className={`${agrandirBolt.className} font-medium text-2xl`}>
             {formatSectionTitle(sectionType)}
           </h3>
@@ -1452,7 +1585,7 @@ export default function EditSectionModal({
                     aria-label="Choose banner video"
                   />
 
-                  {"pretitle" in (activeBannerData ?? {}) && (
+                  {isSimpleBanner && "pretitle" in (activeBannerData ?? {}) && (
                     <div className="rounded-xl border border-gray-200 bg-white p-4">
                       <label className="block text-sm font-semibold text-gray-900">
                         Pretitle
@@ -1468,7 +1601,7 @@ export default function EditSectionModal({
                     </div>
                   )}
 
-                  {"title" in (activeBannerData ?? {}) && (
+                  {isSimpleBanner && "title" in (activeBannerData ?? {}) && (
                     <div className="rounded-xl border border-gray-200 bg-white p-4">
                       <label className="block text-sm font-semibold text-gray-900">
                         Title
@@ -1484,7 +1617,7 @@ export default function EditSectionModal({
                     </div>
                   )}
 
-                  {"desc" in (activeBannerData ?? {}) && (
+                  {isSimpleBanner && "desc" in (activeBannerData ?? {}) && (
                     <div className="rounded-xl border border-gray-200 bg-white p-4">
                       <label className="block text-sm font-semibold text-gray-900">
                         Description
@@ -1500,7 +1633,7 @@ export default function EditSectionModal({
                     </div>
                   )}
 
-                  {hasBannerSlidesField && (
+                  {isSliderBanner && hasBannerSlidesField && (
                     <section className="space-y-4 rounded-xl border border-gray-200 bg-white p-4">
                       <div className="flex items-center justify-between gap-3">
                         <h4 className="text-sm font-semibold text-gray-900">
@@ -1539,20 +1672,32 @@ export default function EditSectionModal({
                             <div className="grid gap-3 lg:grid-cols-2">
                               <div>
                                 <label className="block text-sm font-semibold text-gray-900">
-                                  Slide Image
+                                  {isVideoSliderBanner
+                                    ? "Poster Image"
+                                    : "Slide Image"}
                                 </label>
-                                <input
-                                  value={slide.image}
-                                  onChange={(event) =>
-                                    updateBannerSlide(
-                                      index,
-                                      "image",
-                                      event.target.value,
-                                    )
-                                  }
-                                  className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
-                                  placeholder="/bg1.jpg"
-                                />
+                                <label className="mt-2 flex h-11 w-full cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-left text-sm text-gray-900 transition hover:border-blue-500 focus-within:border-blue-600">
+                                  <span className="font-medium">
+                                    {slide.image ? "Change image" : "Upload image"}
+                                  </span>
+                                  <span className="max-w-[55%] truncate text-xs text-gray-500">
+                                    {slide.image?.startsWith("data:")
+                                      ? "Selected from desktop"
+                                      : slide.image || "Choose from desktop"}
+                                  </span>
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(event) =>
+                                      handleBannerSlideImageFileChange(
+                                        index,
+                                        event,
+                                      )
+                                    }
+                                    className="sr-only"
+                                    aria-label={`Choose slide ${index + 1} image`}
+                                  />
+                                </label>
                               </div>
 
                               <div>
@@ -1573,6 +1718,51 @@ export default function EditSectionModal({
                                 />
                               </div>
                             </div>
+
+                            {isVideoSliderBanner && (
+                              <div>
+                                <div className="flex items-center justify-between gap-3">
+                                  <label className="block text-sm font-semibold text-gray-900">
+                                    Slide Video
+                                  </label>
+                                  {slide.video && (
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        deleteBannerSlideVideo(index)
+                                      }
+                                      className="rounded-md border border-red-500 px-3 py-1 text-xs font-semibold text-red-600 hover:bg-red-50"
+                                    >
+                                      Delete video
+                                    </button>
+                                  )}
+                                </div>
+                                <label className="mt-2 flex h-11 w-full cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-left text-sm text-gray-900 transition hover:border-blue-500 focus-within:border-blue-600">
+                                  <span className="font-medium">
+                                    {slide.video
+                                      ? "Change video"
+                                      : "Upload video"}
+                                  </span>
+                                  <span className="max-w-[55%] truncate text-xs text-gray-500">
+                                    {slide.video?.startsWith("data:")
+                                      ? "Selected from desktop"
+                                      : slide.video || "Choose from desktop"}
+                                  </span>
+                                  <input
+                                    type="file"
+                                    accept="video/*"
+                                    onChange={(event) =>
+                                      handleBannerSlideVideoFileChange(
+                                        index,
+                                        event,
+                                      )
+                                    }
+                                    className="sr-only"
+                                    aria-label={`Choose slide ${index + 1} video`}
+                                  />
+                                </label>
+                              </div>
+                            )}
 
                             <div>
                               <label className="block text-sm font-semibold text-gray-900">
@@ -1653,144 +1843,197 @@ export default function EditSectionModal({
                     </section>
                   )}
 
-                  {hasBannerMediaField && (
+                  {isSimpleBanner && (
                     <section className="rounded-xl border border-gray-200 bg-white p-4">
-                    <h4 className="text-sm font-semibold text-gray-900">
-                      Banner Media
-                    </h4>
+                      <h4 className="text-sm font-semibold text-gray-900">
+                        Banner Type
+                      </h4>
 
-                    {hasBannerImageField && (
-                      <div className="mt-4 grid gap-4 lg:grid-cols-2">
-                        <div>
-                          <label className="block text-sm font-semibold text-gray-900">
-                            Background Image
-                          </label>
+                      <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                        {(
+                          [
+                            ["image", "Image Banner"],
+                            ["video", "Video Banner"],
+                            ["solid", "Solid Color"],
+                            ["gradient", "Gradient"],
+                          ] as const
+                        ).map(([mode, label]) => {
+                          const isActive = bannerBackgroundMode === mode;
+
+                          return (
+                            <button
+                              key={mode}
+                              type="button"
+                              onClick={() => updateBannerBackgroundMode(mode)}
+                              className={`h-11 rounded-lg px-4 text-sm font-medium transition ${
+                                isActive
+                                  ? "bg-blue-600 text-white"
+                                  : "bg-gray-200 text-slate-950 hover:bg-gray-300"
+                              }`}
+                            >
+                              {label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </section>
+                  )}
+
+                  {isSimpleBanner && hasBannerMediaField && (
+                    <section className="rounded-xl border border-gray-200 bg-white p-4">
+                      <h4 className="text-sm font-semibold text-gray-900">
+                        Banner Media
+                      </h4>
+
+                      {hasBannerImageField && (
+                        <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                          <div>
+                            <label className="block text-sm font-semibold text-gray-900">
+                              Background Image
+                            </label>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                bannerImageInputRef.current?.click()
+                              }
+                              className="mt-2 flex h-11 w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-left text-sm text-gray-900 transition hover:border-blue-500 focus:border-blue-600 focus:outline-none"
+                            >
+                              <span className="font-medium">
+                                {activeBannerData?.backgroundImage
+                                  ? "Change image"
+                                  : "Upload image"}
+                              </span>
+                              <span className="max-w-[55%] truncate text-xs text-gray-500">
+                                {activeBannerData?.backgroundImage?.startsWith(
+                                  "data:",
+                                )
+                                  ? "Selected from desktop"
+                                  : activeBannerData?.backgroundImage ||
+                                    "Image path"}
+                              </span>
+                            </button>
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-semibold text-gray-900">
+                              Image Alt Text
+                            </label>
+                            <input
+                              value={
+                                activeBannerData?.backgroundImageTitle ?? ""
+                              }
+                              onChange={(event) =>
+                                updateBannerField(
+                                  "backgroundImageTitle",
+                                  event.target.value,
+                                )
+                              }
+                              className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                              placeholder="Banner image"
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {hasBannerVideoField && (
+                        <div className="mt-4">
+                          <div className="flex items-center justify-between gap-3">
+                            <label className="block text-sm font-semibold text-gray-900">
+                              Background Video
+                            </label>
+                            {activeBannerData?.backgroundVideo && (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  updateBannerField("backgroundVideo", "")
+                                }
+                                className="rounded-md border border-red-500 px-3 py-1 text-xs font-semibold text-red-600 hover:bg-red-50"
+                              >
+                                Delete video
+                              </button>
+                            )}
+                          </div>
                           <button
                             type="button"
-                            onClick={() => bannerImageInputRef.current?.click()}
+                            onClick={() => bannerVideoInputRef.current?.click()}
                             className="mt-2 flex h-11 w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-left text-sm text-gray-900 transition hover:border-blue-500 focus:border-blue-600 focus:outline-none"
                           >
                             <span className="font-medium">
-                              {activeBannerData?.backgroundImage
-                                ? "Change image"
-                                : "Upload image"}
+                              {activeBannerData?.backgroundVideo
+                                ? "Change video"
+                                : "Upload video"}
                             </span>
                             <span className="max-w-[55%] truncate text-xs text-gray-500">
-                              {activeBannerData?.backgroundImage?.startsWith(
+                              {activeBannerData?.backgroundVideo?.startsWith(
                                 "data:",
                               )
                                 ? "Selected from desktop"
-                                : activeBannerData?.backgroundImage ||
-                                  "Image path"}
+                                : activeBannerData?.backgroundVideo ||
+                                  "Video path"}
                             </span>
                           </button>
                         </div>
+                      )}
 
-                        <div>
-                          <label className="block text-sm font-semibold text-gray-900">
-                            Image Alt Text
-                          </label>
-                          <input
-                            value={activeBannerData?.backgroundImageTitle ?? ""}
-                            onChange={(event) =>
-                              updateBannerField(
-                                "backgroundImageTitle",
-                                event.target.value,
-                              )
-                            }
-                            className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
-                            placeholder="Banner image"
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {hasBannerVideoField && (
-                      <div className="mt-4">
-                        <label className="block text-sm font-semibold text-gray-900">
-                          Background Video
-                        </label>
-                        <button
-                          type="button"
-                          onClick={() => bannerVideoInputRef.current?.click()}
-                          className="mt-2 flex h-11 w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-left text-sm text-gray-900 transition hover:border-blue-500 focus:border-blue-600 focus:outline-none"
-                        >
-                          <span className="font-medium">
-                            {activeBannerData?.backgroundVideo
-                              ? "Change video"
-                              : "Upload video"}
-                          </span>
-                          <span className="max-w-[55%] truncate text-xs text-gray-500">
-                            {activeBannerData?.backgroundVideo?.startsWith(
-                              "data:",
-                            )
-                              ? "Selected from desktop"
-                              : activeBannerData?.backgroundVideo ||
-                                "Video path"}
-                          </span>
-                        </button>
-                      </div>
-                    )}
-
-                    {hasBannerColorField && (
-                      <div className="mt-4 grid gap-4 lg:grid-cols-2">
-                        <ColorInput
-                          label={
-                            bannerBackgroundMode === "gradient"
-                              ? "Background left"
-                              : "Background color"
-                          }
-                          value={bannerSolidColor}
-                          onChange={(color) =>
-                            updateBannerField("bannerBackgroundColor", color)
-                          }
-                        />
-
-                        {bannerBackgroundMode === "gradient" && (
+                      {hasBannerColorField && (
+                        <div className="mt-4 grid gap-4 lg:grid-cols-2">
                           <ColorInput
-                            label="Background right"
-                            value={bannerGradientColor}
+                            label={
+                              bannerBackgroundMode === "gradient"
+                                ? "Background left"
+                                : "Background color"
+                            }
+                            value={bannerSolidColor}
                             onChange={(color) =>
-                              updateBannerField("bannerGradientColor", color)
+                              updateBannerField("bannerBackgroundColor", color)
                             }
                           />
-                        )}
-                      </div>
-                    )}
+
+                          {bannerBackgroundMode === "gradient" && (
+                            <ColorInput
+                              label="Background right"
+                              value={bannerGradientColor}
+                              onChange={(color) =>
+                                updateBannerField("bannerGradientColor", color)
+                              }
+                            />
+                          )}
+                        </div>
+                      )}
                     </section>
                   )}
 
                   {hasBannerHeightField && (
                     <div className="rounded-xl border border-gray-200 bg-white p-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <label className="text-sm font-semibold text-gray-900">
-                        Banner Height
-                      </label>
+                      <div className="flex items-center justify-between gap-3">
+                        <label className="text-sm font-semibold text-gray-900">
+                          Banner Height
+                        </label>
+                        <input
+                          type="number"
+                          min={40}
+                          max={100}
+                          value={bannerHeight}
+                          onChange={(event) =>
+                            updateBannerHeight(Number(event.target.value))
+                          }
+                          className="h-10 w-24 rounded-lg border border-gray-300 px-3 text-sm text-gray-900 outline-none focus:border-blue-600"
+                        />
+                      </div>
                       <input
-                        type="number"
+                        type="range"
                         min={40}
                         max={100}
                         value={bannerHeight}
                         onChange={(event) =>
                           updateBannerHeight(Number(event.target.value))
                         }
-                        className="h-10 w-24 rounded-lg border border-gray-300 px-3 text-sm text-gray-900 outline-none focus:border-blue-600"
+                        className="mt-4 w-full accent-blue-600"
                       />
-                    </div>
-                    <input
-                      type="range"
-                      min={40}
-                      max={100}
-                      value={bannerHeight}
-                      onChange={(event) =>
-                        updateBannerHeight(Number(event.target.value))
-                      }
-                      className="mt-4 w-full accent-blue-600"
-                    />
                     </div>
                   )}
 
-                  {hasBannerButtonsField && (
+                  {isSimpleBanner && hasBannerButtonsField && (
                     <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-4">
                       <div className="flex items-center justify-between gap-3">
                         <h4 className="text-sm font-semibold text-gray-900">
@@ -1864,7 +2107,7 @@ export default function EditSectionModal({
                     </div>
                   )}
 
-                  {activeVariant === "Banner-2" && (
+                  {isSimpleBanner && activeVariant === "Banner-2" && (
                     <div className="grid gap-4 lg:grid-cols-2">
                       <div className="rounded-xl border border-gray-200 bg-white p-4">
                         <label className="block text-sm font-semibold text-gray-900">
@@ -1920,14 +2163,21 @@ export default function EditSectionModal({
                       >
                         <div className="h-28 bg-gray-100">
                           {layout.id === "Banner-1" && (
-                            <div
-                              className="relative flex h-full items-center overflow-hidden bg-slate-900 px-5"
-                              style={{ background: bannerPreviewBackground }}
-                            >
-                              {bannerBackgroundMode === "image" && (
-                                <div className="absolute inset-0 bg-linear-to-r from-slate-950 via-slate-800 to-sky-700" />
-                              )}
+                            <div className="relative flex h-full items-center overflow-hidden bg-slate-900 px-5">
+                              <div
+                                className="absolute inset-0 bg-cover bg-center"
+                                style={{
+                                  backgroundImage: `url(${
+                                    activeBannerData?.backgroundImage ??
+                                    "/bg1.jpg"
+                                  })`,
+                                }}
+                              />
+                              <div className="absolute inset-0 bg-black/45" />
                               <div className="relative z-10 w-2/3 space-y-2">
+                                <span className="rounded bg-white/90 px-2 py-0.5 text-[10px] font-bold text-slate-950">
+                                  Image Banner
+                                </span>
                                 <div className="h-1.5 w-24 rounded bg-white/70" />
                                 <div className="h-3 w-40 rounded bg-white" />
                                 <div className="h-1.5 w-full rounded bg-white/60" />
@@ -1938,14 +2188,22 @@ export default function EditSectionModal({
                           )}
 
                           {layout.id === "Banner-2" && (
-                            <div
-                              className="flex h-full items-center justify-center bg-indigo-50 px-5 text-center"
-                              style={{ background: bannerPreviewBackground }}
-                            >
-                              <div className="w-2/3 space-y-3">
-                                <div className="mx-auto h-4 w-40 rounded bg-slate-900" />
-                                <div className="mx-auto h-2 w-full rounded bg-slate-400" />
-                                <div className="mx-auto h-2 w-4/5 rounded bg-slate-400" />
+                            <div className="relative flex h-full items-center justify-center overflow-hidden bg-slate-950 px-5 text-center">
+                              <video
+                                className="absolute inset-0 h-full w-full object-cover opacity-70"
+                                src={activeBannerData?.backgroundVideo || "/video.mp4"}
+                                muted
+                                loop
+                                playsInline
+                              />
+                              <div className="absolute inset-0 bg-black/45" />
+                              <div className="relative z-10 w-2/3 space-y-3">
+                                <span className="rounded bg-white/90 px-2 py-0.5 text-[10px] font-bold text-slate-950">
+                                  Video Banner
+                                </span>
+                                <div className="mx-auto h-4 w-40 rounded bg-white" />
+                                <div className="mx-auto h-2 w-full rounded bg-white/70" />
+                                <div className="mx-auto h-2 w-4/5 rounded bg-white/70" />
                                 <div className="mx-auto h-6 w-20 rounded-md bg-blue-600" />
                               </div>
                             </div>
@@ -1953,8 +2211,54 @@ export default function EditSectionModal({
 
                           {layout.id === "Banner-3" && (
                             <div className="relative flex h-full items-center overflow-hidden bg-slate-900 px-5">
-                              <div className="absolute inset-0 bg-linear-to-r from-slate-950 via-slate-800 to-blue-700" />
+                              <div
+                                className="absolute inset-0 bg-cover bg-center"
+                                style={{
+                                  backgroundImage: `url(${
+                                    activeBannerData?.bannerSlides?.[0]
+                                      ?.image ?? "/bg2.jpg"
+                                  })`,
+                                }}
+                              />
+                              <div className="absolute inset-0 bg-black/45" />
                               <div className="relative z-10 w-2/3 space-y-2">
+                                <span className="rounded bg-white/90 px-2 py-0.5 text-[10px] font-bold text-slate-950">
+                                  Image Slider
+                                </span>
+                                <div className="h-3 w-44 rounded bg-white" />
+                                <div className="h-1.5 w-full rounded bg-white/60" />
+                                <div className="h-1.5 w-4/5 rounded bg-white/60" />
+                                <div className="h-5 w-20 rounded-md bg-blue-600" />
+                              </div>
+                              <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1">
+                                <span className="h-1.5 w-6 rounded bg-white" />
+                                <span className="h-1.5 w-1.5 rounded bg-white/50" />
+                                <span className="h-1.5 w-1.5 rounded bg-white/50" />
+                              </div>
+                            </div>
+                          )}
+
+                          {layout.id === "Banner-4" && (
+                            <div className="relative flex h-full items-center overflow-hidden bg-slate-900 px-5">
+                              <video
+                                className="absolute inset-0 h-full w-full object-cover opacity-70"
+                                src={
+                                  activeBannerData?.bannerSlides?.[0]?.video ||
+                                  "/video.mp4"
+                                }
+                                poster={
+                                  activeBannerData?.bannerSlides?.[0]?.image ||
+                                  "/bg1.jpg"
+                                }
+                                muted
+                                loop
+                                playsInline
+                              />
+                              <div className="absolute inset-0 bg-black/45" />
+                              <div className="relative z-10 w-2/3 space-y-2">
+                                <span className="rounded bg-white/90 px-2 py-0.5 text-[10px] font-bold text-slate-950">
+                                  Video Slider
+                                </span>
                                 <div className="h-3 w-44 rounded bg-white" />
                                 <div className="h-1.5 w-full rounded bg-white/60" />
                                 <div className="h-1.5 w-4/5 rounded bg-white/60" />

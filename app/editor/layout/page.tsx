@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { templates } from "./src/data/templates";
-import { selectedConfig } from "./src/data/selectedConfig";
+import { useSearchParams } from "next/navigation";
+import {
+  buildSelectedConfig,
+  getTemplateVariables,
+} from "./src/data/templateFlow";
 import { sectionRegistry } from "./src/lib/sectionRegistry";
 
 import EditableSection from "./src/components/builder/EditableSection";
@@ -61,16 +64,30 @@ const replaceFirstTextValue = (
 };
 
 export default function Page() {
-  return <EditorPage />;
+  const searchParams = useSearchParams();
+  const templateId = searchParams.get("templateId") ?? "template-1";
+  const category = searchParams.get("category") ?? "Realestate";
+  const initialConfig = buildSelectedConfig(templateId, category);
+  const templateVariables = getTemplateVariables(initialConfig.templateId);
+
+  return (
+    <EditorPage
+      key={`${templateId}-${category}`}
+      initialSections={initialConfig.sections}
+      templateVariables={templateVariables}
+    />
+  );
 }
 
-function EditorPage() {
-  const template = templates.find(
-    (item) => item.id === selectedConfig.templateId,
-  );
-
+function EditorPage({
+  initialSections,
+  templateVariables,
+}: {
+  initialSections: SectionItem[];
+  templateVariables: Record<string, string>;
+}) {
   const [sections, setSections] = useState<SectionItem[]>(
-    selectedConfig.sections,
+    initialSections,
   );
 
   const [editingSection, setEditingSection] = useState<string | null>(null);
@@ -87,8 +104,6 @@ function EditorPage() {
 
     return () => window.clearTimeout(timeout);
   }, [savedToastSection]);
-
-  if (!template) return null;
 
   const updateSectionVariant = (type: string, variant: string) => {
     setSections((prev) =>
@@ -153,7 +168,7 @@ function EditorPage() {
   };
 
   return (
-    <main style={template.variables as React.CSSProperties}>
+    <main style={templateVariables as React.CSSProperties}>
       {sections.map((section) => {
         const Component = sectionRegistry[section.variant];
         const defaultVariant = `${section.type}-1`;

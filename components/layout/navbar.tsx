@@ -168,9 +168,9 @@ export default function Navbar() {
                   </a>
                 </div>
 
-                <Button href="#" variant="danger" title="Start Now">
+                {/* <Button href="#" variant="danger" title="Start Now">
                   Get Started Free
-                </Button>
+                </Button> */}
               </div>
             </div>
 

@@ -17,6 +17,7 @@ export default function Webdiffer({ onStart }: WebdifferProps) {
       href: "/businesstype",
       isDarkButton: false,
       icon: <Zap className="w-8 h-8 text-[var(--red)] fill-[var(--red)]" />,
+      isVoid: false,
     },
     {
       id: 2,
@@ -26,6 +27,7 @@ export default function Webdiffer({ onStart }: WebdifferProps) {
       href: "/businesstype",
       isDarkButton: true,
       icon: <Users className="w-8 h-8 text-[var(--red)] fill-[var(--red)]" />,
+      isVoid: true,
     },
     {
       id: 3,
@@ -35,6 +37,7 @@ export default function Webdiffer({ onStart }: WebdifferProps) {
       href: "/businesstype",
       isDarkButton: false,
       icon: <PenTool className="w-8 h-8 text-[var(--red)]" />,
+      isVoid: true,
     },
   ];
   const router = useRouter();
@@ -73,9 +76,15 @@ export default function Webdiffer({ onStart }: WebdifferProps) {
             <div className="w-full mt-4">
               <Button
                 type="button"
-                onClick={onStart}
+                onClick={(e) => {
+                  if (card.isVoid) {
+                    e.preventDefault();
+                    return;
+                  }
+                  onStart();
+                }}
                 variant={card.isDarkButton ? "dark" : "danger"}
-                className="w-full rounded-lg px-6 py-2.5 font-bold text-sm tracking-wide"
+                className={`w-full rounded-lg px-6 py-2.5 font-bold text-sm tracking-wide ${card.isVoid ? "cursor-none" : "cursor-pointer"}`}
               >
                 {card.buttonText}
               </Button>

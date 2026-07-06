@@ -51,6 +51,7 @@ export type ButtonData = {
 
 export type BannerSlideData = {
   image: string;
+  video?: string;
   alt?: string;
   title: string;
   desc?: string;

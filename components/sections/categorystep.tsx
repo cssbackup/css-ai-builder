@@ -3,9 +3,20 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Briefcase, Check, User, Users } from "lucide-react";
-import Button from "@/components/ui/Button";
 
 type Category = "clients" | "myself" | "company";
+
+type BusinessInfo = {
+  audience: "" | Category;
+  name: string;
+  description: string;
+};
+
+type CategoryStepProps = {
+  value: BusinessInfo;
+  showErrors: boolean;
+  onChange: (value: BusinessInfo) => void;
+};
 
 const categories = [
   {
@@ -46,12 +57,31 @@ const categories = [
   },
 ] as const;
 
+const defaultLabels = {
+  name: "Name",
+  desc: "Description",
+  namePlaceholder: "Enter name",
+  descPlaceholder: "Tell us about your project...",
+};
+
 const steps = ["Business Info", "Category", "Choose Design"];
 
-export default function CategoryStep() {
-  const [selected, setSelected] = useState<Category>("clients");
+export default function CategoryStep({
+  value,
+  showErrors,
+  onChange,
+}: CategoryStepProps) {
+  const [selected, setSelected] = useState<"" | Category>(value.audience);
 
-  const active = categories.find((item) => item.id === selected)!;
+  const active = categories.find((item) => item.id === selected);
+  const labels = active?.labels ?? defaultLabels;
+  const hasAudienceError = showErrors && !value.audience;
+  const hasNameError = showErrors && !value.name.trim();
+  const hasDescriptionError = showErrors && !value.description.trim();
+
+  const updateBusinessInfo = (nextValue: Partial<BusinessInfo>) => {
+    onChange({ ...value, ...nextValue });
+  };
 
   return (
     <section className="w-full mx-auto overflow-hidden rounded-2xl border bg-white border-gray-300 shadow-[0_2px_16px_rgba(15,23,42,0.10)] ">
@@ -90,11 +120,16 @@ export default function CategoryStep() {
                   <button
                     key={item.id}
                     type="button"
-                    onClick={() => setSelected(item.id)}
+                    onClick={() => {
+                      setSelected(item.id);
+                      updateBusinessInfo({ audience: item.id });
+                    }}
                     className={[
                       "relative flex min-h-12 items-center justify-center rounded-xl border px-3 py-2 text-center cursor-pointer transition-all sm:min-h-24 sm:flex-col sm:py-3",
                       isActive
                         ? "border-red-600 bg-red-50"
+                        : hasAudienceError
+                          ? "border-red-500 bg-white"
                         : "border-slate-300 hover:border-slate-300",
                     ].join(" ")}
                   >
@@ -131,29 +166,45 @@ export default function CategoryStep() {
             <form className="mt-4 2xl:mt-8 lg:mt-4 md:mt-4 sm:mt-5 space-y-4 2xl:space-y-6 lg:space-y-4 md:space-y-4 sm:space-y-4">
               <div>
                 <label className="mb-1 block text-sm font-bold text-slate-950">
-                  {active.labels.name}
+                  {labels.name}
                 </label>
                 <input
+                  value={value.name}
+                  onChange={(event) =>
+                    updateBusinessInfo({ name: event.target.value })
+                  }
                   type="text"
-                  placeholder={active.labels.namePlaceholder}
-                  className="h-11 w-full rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 sm:h-14 sm:px-5"
+                  placeholder={labels.namePlaceholder}
+                  className={[
+                    "h-11 w-full rounded-xl border bg-white px-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 sm:h-14 sm:px-5",
+                    hasNameError ? "border-red-500" : "border-slate-300",
+                  ].join(" ")}
                 />
               </div>
 
               <div>
                 <label className="mb-1 block text-sm font-bold text-slate-950">
-                  {active.labels.desc}
+                  {labels.desc}
                 </label>
 
                 <div className="relative">
                   <textarea
+                    value={value.description}
+                    onChange={(event) =>
+                      updateBusinessInfo({ description: event.target.value })
+                    }
                     maxLength={300}
-                    placeholder={active.labels.descPlaceholder}
-                    className="h-20 w-full resize-none rounded-xl border border-slate-300 bg-white overflow-hidden px-4 py-3 pr-16 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 sm:h-24 sm:px-5 sm:py-4"
+                    placeholder={labels.descPlaceholder}
+                    className={[
+                      "h-20 w-full resize-none overflow-hidden rounded-xl border bg-white px-4 py-3 pr-16 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 sm:h-24 sm:px-5 sm:py-4",
+                      hasDescriptionError
+                        ? "border-red-500"
+                        : "border-slate-300",
+                    ].join(" ")}
                   />
 
                   <span className="absolute bottom-3 right-4 text-xs font-semibold text-slate-400 sm:text-sm">
-                    0/300
+                    {value.description.length}/300
                   </span>
                 </div>
               </div>

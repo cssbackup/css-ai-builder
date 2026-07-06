@@ -7,6 +7,12 @@ import CategoryType from "./categorytype";
 import TemplatePreview from "./templatepreview";
 import Button from "@/components/ui/Button";
 
+type BusinessInfo = {
+  audience: "" | "clients" | "myself" | "company";
+  name: string;
+  description: string;
+};
+
 const steps: { title: string; subtitle: string }[] = [
   { title: "Category", subtitle: "" },
   { title: "Category Data", subtitle: "" },
@@ -17,6 +23,13 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
   const [step, setStep] = useState(0);
   const { setHideFooter } = useFooter();
   const [loadspinner, setLoadspinner] = useState(false);
+  const [businessInfoSubmitted, setBusinessInfoSubmitted] = useState(false);
+  const [businessInfo, setBusinessInfo] = useState<BusinessInfo>({
+    audience: "",
+    name: "",
+    description: "",
+  });
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     setHideFooter(true);
@@ -26,7 +39,21 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
     };
   }, [setHideFooter]);
 
+  const isBusinessInfoValid =
+    Boolean(businessInfo.audience) &&
+    Boolean(businessInfo.name.trim()) &&
+    Boolean(businessInfo.description.trim());
+
   const handleContinue = async () => {
+    if (step === 0 && !isBusinessInfoValid) {
+      setBusinessInfoSubmitted(true);
+      return;
+    }
+
+    if (step === 1 && !selectedCategory) {
+      return;
+    }
+
     setLoadspinner(true);
 
     await new Promise((resolve) => setTimeout(resolve, 200)); // 1 second
@@ -44,9 +71,31 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
     <div className="w-full h-dvh z-10 flex justify-center items-center overflow-hidden ">
       <div className="w-full lg:max-w-6xl m-2 lg:mt-4 max-h-[calc(100dvh-80px)] overflow-hidden">
         <div>
-          {step === 0 && <Categorystep />}
-          {step === 1 && <CategoryType />}
-          {step === 2 && <TemplatePreview />}
+          {step === 0 && (
+            <Categorystep
+              value={businessInfo}
+              showErrors={businessInfoSubmitted}
+              onChange={(nextValue) => {
+                setBusinessInfo(nextValue);
+                if (
+                  nextValue.audience &&
+                  nextValue.name.trim() &&
+                  nextValue.description.trim()
+                ) {
+                  setBusinessInfoSubmitted(false);
+                }
+              }}
+            />
+          )}
+          {step === 1 && (
+            <CategoryType
+              selectedCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+            />
+          )}
+          {step === 2 && (
+            <TemplatePreview selectedCategory={selectedCategory} />
+          )}
         </div>
       </div>
 
@@ -62,7 +111,7 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
         <Button
           type="button"
           onClick={handleContinue}
-          disabled={loadspinner}
+          disabled={loadspinner || (step === 1 && !selectedCategory)}
           variant="danger"
         >
           {loadspinner && (
