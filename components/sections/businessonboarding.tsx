@@ -25,7 +25,7 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
   const [loadspinner, setLoadspinner] = useState(false);
   const [businessInfoSubmitted, setBusinessInfoSubmitted] = useState(false);
   const [businessInfo, setBusinessInfo] = useState<BusinessInfo>({
-    audience: "",
+    audience: "clients",
     name: "",
     description: "",
   });
@@ -56,8 +56,7 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
 
     setLoadspinner(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 200)); // 1 second
-
+    await new Promise((resolve) => setTimeout(resolve, 200));
     if (step < steps.length - 1) {
       setStep((prev) => prev + 1);
     } else {

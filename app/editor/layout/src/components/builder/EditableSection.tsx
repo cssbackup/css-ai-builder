@@ -2,7 +2,7 @@
 
 import { ReactNode, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Edit, Plus, Trash } from "lucide-react";
+import { Edit, Plus, Trash, X } from "lucide-react";
 import { usePreview } from "../context/PreviewContext";
 
 type EditableSectionProps = {
@@ -22,6 +22,7 @@ export default function EditableSection({
 }: EditableSectionProps) {
   const { isPreview } = usePreview();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showAddPopup, setShowAddPopup] = useState(false);
   const activeEditableRef = useRef<HTMLElement | null>(null);
   const originalTextRef = useRef("");
 
@@ -30,6 +31,9 @@ export default function EditableSection({
     onDelete();
   };
   const sectionName = label.charAt(0).toUpperCase() + label.slice(1);
+  const canShowSectionAddButton = !["topbar", "header", "footer"].includes(
+    label.toLowerCase(),
+  );
 
   const finishInlineEdit = (element: HTMLElement, shouldSave: boolean) => {
     const oldText = originalTextRef.current;
@@ -158,15 +162,6 @@ export default function EditableSection({
 
               <button
                 type="button"
-                onClick={() => {}}
-                className="flex items-center gap-1 rounded-full border border-gray-400 px-3 py-1 text-xs font-medium text-slate-700  hover:bg-slate-100"
-              >
-                <Plus size={12} />
-                Add
-              </button>
-
-              <button
-                type="button"
                 onClick={() => setShowDeleteConfirm(true)}
                 className="flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium text-red-600  hover:bg-red-50"
               >
@@ -176,6 +171,22 @@ export default function EditableSection({
             </div>
           </div>
         </div>
+      )}
+
+      {!isPreview && canShowSectionAddButton && (
+        <button
+          type="button"
+          aria-label={`Add component after ${sectionName}`}
+          data-editor-toolbar
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            setShowAddPopup(true);
+          }}
+          className="absolute bottom-0 left-1/2 z-[999] flex h-9 w-9 -translate-x-1/2 translate-y-1/2 items-center justify-center rounded-full border border-slate-600 bg-white text-slate-900 opacity-0 shadow-lg transition hover:bg-slate-100 group-hover:opacity-100"
+        >
+          <Plus size={18} />
+        </button>
       )}
 
       {showDeleteConfirm &&
@@ -207,6 +218,23 @@ export default function EditableSection({
                   Cancel
                 </button>
               </div>
+            </div>
+          </div>,
+          document.body,
+        )}
+
+      {showAddPopup &&
+        createPortal(
+          <div className="fixed inset-0 z-[10002] flex items-center justify-center bg-[#fff6df]">
+            <div className="relative w-full h-screen">
+              <button
+                type="button"
+                aria-label="Close add component popup"
+                onClick={() => setShowAddPopup(false)}
+                className="absolute right-2 top-2 ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-amber-50 text-slate-700 hover:bg-amber-100"
+              >
+                <X size={18} />
+              </button>
             </div>
           </div>,
           document.body,

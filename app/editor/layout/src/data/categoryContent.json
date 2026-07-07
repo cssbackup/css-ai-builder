@@ -1,49 +1,203 @@
 {
+  "templates": [
+    {
+      "id": "template-1",
+      "numericId": 1,
+      "title": "Classic Image",
+      "type": "Single Page Website",
+      "image": "/haelli.png",
+      "previewimage": "/haellipreview.png",
+      "preview_description": "Header 1 with image banner, about layout 1, product carousel, and footer.",
+      "prebuilt_pages": 6,
+      "sectionVariants": {
+        "Topbar": "Topbar-1",
+        "Header": "Header-1",
+        "Banner": "Banner-1",
+        "About": "About-1",
+        "Product": "Product-1",
+        "Footer": "Footer-1"
+      },
+      "variables": {
+        "--primary-bg": "#00cadd",
+        "--primary-text": "#ffffff",
+        "--secondary-bg": "#ffffff",
+        "--secondary-text": "#000000",
+        "--header-bg": "#245c6e",
+        "--header-text": "#ffffff",
+        "--hero-bg": "#000000",
+        "--hero-title": "#ffffff",
+        "--primary-pretitle-text": "#ffffff",
+        "--primary-title-text": "#ffffff",
+        "--primary-subtitle-text": "#ffffff",
+        "--secondary-pretitle-text": "#ffffff",
+        "--secondary-title-text": "#ffffff",
+        "--secondary-subtitle-text": "#ffffff",
+        "--primary-link-bg": "#ffffff",
+        "--primary-link-color": "#000000",
+        "--secondary-link-bg": "#00cadd",
+        "--secondary-link-color": "#ffffff",
+        "--text-white": "white",
+        "--blue-bg": "#0668ff",
+        "--lightcream-bg": "#fbfaf6"
+      }
+    },
+    {
+      "id": "template-2",
+      "numericId": 2,
+      "title": "Video Lead",
+      "type": "Multiple Pages Website",
+      "image": "/shaye.png",
+      "previewimage": "/shayepreview.png",
+      "preview_description": "Header 2 with video banner, about layout 2, product cards, and footer.",
+      "prebuilt_pages": 8,
+      "sectionVariants": {
+        "Topbar": "Topbar-2",
+        "Header": "Header-2",
+        "Banner": "Banner-2",
+        "About": "About-2",
+        "Product": "Product-2",
+        "Footer": "Footer-1"
+      },
+      "variables": {
+        "--header-bg": "#111827",
+        "--header-text": "#ffffff",
+        "--hero-bg": "#020617",
+        "--hero-title": "#f8fafc",
+        "--primary-link-bg": "#ffffff",
+        "--primary-link-color": "#000000",
+        "--blue-bg": "#2563eb",
+        "--lightcream-bg": "#fbfaf6"
+      }
+    },
+    {
+      "id": "template-3",
+      "numericId": 3,
+      "title": "Slider Showcase",
+      "type": "Single Page Website",
+      "image": "/stylam.png",
+      "previewimage": "/stylampreview.png",
+      "preview_description": "Header 2 with image slider banner, about layout 2, product grid, and footer.",
+      "prebuilt_pages": 5,
+      "sectionVariants": {
+        "Topbar": "Topbar-1",
+        "Header": "Header-2",
+        "Banner": "Banner-3",
+        "About": "About-2",
+        "Product": "Product-3",
+        "Footer": "Footer-1"
+      },
+      "variables": {
+        "--header-bg": "#0f766e",
+        "--header-text": "#ffffff",
+        "--hero-bg": "#042f2e",
+        "--hero-title": "#ffffff",
+        "--primary-link-bg": "#ffffff",
+        "--primary-link-color": "#0f172a",
+        "--blue-bg": "#0f766e",
+        "--lightcream-bg": "#f8fafc"
+      }
+    },
+    {
+      "id": "template-4",
+      "numericId": 4,
+      "title": "Motion Slider",
+      "type": "Multiple Pages Website",
+      "image": "/blackbay.png",
+      "previewimage": "/blackbaypreview.png",
+      "preview_description": "Header 1 with video slider banner, about layout 1, product cards, and footer.",
+      "prebuilt_pages": 7,
+      "sectionVariants": {
+        "Topbar": "Topbar-2",
+        "Header": "Header-1",
+        "Banner": "Banner-4",
+        "About": "About-1",
+        "Product": "Product-2",
+        "Footer": "Footer-1"
+      },
+      "variables": {
+        "--header-bg": "#1f2937",
+        "--header-text": "#ffffff",
+        "--hero-bg": "#111827",
+        "--hero-title": "#ffffff",
+        "--primary-link-bg": "#facc15",
+        "--primary-link-color": "#111827",
+        "--blue-bg": "#1d4ed8",
+        "--lightcream-bg": "#fff7ed"
+      }
+    },
+    {
+      "id": "template-5",
+      "numericId": 5,
+      "title": "Editorial Blocks",
+      "type": "Single Page Website",
+      "image": "/stylampreview.png",
+      "previewimage": "/stylampreview.png",
+      "preview_description": "Header 2 with image banner, editorial about layout, product carousel, and footer.",
+      "prebuilt_pages": 4,
+      "sectionVariants": {
+        "Topbar": "Topbar-1",
+        "Header": "Header-2",
+        "Banner": "Banner-1",
+        "About": "About-2",
+        "Product": "Product-1",
+        "Footer": "Footer-1"
+      },
+      "variables": {
+        "--header-bg": "#334155",
+        "--header-text": "#ffffff",
+        "--hero-bg": "#1e293b",
+        "--hero-title": "#ffffff",
+        "--primary-link-bg": "#ffffff",
+        "--primary-link-color": "#1e293b",
+        "--blue-bg": "#475569",
+        "--lightcream-bg": "#f8fafc"
+      }
+    }
+  ],
   "common": {
     "Topbar": {
-      "text": ["Luxury homes, verified listings, local experts"],
+      "text": ["Fast setup, editable sections, category-ready media"],
       "phone": "+91 98765 43210",
-      "email": "hello@primehomes.com",
-      "location": "Gurugram, India",
+      "email": "hello@example.com",
+      "location": "India",
       "socialLinks": [
         { "label": "facebook", "href": "#" },
         { "label": "twitter", "href": "#" },
         { "label": "linkedin", "href": "#" }
       ]
     },
-    "Header": {
-      "logo": "PrimeHomes",
-      "menu": [
-        { "label": "Home", "href": "#" },
-        { "label": "Listings", "href": "#" },
-        { "label": "Neighborhoods", "href": "#" },
-        { "label": "Agents", "href": "#" },
-        { "label": "Contact", "href": "#" }
-      ],
-      "buttons": [
-        { "label": "Book Visit", "href": "#", "variant": "primary" },
-        { "label": "Call Agent", "href": "#", "variant": "secondary" }
-      ]
-    },
     "Footer": {
-      "logo": "PrimeHomes",
-      "desc": "Verified discovery, expert guidance, and end-to-end website support.",
+      "desc": "Editable website content powered by one category and template JSON file.",
       "footerContact": {
-        "location": "Gurugram, India",
-        "email": "hello@primehomes.com",
+        "location": "India",
+        "email": "hello@example.com",
         "phone": "+91 98765 43210"
       },
-      "copyrightText": "Copyright 2026 PrimeHomes. All rights reserved."
+      "copyrightText": "Copyright 2026. All rights reserved."
     }
   },
   "categories": {
     "Realestate": {
-      "templates": ["template-1", "template-2", "template-3"],
+      "templates": ["template-1", "template-2", "template-3", "template-4", "template-5"],
       "sections": {
+        "Header": {
+          "logo": "PrimeHomes",
+          "menu": [
+            { "label": "Home", "href": "#" },
+            { "label": "Listings", "href": "#" },
+            { "label": "Neighborhoods", "href": "#" },
+            { "label": "Agents", "href": "#" },
+            { "label": "Contact", "href": "#" }
+          ],
+          "buttons": [
+            { "label": "Book Visit", "href": "#", "variant": "primary" },
+            { "label": "Call Agent", "href": "#", "variant": "secondary" }
+          ]
+        },
         "Banner": {
-          "bannerBackgroundMode": "image",
-          "backgroundImage": "/bg1.jpg",
+          "backgroundImage": "/categories/realestate/bg1.jpg",
           "backgroundImageTitle": "Modern property exterior",
+          "backgroundVideo": "/categories/realestate/video.mp4",
           "bannerHeight": 70,
           "pretitle": "Premium real estate advisory",
           "title": "Find a home that fits your next chapter.",
@@ -51,25 +205,20 @@
           "buttons": [{ "label": "Explore listings", "href": "#", "variant": "primary" }],
           "bannerSlides": [
             {
-              "image": "/bg1.jpg",
+              "image": "/categories/realestate/bg1.jpg",
+              "video": "/categories/realestate/video.mp4",
               "alt": "Modern apartment living room",
               "title": "Move into verified homes faster",
               "desc": "Shortlist ready-to-visit properties with trusted local guidance.",
               "button": { "label": "View homes", "href": "#", "variant": "primary" }
             },
             {
-              "image": "/bg2.jpg",
+              "image": "/categories/realestate/bg2.jpg",
+              "video": "/categories/realestate/video.mp4",
               "alt": "Luxury residential building",
               "title": "Invest in high-growth locations",
-              "desc": "Compare neighborhoods, amenities, pricing, and rental  potential.",
+              "desc": "Compare neighborhoods, amenities, pricing, and rental potential.",
               "button": { "label": "Compare areas", "href": "#", "variant": "primary" }
-            },
-            {
-              "image": "/blackbay.png",
-              "alt": "Premium interior",
-              "title": "Design-ready premium spaces",
-              "desc": "Discover homes with the room, light, and finish your lifestyle needs.",
-              "button": { "label": "Schedule tour", "href": "#", "variant": "primary" }
             }
           ]
         },
@@ -79,12 +228,12 @@
           "subtitle": "Verified homes, smarter visits, clearer decisions",
           "desc": "We help families and investors shortlist the right properties using neighborhood insight, pricing context, and documentation checks.",
           "desc2": "From first call to final paperwork, our advisors keep every step simple, transparent, and focused on your goals.",
-          "backgroundImage": "/bg2.jpg",
+          "backgroundImage": "/categories/realestate/bg2.jpg",
           "backgroundImageTitle": "Premium property lounge",
-          "sideImage": "/shaye.png",
+          "sideImage": "/categories/realestate/bg1.jpg",
           "sideImageTitle": "Luxury residence interior",
           "philosophyTitle": "Our Promise",
-          "philosophyDesc": "No inflated claims, no hidden pressure. Just real options, clear numbers, and reliable local support.",
+          "philosophyDesc": "Real options, clear numbers, and reliable local support.",
           "buttons": [{ "label": "Meet our advisors", "href": "#", "variant": "primary" }]
         },
         "Product": {
@@ -96,14 +245,13 @@
           "productFeatures": [
             { "label": "Verified documents", "price": "Included" },
             { "label": "Site visit", "price": "Free" },
-            { "label": "Loan support", "price": "Available" },
-            { "label": "Legal check", "price": "Included" }
+            { "label": "Loan support", "price": "Available" }
           ],
           "productTotalPrice": "From Rs. 1.25 Cr",
           "productShippingText": "Site visits available today",
           "productSlides": [
             {
-              "image": "/bg1.jpg",
+              "image": "/categories/realestate/bg1.jpg",
               "alt": "Skyline apartment",
               "productTitle": "Skyline Residences",
               "productSubtitle": "3 BHK Apartment",
@@ -116,21 +264,6 @@
               "productTotalPrice": "Rs. 1.25 Cr",
               "productShippingText": "Ready for visit",
               "button": { "label": "View details", "href": "#", "variant": "primary" }
-            },
-            {
-              "image": "/bg2.jpg",
-              "alt": "Luxury villa",
-              "productTitle": "Green Villa Enclave",
-              "productSubtitle": "Independent Villa",
-              "productInfoTitle": "Private gated address",
-              "productInfoDesc": "Garden, premium finishes, and a quiet community location.",
-              "productFeatures": [
-                { "label": "Bedrooms", "price": "4" },
-                { "label": "Plot", "price": "320 sq.yd" }
-              ],
-              "productTotalPrice": "Rs. 3.8 Cr",
-              "productShippingText": "Ready for visit",
-              "button": { "label": "Book tour", "href": "#", "variant": "primary" }
             }
           ],
           "productItems": [
@@ -138,38 +271,42 @@
               "title": "Skyline Residences",
               "category": "3 BHK Apartment",
               "desc": "High-floor homes with open views, clubhouse access, and quick metro connectivity.",
-              "image": "/bg1.jpg",
+              "image": "/categories/realestate/bg1.jpg",
               "alt": "Skyline apartment"
             },
             {
               "title": "Green Villa Enclave",
               "category": "Independent Villa",
               "desc": "Private garden, premium finishes, and a quiet gated community address.",
-              "image": "/bg2.jpg",
+              "image": "/categories/realestate/bg2.jpg",
               "alt": "Luxury villa"
-            },
-            {
-              "title": "Urban Nest Studio",
-              "category": "Investment Studio",
-              "desc": "Compact, rental-friendly studio apartments near commercial hubs.",
-              "image": "/blackbay.png",
-              "alt": "Studio apartment"
             }
           ],
-          "buttons": [
-            { "label": "Take the virtual walkthrough", "href": "#", "variant": "primary" },
-            { "label": "Email us", "href": "mailto:hello@primehomes.com", "variant": "secondary" }
-          ]
+          "buttons": [{ "label": "Take the virtual walkthrough", "href": "#", "variant": "primary" }]
         }
       }
     },
     "Business": {
-      "templates": ["template-1", "template-2", "template-3"],
+      "templates": ["template-1", "template-2", "template-3", "template-4", "template-5"],
       "sections": {
+        "Header": {
+          "logo": "LaunchCo",
+          "menu": [
+            { "label": "Home", "href": "#" },
+            { "label": "Services", "href": "#" },
+            { "label": "Work", "href": "#" },
+            { "label": "Pricing", "href": "#" },
+            { "label": "Contact", "href": "#" }
+          ],
+          "buttons": [
+            { "label": "Start Project", "href": "#", "variant": "primary" },
+            { "label": "Call Us", "href": "#", "variant": "secondary" }
+          ]
+        },
         "Banner": {
-          "bannerBackgroundMode": "image",
-          "backgroundImage": "/blackbay.png",
+          "backgroundImage": "/categories/business/blackbay.png",
           "backgroundImageTitle": "Business workspace",
+          "backgroundVideo": "/categories/business/video.mp4",
           "bannerHeight": 70,
           "pretitle": "Modern business websites",
           "title": "Launch a sharper website for your company.",
@@ -177,11 +314,20 @@
           "buttons": [{ "label": "Start project", "href": "#", "variant": "primary" }],
           "bannerSlides": [
             {
-              "image": "/blackbay.png",
+              "image": "/categories/business/blackbay.png",
+              "video": "/categories/business/video.mp4",
               "alt": "Business website",
               "title": "Clear service pages",
               "desc": "Explain your services with strong sections and simple editing.",
               "button": { "label": "View services", "href": "#", "variant": "primary" }
+            },
+            {
+              "image": "/categories/business/bg1.jpg",
+              "video": "/categories/business/video.mp4",
+              "alt": "Business operations",
+              "title": "Proof-led company pages",
+              "desc": "Show results, offers, and conversion paths in one place.",
+              "button": { "label": "See work", "href": "#", "variant": "primary" }
             }
           ]
         },
@@ -191,10 +337,12 @@
           "subtitle": "Services, proof, and fast lead capture",
           "desc": "Show what your business does, why customers choose you, and how visitors can get in touch.",
           "desc2": "The content is business-specific while template designs can change component by component.",
-          "backgroundImage": "/blackbay.png",
+          "backgroundImage": "/categories/business/blackbay.png",
           "backgroundImageTitle": "Business office",
-          "sideImage": "/stylam.png",
+          "sideImage": "/categories/business/bg2.jpg",
           "sideImageTitle": "Business design",
+          "philosophyTitle": "How We Work",
+          "philosophyDesc": "Clear messaging, strong sections, and fast editing for teams.",
           "buttons": [{ "label": "Get consultation", "href": "#", "variant": "primary" }]
         },
         "Product": {
@@ -210,19 +358,36 @@
           ],
           "productTotalPrice": "Custom",
           "productShippingText": "Fast setup available",
+          "productSlides": [
+            {
+              "image": "/categories/business/bg1.jpg",
+              "alt": "Consulting",
+              "productTitle": "Consulting",
+              "productSubtitle": "Growth Planning",
+              "productInfoTitle": "Clear strategy",
+              "productInfoDesc": "A focused service block for your leading offer.",
+              "productFeatures": [
+                { "label": "Audit", "price": "Included" },
+                { "label": "Plan", "price": "Included" }
+              ],
+              "productTotalPrice": "Custom",
+              "productShippingText": "Fast setup available",
+              "button": { "label": "Talk to us", "href": "#", "variant": "primary" }
+            }
+          ],
           "productItems": [
             {
               "title": "Consulting",
               "category": "Service",
               "desc": "A focused service block for your leading business offer.",
-              "image": "/bg1.jpg",
+              "image": "/categories/business/bg1.jpg",
               "alt": "Business consulting"
             },
             {
               "title": "Operations",
               "category": "Service",
               "desc": "Show the process and support your customers can expect.",
-              "image": "/bg2.jpg",
+              "image": "/categories/business/bg2.jpg",
               "alt": "Business operations"
             }
           ],
@@ -231,13 +396,26 @@
       }
     },
     "School": {
-      "templates": ["template-1", "template-2", "template-3"],
+      "templates": ["template-1","template-2", "template-3", "template-4", "template-5"],
       "sections": {
+        "Header": {
+          "logo": "BrightSchool",
+          "menu": [
+            { "label": "Home", "href": "#" },
+            { "label": "Admissions", "href": "#" },
+            { "label": "Programs", "href": "#" },
+            { "label": "Campus", "href": "#" },
+            { "label": "Contact", "href": "#" }
+          ],
+          "buttons": [
+            { "label": "Apply Now", "href": "#", "variant": "primary" },
+            { "label": "Visit Campus", "href": "#", "variant": "secondary" }
+          ]
+        },
         "Banner": {
-          "bannerBackgroundMode": "image",
-          "backgroundImage": "/bg2.jpg",
+          "backgroundImage": "/categories/school/bg2.jpg",
           "backgroundImageTitle": "School campus",
-          "backgroundVideo": "/video.mp4",
+          "backgroundVideo": "/categories/school/video.mp4",
           "bannerHeight": 70,
           "pretitle": "Future-ready learning",
           "title": "A school where curiosity becomes confidence.",
@@ -245,24 +423,16 @@
           "buttons": [{ "label": "Explore admissions", "href": "#", "variant": "primary" }],
           "bannerSlides": [
             {
-              "image": "/bg1.jpg",
-              "video": "/video.mp4",
+              "image": "/categories/school/bg1.jpg",
+              "video": "/categories/school/video.mp4",
               "alt": "Students learning together",
               "title": "Learning that feels alive",
               "desc": "Highlight classrooms, activities, and student stories with editable slides.",
               "button": { "label": "View programs", "href": "#", "variant": "primary" }
             },
             {
-              "image": "/bg2.jpg",
-              "video": "/video.mp4",
-              "alt": "School campus",
-              "title": "Admissions open for new session",
-              "desc": "Show dates, eligibility, campus visits, and parent support in one place.",
-              "button": { "label": "Apply now", "href": "#", "variant": "primary" }
-            },
-            {
-              "image": "/stylam.png",
-              "video": "/video.mp4",
+              "image": "/categories/school/stylam.png",
+              "video": "/categories/school/video.mp4",
               "alt": "Student activities",
               "title": "Academics, arts, and sports",
               "desc": "Present a complete school experience with reusable website sections.",
@@ -276,9 +446,9 @@
           "subtitle": "A balanced environment for learning and growth",
           "desc": "We help students build strong fundamentals, creative confidence, and real-world curiosity through guided learning.",
           "desc2": "Parents get clear communication, structured programs, and a school community focused on every child.",
-          "backgroundImage": "/bg1.jpg",
+          "backgroundImage": "/categories/school/bg1.jpg",
           "backgroundImageTitle": "School classroom",
-          "sideImage": "/shaye.png",
+          "sideImage": "/categories/school/bg2.jpg",
           "sideImageTitle": "Students activity",
           "philosophyTitle": "Our Approach",
           "philosophyDesc": "Learning works best when students feel seen, supported, and challenged at the right pace.",
@@ -293,71 +463,28 @@
           "productFeatures": [
             { "label": "Primary", "price": "I-V" },
             { "label": "Middle", "price": "VI-VIII" },
-            { "label": "Senior", "price": "IX-XII" },
-            { "label": "Activities", "price": "Included" }
+            { "label": "Senior", "price": "IX-XII" }
           ],
           "productTotalPrice": "Admissions Open",
           "productShippingText": "Campus tours available",
-          "productSlides": [
-            {
-              "image": "/bg1.jpg",
-              "alt": "Primary students",
-              "productTitle": "Primary School",
-              "productSubtitle": "Foundational learning",
-              "productInfoTitle": "Curiosity-led classrooms",
-              "productInfoDesc": "Build language, numeracy, creativity, and confidence.",
-              "productFeatures": [
-                { "label": "Classes", "price": "I-V" },
-                { "label": "Activities", "price": "Daily" }
-              ],
-              "productTotalPrice": "Apply",
-              "productShippingText": "Seats limited",
-              "button": { "label": "Know more", "href": "#", "variant": "primary" }
-            },
-            {
-              "image": "/bg2.jpg",
-              "alt": "Senior students",
-              "productTitle": "Senior School",
-              "productSubtitle": "Focused academics",
-              "productInfoTitle": "Guided future planning",
-              "productInfoDesc": "Subject depth, mentoring, and exam preparation.",
-              "productFeatures": [
-                { "label": "Classes", "price": "IX-XII" },
-                { "label": "Mentoring", "price": "Included" }
-              ],
-              "productTotalPrice": "Apply",
-              "productShippingText": "Counselling available",
-              "button": { "label": "View curriculum", "href": "#", "variant": "primary" }
-            }
-          ],
           "productItems": [
             {
               "title": "Primary School",
               "category": "Classes I-V",
               "desc": "Foundational learning with language, numeracy, activities, and creative confidence.",
-              "image": "/bg1.jpg",
+              "image": "/categories/school/bg1.jpg",
               "alt": "Primary school"
-            },
-            {
-              "title": "Middle School",
-              "category": "Classes VI-VIII",
-              "desc": "Structured academic growth with projects, clubs, and guided exploration.",
-              "image": "/bg2.jpg",
-              "alt": "Middle school"
             },
             {
               "title": "Senior School",
               "category": "Classes IX-XII",
               "desc": "Exam readiness, mentoring, and future planning for senior students.",
-              "image": "/stylam.png",
+              "image": "/categories/school/bg2.jpg",
               "alt": "Senior school"
             }
           ],
-          "buttons": [
-            { "label": "Book campus tour", "href": "#", "variant": "primary" },
-            { "label": "Download brochure", "href": "#", "variant": "secondary" }
-          ]
-        }
+          "buttons": [{ "label": "Book campus tour", "href": "#", "variant": "primary" }]
+         }
       }
     }
   }

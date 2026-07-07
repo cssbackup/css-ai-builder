@@ -35,9 +35,8 @@ export default function Templatepreview({
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
-  const [previewTemplate, setPreviewTemplate] = useState<BuilderTemplate | null>(
-    null,
-  );
+  const [previewTemplate, setPreviewTemplate] =
+    useState<BuilderTemplate | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -232,11 +231,11 @@ export default function Templatepreview({
                 <X size={22} />
               </button>
 
-              <div className="grid h-full items-center gap-6 p-6 lg:grid-cols-[minmax(0,1fr)_400px]">
-                <div className="flex h-full min-h-0 flex-col justify-center gap-8">
-                  <h2 className="text-2xl font-bold text-slate-950 underline">
+              <div className="grid h-full items-center gap-6 p-6 lg:grid-cols-[minmax(0,1fr)_400px] ">
+                <div className="flex h-full min-h-0 flex-col justify-center gap-8 mt-10">
+                  {/* <h2 className="text-2xl font-bold text-slate-950 underline">
                     {getTemplateDisplayTitle(previewTemplate)}
-                  </h2>
+                  </h2>  */}
 
                   <div className="relative mx-auto w-full max-w-[780px]">
                     <Image
@@ -278,7 +277,7 @@ export default function Templatepreview({
                   </div>
                 </div>
 
-                <div className="relative max-h-[85vh] overflow-hidden rounded-[10px] border border-gray-200 p-6 shadow-xl">
+                <div className="relative max-h-[85vh] overflow-hidden rounded-[10px] border border-gray-200 p-6 shadow-xl mt-10">
                   <button
                     type="button"
                     onClick={() => setPreviewTemplate(null)}

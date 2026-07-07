@@ -89,8 +89,10 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
   const handleCreatePage = () => {
     if (!newPageName.trim()) return;
 
-    setPageItems((prevPages) => [...prevPages, newPageName.trim()]);
-    setSelectedPage(newPageName.trim());
+    const trimmedPageName = newPageName.trim();
+
+    setPageItems((prevPages) => [...prevPages, trimmedPageName]);
+    setSelectedPage(trimmedPageName);
 
     setNewPageName("");
     setShowPopup(false);
@@ -180,45 +182,6 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
                   >
                     Add More{" "}
                   </button>
-
-                  {showPopup && (
-                    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/30 backdrop-blur-sm">
-                      <div className="w-full max-w-sm rounded-xl bg-white p-5 shadow-xl">
-                        <h2 className="mb-4 text-lg font-semibold text-slate-900">
-                          Add New Page
-                        </h2>
-
-                        <input
-                          type="text"
-                          value={newPageName}
-                          onChange={(e) => setNewPageName(e.target.value)}
-                          placeholder="Enter page name"
-                          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-500"
-                        />
-
-                        <div className="mt-4 flex justify-end gap-2">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setNewPageName("");
-                              setShowPopup(false);
-                            }}
-                            className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-700"
-                          >
-                            Cancel
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={handleCreatePage}
-                            className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white"
-                          >
-                            Add Page
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
             )}
@@ -280,6 +243,36 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
           <Menu size={22} />
         </button>
       </div>
+
+      {showPopup &&
+        createPortal(
+          <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-white/35 px-4 backdrop-blur-sm">
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                handleCreatePage();
+              }}
+              className="flex w-[min(92vw,440px)] items-center gap-2"
+            >
+              <input
+                type="text"
+                value={newPageName}
+                onChange={(e) => setNewPageName(e.target.value)}
+                placeholder="Enter page name"
+                autoFocus
+                className="h-11 min-w-0 flex-1 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none shadow-lg focus:border-blue-500"
+              />
+
+              <button
+                type="submit"
+                className="h-11 shrink-0 rounded-md bg-blue-600 px-5 text-sm font-semibold text-white shadow-lg hover:bg-blue-700"
+              >
+                Enter
+              </button>
+            </form>
+          </div>,
+          document.body,
+        )}
 
       {pageToDelete &&
         createPortal(

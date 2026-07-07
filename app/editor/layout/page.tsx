@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   buildSelectedConfig,
@@ -64,6 +64,14 @@ const replaceFirstTextValue = (
 };
 
 export default function Page() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <EditorLayoutPage />
+    </Suspense>
+  );
+}
+
+function EditorLayoutPage() {
   const searchParams = useSearchParams();
   const templateId = searchParams.get("templateId") ?? "template-1";
   const category = searchParams.get("category") ?? "Realestate";
