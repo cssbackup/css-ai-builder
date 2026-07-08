@@ -70,14 +70,14 @@ export default function ProductThree({ data = {}, blocks }: SectionProps) {
 
             <BlockRenderer
               block={getTextBlockByRole(resolvedBlocks, "heading")}
-              className="max-w-xl text-5xl font-bold leading-tight tracking-tight md:text-6xl lg:text-7xl"
+              className="max-w-xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
             />
           </div>
 
           <div className="lg:pt-12">
             <BlockRenderer
               block={getTextBlockByRole(resolvedBlocks, "paragraph")}
-              className="max-w-2xl text-xl font-medium leading-relaxed md:text-2xl"
+              className="max-w-2xl text-base font-medium leading-relaxed sm:text-xl md:text-2xl"
             />
 
             <div className="mt-10 flex flex-wrap gap-5">
@@ -85,7 +85,7 @@ export default function ProductThree({ data = {}, blocks }: SectionProps) {
                 <BlockRenderer
                   key={button.id}
                   block={button}
-                  className={`rounded-2xl px-8 py-5 text-base font-bold transition ${
+                    className={`rounded-xl px-5 py-3 text-sm font-bold transition sm:rounded-2xl sm:px-8 sm:py-5 sm:text-base ${
                     index === 0
                       ? "bg-blue-600 text-white hover:bg-blue-700"
                       : "bg-blue-200 text-black hover:bg-blue-300"
@@ -96,19 +96,22 @@ export default function ProductThree({ data = {}, blocks }: SectionProps) {
           </div>
         </div>
 
-        <div className="mt-24 grid gap-x-9 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid gap-x-9 gap-y-10 sm:grid-cols-2 md:mt-24 md:gap-y-14 lg:grid-cols-3">
           {productCards.map((card) => (
             <article key={"id" in card ? card.id : card.title}>
               <div className="relative h-[280px] overflow-hidden rounded-2xl md:h-[320px]">
                 <Image
                   src={card.image ?? "/bg1.jpg"}
                   alt={card.alt ?? card.title ?? "Product"}
+                  data-editor-media
+                  data-editor-media-type="image"
+                  data-editor-media-src={card.image ?? "/bg1.jpg"}
                   fill
                   className="object-cover"
                 />
               </div>
 
-              <h3 className="mt-7 text-3xl font-bold tracking-tight text-white">
+              <h3 className="mt-5 text-2xl font-bold tracking-tight text-white sm:mt-7 sm:text-3xl">
                 {card.title}
               </h3>
 

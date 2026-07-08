@@ -88,7 +88,7 @@ export default function Navbar() {
                         e.preventDefault();
                         setActiveItem(item.label);
                       }}
-                      className={`flex h-full items-center border-b-2 px-0 text-[14px] font-semibold transition-colors duration-150 ${
+                      className={`flex h-full items-center border-b-2 px-0 text-[14px] font-medium transition-colors duration-150 ${
                         isActive
                           ? "border-red-600 text-red-600"
                           : "border-transparent text-black hover:border-red-600 hover:text-red-600"

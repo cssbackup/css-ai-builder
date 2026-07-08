@@ -2,15 +2,35 @@
 
 import { ReactNode, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Edit, Plus, Trash, X } from "lucide-react";
+import { Edit, Plus, Trash, X, Play } from "lucide-react";
 import { usePreview } from "../context/PreviewContext";
+import {
+  addableSectionCards,
+  createAddableSection,
+} from "../../data/templateFlow";
+import { sectionRegistry } from "../../lib/sectionRegistry";
+
+const TOOLBAR_WIDTH = 400;
+const TOOLBAR_HEIGHT = 64;
+const TOOLBAR_CURSOR_GAP = 0;
 
 type EditableSectionProps = {
   label: string;
   children: ReactNode;
   onEdit: () => void;
   onDelete: () => void;
+  onAddSection: (sectionType: string) => void;
   onInlineTextEdit: (oldText: string, newText: string) => void;
+  onInlineMediaEdit: (
+    oldSrc: string,
+    newSrc: string,
+    mediaType: "image" | "video",
+    fileName: string,
+  ) => void;
+  canMoveUp?: boolean;
+  canMoveDown?: boolean;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
 };
 
 export default function EditableSection({
@@ -18,13 +38,26 @@ export default function EditableSection({
   children,
   onEdit,
   onDelete,
+  onAddSection,
   onInlineTextEdit,
+  onInlineMediaEdit,
+  canMoveUp = false,
+  canMoveDown = false,
+  onMoveUp,
+  onMoveDown,
 }: EditableSectionProps) {
   const { isPreview } = usePreview();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showAddPopup, setShowAddPopup] = useState(false);
+  const [toolbarY, setToolbarY] = useState(48);
   const activeEditableRef = useRef<HTMLElement | null>(null);
   const originalTextRef = useRef("");
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const mediaInputRef = useRef<HTMLInputElement | null>(null);
+  const pendingMediaRef = useRef<{
+    oldSrc: string;
+    mediaType: "image" | "video";
+  } | null>(null);
 
   const handleConfirmDelete = () => {
     setShowDeleteConfirm(false);
@@ -95,6 +128,29 @@ export default function EditableSection({
 
     if (target.closest("[data-editor-toolbar]")) return;
 
+    const mediaElement = target.closest<HTMLElement>("[data-editor-media]");
+    if (mediaElement && event.currentTarget.contains(mediaElement)) {
+      const mediaType =
+        mediaElement.dataset.editorMediaType === "video" ? "video" : "image";
+      const oldSrc =
+        mediaElement.dataset.editorMediaSrc ||
+        mediaElement.getAttribute("src") ||
+        "";
+
+      if (!oldSrc) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      pendingMediaRef.current = { oldSrc, mediaType };
+
+      if (mediaInputRef.current) {
+        mediaInputRef.current.accept =
+          mediaType === "video" ? "video/*" : "image/*";
+        mediaInputRef.current.click();
+      }
+      return;
+    }
+
     const editableElement = target.closest<HTMLElement>(
       "h1,h2,h3,h4,h5,h6,p,span,a,button,li",
     );
@@ -138,32 +194,123 @@ export default function EditableSection({
     }
   };
 
+  const handleMediaFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    const pendingMedia = pendingMediaRef.current;
+
+    if (!file || !pendingMedia) {
+      event.target.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        onInlineMediaEdit(
+          pendingMedia.oldSrc,
+          reader.result,
+          pendingMedia.mediaType,
+          file.name,
+        );
+      }
+
+      pendingMediaRef.current = null;
+      event.target.value = "";
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const handleSectionMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (isPreview) return;
+
+    const sectionRect = sectionRef.current?.getBoundingClientRect();
+    if (!sectionRect) return;
+
+    const halfToolbarHeight = TOOLBAR_HEIGHT / 2;
+    const padding = 12;
+    const minY = halfToolbarHeight + padding;
+    const maxY = Math.max(
+      minY,
+      sectionRect.height - halfToolbarHeight - padding,
+    );
+    const cursorY = event.clientY - sectionRect.top + TOOLBAR_CURSOR_GAP;
+
+    setToolbarY(Math.min(Math.max(cursorY, minY), maxY));
+  };
+
   return (
-    <div className="group relative isolate">
+    <div
+      ref={sectionRef}
+      className="group relative isolate"
+      onMouseMove={handleSectionMouseMove}
+    >
+      {!isPreview && (
+        <input
+          ref={mediaInputRef}
+          type="file"
+          className="sr-only"
+          tabIndex={-1}
+          onChange={handleMediaFileChange}
+        />
+      )}
       {!isPreview && (
         <div
           data-editor-toolbar
           className="pointer-events-none absolute inset-0 z-40 hidden group-hover:block"
         >
-          <div className="sticky top-1/2 flex  justify-center px-3">
-            <div className="pointer-events-auto flex max-w-[calc(100vw-2rem)] flex-wrap items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-3 py-1 shadow-lg">
-              <span className="text-sm font-medium text-gray-900">
+          <div
+            className="absolute left-0 right-0 flex -translate-y-1/2 justify-center py-3"
+            style={{ top: toolbarY }}
+          >
+            <div
+              className="pointer-events-auto flex h-10 w-[min(400px,calc(100%-24px))] items-center justify-center gap-3 rounded-full border border-slate-300 bg-white px-3 py-1 shadow-lg"
+              style={{ maxWidth: TOOLBAR_WIDTH }}
+            >
+              <span className="min-w-0 flex-1 truncate text-sm font-medium text-gray-900">
                 {label} :
               </span>
 
               <button
                 type="button"
                 onClick={onEdit}
-                className="flex items-center gap-1 rounded-full border border-gray-400 px-3 py-1 text-xs font-medium text-slate-700  hover:bg-slate-100"
+                className="flex h-7 shrink-0 items-center gap-1 rounded-full border border-gray-400 px-3 text-xs font-medium text-slate-700 hover:bg-slate-100"
               >
                 <Edit size={12} />
                 Edit
               </button>
 
+              {canMoveUp && (
+                <button
+                  type="button"
+                  aria-label={`Move ${sectionName} up`}
+                  title={`Move ${sectionName} up`}
+                  onClick={onMoveUp}
+                  className="flex h-7 w-11 shrink-0 items-center justify-center rounded-full border border-gray-400 bg-gray-100 text-xs font-medium text-slate-700 hover:bg-slate-100"
+                >
+                  <Play size={15} className="rotate-150" />
+                </button>
+              )}
+
+              {canMoveDown && (
+                <button
+                  type="button"
+                  aria-label={`Move ${sectionName} down`}
+                  title={`Move ${sectionName} down`}
+                  onClick={onMoveDown}
+                  className="flex h-7 w-11 shrink-0 items-center justify-center rounded-full border border-gray-400 bg-gray-100 text-xs font-medium text-slate-700 hover:bg-slate-100"
+                >
+                  <Play size={15} className="rotate-90" />
+                </button>
+              )}
+
               <button
                 type="button"
                 onClick={() => setShowDeleteConfirm(true)}
-                className="flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium text-red-600  hover:bg-red-50"
+                className="flex h-7 shrink-0 items-center gap-1 rounded-full border px-3 text-xs font-medium text-red-600 hover:bg-red-50"
               >
                 <Trash size={12} />
                 Delete
@@ -183,7 +330,7 @@ export default function EditableSection({
             event.stopPropagation();
             setShowAddPopup(true);
           }}
-          className="absolute bottom-0 left-1/2 z-[999] flex h-9 w-9 -translate-x-1/2 translate-y-1/2 items-center justify-center rounded-full border border-slate-600 bg-white text-slate-900 opacity-0 shadow-lg transition hover:bg-slate-100 group-hover:opacity-100"
+          className="absolute bottom-3 left-1/2 z-[999] flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border border-slate-600 bg-white text-slate-900 opacity-0 shadow-lg transition hover:scale-105 hover:bg-slate-100 group-hover:opacity-100"
         >
           <Plus size={18} />
         </button>
@@ -225,8 +372,8 @@ export default function EditableSection({
 
       {showAddPopup &&
         createPortal(
-          <div className="fixed inset-0 z-[10002] flex items-center justify-center bg-[#fff6df]">
-            <div className="relative w-full h-screen">
+          <div className="fixed inset-0 z-[10002] bg-[#fff6df] px-5 py-5">
+            <div className="relative mx-auto h-full max-w-6xl overflow-y-auto">
               <button
                 type="button"
                 aria-label="Close add component popup"
@@ -235,6 +382,20 @@ export default function EditableSection({
               >
                 <X size={18} />
               </button>
+
+              <div className="grid gap-x-16 gap-y-10 px-6 pt-12 sm:grid-cols-2 lg:grid-cols-3">
+                {addableSectionCards.map((item) => (
+                  <AddComponentCard
+                    key={item.type}
+                    type={item.type}
+                    title={item.title}
+                    onClick={() => {
+                      onAddSection(item.type);
+                      setShowAddPopup(false);
+                    }}
+                  />
+                ))}
+              </div>
             </div>
           </div>,
           document.body,
@@ -249,5 +410,46 @@ export default function EditableSection({
         {children}
       </div>
     </div>
+  );
+}
+
+function AddComponentCard({
+  type,
+  title,
+  onClick,
+}: {
+  type: string;
+  title: string;
+  onClick: () => void;
+}) {
+  const previewSection = createAddableSection(type, "Realestate");
+  const Component = previewSection
+    ? sectionRegistry[previewSection.variant]
+    : null;
+  const defaultVariant = previewSection
+    ? `${previewSection.type}-1`
+    : undefined;
+  const data =
+    previewSection && defaultVariant
+      ? (previewSection.data[previewSection.variant] ??
+        previewSection.data[defaultVariant])
+      : undefined;
+
+  return (
+    <button type="button" onClick={onClick} className="group text-left">
+      <div className="aspect-[16/9] overflow-hidden rounded-[28px] border-[5px] border-[#202020] bg-white transition group-hover:-translate-y-1 group-hover:bg-white/60">
+        {Component ? (
+          <div className="h-[520px] w-[1200px] origin-top-left scale-[0.28] bg-white">
+            <Component data={data} />
+          </div>
+        ) : (
+          <div className="flex h-full items-center justify-center text-sm font-semibold text-slate-700">
+            {title}
+          </div>
+        )}
+      </div>
+
+      <p className="mt-4 text-base font-semibold text-[#202020]">{title}</p>
+    </button>
   );
 }

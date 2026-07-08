@@ -48,18 +48,18 @@ export default function TopbarTwo({ data = {}, blocks }: SectionProps) {
 
   return (
     <section style={{ background: topbarBackground, color: topbarTextColor }}>
-      <div className="mx-auto flex h-11 max-w-7xl items-center justify-between px-4 lg:px-6">
+      <div className="mx-auto flex min-h-11 max-w-7xl flex-col items-start justify-center gap-2 px-4 py-2 sm:flex-row sm:items-center sm:justify-between lg:px-6">
         {announcement ? (
-          <BlockRenderer block={announcement} className="text-sm font-semibold" />
+          <BlockRenderer block={announcement} className="text-xs font-semibold sm:text-sm" />
         ) : (
-          topbarText && <p className="text-sm font-semibold">{topbarText}</p>
+          topbarText && <p className="text-xs font-semibold sm:text-sm">{topbarText}</p>
         )}
 
-        <div className="flex items-center divide-x divide-white/20">
+        <div className="flex max-w-full flex-wrap items-center gap-x-3 gap-y-2 sm:justify-end sm:divide-x sm:divide-white/20">
           {phone && (
             <Link
               href={`tel:${phone.replace(/\s+/g, "")}`}
-              className="flex items-center gap-2 px-5 text-sm transition hover:opacity-80"
+              className="flex items-center gap-2 text-xs transition hover:opacity-80 sm:px-4 sm:text-sm lg:px-5"
             >
               <FaPhoneAlt className="text-xs" />
               <span>{phone}</span>
@@ -69,7 +69,7 @@ export default function TopbarTwo({ data = {}, blocks }: SectionProps) {
           {email && (
             <Link
               href={`mailto:${email}`}
-              className="flex items-center gap-2 px-5 text-sm transition hover:opacity-80"
+              className="flex items-center gap-2 text-xs transition hover:opacity-80 sm:px-4 sm:text-sm lg:px-5"
             >
               <FaEnvelope className="text-xs" />
               <span>{email}</span>
@@ -77,7 +77,7 @@ export default function TopbarTwo({ data = {}, blocks }: SectionProps) {
           )}
 
           {location && (
-            <span className="flex items-center gap-2 px-5 text-sm">
+            <span className="flex items-center gap-2 text-xs sm:px-4 sm:text-sm lg:px-5">
               <FaMapMarkerAlt className="text-xs" />
               <span>{location}</span>
             </span>
@@ -88,7 +88,7 @@ export default function TopbarTwo({ data = {}, blocks }: SectionProps) {
               <BlockRenderer
                 key={button.id}
                 block={button}
-                className="px-4 text-sm font-semibold transition hover:opacity-80"
+                className="px-2 text-xs font-semibold transition hover:opacity-80 sm:px-4 sm:text-sm"
               />
             ))}
             {socialLinks.map((socialLink, index) => {
@@ -98,7 +98,7 @@ export default function TopbarTwo({ data = {}, blocks }: SectionProps) {
                 <Link
                   key={`${socialLink.label}-${index}`}
                   href={socialLink.href}
-                  className="flex h-11 w-11 items-center justify-center transition hover:bg-white/10"
+                  className="flex h-8 w-8 items-center justify-center transition hover:bg-white/10 sm:h-11 sm:w-11"
                   aria-label={socialLink.label}
                 >
                   <Icon size={14} />

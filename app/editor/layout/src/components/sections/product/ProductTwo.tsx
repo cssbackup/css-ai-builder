@@ -97,16 +97,16 @@ export default function ProductTwo({ data = {}, blocks }: SectionProps) {
 
   return (
     <section className="w-full bg-white">
-      <div className="max-w-6xl  bg-radial  from-white  via-blue-50 to-transparent px-5 py-20">
+      <div className="mx-auto max-w-6xl bg-radial from-white via-blue-50 to-transparent px-5 py-12 md:py-20">
         <h2
-          className={`mb-10 text-center text-4xl font-bold text-black underline ${generalSansMedium.className}`}
+          className={`mb-8 text-center text-3xl font-bold text-black underline sm:text-4xl ${generalSansMedium.className}`}
         >
           {sectionTitle}
         </h2>
 
         <div
           key={animationKey}
-          className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
           style={{
             animation: `${
               slideDirection === "next"
@@ -128,6 +128,9 @@ export default function ProductTwo({ data = {}, blocks }: SectionProps) {
                 <Image
                   src={product.image ?? "/prod2.jpg"}
                   alt={product.alt ?? product.title ?? "Product"}
+                  data-editor-media
+                  data-editor-media-type="image"
+                  data-editor-media-src={product.image ?? "/prod2.jpg"}
                   fill
                   className="object-cover"
                 />

@@ -11,6 +11,9 @@ export default function ImageBlock({ block, className }: ImageBlockProps) {
     <Image
       src={block.src}
       alt={block.alt ?? block.title ?? ""}
+      data-editor-media
+      data-editor-media-type="image"
+      data-editor-media-src={block.src}
       fill={block.fill ?? true}
       sizes="100vw"
       priority={block.priority}

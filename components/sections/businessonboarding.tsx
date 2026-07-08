@@ -103,6 +103,7 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
           type="button"
           onClick={step === 0 ? onBack : () => setStep((prev) => prev - 1)}
           variant="secondary"
+          className="font-medium"
         >
           Back
         </Button>
@@ -112,11 +113,11 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
           onClick={handleContinue}
           disabled={loadspinner || (step === 1 && !selectedCategory)}
           variant="danger"
+          className="font-medium"
         >
           {loadspinner && (
             <span className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" />
           )}
-
           {loadspinner ? "Loading..." : "Continue"}
         </Button>
       </div>

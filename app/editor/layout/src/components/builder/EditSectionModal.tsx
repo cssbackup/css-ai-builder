@@ -1,14 +1,16 @@
 "use client";
 
 import { useRef, useState, type ChangeEvent, type MouseEvent } from "react";
-import { Menu, Plus, Trash, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Menu, Plus, Trash, X } from "lucide-react";
 import { agrandirBolt, generalSansMedium } from "@/app/fonts";
 import {
   BannerSlideData,
   ButtonData,
+  FormFieldData,
   SectionData,
   SocialLinkData,
 } from "../../types/section";
+import { sectionRegistry } from "../../lib/sectionRegistry";
 
 type MenuItem = {
   label: string;
@@ -17,6 +19,7 @@ type MenuItem = {
 };
 
 type SectionItem = {
+  id?: string;
   type: string;
   variant: string;
   data: Record<string, SectionData>;
@@ -27,6 +30,7 @@ type TopbarBackgroundType = "solid" | "gradient";
 type FooterBackgroundType = "solid" | "gradient";
 type BannerBackgroundMode = "image" | "video" | "solid" | "gradient";
 type EditSectionModalProps = {
+  sectionId: string;
   sectionType: string;
   sections: SectionItem[];
   onClose: () => void;
@@ -66,13 +70,86 @@ const productLayouts = [
   { id: "Product-3", name: "Product 3" },
 ];
 
+const formDetailLayouts = [
+  { id: "FormDetail-1", name: "Form 1" },
+  { id: "FormDetail-2", name: "Form 2" },
+  { id: "FormDetail-3", name: "Form 3" },
+  { id: "FormDetail-4", name: "Form 4" },
+];
+
 const footerLayouts = [{ id: "Footer-1", name: "Footer 1" }];
+
+const layoutsBySection: Record<string, { id: string; name: string }[]> = {
+  Topbar: topbarLayouts,
+  Header: headerLayouts,
+  Banner: bannerLayouts,
+  About: aboutLayouts,
+  Product: productLayouts,
+  FormDetail: formDetailLayouts,
+  Footer: footerLayouts,
+  WhyChooseUs: [
+    { id: "WhyChooseUs-1", name: "Why Choose Us 1" },
+    { id: "WhyChooseUs-2", name: "Why Choose Us 2" },
+    { id: "WhyChooseUs-3", name: "Why Choose Us 3" },
+    { id: "WhyChooseUs-4", name: "Why Choose Us 4" },
+  ],
+  Gallery: [
+    { id: "Gallery-1", name: "Gallery 1" },
+    { id: "Gallery-2", name: "Gallery 2" },
+    { id: "Gallery-3", name: "Gallery 3" },
+    { id: "Gallery-4", name: "Gallery 4" },
+    { id: "Gallery-5", name: "Gallery 5" },
+    { id: "Gallery-6", name: "Gallery 6" },
+  ],
+  FAQ: [
+    { id: "FAQ-1", name: "FAQ 1" },
+    { id: "FAQ-2", name: "FAQ 2" },
+    { id: "FAQ-3", name: "FAQ 3" },
+    { id: "FAQ-4", name: "FAQ 4" },
+  ],
+  Testimonial: [
+    { id: "Testimonial-1", name: "Our Clients 1" },
+    { id: "Testimonial-2", name: "Our Clients 2" },
+    { id: "Testimonial-3", name: "Our Clients 3" },
+  ],
+};
 
 const MAX_MENU_LINKS = 7;
 const MAX_TOPBAR_SOCIAL_LINKS = 4;
 const MAX_HEADER_BUTTONS = 3;
 const MAX_BANNER_BUTTONS = 3;
+const MAX_FORM_FIELDS = 5;
 const MAX_LINK_TEXT_LENGTH = 20;
+
+const getMediaKindFromKey = (key: string): "image" | "video" | null => {
+  const normalizedKey = key.toLowerCase();
+
+  if (
+    normalizedKey.includes("title") ||
+    normalizedKey.includes("alt") ||
+    normalizedKey.includes("label") ||
+    normalizedKey.includes("href")
+  ) {
+    return null;
+  }
+
+  if (normalizedKey === "poster") return "image";
+  if (normalizedKey === "image" || normalizedKey.endsWith("image")) {
+    return "image";
+  }
+  if (normalizedKey === "video" || normalizedKey.endsWith("video")) {
+    return "video";
+  }
+
+  return null;
+};
+
+const getMediaUploadLabel = (value: string, mediaKind: "image" | "video") => {
+  if (!value) return `Choose ${mediaKind}`;
+
+  return value.startsWith("data:") ? "Selected from desktop" : value;
+};
+
 const socialLinkLabels: SocialLinkData["label"][] = [
   "facebook",
   "instagram",
@@ -89,13 +166,26 @@ const sidebarItemsBySection: Record<string, string[]> = {
     "Header Buttons",
   ],
   Banner: ["Banner Content", "Banner Layout"],
-  About: ["About Layout"],
-  Product: ["Product Layout"],
+  About: ["About Content", "About Layout"],
+  Product: ["Product Content", "Product Layout"],
+  WhyChooseUs: ["WhyChooseUs Content", "WhyChooseUs Layout"],
+  Gallery: ["Gallery Content", "Gallery Layout"],
+  FAQ: ["FAQ Content", "FAQ Layout"],
+  Testimonial: ["Our Clients Content", "Our Clients Layout"],
+  FormDetail: ["Form Content", "Form Layout"],
   Footer: ["Footer Layout"],
 };
 
 const normalizeSectionType = (sectionType: string) => {
   const normalized = sectionType.trim().toLowerCase();
+  const aliases: Record<string, string> = {
+    faq: "FAQ",
+    formdetail: "FormDetail",
+    testimonial: "Testimonial",
+    whychooseus: "WhyChooseUs",
+  };
+
+  if (aliases[normalized]) return aliases[normalized];
 
   return normalized.charAt(0).toUpperCase() + normalized.slice(1);
 };
@@ -115,78 +205,70 @@ const clampBannerHeight = (height: number) => {
   return Math.min(100, Math.max(40, height));
 };
 
-const getDefaultBannerData = (variant: string): SectionData | undefined => {
+const getDefaultBannerData = (
+  variant: string,
+  sourceData: SectionData = {},
+): SectionData | undefined => {
+  const sourceImage = sourceData.backgroundImage ?? "/bg1.jpg";
+  const sourceVideo = sourceData.backgroundVideo ?? "/video.mp4";
+  const sourceSlides = Array.isArray(sourceData.bannerSlides)
+    ? sourceData.bannerSlides
+    : [];
+
   if (variant === "Banner-4") {
     return {
+      ...sourceData,
       bannerHeight: 70,
-      bannerSlides: [
-        {
-          image: "/bg1.jpg",
-          video: "/video.mp4",
-          alt: "Video slide one",
-          title: "Video background slide",
-          desc: "Upload videos from desktop and edit every slide CTA.",
-          button: {
-            label: "Watch now",
-            href: "#",
-            variant: "primary",
-          },
-        },
-        {
-          image: "/bg2.jpg",
-          video: "/video.mp4",
-          alt: "Video slide two",
-          title: "Motion-led website hero",
-          desc: "Use this layout when video should play behind every slide.",
-          button: {
-            label: "Explore",
-            href: "#",
-            variant: "primary",
-          },
-        },
-      ],
+      bannerSlides: sourceSlides.length
+        ? sourceSlides.map((slide) => ({
+            ...slide,
+            image: slide.image || sourceImage,
+            video: slide.video || sourceVideo,
+          }))
+        : [
+            {
+              image: sourceImage,
+              video: sourceVideo,
+              alt: sourceData.backgroundImageTitle ?? "Category video slide",
+              title: sourceData.title ?? "Category video banner",
+              desc:
+                sourceData.desc ??
+                "Use category-specific motion behind every banner slide.",
+              button: {
+                label: "Explore",
+                href: "#",
+                variant: "primary",
+              },
+            },
+          ],
     };
   }
 
   if (variant !== "Banner-3") return undefined;
 
   return {
+    ...sourceData,
     bannerHeight: 70,
-    bannerSlides: [
-      {
-        image: "/bg1.jpg",
-        alt: "AI website builder dashboard",
-        title: "Build Your Website Today",
-        desc: "Create polished pages from reusable blocks that your backend can update with clean JSON.",
-        button: {
-          label: "Get Started",
-          href: "#",
-          variant: "primary",
-        },
-      },
-      {
-        image: "/bg2.jpg",
-        alt: "AI powered banner design",
-        title: "Change Every Slide",
-        desc: "Each slide has its own image, title, description, and button so content stays simple to manage.",
-        button: {
-          label: "View Demo",
-          href: "#",
-          variant: "primary",
-        },
-      },
-      {
-        image: "/ai_rays.png",
-        alt: "AI rays visual",
-        title: "Ready For Backend Data",
-        desc: "Send bannerSlides from the backend and this layout will render the slider automatically.",
-        button: {
-          label: "Learn More",
-          href: "#",
-          variant: "primary",
-        },
-      },
-    ],
+    bannerSlides: sourceSlides.length
+      ? sourceSlides.map((slide) => ({
+          ...slide,
+          image: slide.image || sourceImage,
+        }))
+      : [
+          {
+            image: sourceImage,
+            alt: sourceData.backgroundImageTitle ?? "Category slide",
+            title: sourceData.title ?? "Category image slider",
+            desc:
+              sourceData.desc ??
+              "Use category-specific images across every slider layout.",
+            button: {
+              label: "Explore",
+              href: "#",
+              variant: "primary",
+            },
+          },
+        ],
   };
 };
 
@@ -195,6 +277,7 @@ const getVisibleSocialLinks = (
 ) => socialLinks.slice(0, MAX_TOPBAR_SOCIAL_LINKS);
 
 export default function EditSectionModal({
+  sectionId,
   sectionType,
   sections,
   onClose,
@@ -205,6 +288,7 @@ export default function EditSectionModal({
   const [activeTab, setActiveTab] = useState(getDefaultTab(sectionType));
   const [colorPanelOpen, setColorPanelOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [galleryLayoutStart, setGalleryLayoutStart] = useState(0);
   const [hasChanges, setHasChanges] = useState(false);
   const [lastChangedSection, setLastChangedSection] = useState(sectionType);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
@@ -222,14 +306,17 @@ export default function EditSectionModal({
   const activeSectionType = normalizeSectionType(sectionType);
   const visibleSidebarItems = sidebarItemsBySection[activeSectionType] ?? [];
   const currentSection = sections.find(
-    (item) => normalizeSectionType(item.type) === activeSectionType,
+    (item) => (item.id ?? item.type) === sectionId,
   );
-  const activeSectionKey = currentSection?.type ?? activeSectionType;
+  const activeSectionKey = currentSection?.id ?? currentSection?.type ?? sectionId;
   const activeVariant = currentSection?.variant?.startsWith(
     `${activeSectionType}-`,
   )
     ? currentSection.variant
     : `${activeSectionType}-1`;
+  const fallbackVariantData =
+    currentSection?.data?.[`${activeSectionType}-1`] ??
+    Object.values(currentSection?.data ?? {})[0];
 
   const activeTopbarData = currentSection?.data?.[activeVariant] as
     | {
@@ -262,7 +349,7 @@ export default function EditSectionModal({
 
   const activeBannerData = (currentSection?.data?.[activeVariant] ??
     (activeSectionType === "Banner"
-      ? getDefaultBannerData(activeVariant)
+      ? getDefaultBannerData(activeVariant, fallbackVariantData)
       : undefined)) as
     | {
         backgroundImage?: string;
@@ -281,6 +368,25 @@ export default function EditSectionModal({
         buttons?: ButtonData[];
       }
     | undefined;
+
+  const activeFormDetailData = currentSection?.data?.[activeVariant] as
+    | {
+        pretitle?: string;
+        title?: string;
+        desc?: string;
+        formSubmitLabel?: string;
+        formFields?: FormFieldData[];
+      }
+    | undefined;
+  const activeGenericData = currentSection?.data?.[activeVariant] as
+    | SectionData
+    | undefined;
+  const activeGenericStringEntries = Object.entries(activeGenericData ?? {}).filter(
+    ([, value]) => typeof value === "string",
+  );
+  const activeGenericArrayEntries = Object.entries(activeGenericData ?? {}).filter(
+    ([, value]) => Array.isArray(value),
+  );
 
   const menuItems = activeHeaderData?.menu ?? [];
   const topbarBackgroundType =
@@ -347,6 +453,15 @@ export default function EditSectionModal({
     (activeSectionType === "Topbar" && activeTab === "Topbar Layout") ||
     (activeSectionType === "Header" && activeTab === "Header Layout") ||
     (activeSectionType === "Footer" && activeTab === "Footer Layout");
+  const layoutOptions = layoutsBySection[activeSectionType] ?? [];
+  const visibleLayoutOptions =
+    activeSectionType === "Gallery" && layoutOptions.length > 4
+      ? Array.from(
+          { length: 4 },
+          (_, index) =>
+            layoutOptions[(galleryLayoutStart + index) % layoutOptions.length],
+        )
+      : layoutOptions;
 
   const handleModalMouseDown = (event: MouseEvent<HTMLDivElement>) => {
     if ((event.target as HTMLElement).closest("button,input,textarea,select")) {
@@ -430,6 +545,122 @@ export default function EditSectionModal({
     });
   };
 
+  const updateActiveFormDetailData = (newData: Record<string, unknown>) => {
+    if (!currentSection || !activeFormDetailData) return;
+
+    setHasChanges(true);
+    setLastChangedSection(activeSectionKey);
+    onUpdateSectionData(activeSectionKey, {
+      ...currentSection.data,
+      [activeVariant]: {
+        ...activeFormDetailData,
+        ...newData,
+      },
+    });
+  };
+
+  const updateFormField = (
+    index: number,
+    field: keyof FormFieldData,
+    value: string,
+  ) => {
+    const updatedFields = (activeFormDetailData?.formFields ?? []).map(
+      (item, itemIndex) =>
+        itemIndex === index ? { ...item, [field]: value } : item,
+    );
+
+    updateActiveFormDetailData({ formFields: updatedFields });
+  };
+
+  const addFormField = () => {
+    if ((activeFormDetailData?.formFields ?? []).length >= MAX_FORM_FIELDS) {
+      return;
+    }
+
+    updateActiveFormDetailData({
+      formFields: [
+        ...(activeFormDetailData?.formFields ?? []),
+        {
+          label: "New Field",
+          type: "text",
+          placeholder: "Enter value",
+        },
+      ],
+    });
+  };
+
+  const deleteFormField = (index: number) => {
+    updateActiveFormDetailData({
+      formFields: (activeFormDetailData?.formFields ?? []).filter(
+        (_, itemIndex) => itemIndex !== index,
+      ),
+    });
+  };
+
+  const updateActiveGenericData = (newData: Record<string, unknown>) => {
+    if (!currentSection || !activeGenericData) return;
+
+    setHasChanges(true);
+    setLastChangedSection(activeSectionKey);
+    onUpdateSectionData(activeSectionKey, {
+      ...currentSection.data,
+      [activeVariant]: {
+        ...activeGenericData,
+        ...newData,
+      },
+    });
+  };
+
+  const updateGenericArrayItem = (
+    field: keyof SectionData,
+    index: number,
+    itemField: string,
+    value: string,
+  ) => {
+    const items = activeGenericData?.[field];
+
+    if (!Array.isArray(items)) return;
+
+    updateActiveGenericData({
+      [field]: items.map((item, itemIndex) =>
+        itemIndex === index &&
+        typeof item === "object" &&
+        item !== null &&
+        !Array.isArray(item)
+          ? { ...item, [itemField]: value }
+          : item,
+      ),
+    });
+  };
+
+  const handleGenericMediaFileChange = (
+    field: keyof SectionData,
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    readBannerBackgroundFile(file, (dataUrl) => {
+      updateActiveGenericData({ [field]: dataUrl });
+    });
+    event.target.value = "";
+  };
+
+  const handleGenericArrayImageFileChange = (
+    field: keyof SectionData,
+    index: number,
+    itemField: string,
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    readBannerBackgroundFile(file, (dataUrl) => {
+      updateGenericArrayItem(field, index, itemField, dataUrl);
+    });
+    event.target.value = "";
+  };
+
   const handleSidebarTabChange = (tab: string) => {
     setActiveTab(tab);
     setMobileSidebarOpen(false);
@@ -440,19 +671,24 @@ export default function EditSectionModal({
 
     if (activeSectionType === "Banner" && currentSection) {
       const currentVariantData = currentSection.data[variant];
+      const sourceVariantData =
+        currentVariantData ??
+        currentSection.data[activeVariant] ??
+        currentSection.data["Banner-1"] ??
+        Object.values(currentSection.data)[0];
       const nextVariantData =
         variant === "Banner-1"
           ? {
-              ...currentVariantData,
+              ...sourceVariantData,
               bannerBackgroundMode: "image" as const,
-              backgroundImage: currentVariantData?.backgroundImage ?? "/bg1.jpg",
+              backgroundImage: sourceVariantData?.backgroundImage ?? "/bg1.jpg",
             }
           : variant === "Banner-2"
             ? {
-                ...currentVariantData,
+                ...sourceVariantData,
                 bannerBackgroundMode: "video" as const,
                 backgroundVideo:
-                  currentVariantData?.backgroundVideo ?? "/video.mp4",
+                  sourceVariantData?.backgroundVideo ?? "/video.mp4",
               }
             : undefined;
 
@@ -469,7 +705,12 @@ export default function EditSectionModal({
       currentSection &&
       !currentSection.data[variant]
     ) {
-      const defaultBannerData = getDefaultBannerData(variant);
+      const defaultBannerData = getDefaultBannerData(
+        variant,
+        currentSection.data[activeVariant] ??
+          currentSection.data["Banner-1"] ??
+          Object.values(currentSection.data)[0],
+      );
 
       if (defaultBannerData) {
         onUpdateSectionData(activeSectionKey, {
@@ -656,10 +897,6 @@ export default function EditSectionModal({
     updateActiveBannerData({ [field]: value });
   };
 
-  const updateBannerBackgroundMode = (mode: BannerBackgroundMode) => {
-    updateActiveBannerData({ bannerBackgroundMode: mode });
-  };
-
   const readBannerBackgroundFile = (
     file: File,
     onLoad: (dataUrl: string) => void,
@@ -825,11 +1062,16 @@ export default function EditSectionModal({
 
   const addBannerSlide = () => {
     const nextIndex = (activeBannerData?.bannerSlides ?? []).length + 1;
+    const firstSlide = activeBannerData?.bannerSlides?.[0];
+    const categoryImage =
+      firstSlide?.image ?? activeBannerData?.backgroundImage ?? "/bg1.jpg";
+    const categoryVideo =
+      firstSlide?.video ?? activeBannerData?.backgroundVideo ?? "/video.mp4";
     const updatedSlides = [
       ...(activeBannerData?.bannerSlides ?? []),
       {
-        image: "/bg1.jpg",
-        ...(isVideoSliderBanner ? { video: "/video.mp4" } : {}),
+        image: categoryImage,
+        ...(isVideoSliderBanner ? { video: categoryVideo } : {}),
         alt: `Banner slide ${nextIndex}`,
         title: "New banner slide",
         desc: "Update this slide text from Banner Content.",
@@ -1669,21 +1911,19 @@ export default function EditSectionModal({
                               </button>
                             </div>
 
-                            <div className="grid gap-3 lg:grid-cols-2">
+                            {!isVideoSliderBanner && (
                               <div>
                                 <label className="block text-sm font-semibold text-gray-900">
-                                  {isVideoSliderBanner
-                                    ? "Poster Image"
-                                    : "Slide Image"}
+                                  Slide Image
                                 </label>
                                 <label className="mt-2 flex h-11 w-full cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-left text-sm text-gray-900 transition hover:border-blue-500 focus-within:border-blue-600">
                                   <span className="font-medium">
-                                    {slide.image ? "Change image" : "Upload image"}
+                                    {slide.image
+                                      ? "Change image"
+                                      : "Upload image"}
                                   </span>
                                   <span className="max-w-[55%] truncate text-xs text-gray-500">
-                                    {slide.image?.startsWith("data:")
-                                      ? "Selected from desktop"
-                                      : slide.image || "Choose from desktop"}
+                                    {getMediaUploadLabel(slide.image, "image")}
                                   </span>
                                   <input
                                     type="file"
@@ -1699,25 +1939,7 @@ export default function EditSectionModal({
                                   />
                                 </label>
                               </div>
-
-                              <div>
-                                <label className="block text-sm font-semibold text-gray-900">
-                                  Image Alt Text
-                                </label>
-                                <input
-                                  value={slide.alt ?? ""}
-                                  onChange={(event) =>
-                                    updateBannerSlide(
-                                      index,
-                                      "alt",
-                                      event.target.value,
-                                    )
-                                  }
-                                  className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
-                                  placeholder="Slide image"
-                                />
-                              </div>
-                            </div>
+                            )}
 
                             {isVideoSliderBanner && (
                               <div>
@@ -1744,9 +1966,10 @@ export default function EditSectionModal({
                                       : "Upload video"}
                                   </span>
                                   <span className="max-w-[55%] truncate text-xs text-gray-500">
-                                    {slide.video?.startsWith("data:")
-                                      ? "Selected from desktop"
-                                      : slide.video || "Choose from desktop"}
+                                    {getMediaUploadLabel(
+                                      slide.video ?? "",
+                                      "video",
+                                    )}
                                   </span>
                                   <input
                                     type="file"
@@ -1843,42 +2066,6 @@ export default function EditSectionModal({
                     </section>
                   )}
 
-                  {isSimpleBanner && (
-                    <section className="rounded-xl border border-gray-200 bg-white p-4">
-                      <h4 className="text-sm font-semibold text-gray-900">
-                        Banner Type
-                      </h4>
-
-                      <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                        {(
-                          [
-                            ["image", "Image Banner"],
-                            ["video", "Video Banner"],
-                            ["solid", "Solid Color"],
-                            ["gradient", "Gradient"],
-                          ] as const
-                        ).map(([mode, label]) => {
-                          const isActive = bannerBackgroundMode === mode;
-
-                          return (
-                            <button
-                              key={mode}
-                              type="button"
-                              onClick={() => updateBannerBackgroundMode(mode)}
-                              className={`h-11 rounded-lg px-4 text-sm font-medium transition ${
-                                isActive
-                                  ? "bg-blue-600 text-white"
-                                  : "bg-gray-200 text-slate-950 hover:bg-gray-300"
-                              }`}
-                            >
-                              {label}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </section>
-                  )}
-
                   {isSimpleBanner && hasBannerMediaField && (
                     <section className="rounded-xl border border-gray-200 bg-white p-4">
                       <h4 className="text-sm font-semibold text-gray-900">
@@ -1904,12 +2091,11 @@ export default function EditSectionModal({
                                   : "Upload image"}
                               </span>
                               <span className="max-w-[55%] truncate text-xs text-gray-500">
-                                {activeBannerData?.backgroundImage?.startsWith(
-                                  "data:",
+                                {getMediaUploadLabel(
+                                  activeBannerData?.backgroundImage ?? "",
+                                  "image",
                                 )
-                                  ? "Selected from desktop"
-                                  : activeBannerData?.backgroundImage ||
-                                    "Image path"}
+                                }
                               </span>
                             </button>
                           </div>
@@ -1964,12 +2150,11 @@ export default function EditSectionModal({
                                 : "Upload video"}
                             </span>
                             <span className="max-w-[55%] truncate text-xs text-gray-500">
-                              {activeBannerData?.backgroundVideo?.startsWith(
-                                "data:",
+                              {getMediaUploadLabel(
+                                activeBannerData?.backgroundVideo ?? "",
+                                "video",
                               )
-                                ? "Selected from desktop"
-                                : activeBannerData?.backgroundVideo ||
-                                  "Video path"}
+                              }
                             </span>
                           </button>
                         </div>
@@ -2033,7 +2218,9 @@ export default function EditSectionModal({
                     </div>
                   )}
 
-                  {isSimpleBanner && hasBannerButtonsField && (
+                  {isSimpleBanner &&
+                    activeVariant !== "Banner-2" &&
+                    hasBannerButtonsField && (
                     <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-4">
                       <div className="flex items-center justify-between gap-3">
                         <h4 className="text-sm font-semibold text-gray-900">
@@ -2103,43 +2290,6 @@ export default function EditSectionModal({
                             </div>
                           ),
                         )}
-                      </div>
-                    </div>
-                  )}
-
-                  {isSimpleBanner && activeVariant === "Banner-2" && (
-                    <div className="grid gap-4 lg:grid-cols-2">
-                      <div className="rounded-xl border border-gray-200 bg-white p-4">
-                        <label className="block text-sm font-semibold text-gray-900">
-                          Title Color
-                        </label>
-                        <input
-                          type="color"
-                          value={activeBannerData?.titleColor ?? "#ffffff"}
-                          onChange={(event) =>
-                            updateBannerField("titleColor", event.target.value)
-                          }
-                          className="mt-2 h-10 w-12 cursor-pointer rounded border-0 bg-transparent p-0"
-                          aria-label="Banner title color"
-                        />
-                      </div>
-
-                      <div className="rounded-xl border border-gray-200 bg-white p-4">
-                        <label className="block text-sm font-semibold text-gray-900">
-                          Overlay Color
-                        </label>
-                        <input
-                          type="color"
-                          value={activeBannerData?.overlayColor ?? "#000000"}
-                          onChange={(event) =>
-                            updateBannerField(
-                              "overlayColor",
-                              event.target.value,
-                            )
-                          }
-                          className="mt-2 h-10 w-12 cursor-pointer rounded border-0 bg-transparent p-0"
-                          aria-label="Banner overlay color"
-                        />
                       </div>
                     </div>
                   )}
@@ -2278,268 +2428,6 @@ export default function EditSectionModal({
                 </div>
               )}
 
-            {activeSectionType === "Banner" &&
-              activeTab === "Banner Background" && (
-                <div className="space-y-4">
-                  <section className="rounded-xl bg-[#f4f4f5] py-1">
-                    <input
-                      ref={bannerImageInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={handleBannerImageFileChange}
-                      className="hidden"
-                      aria-label="Choose banner image"
-                    />
-                    <input
-                      ref={bannerVideoInputRef}
-                      type="file"
-                      accept="video/*"
-                      onChange={handleBannerVideoFileChange}
-                      className="hidden"
-                      aria-label="Choose banner video"
-                    />
-
-                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                      {(
-                        [
-                          [
-                            "image",
-                            activeBannerData?.backgroundImage
-                              ? "Change Image"
-                              : "Add Image",
-                          ],
-                          [
-                            "video",
-                            activeBannerData?.backgroundVideo
-                              ? "Change Video"
-                              : "Add Video",
-                          ],
-                          ["solid", "Solid"],
-                          ["gradient", "Gradient"],
-                        ] as const
-                      ).map(([mode, label]) => {
-                        const isActive = bannerBackgroundMode === mode;
-
-                        return (
-                          <button
-                            key={mode}
-                            type="button"
-                            onClick={() => updateBannerBackgroundMode(mode)}
-                            className={`h-11 rounded-lg px-4 text-sm font-medium transition ${
-                              isActive
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-300 text-slate-950 hover:bg-gray-500"
-                            }`}
-                          >
-                            {label}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </section>
-
-                  {bannerBackgroundMode === "image" && (
-                    <div className="grid gap-4 lg:grid-cols-2">
-                      <div className="rounded-xl border border-gray-200 bg-white p-4">
-                        <label className="block text-sm font-semibold text-gray-900">
-                          Background Image
-                        </label>
-                        <button
-                          type="button"
-                          onClick={() => bannerImageInputRef.current?.click()}
-                          className="mt-2 flex h-11 w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-left text-sm text-gray-900 transition hover:border-blue-500 focus:border-blue-600 focus:outline-none"
-                        >
-                          <span className="font-medium">
-                            {activeBannerData?.backgroundImage
-                              ? "Change image"
-                              : "Upload image"}
-                          </span>
-                          <span className="max-w-[55%] truncate text-xs text-gray-500">
-                            {activeBannerData?.backgroundImage?.startsWith(
-                              "data:",
-                            )
-                              ? "Selected from desktop"
-                              : activeBannerData?.backgroundImage ||
-                                "Image path"}
-                          </span>
-                        </button>
-                      </div>
-
-                      <div className="rounded-xl border border-gray-200 bg-white p-4">
-                        <label className="block text-sm font-semibold text-gray-900">
-                          Image Alt Text
-                        </label>
-                        <input
-                          value={activeBannerData?.backgroundImageTitle ?? ""}
-                          onChange={(event) =>
-                            updateBannerField(
-                              "backgroundImageTitle",
-                              event.target.value,
-                            )
-                          }
-                          className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
-                          placeholder="Banner image"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {bannerBackgroundMode === "video" && (
-                    <div className="rounded-xl border border-gray-200 bg-white p-4">
-                      <label className="block text-sm font-semibold text-gray-900">
-                        Background Video
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => bannerVideoInputRef.current?.click()}
-                        className="mt-2 flex h-11 w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-left text-sm text-gray-900 transition hover:border-blue-500 focus:border-blue-600 focus:outline-none"
-                      >
-                        <span className="font-medium">
-                          {activeBannerData?.backgroundVideo
-                            ? "Change video"
-                            : "Upload video"}
-                        </span>
-                        <span className="max-w-[55%] truncate text-xs text-gray-500">
-                          {activeBannerData?.backgroundVideo?.startsWith(
-                            "data:",
-                          )
-                            ? "Selected from desktop"
-                            : activeBannerData?.backgroundVideo || "Video path"}
-                        </span>
-                      </button>
-                    </div>
-                  )}
-
-                  {(bannerBackgroundMode === "solid" ||
-                    bannerBackgroundMode === "gradient") && (
-                    <div className="grid gap-4 lg:grid-cols-2">
-                      <ColorInput
-                        label={
-                          bannerBackgroundMode === "gradient"
-                            ? "Background left"
-                            : "Background color"
-                        }
-                        value={bannerSolidColor}
-                        onChange={(color) =>
-                          updateBannerField("bannerBackgroundColor", color)
-                        }
-                      />
-
-                      {bannerBackgroundMode === "gradient" && (
-                        <ColorInput
-                          label="Background right"
-                          value={bannerGradientColor}
-                          onChange={(color) =>
-                            updateBannerField("bannerGradientColor", color)
-                          }
-                        />
-                      )}
-                    </div>
-                  )}
-
-                  <div className="rounded-xl border border-gray-200 bg-white p-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <label className="text-sm font-semibold text-gray-900">
-                        Banner Height
-                      </label>
-                      <input
-                        type="number"
-                        min={40}
-                        max={100}
-                        value={bannerHeight}
-                        onChange={(event) =>
-                          updateBannerHeight(Number(event.target.value))
-                        }
-                        className="h-10 w-24 rounded-lg border border-gray-300 px-3 text-sm text-gray-900 outline-none focus:border-blue-600"
-                      />
-                    </div>
-                    <input
-                      type="range"
-                      min={40}
-                      max={100}
-                      value={bannerHeight}
-                      onChange={(event) =>
-                        updateBannerHeight(Number(event.target.value))
-                      }
-                      className="mt-4 w-full accent-blue-600"
-                    />
-                  </div>
-                </div>
-              )}
-
-            {activeSectionType === "Banner" &&
-              activeTab === "Banner Buttons" && (
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-gray-700 underline">
-                      Manage banner action buttons.
-                    </p>
-
-                    <button
-                      type="button"
-                      onClick={addBannerButton}
-                      disabled={
-                        (activeBannerData?.buttons ?? []).length >=
-                        MAX_BANNER_BUTTONS
-                      }
-                      className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-xs font-medium text-white disabled:cursor-not-allowed disabled:bg-gray-300"
-                    >
-                      <Plus size={14} />
-                      Add Button
-                    </button>
-                  </div>
-
-                  <p className="text-xs text-gray-500">
-                    {(activeBannerData?.buttons ?? []).length}/
-                    {MAX_BANNER_BUTTONS} banner buttons added
-                  </p>
-
-                  <div className="space-y-3">
-                    {(activeBannerData?.buttons ?? []).map((button, index) => (
-                      <div
-                        key={index}
-                        className="grid grid-cols-1 gap-3 rounded-xl border border-gray-300 bg-white p-3 shadow-sm lg:grid-cols-[minmax(8rem,1fr)_minmax(8rem,1fr)_3.5rem]"
-                      >
-                        <input
-                          value={button.label}
-                          onChange={(event) =>
-                            updateBannerButton(
-                              index,
-                              "label",
-                              event.target.value,
-                            )
-                          }
-                          className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
-                          placeholder="Button label"
-                        />
-
-                        <input
-                          value={button.href}
-                          onChange={(event) =>
-                            updateBannerButton(
-                              index,
-                              "href",
-                              event.target.value,
-                            )
-                          }
-                          className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
-                          placeholder="/link"
-                        />
-
-                        <button
-                          type="button"
-                          onClick={() => deleteBannerButton(index)}
-                          className="flex h-8 w-8 items-center justify-center rounded-lg border border-red-500 bg-white text-red-600"
-                          aria-label="Delete banner button"
-                        >
-                          <Trash size={18} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
             {activeSectionType === "About" && activeTab === "About Layout" && (
               <div className="space-y-4">
                 {aboutLayouts.map((layout) => {
@@ -2650,6 +2538,484 @@ export default function EditSectionModal({
                               </div>
                             </div>
                           )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+            {activeSectionType === "FormDetail" &&
+              activeTab === "Form Layout" && (
+                <div className="space-y-4">
+                  {formDetailLayouts.map((layout) => {
+                    const isActive = currentSection?.variant === layout.id;
+
+                    return (
+                      <button
+                        key={layout.id}
+                        type="button"
+                        onClick={() => selectSectionVariant(layout.id)}
+                        className={`w-full overflow-hidden rounded-2xl border bg-white text-left ${
+                          isActive ? "border-gray-400" : "border-gray-200"
+                        }`}
+                      >
+                        <div className="grid h-32 grid-cols-[1fr_1fr] overflow-hidden bg-[#dfecea] p-3">
+                          {layout.id === "FormDetail-1" ? (
+                            <>
+                              <div className="rounded-2xl bg-slate-900/85 p-4">
+                                <div className="h-5 w-16 rounded-full bg-white/30" />
+                                <div className="mt-8 h-3 w-24 rounded bg-white" />
+                                <div className="mt-2 h-2 w-28 rounded bg-white/60" />
+                              </div>
+                              <div className="rounded-r-2xl bg-white p-4">
+                                <div className="h-4 w-16 rounded bg-slate-900" />
+                                <div className="mt-4 space-y-2">
+                                  <div className="h-4 rounded-full bg-emerald-50" />
+                                  <div className="h-4 rounded-full bg-emerald-50" />
+                                  <div className="h-4 rounded-full bg-emerald-50" />
+                                </div>
+                                <div className="mt-3 h-5 rounded-full bg-emerald-800" />
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <div className="bg-slate-100 p-4">
+                                <div className="h-4 w-24 rounded bg-slate-900" />
+                                <div className="mt-3 h-2 w-full rounded bg-slate-400" />
+                                <div className="mt-2 h-2 w-4/5 rounded bg-slate-400" />
+                              </div>
+                              <div className="bg-white p-4">
+                                <div className="space-y-2">
+                                  <div className="h-5 rounded bg-slate-100" />
+                                  <div className="h-5 rounded bg-slate-100" />
+                                  <div className="h-8 rounded bg-blue-600" />
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                        <div className="px-4 py-3 text-sm font-semibold text-slate-800">
+                          {layout.name}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+            {activeSectionType === "FormDetail" &&
+              activeTab === "Form Content" && (
+                <div className="space-y-5">
+                  <section className="rounded-xl bg-[#f4f4f5] p-4">
+                    <div className="grid gap-3">
+                      <input
+                        value={activeFormDetailData?.pretitle ?? ""}
+                        onChange={(event) =>
+                          updateActiveFormDetailData({
+                            pretitle: event.target.value,
+                          })
+                        }
+                        className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
+                        placeholder="Eyebrow text"
+                      />
+                      <input
+                        value={activeFormDetailData?.title ?? ""}
+                        onChange={(event) =>
+                          updateActiveFormDetailData({
+                            title: event.target.value,
+                          })
+                        }
+                        className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
+                        placeholder="Form title"
+                      />
+                      <textarea
+                        value={activeFormDetailData?.desc ?? ""}
+                        onChange={(event) =>
+                          updateActiveFormDetailData({
+                            desc: event.target.value,
+                          })
+                        }
+                        className="h-24 resize-none rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-blue-600"
+                        placeholder="Form description"
+                      />
+                      <input
+                        value={activeFormDetailData?.formSubmitLabel ?? ""}
+                        onChange={(event) =>
+                          updateActiveFormDetailData({
+                            formSubmitLabel: event.target.value,
+                          })
+                        }
+                        className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
+                        placeholder="Submit button label"
+                      />
+                    </div>
+                  </section>
+
+                  <section className="rounded-xl bg-[#f4f4f5] p-4">
+                    <div className="mb-4 flex items-center justify-between">
+                      <h4 className="text-sm font-bold text-slate-900">
+                        Form Fields
+                      </h4>
+                      <button
+                        type="button"
+                        onClick={addFormField}
+                        disabled={
+                          (activeFormDetailData?.formFields ?? []).length >=
+                          MAX_FORM_FIELDS
+                        }
+                        className="rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+                      >
+                        Add Field
+                      </button>
+                    </div>
+                    <p className="-mt-2 mb-4 text-xs font-medium text-slate-500">
+                      {(activeFormDetailData?.formFields ?? []).length}/
+                      {MAX_FORM_FIELDS} fields added
+                    </p>
+
+                    <div className="space-y-3">
+                      {(activeFormDetailData?.formFields ?? []).map(
+                        (field, index) => (
+                          <div
+                            key={`${field.label}-${index}`}
+                            className="grid gap-2 rounded-xl bg-white p-3"
+                          >
+                            <div className="grid gap-2 md:grid-cols-[1fr_1fr_130px_36px]">
+                              <input
+                                value={field.label}
+                                onChange={(event) =>
+                                  updateFormField(
+                                    index,
+                                    "label",
+                                    event.target.value,
+                                  )
+                                }
+                                className="h-10 rounded-lg border border-gray-300 px-3 text-sm outline-none focus:border-blue-600"
+                                placeholder="Field label"
+                              />
+                              <input
+                                value={field.placeholder ?? ""}
+                                onChange={(event) =>
+                                  updateFormField(
+                                    index,
+                                    "placeholder",
+                                    event.target.value,
+                                  )
+                                }
+                                className="h-10 rounded-lg border border-gray-300 px-3 text-sm outline-none focus:border-blue-600"
+                                placeholder="Placeholder"
+                              />
+                              <select
+                                value={field.type ?? "text"}
+                                onChange={(event) =>
+                                  updateFormField(
+                                    index,
+                                    "type",
+                                    event.target.value,
+                                  )
+                                }
+                                className="h-10 rounded-lg border border-gray-300 px-3 text-sm outline-none focus:border-blue-600"
+                              >
+                                <option value="text">Text</option>
+                                <option value="email">Email</option>
+                                <option value="tel">Phone</option>
+                                <option value="textarea">Textarea</option>
+                              </select>
+                              <button
+                                type="button"
+                                onClick={() => deleteFormField(index)}
+                                className="flex h-10 w-10 items-center justify-center rounded-lg border border-red-500 text-red-600"
+                                aria-label="Delete form field"
+                              >
+                                <Trash size={16} />
+                              </button>
+                            </div>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                  </section>
+                </div>
+              )}
+
+            {[
+              "About",
+              "Product",
+              "WhyChooseUs",
+              "Gallery",
+              "FAQ",
+              "Testimonial",
+            ].includes(activeSectionType) &&
+              activeTab.endsWith("Content") && (
+                <div className="space-y-5">
+                  {!!activeGenericStringEntries.length && (
+                    <section className="rounded-xl bg-[#f4f4f5] p-4">
+                      <h4 className="mb-4 text-sm font-bold text-slate-900">
+                        Main Content
+                      </h4>
+                      <div className="grid gap-3">
+                        {activeGenericStringEntries.map(([key, value]) => {
+                          const mediaKind = getMediaKindFromKey(key);
+                          const stringValue = String(value);
+
+                          return (
+                            <label key={key} className="block">
+                              <span className="mb-1 block text-xs font-semibold capitalize text-slate-600">
+                                {key.replace(/([A-Z])/g, " $1")}
+                              </span>
+                              {mediaKind ? (
+                                <span className="flex h-11 w-full cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-900 transition hover:border-blue-500 focus-within:border-blue-600">
+                                  <span className="font-medium">
+                                    {stringValue
+                                      ? `Change ${mediaKind}`
+                                      : `Upload ${mediaKind}`}
+                                  </span>
+                                  <span className="max-w-[55%] truncate text-xs text-slate-500">
+                                    {getMediaUploadLabel(
+                                      stringValue,
+                                      mediaKind,
+                                    )}
+                                  </span>
+                                  <input
+                                    type="file"
+                                    accept={
+                                      mediaKind === "video"
+                                        ? "video/*"
+                                        : "image/*"
+                                    }
+                                    onChange={(event) =>
+                                      handleGenericMediaFileChange(
+                                        key as keyof SectionData,
+                                        event,
+                                      )
+                                    }
+                                    className="sr-only"
+                                  />
+                                </span>
+                              ) : String(value).length > 80 ? (
+                                <textarea
+                                  value={stringValue}
+                                  onChange={(event) =>
+                                    updateActiveGenericData({
+                                      [key]: event.target.value,
+                                    })
+                                  }
+                                  className="h-24 w-full resize-none rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-blue-600"
+                                />
+                              ) : (
+                                <input
+                                  value={stringValue}
+                                  onChange={(event) =>
+                                    updateActiveGenericData({
+                                      [key]: event.target.value,
+                                    })
+                                  }
+                                  className="h-11 w-full rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
+                                />
+                              )}
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </section>
+                  )}
+
+                  {activeGenericArrayEntries.map(([key, value]) => (
+                      <section key={key} className="rounded-xl bg-[#f4f4f5] p-4">
+                        <h4 className="mb-4 text-sm font-bold capitalize text-slate-900">
+                          {key.replace(/([A-Z])/g, " $1")}
+                        </h4>
+                        <div className="space-y-3">
+                          {(value as unknown[]).map((item, itemIndex) => {
+                            if (
+                              typeof item !== "object" ||
+                              item === null ||
+                              Array.isArray(item)
+                            ) {
+                              return null;
+                            }
+
+                            return (
+                              <div
+                                key={`${key}-${itemIndex}`}
+                                className="grid gap-2 rounded-xl bg-white p-3"
+                              >
+                                {Object.entries(item)
+                                  .filter(
+                                    ([, itemValue]) =>
+                                      typeof itemValue === "string" ||
+                                      typeof itemValue === "number",
+                                  )
+                                  .map(([itemKey, itemValue]) => {
+                                    const mediaKind =
+                                      getMediaKindFromKey(itemKey);
+                                    const stringValue = String(itemValue);
+
+                                    return (
+                                      <label key={itemKey} className="block">
+                                        <span className="mb-1 block text-xs font-semibold capitalize text-slate-600">
+                                          {itemKey.replace(/([A-Z])/g, " $1")}
+                                        </span>
+                                        {mediaKind ? (
+                                          <span className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-900 transition hover:border-blue-500 focus-within:border-blue-600">
+                                            <span className="font-medium">
+                                              {stringValue
+                                                ? `Change ${mediaKind}`
+                                                : `Upload ${mediaKind}`}
+                                            </span>
+                                            <span className="max-w-[55%] truncate text-xs text-slate-500">
+                                              {getMediaUploadLabel(
+                                                stringValue,
+                                                mediaKind,
+                                              )}
+                                            </span>
+                                            <input
+                                              type="file"
+                                              accept={
+                                                mediaKind === "video"
+                                                  ? "video/*"
+                                                  : "image/*"
+                                              }
+                                              onChange={(event) =>
+                                                handleGenericArrayImageFileChange(
+                                                  key as keyof SectionData,
+                                                  itemIndex,
+                                                  itemKey,
+                                                  event,
+                                                )
+                                              }
+                                              className="sr-only"
+                                            />
+                                          </span>
+                                        ) : (
+                                          <input
+                                            type={
+                                              activeSectionType ===
+                                                "Testimonial" &&
+                                              itemKey === "rating"
+                                                ? "number"
+                                                : "text"
+                                            }
+                                            min={
+                                              activeSectionType ===
+                                                "Testimonial" &&
+                                              itemKey === "rating"
+                                                ? 0
+                                                : undefined
+                                            }
+                                            max={
+                                              activeSectionType ===
+                                                "Testimonial" &&
+                                              itemKey === "rating"
+                                                ? 5
+                                                : undefined
+                                            }
+                                            step={
+                                              activeSectionType ===
+                                                "Testimonial" &&
+                                              itemKey === "rating"
+                                                ? 0.5
+                                                : undefined
+                                            }
+                                            value={stringValue}
+                                            onChange={(event) =>
+                                              updateGenericArrayItem(
+                                                key as keyof SectionData,
+                                                itemIndex,
+                                                itemKey,
+                                                activeSectionType ===
+                                                  "Testimonial" &&
+                                                  itemKey === "rating"
+                                                  ? String(
+                                                      Math.max(
+                                                        0,
+                                                        Math.min(
+                                                          5,
+                                                          Number(
+                                                            event.target.value,
+                                                          ) || 0,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : event.target.value,
+                                              )
+                                            }
+                                            className="h-10 w-full rounded-lg border border-gray-300 px-3 text-sm outline-none focus:border-blue-600"
+                                          />
+                                        )}
+                                      </label>
+                                    );
+                                  })}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </section>
+                    ))}
+                </div>
+              )}
+
+            {["WhyChooseUs", "Gallery", "FAQ", "Testimonial"].includes(activeSectionType) &&
+              activeTab.endsWith("Layout") && (
+                <div className="space-y-4">
+                  {activeSectionType === "Gallery" && layoutOptions.length > 4 && (
+                    <div className="flex justify-end gap-2">
+                      <button
+                        type="button"
+                        aria-label="Previous gallery layouts"
+                        onClick={() =>
+                          setGalleryLayoutStart(
+                            (prev) =>
+                              (prev - 1 + layoutOptions.length) %
+                              layoutOptions.length,
+                          )
+                        }
+                        className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 bg-white text-slate-700 hover:bg-slate-100"
+                      >
+                        <ChevronLeft size={17} />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Next gallery layouts"
+                        onClick={() =>
+                          setGalleryLayoutStart(
+                            (prev) => (prev + 1) % layoutOptions.length,
+                          )
+                        }
+                        className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 bg-white text-slate-700 hover:bg-slate-100"
+                      >
+                        <ChevronRight size={17} />
+                      </button>
+                    </div>
+                  )}
+
+                  {visibleLayoutOptions.map((layout) => {
+                    const isActive = currentSection?.variant === layout.id;
+                    const Component = sectionRegistry[layout.id];
+
+                    return (
+                      <button
+                        key={layout.id}
+                        type="button"
+                        onClick={() => selectSectionVariant(layout.id)}
+                        className={`w-full overflow-hidden rounded-2xl border bg-white text-left ${
+                          isActive ? "border-gray-400" : "border-gray-200"
+                        }`}
+                      >
+                        <div className="h-36 overflow-hidden bg-white">
+                          {Component ? (
+                            <div className="h-[520px] w-[1200px] origin-top-left scale-[0.32]">
+                              <Component data={activeGenericData} />
+                            </div>
+                          ) : (
+                            <div className="flex h-full items-center justify-center text-sm font-semibold">
+                              {layout.name}
+                            </div>
+                          )}
+                        </div>
+                        <div className="px-4 py-3 text-sm font-semibold text-slate-800">
+                          {layout.name}
                         </div>
                       </button>
                     );

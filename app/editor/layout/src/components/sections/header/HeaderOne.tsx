@@ -43,7 +43,7 @@ export default function HeaderOne({ data = {}, blocks }: SectionProps) {
   return (
     <header
       ref={headerRef}
-      className="relative w-full px-4"
+      className="relative z-[70] w-full px-4"
       style={
         {
           background: headerBackground,
@@ -86,7 +86,7 @@ export default function HeaderOne({ data = {}, blocks }: SectionProps) {
                         <Link
                           key={child.label}
                           href={child.href}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          className="block whitespace-nowrap px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
                           {child.label}
                         </Link>

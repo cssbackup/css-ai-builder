@@ -15,6 +15,9 @@ export default function CardBlock({ block, className }: CardBlockProps) {
           <Image
             src={block.image}
             alt={block.alt ?? block.title ?? ""}
+            data-editor-media
+            data-editor-media-type="image"
+            data-editor-media-src={block.image}
             fill
             sizes="(min-width: 1024px) 33vw, 100vw"
             className="object-cover"

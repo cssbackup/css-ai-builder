@@ -6,7 +6,8 @@ export type SectionType =
   | "header"
   | "footer"
   | "product"
-  | "topbar";
+  | "topbar"
+  | "testimonial";
 
 export type MenuItem = {
   label: string;

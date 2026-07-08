@@ -28,7 +28,7 @@ export default function AboutTwo({ data = {}, blocks }: SectionProps) {
 
             <BlockRenderer
               block={getTextBlockByRole(resolvedBlocks, "heading")}
-              className="text-7xl font-black uppercase leading-[0.85] tracking-tight text-black sm:text-8xl lg:text-9xl"
+              className="text-5xl font-black uppercase leading-[0.9] tracking-tight text-black sm:text-7xl lg:text-9xl"
             />
           </div>
 
@@ -40,7 +40,7 @@ export default function AboutTwo({ data = {}, blocks }: SectionProps) {
 
             <BlockRenderer
               block={getTextBlockByRole(resolvedBlocks, "paragraph")}
-              className="max-w-xs text-base leading-relaxed text-black"
+              className="max-w-sm text-sm leading-relaxed text-black sm:text-base"
             />
 
             {buttonBlocks.length ? (
@@ -75,7 +75,7 @@ export default function AboutTwo({ data = {}, blocks }: SectionProps) {
           <div>
             <BlockRenderer
               block={getTextBlockByRole(resolvedBlocks, "philosophy-heading")}
-              className="mb-6 text-3xl font-bold text-black lg:text-4xl"
+              className="mb-4 text-2xl font-bold text-black sm:text-3xl lg:text-4xl"
             />
 
             <BlockRenderer

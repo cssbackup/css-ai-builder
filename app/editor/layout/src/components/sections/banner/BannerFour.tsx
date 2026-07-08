@@ -60,6 +60,9 @@ export default function BannerFour({ data = {} }: SectionProps) {
           className="absolute inset-0 h-full w-full object-cover"
           src={activeSlide.video}
           poster={activeSlide.image}
+          data-editor-media
+          data-editor-media-type="video"
+          data-editor-media-src={activeSlide.video}
           autoPlay
           muted
           loop
@@ -67,20 +70,23 @@ export default function BannerFour({ data = {} }: SectionProps) {
         />
       ) : (
         <div
+          data-editor-media
+          data-editor-media-type="image"
+          data-editor-media-src={activeSlide.image}
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${activeSlide.image})` }}
         />
       )}
 
-      <div className="absolute inset-0 bg-black/55" />
+      <div className="pointer-events-none absolute inset-0 bg-black/55" />
 
-      <div className="relative z-10 flex h-full items-center px-6 md:px-12">
+      <div className="relative z-10 flex h-full items-center px-5 py-12 sm:px-6 md:px-12">
         <div className="max-w-2xl space-y-4 text-white">
-          <h1 className="text-3xl font-semibold leading-tight md:text-5xl">
+          <h1 className="text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl">
             {activeSlide.title}
           </h1>
           {activeSlide.desc && (
-            <p className="max-w-xl text-base leading-relaxed text-white/85 md:text-lg">
+            <p className="max-w-xl text-sm leading-relaxed text-white/85 sm:text-base md:text-lg">
               {activeSlide.desc}
             </p>
           )}
@@ -100,7 +106,7 @@ export default function BannerFour({ data = {} }: SectionProps) {
           <button
             type="button"
             onClick={goToPreviousSlide}
-            className="absolute left-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-950 shadow-lg transition hover:bg-white"
+            className="absolute left-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-950 shadow-lg transition hover:bg-white sm:left-4 sm:h-10 sm:w-10"
             aria-label="Previous video slide"
           >
             <ChevronLeft size={22} />
@@ -108,7 +114,7 @@ export default function BannerFour({ data = {} }: SectionProps) {
           <button
             type="button"
             onClick={goToNextSlide}
-            className="absolute right-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-950 shadow-lg transition hover:bg-white"
+            className="absolute right-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-950 shadow-lg transition hover:bg-white sm:right-4 sm:h-10 sm:w-10"
             aria-label="Next video slide"
           >
             <ChevronRight size={22} />

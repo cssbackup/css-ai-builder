@@ -43,6 +43,9 @@ export default function BannerOne({ data = {}, blocks }: SectionProps) {
           <Image
             src={backgroundImage.src}
             alt={backgroundImage.alt ?? heading?.content ?? "Banner image"}
+            data-editor-media
+            data-editor-media-type="image"
+            data-editor-media-src={backgroundImage.src}
             fill
             sizes="100vw"
             unoptimized={backgroundImage.src.startsWith("data:")}
@@ -58,27 +61,27 @@ export default function BannerOne({ data = {}, blocks }: SectionProps) {
         )}
 
         {/* Optional Dark Overlay */}
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="pointer-events-none absolute inset-0 bg-black/50" />
 
         {/* Content */}
-        <div className="relative z-10 flex h-full flex-col justify-center gap-2 px-6">
+        <div className="relative z-10 flex h-full max-w-4xl flex-col justify-center gap-3 px-5 py-12 sm:px-6 md:px-10">
           <BlockRenderer
             block={getTextBlockByRole(resolvedBlocks, "pretitle")}
-            className="text-lg text-(--primary-pretitle-text) lg:text-xl"
+            className="text-sm font-medium text-(--primary-pretitle-text) sm:text-base lg:text-xl"
           />
 
           <BlockRenderer
             block={heading}
-            className={`${agrandirBolt.className} text-3xl font-semibold leading-tight text-(--primary-title-text) lg:text-5xl`}
+            className={`${agrandirBolt.className} text-3xl font-semibold leading-tight text-(--primary-title-text) sm:text-4xl lg:text-5xl`}
           />
 
           <BlockRenderer
             block={paragraph}
-            className="text-lg text-(--primary-subtitle-text) lg:text-md w-60dvw"
+            className="max-w-2xl text-sm leading-6 text-(--primary-subtitle-text) sm:text-base lg:text-lg"
           />
 
           {!!buttonBlocks.length && (
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {buttonBlocks.map((button) => (
                 <BlockRenderer
                   key={button.id}

@@ -16,9 +16,12 @@ export default function AboutOne({ data = {}, blocks }: SectionProps) {
   const buttonBlocks = getBlocksByType(resolvedBlocks, "button");
 
   return (
-    <div className="bg-(--lightcream-bg) w-full flex items-center py-14">
-      <div className="px-6 w-1/2 flex flex-col gap-3">
-        <BlockRenderer block={heading} className="text-5xl font-semibold" />
+    <div className="flex w-full flex-col items-stretch gap-8 bg-(--lightcream-bg) py-10 md:flex-row md:items-center md:py-14">
+      <div className="flex w-full flex-col gap-3 px-5 md:w-1/2 md:px-6">
+        <BlockRenderer
+          block={heading}
+          className="text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl"
+        />
         <BlockRenderer block={paragraph} />
         {!!buttonBlocks.length && (
           <div className="mt-2 flex flex-wrap gap-2">
@@ -32,7 +35,7 @@ export default function AboutOne({ data = {}, blocks }: SectionProps) {
           </div>
         )}
       </div>
-      <div className="relative min-h-80 w-1/2">
+      <div className="relative min-h-72 w-full md:min-h-80 md:w-1/2">
         <BlockRenderer block={image} className="object-cover" />
       </div>
     </div>

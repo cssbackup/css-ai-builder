@@ -13,6 +13,27 @@ import AboutTwo from "../components/sections/about/AboutTwo";
 import ProductOne from "../components/sections/product/ProductOne";
 import ProductTwo from "../components/sections/product/ProductTwo";
 import ProductThree from "../components/sections/product/ProductThree";
+import WhyChooseUsOne from "../components/sections/whychooseus/WhyChooseUsOne";
+import WhyChooseUsTwo from "../components/sections/whychooseus/WhyChooseUsTwo";
+import WhyChooseUsThree from "../components/sections/whychooseus/WhyChooseUsThree";
+import WhyChooseUsFour from "../components/sections/whychooseus/WhyChooseUsFour";
+import GalleryOne from "../components/sections/gallery/GalleryOne";
+import GalleryTwo from "../components/sections/gallery/GalleryTwo";
+import GalleryThree from "../components/sections/gallery/GalleryThree";
+import GalleryFour from "../components/sections/gallery/GalleryFour";
+import GalleryFive from "../components/sections/gallery/GalleryFive";
+import GallerySix from "../components/sections/gallery/GallerySix";
+import FormDetailOne from "../components/sections/formdetail/FormDetailOne";
+import FormDetailTwo from "../components/sections/formdetail/FormDetailTwo";
+import FormDetailThree from "../components/sections/formdetail/FormDetailThree";
+import FormDetailFour from "../components/sections/formdetail/FormDetailFour";
+import FaqOne from "../components/sections/faq/FaqOne";
+import FaqTwo from "../components/sections/faq/FaqTwo";
+import FaqThree from "../components/sections/faq/FaqThree";
+import FaqFour from "../components/sections/faq/FaqFour";
+import TestimonialOne from "../components/sections/testimonial/TestimonialOne";
+import TestimonialTwo from "../components/sections/testimonial/TestimonialTwo";
+import TestimonialThree from "../components/sections/testimonial/TestimonialThree";
 import FooterOne from "../components/sections/footer/FooterOne";
 
 import { SectionProps } from "../types/section";
@@ -31,5 +52,26 @@ export const sectionRegistry: Record<string, ComponentType<SectionProps>> = {
   "Product-1": ProductOne,
   "Product-2": ProductTwo,
   "Product-3": ProductThree,
+  "WhyChooseUs-1": WhyChooseUsOne,
+  "WhyChooseUs-2": WhyChooseUsTwo,
+  "WhyChooseUs-3": WhyChooseUsThree,
+  "WhyChooseUs-4": WhyChooseUsFour,
+  "Gallery-1": GalleryOne,
+  "Gallery-2": GalleryTwo,
+  "Gallery-3": GalleryThree,
+  "Gallery-4": GalleryFour,
+  "Gallery-5": GalleryFive,
+  "Gallery-6": GallerySix,
+  "FormDetail-1": FormDetailOne,
+  "FormDetail-2": FormDetailTwo,
+  "FormDetail-3": FormDetailThree,
+  "FormDetail-4": FormDetailFour,
+  "FAQ-1": FaqOne,
+  "FAQ-2": FaqTwo,
+  "FAQ-3": FaqThree,
+  "FAQ-4": FaqFour,
+  "Testimonial-1": TestimonialOne,
+  "Testimonial-2": TestimonialTwo,
+  "Testimonial-3": TestimonialThree,
   "Footer-1": FooterOne,
 };

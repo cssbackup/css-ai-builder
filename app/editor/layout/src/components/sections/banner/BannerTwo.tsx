@@ -43,6 +43,9 @@ export default function BannerTwo({ data = {}, blocks }: SectionProps) {
           <Image
             src={backgroundImage.src}
             alt={backgroundImage.alt ?? heading?.content ?? "Banner image"}
+            data-editor-media
+            data-editor-media-type="image"
+            data-editor-media-src={backgroundImage.src}
             fill
             sizes="100vw"
             unoptimized={backgroundImage.src.startsWith("data:")}
@@ -59,31 +62,31 @@ export default function BannerTwo({ data = {}, blocks }: SectionProps) {
 
         {/* Optional Dark Overlay */}
         <div
-          className="absolute inset-0 bg-black/40"
+          className="pointer-events-none absolute inset-0 bg-black/40"
           style={{
             backgroundColor: data.overlayColor,
           }}
         />
 
         {/* Content */}
-        <div className="relative z-10 flex h-full flex-col items-center justify-center gap-3 px-4 text-center">
+        <div className="relative z-10 flex h-full flex-col items-center justify-center gap-3 px-5 py-12 text-center sm:px-6">
           <BlockRenderer
             block={getTextBlockByRole(resolvedBlocks, "pretitle")}
-            className="text-lg font-medium lg:text-xl text-(--secondary-pretitle-text)"
+            className="text-sm font-medium text-(--secondary-pretitle-text) sm:text-base lg:text-xl"
           />
 
           <BlockRenderer
             block={heading}
-            className="max-w-4xl text-3xl font-semibold leading-tight text-white lg:text-5xl"
+            className="max-w-4xl text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl"
           />
 
           <BlockRenderer
             block={paragraph}
-            className="max-w-3xl text-md text-(--secondary-subtitle-text) lg:text-md"
+            className="max-w-3xl text-sm leading-6 text-(--secondary-subtitle-text) sm:text-base"
           />
 
           {!!buttonBlocks.length && (
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-center gap-2">
               {buttonBlocks.map((button) => (
                 <BlockRenderer
                   key={button.id}

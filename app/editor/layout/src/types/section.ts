@@ -90,6 +90,37 @@ export type ProductCardData = {
   imageTitle?: string;
 };
 
+export type WhyChooseUsItemData = {
+  title: string;
+  desc: string;
+  stat?: string;
+};
+
+export type GalleryItemData = {
+  image: string;
+  alt?: string;
+  title?: string;
+};
+
+export type FormFieldData = {
+  label: string;
+  type?: "text" | "email" | "tel" | "textarea";
+  placeholder?: string;
+};
+
+export type FaqItemData = {
+  question: string;
+  answer: string;
+};
+
+export type TestimonialItemData = {
+  name: string;
+  role: string;
+  quote: string;
+  image?: string;
+  rating?: string;
+};
+
 export type FooterSocialData = {
   label: "facebook" | "instagram" | "twitter" | "linkedin";
   href: string;
@@ -173,6 +204,13 @@ export type SectionData = {
   productSectionTitle?: string;
   productItems?: ProductCardData[];
 
+  whyChooseUsItems?: WhyChooseUsItemData[];
+  galleryItems?: GalleryItemData[];
+  formFields?: FormFieldData[];
+  formSubmitLabel?: string;
+  faqItems?: FaqItemData[];
+  testimonialItems?: TestimonialItemData[];
+
   footerBackgroundType?: "solid" | "gradient";
   footerBackgroundColor?: string;
   footerGradientColor?: string;
@@ -193,6 +231,7 @@ export type SectionProps = {
   };
 
 export type SectionItem = {
+  id?: string;
   type: string;
   variant: string;
   data: Record<string, SectionData>;

@@ -97,10 +97,10 @@ export default function FooterOne({ data = {}, blocks }: SectionProps) {
 
   return (
     <footer style={{ background: footerBackground, color: textColor }}>
-      <div className="mx-auto max-w-7xl px-6 py-16">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto max-w-7xl px-5 py-12 sm:px-6 sm:py-16">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
           <div>
-            <Link href="/" className="text-3xl font-bold">
+            <Link href="/" className="text-2xl font-bold sm:text-3xl">
               {logo?.text ?? "BlackBay"}
             </Link>
 
@@ -109,7 +109,7 @@ export default function FooterOne({ data = {}, blocks }: SectionProps) {
                 "We create modern websites that are fast, responsive, and AI-powered to help your business grow online."}
             </p>
 
-            <div className="mt-6 flex items-center gap-4">
+            <div className="mt-6 flex flex-wrap items-center gap-3 sm:gap-4">
               {socialLinks.map((social) => {
                 const Icon = socialIcons[social.label];
 
@@ -129,7 +129,7 @@ export default function FooterOne({ data = {}, blocks }: SectionProps) {
 
           {(columnBlocks.length ? columnBlocks : columns).map((column) => (
             <div key={column.title}>
-              <h3 className="mb-6 text-xl font-semibold">{column.title}</h3>
+              <h3 className="mb-4 text-lg font-semibold sm:mb-6 sm:text-xl">{column.title}</h3>
 
               <ul className="space-y-3" style={{ color: mutedTextColor }}>
                 {("items" in column ? column.items : column.links).map((item) => {
@@ -149,7 +149,7 @@ export default function FooterOne({ data = {}, blocks }: SectionProps) {
           ))}
 
           <div>
-            <h3 className="mb-6 text-xl font-semibold">Contact</h3>
+            <h3 className="mb-4 text-lg font-semibold sm:mb-6 sm:text-xl">Contact</h3>
 
             <div className="space-y-4" style={{ color: mutedTextColor }}>
               <p>{contact.location}</p>
@@ -178,7 +178,7 @@ export default function FooterOne({ data = {}, blocks }: SectionProps) {
           >
             <p>{copyrightText}</p>
 
-            <div className="flex gap-6">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 md:justify-end">
               {(legalBlock?.items ?? legalLinks).map((item) => {
                 const label = typeof item === "string" ? item : item.label;
                 const href = typeof item === "string" ? "#" : item.href;

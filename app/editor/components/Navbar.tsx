@@ -31,7 +31,8 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
   const [pageToDelete, setPageToDelete] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const { isPreview, togglePreview } = usePreview();
+  const { isPreview, togglePreview, viewportMode, setViewportMode } =
+    usePreview();
   const [showPopup, setShowPopup] = useState(false);
   const [newPageName, setNewPageName] = useState("");
 
@@ -191,16 +192,29 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
         <div className="hidden md:flex justify-between items-center gap-50">
           {isPreview ? (
             <div className="flex items-center gap-3 bg-gray-100 px-6 py-1 rounded-full">
-              <Link href="/">
+              <button
+                type="button"
+                aria-label="Show desktop preview"
+                onClick={() => setViewportMode("desktop")}
+                className={`rounded px-1 py-1 ${
+                  viewportMode === "desktop" ? "bg-white shadow-sm" : ""
+                }`}
+              >
                 <LaptopMinimal
                   size={28}
-                  className="text-gray-600 py-1 rounded"
+                  className="text-gray-600"
                 />
-              </Link>
-              <Link href="/">
-                {" "}
-                <Smartphone size={28} className="text-gray-600 py-1 rounded" />
-              </Link>
+              </button>
+              <button
+                type="button"
+                aria-label="Show mobile preview"
+                onClick={() => setViewportMode("mobile")}
+                className={`rounded px-1 py-1 ${
+                  viewportMode === "mobile" ? "bg-white shadow-sm" : ""
+                }`}
+              >
+                <Smartphone size={28} className="text-gray-600" />
+              </button>
             </div>
           ) : (
             " "

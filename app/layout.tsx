@@ -21,7 +21,9 @@ export default function RootLayout({
       lang="en"
       className={`h-full ${generalSansMedium.className} ${agrandirBolt.variable}`}
     >
-      <body className="min-h-dvh overflow-x-hidden overflow-y-auto">
+      <body
+        className={`min-h-dvh overflow-x-hidden overflow-y-auto ${generalSansMedium.className} `}
+      >
         {children}
       </body>
     </html>

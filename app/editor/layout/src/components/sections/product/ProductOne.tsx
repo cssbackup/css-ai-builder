@@ -71,10 +71,10 @@ export default function ProductOne({ data = {}, blocks }: SectionProps) {
 
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto max-w-7xl bg-radial  from-white  via-blue-50 to-transparent px-6 py-20 md:px-10">
+      <div className="mx-auto max-w-7xl bg-radial from-white via-blue-50 to-transparent px-5 py-12 md:px-10 md:py-20">
         <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.4fr_1fr]">
           <div>
-            <h1 className="text-4xl font-bold leading-tight text-black md:text-5xl">
+            <h1 className="text-3xl font-bold leading-tight text-black sm:text-4xl md:text-5xl">
               {activeSlide.title}
             </h1>
 
@@ -82,7 +82,7 @@ export default function ProductOne({ data = {}, blocks }: SectionProps) {
               {activeSlide.category}
             </p>
 
-            <div className="mt-8 w-full max-w-[210px] rounded-sm bg-white p-4 shadow">
+            <div className="mt-6 w-full max-w-[260px] rounded-sm bg-white p-4 shadow md:mt-8 md:max-w-[210px]">
               {(data.productFeatures ?? []).map((item) => (
                 <div
                   key={item.label}
@@ -117,12 +117,15 @@ export default function ProductOne({ data = {}, blocks }: SectionProps) {
           </div>
 
           <div className="flex flex-col items-center justify-center">
-            <div className="relative h-[300px] w-full max-w-[420px] md:h-[360px]">
+            <div className="relative h-[240px] w-full max-w-[420px] sm:h-[300px] md:h-[360px]">
               <div className="absolute bottom-2 left-1/2 h-12 w-[80%] -translate-x-1/2 rounded-full bg-slate-500/90 blur-2xl" />
 
               <Image
                 src={activeSlide.image ?? "/55.jpg"}
                 alt={activeSlide.alt ?? activeSlide.title ?? "Product"}
+                data-editor-media
+                data-editor-media-type="image"
+                data-editor-media-src={activeSlide.image ?? "/55.jpg"}
                 fill
                 className="object-contain drop-shadow-[0_28px_24px_rgba(15,23,42,0.18)]"
                 priority
@@ -133,7 +136,7 @@ export default function ProductOne({ data = {}, blocks }: SectionProps) {
               <button
                 type="button"
                 onClick={prevImage}
-                className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-gray-600 shadow transition hover:bg-gray-100"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-gray-600 shadow transition hover:bg-gray-100 sm:h-12 sm:w-12"
               >
                 <ArrowLeft size={22} />
               </button>
@@ -141,7 +144,7 @@ export default function ProductOne({ data = {}, blocks }: SectionProps) {
               <button
                 type="button"
                 onClick={nextImage}
-                className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-gray-600 shadow transition hover:bg-gray-100"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-gray-600 shadow transition hover:bg-gray-100 sm:h-12 sm:w-12"
               >
                 <ArrowRight size={22} />
               </button>
@@ -149,11 +152,11 @@ export default function ProductOne({ data = {}, blocks }: SectionProps) {
           </div>
 
           <div>
-            <h2 className="text-3xl font-bold text-black">
+            <h2 className="text-2xl font-bold text-black sm:text-3xl">
               {activeSlide.title}
             </h2>
 
-            <p className="mt-3 max-w-xs text-xs leading-relaxed text-black">
+            <p className="mt-3 max-w-sm text-sm leading-relaxed text-black lg:max-w-xs lg:text-xs">
               {activeSlide.desc}
             </p>
 

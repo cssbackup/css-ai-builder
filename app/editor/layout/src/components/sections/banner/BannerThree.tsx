@@ -98,23 +98,26 @@ export default function BannerThree({ data = {}, blocks }: SectionProps) {
         key={activeSlide.id}
         src={activeSlide.image ?? "/bg1.jpg"}
         alt={activeSlide.alt ?? activeSlide.title ?? "Banner slide"}
+        data-editor-media
+        data-editor-media-type="image"
+        data-editor-media-src={activeSlide.image ?? "/bg1.jpg"}
         fill
         priority
         sizes="100vw"
         unoptimized={activeSlide.image?.startsWith("data:")}
         className="object-cover transition-opacity duration-500"
       />
-      <div className="absolute inset-0 bg-black/50" />
+      <div className="pointer-events-none absolute inset-0 bg-black/50" />
 
-      <div className="relative z-10 flex h-full items-center px-6 md:px-12">
+      <div className="relative z-10 flex h-full items-center px-5 py-12 sm:px-6 md:px-12">
         <div className="max-w-2xl space-y-4 text-white">
           {activeSlide.title && (
-            <h1 className="text-3xl font-semibold leading-tight md:text-5xl">
+            <h1 className="text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl">
               {activeSlide.title}
             </h1>
           )}
           {activeSlide.desc && (
-            <p className="max-w-xl text-base leading-relaxed text-white/85 md:text-lg">
+            <p className="max-w-xl text-sm leading-relaxed text-white/85 sm:text-base md:text-lg">
               {activeSlide.desc}
             </p>
           )}
@@ -132,7 +135,7 @@ export default function BannerThree({ data = {}, blocks }: SectionProps) {
           <button
             type="button"
             onClick={goToPreviousSlide}
-            className="absolute left-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-950 shadow-lg transition hover:bg-white"
+            className="absolute left-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-950 shadow-lg transition hover:bg-white sm:left-4 sm:h-10 sm:w-10"
             aria-label="Previous banner slide"
           >
             <ChevronLeft size={22} />
@@ -140,7 +143,7 @@ export default function BannerThree({ data = {}, blocks }: SectionProps) {
           <button
             type="button"
             onClick={goToNextSlide}
-            className="absolute right-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-950 shadow-lg transition hover:bg-white"
+            className="absolute right-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-950 shadow-lg transition hover:bg-white sm:right-4 sm:h-10 sm:w-10"
             aria-label="Next banner slide"
           >
             <ChevronRight size={22} />
