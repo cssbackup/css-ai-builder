@@ -20,7 +20,7 @@ export default function AboutOne({ data = {}, blocks }: SectionProps) {
       <div className="flex w-full flex-col gap-3 px-5 md:w-1/2 md:px-6">
         <BlockRenderer
           block={heading}
-          className="text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl"
+          className="text-xl font-semibold leading-tight sm:text-xl lg:text-sm"
         />
         <BlockRenderer block={paragraph} />
         {!!buttonBlocks.length && (

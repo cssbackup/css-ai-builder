@@ -11,6 +11,7 @@ import {
   SocialLinkData,
 } from "../../types/section";
 import { sectionRegistry } from "../../lib/sectionRegistry";
+import { PageLink, usePreview } from "../context/PreviewContext";
 
 type MenuItem = {
   label: string;
@@ -62,6 +63,12 @@ const bannerLayouts = [
 const aboutLayouts = [
   { id: "About-1", name: "About 1" },
   { id: "About-2", name: "About 2" },
+];
+
+const aboutPageLayouts = [
+  { id: "AboutPage-1", name: "About Page" },
+  { id: "AboutPage-2", name: "About Page Two" },
+  { id: "AboutPage-3", name: "About Page Three" },
 ];
 
 const productLayouts = [
@@ -121,6 +128,13 @@ const MAX_BANNER_BUTTONS = 3;
 const MAX_FORM_FIELDS = 5;
 const MAX_LINK_TEXT_LENGTH = 20;
 
+const toPageLinks = (menu: MenuItem[]): PageLink[] =>
+  menu.slice(0, MAX_MENU_LINKS).map((item) => ({
+    label: item.label,
+    href: item.href,
+    children: item.children ? toPageLinks(item.children) : undefined,
+  }));
+
 const getMediaKindFromKey = (key: string): "image" | "video" | null => {
   const normalizedKey = key.toLowerCase();
 
@@ -159,12 +173,7 @@ const socialLinkLabels: SocialLinkData["label"][] = [
 
 const sidebarItemsBySection: Record<string, string[]> = {
   Topbar: ["Topbar Layout", "Topbar Content"],
-  Header: [
-    "Logo Settings",
-    "Header Layout",
-    "Navigation Menu",
-    "Header Buttons",
-  ],
+  Header: ["Header Content", "Header Layout", "Navigation Menu"],
   Banner: ["Banner Content", "Banner Layout"],
   About: ["About Content", "About Layout"],
   Product: ["Product Content", "Product Layout"],
@@ -291,6 +300,7 @@ export default function EditSectionModal({
   const [galleryLayoutStart, setGalleryLayoutStart] = useState(0);
   const [hasChanges, setHasChanges] = useState(false);
   const [lastChangedSection, setLastChangedSection] = useState(sectionType);
+  const { currentPage, setCurrentPage, setPageLinks } = usePreview();
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const [dragStart, setDragStart] = useState<{
     pointerX: number;
@@ -309,11 +319,15 @@ export default function EditSectionModal({
     (item) => (item.id ?? item.type) === sectionId,
   );
   const activeSectionKey = currentSection?.id ?? currentSection?.type ?? sectionId;
-  const activeVariant = currentSection?.variant?.startsWith(
-    `${activeSectionType}-`,
-  )
+  const isAboutPageSection =
+    activeSectionType === "About" &&
+    (activeSectionKey === "AboutPage" ||
+      currentSection?.variant?.startsWith("AboutPage-"));
+  const activeVariant = currentSection?.data?.[currentSection.variant]
     ? currentSection.variant
-    : `${activeSectionType}-1`;
+    : currentSection?.variant?.startsWith(`${activeSectionType}-`)
+      ? currentSection.variant
+      : `${activeSectionType}-1`;
   const fallbackVariantData =
     currentSection?.data?.[`${activeSectionType}-1`] ??
     Object.values(currentSection?.data ?? {})[0];
@@ -337,8 +351,10 @@ export default function EditSectionModal({
 
   const activeHeaderData = currentSection?.data?.[activeVariant] as
     | {
-        logo?: string;
-        headerBackgroundType?: HeaderBackgroundType;
+      logo?: string;
+      logoImage?: string;
+      logoImageTitle?: string;
+      headerBackgroundType?: HeaderBackgroundType;
         headerBackgroundColor?: string;
         headerGradientColor?: string;
         headerTextColor?: string;
@@ -462,6 +478,9 @@ export default function EditSectionModal({
             layoutOptions[(galleryLayoutStart + index) % layoutOptions.length],
         )
       : layoutOptions;
+  const activeAboutLayouts = isAboutPageSection
+    ? aboutPageLayouts
+    : aboutLayouts;
 
   const handleModalMouseDown = (event: MouseEvent<HTMLDivElement>) => {
     if ((event.target as HTMLElement).closest("button,input,textarea,select")) {
@@ -505,6 +524,17 @@ export default function EditSectionModal({
 
   const updateActiveHeaderData = (newData: Record<string, unknown>) => {
     if (!currentSection || !activeHeaderData) return;
+
+    if (Array.isArray(newData.menu)) {
+      const nextPageLinks = toPageLinks(newData.menu as MenuItem[]);
+
+      setPageLinks(nextPageLinks);
+      setCurrentPage(
+        nextPageLinks.some((item) => item.label === currentPage)
+          ? currentPage
+          : (nextPageLinks[0]?.label ?? ""),
+      );
+    }
 
     setHasChanges(true);
     setLastChangedSection(activeSectionKey);
@@ -667,7 +697,11 @@ export default function EditSectionModal({
   };
 
   const selectSectionVariant = (variant: string) => {
-    if (!variant.startsWith(`${activeSectionType}-`)) return;
+    const isAllowedVariant =
+      variant.startsWith(`${activeSectionType}-`) ||
+      (isAboutPageSection && variant.startsWith("AboutPage-"));
+
+    if (!isAllowedVariant) return;
 
     if (activeSectionType === "Banner" && currentSection) {
       const currentVariantData = currentSection.data[variant];
@@ -721,6 +755,16 @@ export default function EditSectionModal({
     }
 
     if (currentSection?.variant !== variant) {
+      if (currentSection && !currentSection.data[variant]) {
+        const sourceData =
+          currentSection.data[activeVariant] ?? Object.values(currentSection.data)[0];
+
+        onUpdateSectionData(activeSectionKey, {
+          ...currentSection.data,
+          [variant]: sourceData,
+        });
+      }
+
       setHasChanges(true);
       setLastChangedSection(activeSectionKey);
     }
@@ -858,6 +902,23 @@ export default function EditSectionModal({
 
   const updateHeaderLogo = (logo: string) => {
     updateActiveHeaderData({ logo });
+  };
+
+  const updateHeaderLogoImage = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    readBannerBackgroundFile(file, (dataUrl) => {
+      updateActiveHeaderData({
+        logoImage: dataUrl,
+        logoImageTitle: file.name,
+      });
+    });
+    event.target.value = "";
+  };
+
+  const deleteHeaderLogoImage = () => {
+    updateActiveHeaderData({ logoImage: "", logoImageTitle: "" });
   };
 
   const updateHeaderButton = (
@@ -1648,17 +1709,132 @@ export default function EditSectionModal({
               )}
 
             {activeSectionType === "Header" &&
-              activeTab === "Logo Settings" && (
-                <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-4">
-                  <label className="block text-sm font-semibold text-gray-900">
-                    Logo Text
-                  </label>
-                  <input
-                    value={activeHeaderData?.logo ?? ""}
-                    onChange={(event) => updateHeaderLogo(event.target.value)}
-                    className="h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
-                    placeholder="Enter logo text"
-                  />
+              activeTab === "Header Content" && (
+                <div className="space-y-5">
+                  <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-4">
+                    <h4 className="text-sm font-bold text-slate-900">
+                      Logo
+                    </h4>
+
+                    <label className="block text-sm font-semibold text-gray-900">
+                      Logo Text
+                    </label>
+                    <input
+                      value={activeHeaderData?.logo ?? ""}
+                      onChange={(event) => updateHeaderLogo(event.target.value)}
+                      className="h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                      placeholder="Enter logo text"
+                    />
+
+                    <div className="space-y-2">
+                      <span className="block text-sm font-semibold text-gray-900">
+                        Logo Image
+                      </span>
+                      <label className="flex h-11 w-full cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-900 transition hover:border-blue-500">
+                        <span className="font-medium">
+                          {activeHeaderData?.logoImage
+                            ? "Change logo image"
+                            : "Upload logo image"}
+                        </span>
+                        <span className="max-w-[55%] truncate text-xs text-slate-500">
+                          {activeHeaderData?.logoImageTitle ??
+                            activeHeaderData?.logoImage ??
+                            "No image selected"}
+                        </span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={updateHeaderLogoImage}
+                          className="sr-only"
+                        />
+                      </label>
+
+                      {activeHeaderData?.logoImage && (
+                        <button
+                          type="button"
+                          onClick={deleteHeaderLogoImage}
+                          className="rounded-md border border-red-500 px-3 py-1 text-xs font-semibold text-red-600 hover:bg-red-50"
+                        >
+                          Remove logo image
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="text-sm font-bold text-slate-900">
+                          Header Buttons
+                        </h4>
+                        <p className="mt-1 text-xs text-gray-700 underline">
+                          Manage header action buttons.
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={addHeaderButton}
+                        disabled={
+                          (activeHeaderData?.buttons ?? []).length >=
+                          MAX_HEADER_BUTTONS
+                        }
+                        className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-xs font-medium text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+                      >
+                        <Plus size={14} />
+                        Add Button
+                      </button>
+                    </div>
+
+                    <p className="text-xs text-gray-500">
+                      {(activeHeaderData?.buttons ?? []).length}/
+                      {MAX_HEADER_BUTTONS} header buttons added
+                    </p>
+
+                    <div className="space-y-3">
+                      {(activeHeaderData?.buttons ?? []).map((button, index) => (
+                        <div
+                          key={index}
+                          className="grid grid-cols-1 gap-3 rounded-xl border border-gray-300 bg-white p-3 shadow-sm lg:grid-cols-[minmax(8rem,1fr)_minmax(8rem,1fr)_3.5rem]"
+                        >
+                          <input
+                            value={button.label}
+                            onChange={(event) =>
+                              updateHeaderButton(
+                                index,
+                                "label",
+                                event.target.value,
+                              )
+                            }
+                            className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
+                            placeholder="Button label"
+                          />
+
+                          <input
+                            value={button.href}
+                            onChange={(event) =>
+                              updateHeaderButton(
+                                index,
+                                "href",
+                                event.target.value,
+                              )
+                            }
+                            className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
+                            placeholder="/link"
+                          />
+
+                          <button
+                            type="button"
+                            onClick={() => deleteHeaderButton(index)}
+                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-red-500 bg-white text-red-600"
+                            aria-label="Delete header button"
+                          >
+                            <Trash size={18} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -1731,79 +1907,6 @@ export default function EditSectionModal({
                       </button>
                     );
                   })}
-                </div>
-              )}
-
-            {activeSectionType === "Header" &&
-              activeTab === "Header Buttons" && (
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-gray-700 underline">
-                      Manage header action buttons.
-                    </p>
-
-                    <button
-                      type="button"
-                      onClick={addHeaderButton}
-                      disabled={
-                        (activeHeaderData?.buttons ?? []).length >=
-                        MAX_HEADER_BUTTONS
-                      }
-                      className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-xs font-medium text-white disabled:cursor-not-allowed disabled:bg-gray-300"
-                    >
-                      <Plus size={14} />
-                      Add Button
-                    </button>
-                  </div>
-
-                  <p className="text-xs text-gray-500">
-                    {(activeHeaderData?.buttons ?? []).length}/
-                    {MAX_HEADER_BUTTONS} header buttons added
-                  </p>
-
-                  <div className="space-y-3">
-                    {(activeHeaderData?.buttons ?? []).map((button, index) => (
-                      <div
-                        key={index}
-                        className="grid grid-cols-1 gap-3 rounded-xl border border-gray-300 bg-white p-3 shadow-sm lg:grid-cols-[minmax(8rem,1fr)_minmax(8rem,1fr)_3.5rem]"
-                      >
-                        <input
-                          value={button.label}
-                          onChange={(event) =>
-                            updateHeaderButton(
-                              index,
-                              "label",
-                              event.target.value,
-                            )
-                          }
-                          className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
-                          placeholder="Button label"
-                        />
-
-                        <input
-                          value={button.href}
-                          onChange={(event) =>
-                            updateHeaderButton(
-                              index,
-                              "href",
-                              event.target.value,
-                            )
-                          }
-                          className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
-                          placeholder="/link"
-                        />
-
-                        <button
-                          type="button"
-                          onClick={() => deleteHeaderButton(index)}
-                          className="flex h-8 w-8 items-center justify-center rounded-lg border border-red-500 bg-white text-red-600"
-                          aria-label="Delete header button"
-                        >
-                          <Trash size={18} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
                 </div>
               )}
 
@@ -2430,7 +2533,7 @@ export default function EditSectionModal({
 
             {activeSectionType === "About" && activeTab === "About Layout" && (
               <div className="space-y-4">
-                {aboutLayouts.map((layout) => {
+                {activeAboutLayouts.map((layout) => {
                   const isActive = currentSection?.variant === layout.id;
 
                   return (
@@ -2443,6 +2546,56 @@ export default function EditSectionModal({
                       }`}
                     >
                       <div className="h-32 bg-gray-100">
+                        {layout.id === "AboutPage-1" && (
+                          <div className="grid h-full grid-cols-[1.1fr_0.9fr] gap-3 bg-white p-4">
+                            <div className="space-y-2">
+                              <div className="h-2 w-20 rounded bg-blue-500" />
+                              <div className="h-5 w-full rounded bg-slate-900" />
+                              <div className="h-5 w-4/5 rounded bg-slate-900" />
+                              <div className="mt-3 h-2 w-full rounded bg-slate-400" />
+                              <div className="h-2 w-5/6 rounded bg-slate-400" />
+                            </div>
+                            <div className="rounded-2xl bg-slate-300" />
+                          </div>
+                        )}
+
+                        {layout.id === "AboutPage-2" && (
+                          <div className="grid h-full grid-cols-[0.9fr_1.1fr] gap-3 bg-slate-50 p-4">
+                            <div className="rounded-2xl bg-slate-300" />
+                            <div className="space-y-2">
+                              <div className="h-2 w-20 rounded bg-blue-500" />
+                              <div className="h-5 w-full rounded bg-slate-900" />
+                              <div className="h-5 w-4/5 rounded bg-slate-900" />
+                              <div className="mt-3 grid grid-cols-3 gap-2">
+                                <div className="h-8 rounded bg-white" />
+                                <div className="h-8 rounded bg-white" />
+                                <div className="h-8 rounded bg-white" />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {layout.id === "AboutPage-3" && (
+                          <div className="h-full bg-slate-950 p-4">
+                            <div className="h-2 w-20 rounded bg-blue-300" />
+                            <div className="mt-3 grid grid-cols-[1.1fr_0.9fr] gap-4">
+                              <div className="space-y-2">
+                                <div className="h-5 w-full rounded bg-white" />
+                                <div className="h-5 w-4/5 rounded bg-white" />
+                              </div>
+                              <div className="space-y-2">
+                                <div className="h-2 w-full rounded bg-white/50" />
+                                <div className="h-2 w-5/6 rounded bg-white/50" />
+                              </div>
+                            </div>
+                            <div className="mt-4 grid grid-cols-3 gap-2">
+                              <div className="h-7 rounded bg-white/10" />
+                              <div className="h-7 rounded bg-white/10" />
+                              <div className="h-7 rounded bg-white/10" />
+                            </div>
+                          </div>
+                        )}
+
                         {layout.id === "About-1" && (
                           <div className="grid h-full grid-cols-2 overflow-hidden bg-[#fbfaf6]">
                             <div className="flex flex-col justify-center gap-2 px-5">

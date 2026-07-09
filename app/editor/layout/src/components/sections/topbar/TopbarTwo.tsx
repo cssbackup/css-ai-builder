@@ -48,11 +48,16 @@ export default function TopbarTwo({ data = {}, blocks }: SectionProps) {
 
   return (
     <section style={{ background: topbarBackground, color: topbarTextColor }}>
-      <div className="mx-auto flex min-h-11 max-w-7xl flex-col items-start justify-center gap-2 px-4 py-2 sm:flex-row sm:items-center sm:justify-between lg:px-6">
+      <div className="mx-auto flex min-h-11 max-w-7xl flex-col items-start justify-center gap-2 px-4 sm:flex-row sm:items-center sm:justify-between lg:px-6">
         {announcement ? (
-          <BlockRenderer block={announcement} className="text-xs font-semibold sm:text-sm" />
+          <BlockRenderer
+            block={announcement}
+            className="text-xs font-semibold sm:text-sm"
+          />
         ) : (
-          topbarText && <p className="text-xs font-semibold sm:text-sm">{topbarText}</p>
+          topbarText && (
+            <p className="text-xs font-semibold sm:text-sm">{topbarText}</p>
+          )
         )}
 
         <div className="flex max-w-full flex-wrap items-center gap-x-3 gap-y-2 sm:justify-end sm:divide-x sm:divide-white/20">

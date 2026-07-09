@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import {
   Menu,
   Eye,
@@ -18,7 +17,13 @@ import {
 } from "lucide-react";
 import { usePreview } from "../layout/src/components/context/PreviewContext";
 
-const pages = ["Home", "About", "Services", "Contact"];
+const MAX_PAGE_ITEMS = 7;
+
+const createPageHref = (label: string) => {
+  const slug = label.trim().toLowerCase().replace(/\s+/g, "-");
+
+  return slug === "home" ? "#" : `#${slug}`;
+};
 
 type HeaderProps = {
   onMenuClick: () => void;
@@ -26,13 +31,18 @@ type HeaderProps = {
 
 export default function Navbar({ onMenuClick }: HeaderProps) {
   const [open, setOpen] = useState(false);
-  const [selectedPage, setSelectedPage] = useState("Home");
-  const [pageItems, setPageItems] = useState(pages);
   const [pageToDelete, setPageToDelete] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
-  const { isPreview, togglePreview, viewportMode, setViewportMode } =
-    usePreview();
+  const {
+    currentPage,
+    isPreview,
+    pageLinks,
+    setCurrentPage,
+    setPageLinks,
+    togglePreview,
+    viewportMode,
+    setViewportMode,
+  } = usePreview();
   const [showPopup, setShowPopup] = useState(false);
   const [newPageName, setNewPageName] = useState("");
 
@@ -53,12 +63,9 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
     };
   }, []);
 
-  const getPageEditHref = (page: string) =>
-    `/editor/layout?page=${page.toLowerCase()}`;
-
   const handleEditPage = (page: string) => {
     setOpen(false);
-    router.push(getPageEditHref(page));
+    setCurrentPage(page);
   };
 
   const handleDeletePage = (page: string) => {
@@ -69,15 +76,14 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
   const handleConfirmDeletePage = () => {
     if (!pageToDelete) return;
 
-    setPageItems((prevPages) => {
-      const nextPages = prevPages.filter((item) => item !== pageToDelete);
+    setPageLinks(
+      pageLinks.filter((item) => item.label !== pageToDelete),
+    );
 
-      if (selectedPage === pageToDelete) {
-        setSelectedPage(nextPages[0] ?? "");
-      }
-
-      return nextPages;
-    });
+    if (currentPage === pageToDelete) {
+      const nextPage = pageLinks.find((item) => item.label !== pageToDelete);
+      setCurrentPage(nextPage?.label ?? "");
+    }
 
     setPageToDelete(null);
   };
@@ -88,16 +94,21 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
   };
 
   const handleCreatePage = () => {
-    if (!newPageName.trim()) return;
+    if (!newPageName.trim() || pageLinks.length >= MAX_PAGE_ITEMS) return;
 
     const trimmedPageName = newPageName.trim();
 
-    setPageItems((prevPages) => [...prevPages, trimmedPageName]);
-    setSelectedPage(trimmedPageName);
+    setPageLinks([
+      ...pageLinks,
+      { label: trimmedPageName, href: createPageHref(trimmedPageName) },
+    ]);
+    setCurrentPage(trimmedPageName);
 
     setNewPageName("");
     setShowPopup(false);
   };
+
+  const canAddMorePages = pageLinks.length < MAX_PAGE_ITEMS;
 
   return (
     <header className="fixed left-0 top-0 z-20 flex h-14 w-full items-center justify-between border-b border-gray-200 px-4">
@@ -123,7 +134,7 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
                 onClick={() => setOpen((prev) => !prev)}
                 className="flex h-8 min-w-[30px] items-center justify-center gap-1 rounded-lg border border-gray-200 bg-white px-2 text-sm font-medium text-gray-800"
               >
-                {selectedPage || "Page"}
+                {currentPage || "Page"}
 
                 <ChevronDown
                   size={20}
@@ -136,29 +147,31 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
 
             {open && (
               <div className="absolute -right-22 top-[50px] z-[200] w-55 border-2 border-slate-200 bg-white">
-                {pageItems.map((page) => (
+                {pageLinks.map((page) => (
                   <div
-                    key={page}
+                    key={page.label}
                     className="flex w-full items-center gap-2 border-b border-slate-200 px-2 py-3 text-sm font-medium text-slate-800 last:border-b-0 hover:bg-slate-50 hover:text-black"
                   >
                     <button
                       type="button"
                       onClick={() => {
-                        setSelectedPage(page);
+                        setCurrentPage(page.label);
                         setOpen(false);
                       }}
                       className="flex min-w-0 flex-1 items-center gap-1 text-left"
                     >
                       <ChevronRight size={14} className="text-slate-800" />
 
-                      <span className="min-w-0 flex-1 truncate">{page}</span>
+                      <span className="min-w-0 flex-1 truncate">
+                        {page.label}
+                      </span>
                     </button>
 
-                    {page !== "Home" && (
+                    {page.label !== currentPage && (
                       <button
                         type="button"
-                        aria-label={`Edit ${page}`}
-                        onClick={() => handleEditPage(page)}
+                        aria-label={`Edit ${page.label}`}
+                        onClick={() => handleEditPage(page.label)}
                         className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-slate-300 bg-slate-100 text-slate-600 hover:bg-slate-200"
                       >
                         <Edit size={16} />
@@ -167,8 +180,8 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
 
                     <button
                       type="button"
-                      aria-label={`Delete ${page}`}
-                      onClick={() => handleDeletePage(page)}
+                      aria-label={`Delete ${page.label}`}
+                      onClick={() => handleDeletePage(page.label)}
                       className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-slate-300 bg-slate-100 text-red-600 hover:bg-red-50"
                     >
                       <Trash size={16} />
@@ -178,7 +191,12 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
 
                 <div className="flex justify-end px-2 py-2">
                   <button
-                    className="bg-blue-600 text-white px-5 py-2 text-xs rounded"
+                    disabled={!canAddMorePages}
+                    className={`rounded px-5 py-2 text-xs text-white ${
+                      canAddMorePages
+                        ? "bg-blue-600 hover:bg-blue-700"
+                        : "cursor-not-allowed bg-blue-300"
+                    }`}
                     onClick={addNewPage}
                   >
                     Add More{" "}
@@ -279,7 +297,12 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
 
               <button
                 type="submit"
-                className="h-11 shrink-0 rounded-md bg-blue-600 px-5 text-sm font-semibold text-white shadow-lg hover:bg-blue-700"
+                disabled={!canAddMorePages}
+                className={`h-11 shrink-0 rounded-md px-5 text-sm font-semibold text-white shadow-lg ${
+                  canAddMorePages
+                    ? "bg-blue-600 hover:bg-blue-700"
+                    : "cursor-not-allowed bg-blue-300"
+                }`}
               >
                 Enter
               </button>

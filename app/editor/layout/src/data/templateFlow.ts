@@ -434,6 +434,25 @@ export const createAddableSection = (
   );
 };
 
+export const createAboutPageSection = (category: string): SectionItem => {
+  const aboutPageData = {
+    ...categoryContent.common.AboutPage,
+    ...categoryContent.categories[category]?.sections?.AboutPage,
+  } as SectionData;
+
+  return {
+    id: "AboutPage",
+    page: "about",
+    type: "About",
+    variant: "AboutPage-1",
+    data: {
+      "AboutPage-1": aboutPageData,
+      "AboutPage-2": aboutPageData,
+      "AboutPage-3": aboutPageData,
+    },
+  };
+};
+
 export const getBuilderTemplate = (templateId?: string | null) =>
   builderTemplates.find((template) => template.id === templateId) ??
   builderTemplates[0];

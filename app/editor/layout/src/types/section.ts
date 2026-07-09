@@ -154,6 +154,8 @@ export type SectionData = {
   socialLinks?: SocialLinkData[];
 
   logo?: string;
+  logoImage?: string;
+  logoImageTitle?: string;
   menu?: MenuItem[];
   buttons?: ButtonData[];
 
@@ -232,6 +234,7 @@ export type SectionProps = {
 
 export type SectionItem = {
   id?: string;
+  page?: string;
   type: string;
   variant: string;
   data: Record<string, SectionData>;

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronDown, Menu, X } from "lucide-react";
 import React, { useState } from "react";
 import { SectionProps } from "./../../../types/section";
@@ -33,11 +34,18 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
       }
     >
       <div className="flex w-full items-center justify-between gap-4">
-        <Link
-          href="/"
-          className="shrink-0 text-base font-bold text-(--header-text) sm:text-lg"
-        >
-          {logo?.text}
+        <Link href="/" className="relative shrink-0 text-(--header-text)">
+          {data.logoImage ? (
+            <Image
+              src={data.logoImage}
+              alt={data.logoImageTitle ?? logo?.text ?? "Logo"}
+              width={150}
+              height={48}
+              className="h-10 w-auto object-contain"
+            />
+          ) : (
+            <span className="text-base font-bold sm:text-lg">{logo?.text}</span>
+          )}
         </Link>
 
         <nav className="hidden items-center gap-4 md:flex lg:gap-6">

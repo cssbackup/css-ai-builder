@@ -231,7 +231,7 @@ function SidebarContent({
                           : "text-gray-700"
                       }`}
                     >
-                      {item.label}hhh
+                      {item.label}
                     </span>
 
                     {hasChildren && (

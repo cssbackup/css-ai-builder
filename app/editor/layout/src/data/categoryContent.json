@@ -200,6 +200,17 @@
       },
       "copyrightText": "Copyright 2026. All rights reserved."
     },
+    "AboutPage": {
+      "pretitle": "About us",
+      "title": "We build thoughtful websites for growing brands.",
+      "desc": "Our team combines strategy, design, and technology to create digital experiences that explain your business clearly and help visitors take action.",
+      "desc2": "From the first idea to the final launch, we focus on useful content, clean layouts, and flexible sections that your team can keep improving over time.",
+      "subtitle": "Our approach",
+      "sideImage": "/bg1.jpg",
+      "sideImageTitle": "About page team image",
+      "philosophyTitle": "Clear thinking, careful execution.",
+      "philosophyDesc": "We start by understanding the business, the audience, and the decisions visitors need to make. Then we shape pages around strong messaging, useful sections, and simple editing workflows."
+    },
     "Testimonial": {
       "pretitle": "Our clients",
       "title": "Trusted by people who care about results.",

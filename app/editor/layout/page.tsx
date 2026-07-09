@@ -1,16 +1,18 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   buildSelectedConfig,
   createAddableSection,
+  createAboutPageSection,
   getTemplateVariables,
 } from "./src/data/templateFlow";
 import { sectionRegistry } from "./src/lib/sectionRegistry";
 
 import EditableSection from "./src/components/builder/EditableSection";
 import EditSectionModal from "./src/components/builder/EditSectionModal";
+import { usePreview } from "./src/components/context/PreviewContext";
 
 import { SectionData, SectionItem } from "./src/types/section";
 
@@ -24,6 +26,33 @@ const lockedSectionTypes = new Set(["Topbar", "Header", "Footer"]);
 
 const isLockedSection = (section?: SectionItem) =>
   Boolean(section && lockedSectionTypes.has(section.type));
+
+const addAboutPageSection = (sections: SectionItem[], category: string) => {
+  if (sections.some((section) => section.id === "AboutPage")) return sections;
+
+  const aboutPageSection = createAboutPageSection(category);
+  const footerIndex = sections.findIndex((section) => section.type === "Footer");
+
+  if (footerIndex === -1) return [...sections, aboutPageSection];
+
+  return [
+    ...sections.slice(0, footerIndex),
+    aboutPageSection,
+    ...sections.slice(footerIndex),
+  ];
+};
+
+const areMenusEqual = (
+  currentMenu: { label: string; href: string; children?: { label: string; href: string }[] }[] = [],
+  nextMenu: { label: string; href: string; children?: { label: string; href: string }[] }[],
+): boolean =>
+  currentMenu.length === nextMenu.length &&
+  currentMenu.every(
+    (item, index) =>
+      item.label === nextMenu[index]?.label &&
+      item.href === nextMenu[index]?.href &&
+      areMenusEqual(item.children, nextMenu[index]?.children ?? []),
+  );
 
 const replaceFirstTextValue = (
   value: unknown,
@@ -149,8 +178,10 @@ export default function Page() {
 
 function EditorLayoutPage() {
   const searchParams = useSearchParams();
+  const { currentPage, pageLinks } = usePreview();
   const templateId = searchParams.get("templateId") ?? "template-1";
   const category = searchParams.get("category") ?? "Realestate";
+  const page = currentPage || searchParams.get("page") || "home";
   const initialConfig = buildSelectedConfig(templateId, category);
   const templateVariables = getTemplateVariables(initialConfig.templateId);
 
@@ -160,6 +191,8 @@ function EditorLayoutPage() {
       initialSections={initialConfig.sections}
       templateVariables={templateVariables}
       category={category}
+      page={page}
+      pageLinks={pageLinks}
     />
   );
 }
@@ -168,16 +201,27 @@ function EditorPage({
   initialSections,
   templateVariables,
   category,
+  page,
+  pageLinks,
 }: {
   initialSections: SectionItem[];
   templateVariables: Record<string, string>;
   category: string;
+  page: string;
+  pageLinks: {
+    label: string;
+    href: string;
+    children?: { label: string; href: string }[];
+  }[];
 }) {
   const [sections, setSections] = useState<SectionItem[]>(() =>
-    initialSections.map((section) => ({
-      ...section,
-      id: section.id ?? section.type,
-    })),
+    addAboutPageSection(
+      initialSections.map((section) => ({
+        ...section,
+        id: section.id ?? section.type,
+      })),
+      category,
+    ),
   );
 
   const [editingSection, setEditingSection] = useState<string | null>(null);
@@ -293,17 +337,21 @@ function EditorPage({
   const addSectionAfter = (afterSectionId: string, sectionType: string) => {
     const nextSection = createAddableSection(sectionType, category);
     if (!nextSection) return;
+    const isAboutEditor = page.toLowerCase() === "about";
+    const scopedNextSection = isAboutEditor
+      ? { ...nextSection, page: "about" }
+      : nextSection;
 
     setSections((prevSections) => {
       const targetIndex = prevSections.findIndex(
         (section) => (section.id ?? section.type) === afterSectionId,
       );
 
-      if (targetIndex === -1) return [...prevSections, nextSection];
+      if (targetIndex === -1) return [...prevSections, scopedNextSection];
 
       return [
         ...prevSections.slice(0, targetIndex + 1),
-        nextSection,
+        scopedNextSection,
         ...prevSections.slice(targetIndex + 1),
       ];
     });
@@ -340,22 +388,56 @@ function EditorPage({
     setEditingSection(null);
     setSavedToastSection(sectionType);
   };
-  const editingSectionItem = sections.find(
+  const syncedSections = useMemo(
+    () =>
+      sections.map((section) => {
+        if (section.type !== "Header") return section;
+
+        const activeVariant = section.variant;
+        const activeData = section.data[activeVariant];
+
+        if (!activeData || areMenusEqual(activeData.menu, pageLinks)) {
+          return section;
+        }
+
+        return {
+          ...section,
+          data: {
+            ...section.data,
+            [activeVariant]: {
+              ...activeData,
+              menu: pageLinks,
+            },
+          },
+        };
+      }),
+    [pageLinks, sections],
+  );
+  const editingSectionItem = syncedSections.find(
     (section) => (section.id ?? section.type) === editingSection,
   );
+  const isAboutPage = page.toLowerCase() === "about";
+  const visibleSections = isAboutPage
+    ? syncedSections.filter(
+        (section) =>
+          ["Topbar", "Header", "Footer"].includes(section.type) ||
+          section.id === "AboutPage" ||
+          section.page === "about",
+      )
+    : syncedSections.filter((section) => section.page !== "about");
 
   return (
     <main
       className="w-full max-w-full overflow-x-hidden [overflow-wrap:anywhere]"
       style={templateVariables as React.CSSProperties}
     >
-      {sections.map((section) => {
+      {visibleSections.map((section) => {
         const sectionId = section.id ?? section.type;
-        const sectionIndex = sections.findIndex(
+        const sectionIndex = visibleSections.findIndex(
           (item) => (item.id ?? item.type) === sectionId,
         );
-        const previousSection = sections[sectionIndex - 1];
-        const nextSection = sections[sectionIndex + 1];
+        const previousSection = visibleSections[sectionIndex - 1];
+        const nextSection = visibleSections[sectionIndex + 1];
         const canMoveUp =
           Boolean(previousSection) &&
           !isLockedSection(section) &&
@@ -410,7 +492,7 @@ function EditorPage({
           key={editingSectionItem.id ?? editingSectionItem.type}
           sectionId={editingSectionItem.id ?? editingSectionItem.type}
           sectionType={editingSectionItem.type}
-          sections={sections}
+          sections={syncedSections}
           onClose={() => setEditingSection(null)}
           onSave={handleSectionSave}
           onSelectVariant={updateSectionVariant}

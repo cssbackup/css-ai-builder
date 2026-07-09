@@ -19,7 +19,7 @@ export default function AboutTwo({ data = {}, blocks }: SectionProps) {
     <section className="w-full bg-white px-4 py-10 md:px-10 lg:px-16">
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_1.6fr_1fr] lg:items-end">
         {/* Left Content */}
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-4">
           <div>
             <BlockRenderer
               block={getTextBlockByRole(resolvedBlocks, "pretitle")}
@@ -28,7 +28,7 @@ export default function AboutTwo({ data = {}, blocks }: SectionProps) {
 
             <BlockRenderer
               block={getTextBlockByRole(resolvedBlocks, "heading")}
-              className="text-5xl font-black uppercase leading-[0.9] tracking-tight text-black sm:text-7xl lg:text-9xl"
+              className="text-5xl font-black uppercase leading-[1] tracking-light text-black sm:text-7xl lg:text-4xl"
             />
           </div>
 

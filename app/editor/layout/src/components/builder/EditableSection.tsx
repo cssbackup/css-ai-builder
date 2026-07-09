@@ -263,11 +263,11 @@ export default function EditableSection({
           className="pointer-events-none absolute inset-0 z-40 hidden group-hover:block"
         >
           <div
-            className="absolute left-0 right-0 flex -translate-y-1/2 justify-center py-3"
+            className="absolute left-0 right-0 flex -translate-y-1/2 justify-center py-0 "
             style={{ top: toolbarY }}
           >
             <div
-              className="pointer-events-auto flex h-10 w-[min(400px,calc(100%-24px))] items-center justify-center gap-3 rounded-full border border-slate-300 bg-white px-3 py-1 shadow-lg"
+              className="pointer-events-auto flex h-10  items-center justify-center gap-3 rounded-full border border-slate-300 bg-white px-3 py-1 shadow-lg"
               style={{ maxWidth: TOOLBAR_WIDTH }}
             >
               <span className="min-w-0 flex-1 truncate text-sm font-medium text-gray-900">
@@ -283,30 +283,6 @@ export default function EditableSection({
                 Edit
               </button>
 
-              {canMoveUp && (
-                <button
-                  type="button"
-                  aria-label={`Move ${sectionName} up`}
-                  title={`Move ${sectionName} up`}
-                  onClick={onMoveUp}
-                  className="flex h-7 w-11 shrink-0 items-center justify-center rounded-full border border-gray-400 bg-gray-100 text-xs font-medium text-slate-700 hover:bg-slate-100"
-                >
-                  <Play size={15} className="rotate-150" />
-                </button>
-              )}
-
-              {canMoveDown && (
-                <button
-                  type="button"
-                  aria-label={`Move ${sectionName} down`}
-                  title={`Move ${sectionName} down`}
-                  onClick={onMoveDown}
-                  className="flex h-7 w-11 shrink-0 items-center justify-center rounded-full border border-gray-400 bg-gray-100 text-xs font-medium text-slate-700 hover:bg-slate-100"
-                >
-                  <Play size={15} className="rotate-90" />
-                </button>
-              )}
-
               <button
                 type="button"
                 onClick={() => setShowDeleteConfirm(true)}
@@ -321,19 +297,44 @@ export default function EditableSection({
       )}
 
       {!isPreview && canShowSectionAddButton && (
-        <button
-          type="button"
-          aria-label={`Add component after ${sectionName}`}
-          data-editor-toolbar
-          onClick={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            setShowAddPopup(true);
-          }}
-          className="absolute bottom-3 left-1/2 z-[999] flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border border-slate-600 bg-white text-slate-900 opacity-0 shadow-lg transition hover:scale-105 hover:bg-slate-100 group-hover:opacity-100"
-        >
-          <Plus size={18} />
-        </button>
+        <div className="absolute bottom-3 left-1/2 z-[999] flex h-14 px-6 rounded-full gap-3 -translate-x-1/2 items-center justify-center bg-gray-100 border border-gray-500  opacity-0 group-hover:opacity-100">
+          <button
+            type="button"
+            aria-label={`Add component after ${sectionName}`}
+            data-editor-toolbar
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              setShowAddPopup(true);
+            }}
+            className="h-10 w-10 rounded-full flex justify-center items-center border border-slate-600 bg-white text-slate-900 shadow-lg transition hover:scale-105 hover:bg-slate-100"
+          >
+            <Plus size={18} />
+          </button>
+          {canMoveUp && (
+            <button
+              type="button"
+              aria-label={`Move ${sectionName} up`}
+              title={`Move ${sectionName} up`}
+              onClick={onMoveUp}
+              className="flex h-7 w-11 shrink-0 items-center justify-center rounded-full border border-gray-400 bg-gray-100 text-xs font-medium text-slate-700 hover:bg-slate-100"
+            >
+              <Play size={15} className="rotate-150" />
+            </button>
+          )}
+
+          {canMoveDown && (
+            <button
+              type="button"
+              aria-label={`Move ${sectionName} down`}
+              title={`Move ${sectionName} down`}
+              onClick={onMoveDown}
+              className="flex h-7 w-11 shrink-0 items-center justify-center rounded-full border border-gray-400 bg-gray-100 text-xs font-medium text-slate-700 hover:bg-slate-100"
+            >
+              <Play size={15} className="rotate-90" />
+            </button>
+          )}
+        </div>
       )}
 
       {showDeleteConfirm &&
