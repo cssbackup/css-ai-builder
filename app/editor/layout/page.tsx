@@ -2,10 +2,14 @@
 
 import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { ArrowUp, MessageCircle, Phone } from "lucide-react";
 import {
   buildSelectedConfig,
   createAddableSection,
   createAboutPageSection,
+  createContactPageSection,
+  createGalleryPageSection,
+  createServicePageSection,
   getTemplateVariables,
 } from "./src/data/templateFlow";
 import { sectionRegistry } from "./src/lib/sectionRegistry";
@@ -39,6 +43,52 @@ const addAboutPageSection = (sections: SectionItem[], category: string) => {
     ...sections.slice(0, footerIndex),
     aboutPageSection,
     ...sections.slice(footerIndex),
+  ];
+};
+
+const addGalleryPageSection = (sections: SectionItem[], category: string) => {
+  if (sections.some((section) => section.id === "GalleryPage")) return sections;
+
+  const galleryPageSection = createGalleryPageSection(category);
+  const footerIndex = sections.findIndex((section) => section.type === "Footer");
+
+  if (footerIndex === -1) return [...sections, galleryPageSection];
+
+  return [
+    ...sections.slice(0, footerIndex),
+    galleryPageSection,
+    ...sections.slice(footerIndex),
+  ];
+};
+
+const addContactPageSection = (sections: SectionItem[], category: string) => {
+  if (sections.some((section) => section.id === "ContactPage")) return sections;
+
+  const contactPageSection = createContactPageSection(category);
+  const footerIndex = sections.findIndex((section) => section.type === "Footer");
+
+  if (footerIndex === -1) return [...sections, contactPageSection];
+
+  return [
+    ...sections.slice(0, footerIndex),
+    contactPageSection,
+    ...sections.slice(footerIndex),
+  ];
+};
+
+const addServicePageSection = (sections: SectionItem[], category: string) => {
+  if (sections.some((section) => section.id === "ServicePage")) return sections;
+
+  const servicePageSection = createServicePageSection(category);
+  const galleryIndex = sections.findIndex((section) => section.id === "GalleryPage");
+  const footerIndex = sections.findIndex((section) => section.type === "Footer");
+  const insertIndex =
+    galleryIndex !== -1 ? galleryIndex : footerIndex === -1 ? sections.length : footerIndex;
+
+  return [
+    ...sections.slice(0, insertIndex),
+    servicePageSection,
+    ...sections.slice(insertIndex),
   ];
 };
 
@@ -178,12 +228,40 @@ export default function Page() {
 
 function EditorLayoutPage() {
   const searchParams = useSearchParams();
-  const { currentPage, pageLinks } = usePreview();
+  const { currentPage, pageLinks, setCurrentPage, setPageLinks } = usePreview();
   const templateId = searchParams.get("templateId") ?? "template-1";
   const category = searchParams.get("category") ?? "Realestate";
   const page = currentPage || searchParams.get("page") || "home";
-  const initialConfig = buildSelectedConfig(templateId, category);
+  const initialConfig = useMemo(
+    () => buildSelectedConfig(templateId, category),
+    [templateId, category],
+  );
   const templateVariables = getTemplateVariables(initialConfig.templateId);
+
+  useEffect(() => {
+    setCurrentPage("Home");
+  }, [category, setCurrentPage, templateId]);
+
+  useEffect(() => {
+    const headerSection = initialConfig.sections.find(
+      (section) => section.type === "Header",
+    );
+    const headerData = headerSection?.data?.[headerSection.variant];
+    const categoryPageLinks = headerData?.menu;
+
+    if (!Array.isArray(categoryPageLinks) || !categoryPageLinks.length) return;
+
+    const currentLinksStartWithCategoryLinks = categoryPageLinks.every(
+      (item, index) =>
+        item.label === pageLinks[index]?.label &&
+        item.href === pageLinks[index]?.href &&
+        areMenusEqual(item.children ?? [], pageLinks[index]?.children ?? []),
+    );
+
+    if (!currentLinksStartWithCategoryLinks) {
+      setPageLinks(categoryPageLinks);
+    }
+  }, [initialConfig.sections, pageLinks, setPageLinks]);
 
   return (
     <EditorPage
@@ -215,17 +293,29 @@ function EditorPage({
   }[];
 }) {
   const [sections, setSections] = useState<SectionItem[]>(() =>
-    addAboutPageSection(
-      initialSections.map((section) => ({
-        ...section,
-        id: section.id ?? section.type,
-      })),
+    addContactPageSection(
+      addGalleryPageSection(
+        addServicePageSection(
+          addAboutPageSection(
+            initialSections.map((section) => ({
+              ...section,
+              id: section.id ?? section.type,
+            })),
+            category,
+          ),
+          category,
+        ),
+        category,
+      ),
       category,
     ),
   );
 
   const [editingSection, setEditingSection] = useState<string | null>(null);
   const [savedToastSection, setSavedToastSection] = useState<string | null>(
+    null,
+  );
+  const [inlineUpdateToast, setInlineUpdateToast] = useState<string | null>(
     null,
   );
 
@@ -238,6 +328,16 @@ function EditorPage({
 
     return () => window.clearTimeout(timeout);
   }, [savedToastSection]);
+
+  useEffect(() => {
+    if (!inlineUpdateToast) return;
+
+    const timeout = window.setTimeout(() => {
+      setInlineUpdateToast(null);
+    }, 2400);
+
+    return () => window.clearTimeout(timeout);
+  }, [inlineUpdateToast]);
 
   const updateSectionVariant = (sectionId: string, variant: string) => {
     setSections((prev) =>
@@ -265,6 +365,7 @@ function EditorPage({
   const updateInlineText = (
     sectionId: string,
     variant: string,
+    sectionType: string,
     oldText: string,
     newText: string,
   ) => {
@@ -288,11 +389,13 @@ function EditorPage({
         };
       }),
     );
+    setInlineUpdateToast(`${formatSectionName(sectionType)} Content - Updated`);
   };
 
   const updateInlineMedia = (
     sectionId: string,
     variant: string,
+    sectionType: string,
     oldSrc: string,
     newSrc: string,
     mediaType: "image" | "video",
@@ -323,6 +426,11 @@ function EditorPage({
           },
         };
       }),
+    );
+    setInlineUpdateToast(
+      `${formatSectionName(sectionType)} ${
+        mediaType === "video" ? "Video" : "Image"
+      } - Updated`,
     );
   };
 
@@ -416,19 +524,44 @@ function EditorPage({
   const editingSectionItem = syncedSections.find(
     (section) => (section.id ?? section.type) === editingSection,
   );
-  const isAboutPage = page.toLowerCase() === "about";
-  const visibleSections = isAboutPage
-    ? syncedSections.filter(
-        (section) =>
-          ["Topbar", "Header", "Footer"].includes(section.type) ||
-          section.id === "AboutPage" ||
-          section.page === "about",
-      )
-    : syncedSections.filter((section) => section.page !== "about");
+  const footerSection = syncedSections.find(
+    (section) => section.type === "Footer",
+  );
+  const footerVariantData = footerSection
+    ? footerSection.data?.[footerSection.variant] ??
+      footerSection.data?.["Footer-1"]
+    : undefined;
+  const footerData = isRecord(footerVariantData)
+    ? (footerVariantData as SectionData)
+    : undefined;
+  const whatsappLink = footerData?.whatsappLink;
+  const callLink = footerData?.callLink;
+  const currentPageSlug = page.trim().toLowerCase();
+  const pageShellSectionTypes = ["Topbar", "Header", "Footer"];
+  const visibleSections =
+    currentPageSlug && currentPageSlug !== "home"
+      ? syncedSections.filter(
+          (section) =>
+            pageShellSectionTypes.includes(section.type) ||
+            section.page?.toLowerCase() === currentPageSlug,
+        )
+      : syncedSections.filter((section) => !section.page);
+  const scrollToTopbar = () => {
+    const scrollContainer = document.querySelector<HTMLElement>(
+      "[data-template-scroll]",
+    );
+
+    if (scrollContainer) {
+      scrollContainer.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <main
-      className="w-full max-w-full overflow-x-hidden [overflow-wrap:anywhere]"
+      className="editor-smooth-surface w-full max-w-full overflow-x-hidden [overflow-wrap:anywhere]"
       style={templateVariables as React.CSSProperties}
     >
       {visibleSections.map((section) => {
@@ -469,12 +602,19 @@ function EditorPage({
             onMoveUp={() => moveSection(sectionId, -1)}
             onMoveDown={() => moveSection(sectionId, 1)}
             onInlineTextEdit={(oldText, newText) =>
-              updateInlineText(sectionId, section.variant, oldText, newText)
+              updateInlineText(
+                sectionId,
+                section.variant,
+                section.type,
+                oldText,
+                newText,
+              )
             }
             onInlineMediaEdit={(oldSrc, newSrc, mediaType, fileName) =>
               updateInlineMedia(
                 sectionId,
                 section.variant,
+                section.type,
                 oldSrc,
                 newSrc,
                 mediaType,
@@ -510,6 +650,52 @@ function EditorPage({
           {formatSectionName(savedToastSection)} changes saved
         </div>
       )}
+
+      {inlineUpdateToast && (
+        <div
+          key={inlineUpdateToast}
+          className="fixed right-4 top-4 z-[10003] rounded-lg border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-700 shadow-[0_12px_35px_rgba(15,23,42,0.16)]"
+          role="status"
+          aria-live="polite"
+        >
+          {inlineUpdateToast}
+        </div>
+      )}
+
+      {(whatsappLink || callLink) && (
+        <div className="fixed bottom-5 left-5 z-[9000] flex flex-col gap-3 md:left-[var(--template-floating-left,1.25rem)]">
+          {whatsappLink && (
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noreferrer"
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500 text-white shadow-[0_12px_32px_rgba(16,185,129,0.32)] transition-all duration-300 hover:-translate-y-1 hover:bg-emerald-600"
+              aria-label="Open WhatsApp"
+            >
+              <MessageCircle size={22} />
+            </a>
+          )}
+
+          {callLink && (
+            <a
+              href={callLink}
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white shadow-[0_12px_32px_rgba(37,99,235,0.32)] transition-all duration-300 hover:-translate-y-1 hover:bg-blue-700"
+              aria-label="Call now"
+            >
+              <Phone size={21} />
+            </a>
+          )}
+        </div>
+      )}
+
+      <button
+        type="button"
+        onClick={scrollToTopbar}
+        className="fixed bottom-5 right-5 z-[9000] flex h-12 w-12 items-center justify-center rounded-full bg-slate-950 text-white shadow-[0_12px_32px_rgba(15,23,42,0.28)] transition-all duration-300 hover:-translate-y-1 hover:bg-slate-800"
+        aria-label="Scroll to topbar"
+      >
+        <ArrowUp size={22} />
+      </button>
     </main>
   );
 }

@@ -36,28 +36,8 @@ export default function ProductOne({ data = {}, blocks }: SectionProps) {
   const resolvedBlocks = resolveSectionBlocks({ blocks, data });
   const cardBlocks = getBlocksByType(resolvedBlocks, "card");
   const [activeIndex, setActiveIndex] = useState(0);
-  const slides = cardBlocks.length
-    ? cardBlocks
-    : fallbackSlides.map((slide, index) => ({
-        id: `fallback-slide-${index + 1}`,
-        type: "card" as const,
-        title: slide.productTitle,
-        category: slide.productSubtitle,
-        desc: slide.productInfoDesc,
-        image: slide.image,
-        alt: slide.alt,
-        blocks: slide.button
-          ? [
-              {
-                id: `fallback-slide-button-${index + 1}`,
-                type: "button" as const,
-                label: slide.button.label,
-                href: slide.button.href,
-                variant: slide.button.variant,
-              },
-            ]
-          : [],
-      }));
+  const slides = cardBlocks;
+  void fallbackSlides;
   const activeSlide = slides[activeIndex] ?? slides[0];
   const slideButton = activeSlide?.blocks?.find((block) => block.type === "button");
 
@@ -68,6 +48,8 @@ export default function ProductOne({ data = {}, blocks }: SectionProps) {
   const prevImage = () => {
     setActiveIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
+
+  if (!activeSlide) return null;
 
   return (
     <section className="w-full bg-white">
@@ -120,16 +102,18 @@ export default function ProductOne({ data = {}, blocks }: SectionProps) {
             <div className="relative h-[240px] w-full max-w-[420px] sm:h-[300px] md:h-[360px]">
               <div className="absolute bottom-2 left-1/2 h-12 w-[80%] -translate-x-1/2 rounded-full bg-slate-500/90 blur-2xl" />
 
-              <Image
-                src={activeSlide.image ?? "/55.jpg"}
-                alt={activeSlide.alt ?? activeSlide.title ?? "Product"}
-                data-editor-media
-                data-editor-media-type="image"
-                data-editor-media-src={activeSlide.image ?? "/55.jpg"}
-                fill
-                className="object-contain drop-shadow-[0_28px_24px_rgba(15,23,42,0.18)]"
-                priority
-              />
+              {activeSlide.image && (
+                <Image
+                  src={activeSlide.image}
+                  alt={activeSlide.alt ?? activeSlide.title ?? ""}
+                  data-editor-media
+                  data-editor-media-type="image"
+                  data-editor-media-src={activeSlide.image}
+                  fill
+                  className="object-contain drop-shadow-[0_28px_24px_rgba(15,23,42,0.18)]"
+                  priority
+                />
+              )}
             </div>
 
             <div className="mt-6 flex items-center gap-4">

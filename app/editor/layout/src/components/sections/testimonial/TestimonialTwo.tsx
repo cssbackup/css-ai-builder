@@ -23,13 +23,13 @@ const fallbackItems: TestimonialItemData[] = [
 ];
 
 const getItems = (data: SectionProps["data"]) =>
-  data?.testimonialItems?.length ? data.testimonialItems : fallbackItems;
+  data?.testimonialItems ?? [];
+void fallbackItems;
 const getRating = (rating?: string) =>
   Math.max(0, Math.min(5, Math.round(Number(rating) || 0)));
 
 export default function TestimonialTwo({ data = {} }: SectionProps) {
   const items = getItems(data);
-  const featured = items[0] ?? fallbackItems[0];
   const scrollerRef = useRef<HTMLDivElement>(null);
   const scrollClients = (direction: -1 | 1) => {
     scrollerRef.current?.scrollBy({
@@ -49,10 +49,10 @@ export default function TestimonialTwo({ data = {} }: SectionProps) {
       <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-10">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.18em] text-cyan-300">
-            {data.pretitle ?? "Our clients"}
+            {data.pretitle}
           </p>
-          <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">{data.title ?? "Trusted by teams who move fast."}</h2>
-          <p className="mt-4 text-slate-300">{data.desc ?? "Real feedback from people using these pages to grow their work."}</p>
+          {data.title && <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">{data.title}</h2>}
+          {data.desc && <p className="mt-4 text-slate-300">{data.desc}</p>}
           <div className="mt-6 flex gap-2">
             <button
               type="button"
@@ -80,7 +80,7 @@ export default function TestimonialTwo({ data = {} }: SectionProps) {
                   <Star
                     key={index}
                     size={16}
-                    fill={index < getRating(item.rating ?? featured.rating) ? "currentColor" : "none"}
+                    fill={index < getRating(item.rating) ? "currentColor" : "none"}
                   />
                 ))}
               </div>
@@ -89,7 +89,7 @@ export default function TestimonialTwo({ data = {} }: SectionProps) {
               </p>
               <div className="mt-8 flex items-center gap-4">
                 <div className="relative h-14 w-14 overflow-hidden rounded-full bg-slate-100">
-                  <Image src={item.image ?? "/bg1.jpg"} alt={item.name} data-editor-media data-editor-media-type="image" data-editor-media-src={item.image ?? "/bg1.jpg"} fill className="object-cover" />
+                  {item.image && <Image src={item.image} alt={item.name} data-editor-media data-editor-media-type="image" data-editor-media-src={item.image} fill className="object-cover" />}
                 </div>
                 <div>
                   <h3 className="font-bold">{item.name}</h3>

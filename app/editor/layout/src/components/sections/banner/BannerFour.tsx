@@ -2,28 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { BannerSlideData, SectionProps } from "./../../../types/section";
-
-const fallbackSlides: BannerSlideData[] = [
-  {
-    image: "/bg1.jpg",
-    video: "/video.mp4",
-    alt: "Video banner slide",
-    title: "Video stories that move",
-    desc: "Use video backgrounds with editable slide text and buttons.",
-    button: {
-      label: "Watch now",
-      href: "#",
-      variant: "primary",
-    },
-  },
-];
+import { SectionProps } from "./../../../types/section";
 
 export default function BannerFour({ data = {} }: SectionProps) {
-  const slides = (data.bannerSlides?.length
-    ? data.bannerSlides
-    : fallbackSlides
-  ).filter((slide) => slide.video || slide.image);
+  const slides = (data.bannerSlides ?? []).filter(
+    (slide) => slide.video || slide.image,
+  );
   const [activeIndex, setActiveIndex] = useState(0);
   const bannerHeight = data.bannerHeight ?? 70;
   const safeActiveIndex = slides.length ? activeIndex % slides.length : 0;
@@ -74,7 +58,11 @@ export default function BannerFour({ data = {} }: SectionProps) {
           data-editor-media-type="image"
           data-editor-media-src={activeSlide.image}
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${activeSlide.image})` }}
+          style={{
+            backgroundImage: activeSlide.image
+              ? `url(${activeSlide.image})`
+              : undefined,
+          }}
         />
       )}
 
@@ -82,9 +70,11 @@ export default function BannerFour({ data = {} }: SectionProps) {
 
       <div className="relative z-10 flex h-full items-center px-5 py-12 sm:px-6 md:px-12">
         <div className="max-w-2xl space-y-4 text-white">
-          <h1 className="text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl">
-            {activeSlide.title}
-          </h1>
+          {activeSlide.title && (
+            <h1 className="text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl">
+              {activeSlide.title}
+            </h1>
+          )}
           {activeSlide.desc && (
             <p className="max-w-xl text-sm leading-relaxed text-white/85 sm:text-base md:text-lg">
               {activeSlide.desc}

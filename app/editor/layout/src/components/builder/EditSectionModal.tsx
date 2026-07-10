@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, type ChangeEvent, type MouseEvent } from "react";
-import { ChevronLeft, ChevronRight, Menu, Plus, Trash, X } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Menu, Plus, Trash, X } from "lucide-react";
 import { agrandirBolt, generalSansMedium } from "@/app/fonts";
 import {
   BannerSlideData,
@@ -21,6 +21,7 @@ type MenuItem = {
 
 type SectionItem = {
   id?: string;
+  page?: string;
   type: string;
   variant: string;
   data: Record<string, SectionData>;
@@ -69,6 +70,15 @@ const aboutPageLayouts = [
   { id: "AboutPage-1", name: "About Page" },
   { id: "AboutPage-2", name: "About Page Two" },
   { id: "AboutPage-3", name: "About Page Three" },
+];
+
+const galleryPageLayouts = [{ id: "GalleryPage-1", name: "Gallery Page" }];
+
+const servicePageLayouts = [{ id: "ServicePage-1", name: "Service Page" }];
+
+const contactPageLayouts = [
+  { id: "ContactPage-1", name: "Contact Page" },
+  { id: "ContactPage-2", name: "Contact Page Two" },
 ];
 
 const productLayouts = [
@@ -121,12 +131,21 @@ const layoutsBySection: Record<string, { id: string; name: string }[]> = {
   ],
 };
 
+const pageLayoutsBySection: Record<string, { id: string; name: string }[]> = {
+  About: aboutPageLayouts,
+  Service: servicePageLayouts,
+  Gallery: galleryPageLayouts,
+  Contact: contactPageLayouts,
+};
+
 const MAX_MENU_LINKS = 7;
 const MAX_TOPBAR_SOCIAL_LINKS = 4;
 const MAX_HEADER_BUTTONS = 3;
 const MAX_BANNER_BUTTONS = 3;
 const MAX_FORM_FIELDS = 5;
 const MAX_LINK_TEXT_LENGTH = 20;
+const DEFAULT_WHATSAPP_LINK = "https://api.whatsapp.com/send?phone=962786336414";
+const DEFAULT_CALL_LINK = "tel:+919876543210";
 
 const toPageLinks = (menu: MenuItem[]): PageLink[] =>
   menu.slice(0, MAX_MENU_LINKS).map((item) => ({
@@ -176,13 +195,15 @@ const sidebarItemsBySection: Record<string, string[]> = {
   Header: ["Header Content", "Header Layout", "Navigation Menu"],
   Banner: ["Banner Content", "Banner Layout"],
   About: ["About Content", "About Layout"],
+  Service: ["Service Content", "Service Layout"],
   Product: ["Product Content", "Product Layout"],
   WhyChooseUs: ["WhyChooseUs Content", "WhyChooseUs Layout"],
   Gallery: ["Gallery Content", "Gallery Layout"],
+  Contact: ["Contact Content", "Contact Layout"],
   FAQ: ["FAQ Content", "FAQ Layout"],
   Testimonial: ["Our Clients Content", "Our Clients Layout"],
   FormDetail: ["Form Content", "Form Layout"],
-  Footer: ["Footer Layout"],
+  Footer: ["Footer Layout", "External Link"],
 };
 
 const normalizeSectionType = (sectionType: string) => {
@@ -285,6 +306,36 @@ const getVisibleSocialLinks = (
   socialLinks: { label: SocialLinkData["label"]; href: string }[] = [],
 ) => socialLinks.slice(0, MAX_TOPBAR_SOCIAL_LINKS);
 
+const SelectedLayoutBadge = ({ active }: { active: boolean }) =>
+  active ? (
+    <span className="absolute right-3 top-3 z-20 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-emerald-500 text-white shadow-lg">
+      <Check size={16} strokeWidth={3} />
+    </span>
+  ) : null;
+
+const MediaUploadPreview = ({
+  src,
+  type,
+}: {
+  src: string;
+  type: "image" | "video";
+}) => (
+  <div className="h-20 w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-100 sm:w-32">
+    {src ? (
+      type === "image" ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={src} alt="" className="h-full w-full object-cover" />
+      ) : (
+        <video src={src} className="h-full w-full object-cover" muted playsInline />
+      )
+    ) : (
+      <div className="flex h-full items-center justify-center text-xs font-semibold text-slate-400">
+        No {type}
+      </div>
+    )}
+  </div>
+);
+
 export default function EditSectionModal({
   sectionId,
   sectionType,
@@ -311,6 +362,7 @@ export default function EditSectionModal({
   const [bannerGenerationType, setBannerGenerationType] = useState<
     "image" | "video" | null
   >(null);
+  const [layoutGenerationActive, setLayoutGenerationActive] = useState(false);
   const bannerImageInputRef = useRef<HTMLInputElement>(null);
   const bannerVideoInputRef = useRef<HTMLInputElement>(null);
   const activeSectionType = normalizeSectionType(sectionType);
@@ -319,10 +371,7 @@ export default function EditSectionModal({
     (item) => (item.id ?? item.type) === sectionId,
   );
   const activeSectionKey = currentSection?.id ?? currentSection?.type ?? sectionId;
-  const isAboutPageSection =
-    activeSectionType === "About" &&
-    (activeSectionKey === "AboutPage" ||
-      currentSection?.variant?.startsWith("AboutPage-"));
+  const isPageSection = Boolean(currentSection?.page);
   const activeVariant = currentSection?.data?.[currentSection.variant]
     ? currentSection.variant
     : currentSection?.variant?.startsWith(`${activeSectionType}-`)
@@ -450,6 +499,8 @@ export default function EditSectionModal({
         footerBackgroundColor?: string;
         footerGradientColor?: string;
         footerTextColor?: string;
+        whatsappLink?: string;
+        callLink?: string;
       }
     | undefined;
   const footerBackgroundType =
@@ -469,7 +520,11 @@ export default function EditSectionModal({
     (activeSectionType === "Topbar" && activeTab === "Topbar Layout") ||
     (activeSectionType === "Header" && activeTab === "Header Layout") ||
     (activeSectionType === "Footer" && activeTab === "Footer Layout");
-  const layoutOptions = layoutsBySection[activeSectionType] ?? [];
+  const sectionLayoutOptions = layoutsBySection[activeSectionType] ?? [];
+  const pageLayoutOptions = pageLayoutsBySection[activeSectionType] ?? [];
+  const layoutOptions = isPageSection
+    ? [...sectionLayoutOptions, ...pageLayoutOptions]
+    : sectionLayoutOptions;
   const visibleLayoutOptions =
     activeSectionType === "Gallery" && layoutOptions.length > 4
       ? Array.from(
@@ -478,9 +533,14 @@ export default function EditSectionModal({
             layoutOptions[(galleryLayoutStart + index) % layoutOptions.length],
         )
       : layoutOptions;
-  const activeAboutLayouts = isAboutPageSection
-    ? aboutPageLayouts
+  const activeAboutLayouts = isPageSection
+    ? [...aboutLayouts, ...aboutPageLayouts]
     : aboutLayouts;
+  const generationText = bannerGenerationType
+    ? `generating ${bannerGenerationType}`
+    : layoutGenerationActive
+      ? "generating layout"
+      : "";
 
   const handleModalMouseDown = (event: MouseEvent<HTMLDivElement>) => {
     if ((event.target as HTMLElement).closest("button,input,textarea,select")) {
@@ -669,7 +729,9 @@ export default function EditSectionModal({
   ) => {
     const file = event.target.files?.[0];
     if (!file) return;
+    const mediaKind = getMediaKindFromKey(String(field)) ?? "image";
 
+    showBannerGenerationLoader(mediaKind);
     readBannerBackgroundFile(file, (dataUrl) => {
       updateActiveGenericData({ [field]: dataUrl });
     });
@@ -684,7 +746,9 @@ export default function EditSectionModal({
   ) => {
     const file = event.target.files?.[0];
     if (!file) return;
+    const mediaKind = getMediaKindFromKey(itemField) ?? "image";
 
+    showBannerGenerationLoader(mediaKind);
     readBannerBackgroundFile(file, (dataUrl) => {
       updateGenericArrayItem(field, index, itemField, dataUrl);
     });
@@ -699,9 +763,15 @@ export default function EditSectionModal({
   const selectSectionVariant = (variant: string) => {
     const isAllowedVariant =
       variant.startsWith(`${activeSectionType}-`) ||
-      (isAboutPageSection && variant.startsWith("AboutPage-"));
+      (isPageSection && variant.startsWith(`${activeSectionType}Page-`));
 
     if (!isAllowedVariant) return;
+
+    setLayoutGenerationActive(true);
+    window.setTimeout(() => {
+      setLayoutGenerationActive(false);
+      onClose();
+    }, 1600);
 
     if (activeSectionType === "Banner" && currentSection) {
       const currentVariantData = currentSection.data[variant];
@@ -908,6 +978,7 @@ export default function EditSectionModal({
     const file = event.target.files?.[0];
     if (!file) return;
 
+    showBannerGenerationLoader("image");
     readBannerBackgroundFile(file, (dataUrl) => {
       updateActiveHeaderData({
         logoImage: dataUrl,
@@ -975,7 +1046,10 @@ export default function EditSectionModal({
 
   const showBannerGenerationLoader = (type: "image" | "video") => {
     setBannerGenerationType(type);
-    window.setTimeout(() => setBannerGenerationType(null), 2000);
+    window.setTimeout(() => {
+      setBannerGenerationType(null);
+      onClose();
+    }, 1800);
   };
 
   const handleBannerImageFileChange = (
@@ -1171,6 +1245,13 @@ export default function EditSectionModal({
     updateActiveFooterData({ footerTextColor: color });
   };
 
+  const updateFooterExternalLink = (
+    field: "whatsappLink" | "callLink",
+    value: string,
+  ) => {
+    updateActiveFooterData({ [field]: value });
+  };
+
   const addDropdownItem = (menuIndex: number) => {
     const currentDropdowns = menuItems[menuIndex]?.children ?? [];
 
@@ -1253,13 +1334,15 @@ export default function EditSectionModal({
 
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-[9999] flex items-end justify-center p-3"
+      className="pointer-events-none fixed inset-0 z-[9999] flex items-center justify-center p-3"
       onMouseMove={handleModalMouseMove}
       onMouseUp={handleModalMouseUp}
       onMouseLeave={handleModalMouseUp}
     >
       <div
-        className="pointer-events-auto relative mx-3 flex h-[70vh] w-full max-w-[880px] flex-col overflow-hidden rounded-3xl bg-[#f4f4f5] shadow-2xl"
+        className={`pointer-events-auto relative mx-3 h-[min(76vh,720px)] w-full max-w-[880px] flex-col overflow-hidden rounded-3xl bg-[#f4f4f5] shadow-2xl animate-editor-pop ${
+          generationText ? "hidden" : "flex"
+        }`}
         style={{
           transform: `translate(${modalPosition.x}px, ${modalPosition.y}px)`,
         }}
@@ -1567,10 +1650,11 @@ export default function EditSectionModal({
                         key={layout.id}
                         type="button"
                         onClick={() => selectSectionVariant(layout.id)}
-                        className={`w-full overflow-hidden rounded-2xl border bg-white text-left ${
+                        className={`relative w-full overflow-hidden rounded-2xl border bg-white text-left ${
                           isActive ? "border-gray-400" : "border-gray-200"
                         }`}
                       >
+                        <SelectedLayoutBadge active={isActive} />
                         <div
                           className="flex h-20 items-center justify-between px-5"
                           style={{
@@ -1861,10 +1945,11 @@ export default function EditSectionModal({
                         key={layout.id}
                         type="button"
                         onClick={() => selectSectionVariant(layout.id)}
-                        className={`w-full overflow-hidden rounded-2xl border bg-white text-left ${
+                        className={`relative w-full overflow-hidden rounded-2xl border bg-white text-left ${
                           isActive ? "border-gray-400" : "border-gray-200"
                         }`}
                       >
+                        <SelectedLayoutBadge active={isActive} />
                         <div className="h-20 bg-gray-100">
                           {layout.id === "Header-1" && (
                             <div className="h-full">
@@ -2181,26 +2266,31 @@ export default function EditSectionModal({
                             <label className="block text-sm font-semibold text-gray-900">
                               Background Image
                             </label>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                bannerImageInputRef.current?.click()
-                              }
-                              className="mt-2 flex h-11 w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-left text-sm text-gray-900 transition hover:border-blue-500 focus:border-blue-600 focus:outline-none"
-                            >
-                              <span className="font-medium">
-                                {activeBannerData?.backgroundImage
-                                  ? "Change image"
-                                  : "Upload image"}
-                              </span>
-                              <span className="max-w-[55%] truncate text-xs text-gray-500">
-                                {getMediaUploadLabel(
-                                  activeBannerData?.backgroundImage ?? "",
-                                  "image",
-                                )
+                            <div className="mt-2 grid gap-3 sm:grid-cols-[minmax(0,1fr)_8rem] sm:items-center">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  bannerImageInputRef.current?.click()
                                 }
-                              </span>
-                            </button>
+                                className="flex h-11 w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-left text-sm text-gray-900 transition hover:border-blue-500 focus:border-blue-600 focus:outline-none"
+                              >
+                                <span className="font-medium">
+                                  {activeBannerData?.backgroundImage
+                                    ? "Change image"
+                                    : "Upload image"}
+                                </span>
+                                <span className="max-w-[55%] truncate text-xs text-gray-500">
+                                  {getMediaUploadLabel(
+                                    activeBannerData?.backgroundImage ?? "",
+                                    "image",
+                                  )}
+                                </span>
+                              </button>
+                              <MediaUploadPreview
+                                src={activeBannerData?.backgroundImage ?? ""}
+                                type="image"
+                              />
+                            </div>
                           </div>
 
                           <div>
@@ -2242,24 +2332,29 @@ export default function EditSectionModal({
                               </button>
                             )}
                           </div>
-                          <button
-                            type="button"
-                            onClick={() => bannerVideoInputRef.current?.click()}
-                            className="mt-2 flex h-11 w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-left text-sm text-gray-900 transition hover:border-blue-500 focus:border-blue-600 focus:outline-none"
-                          >
-                            <span className="font-medium">
-                              {activeBannerData?.backgroundVideo
-                                ? "Change video"
-                                : "Upload video"}
-                            </span>
-                            <span className="max-w-[55%] truncate text-xs text-gray-500">
-                              {getMediaUploadLabel(
-                                activeBannerData?.backgroundVideo ?? "",
-                                "video",
-                              )
-                              }
-                            </span>
-                          </button>
+                          <div className="mt-2 grid gap-3 sm:grid-cols-[minmax(0,1fr)_8rem] sm:items-center">
+                            <button
+                              type="button"
+                              onClick={() => bannerVideoInputRef.current?.click()}
+                              className="flex h-11 w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-left text-sm text-gray-900 transition hover:border-blue-500 focus:border-blue-600 focus:outline-none"
+                            >
+                              <span className="font-medium">
+                                {activeBannerData?.backgroundVideo
+                                  ? "Change video"
+                                  : "Upload video"}
+                              </span>
+                              <span className="max-w-[55%] truncate text-xs text-gray-500">
+                                {getMediaUploadLabel(
+                                  activeBannerData?.backgroundVideo ?? "",
+                                  "video",
+                                )}
+                              </span>
+                            </button>
+                            <MediaUploadPreview
+                              src={activeBannerData?.backgroundVideo ?? ""}
+                              type="video"
+                            />
+                          </div>
                         </div>
                       )}
 
@@ -2410,10 +2505,11 @@ export default function EditSectionModal({
                         key={layout.id}
                         type="button"
                         onClick={() => selectSectionVariant(layout.id)}
-                        className={`w-full overflow-hidden rounded-2xl border bg-white text-left ${
+                        className={`relative w-full overflow-hidden rounded-2xl border bg-white text-left ${
                           isActive ? "border-gray-400" : "border-gray-200"
                         }`}
                       >
+                        <SelectedLayoutBadge active={isActive} />
                         <div className="h-28 bg-gray-100">
                           {layout.id === "Banner-1" && (
                             <div className="relative flex h-full items-center overflow-hidden bg-slate-900 px-5">
@@ -2541,10 +2637,11 @@ export default function EditSectionModal({
                       key={layout.id}
                       type="button"
                       onClick={() => selectSectionVariant(layout.id)}
-                      className={`w-full overflow-hidden rounded-2xl border bg-white text-left ${
+                      className={`relative w-full overflow-hidden rounded-2xl border bg-white text-left ${
                         isActive ? "border-gray-400" : "border-gray-200"
                       }`}
                     >
+                      <SelectedLayoutBadge active={isActive} />
                       <div className="h-32 bg-gray-100">
                         {layout.id === "AboutPage-1" && (
                           <div className="grid h-full grid-cols-[1.1fr_0.9fr] gap-3 bg-white p-4">
@@ -2643,10 +2740,11 @@ export default function EditSectionModal({
                         key={layout.id}
                         type="button"
                         onClick={() => selectSectionVariant(layout.id)}
-                        className={`w-full overflow-hidden rounded-2xl border bg-white text-left ${
+                        className={`relative w-full overflow-hidden rounded-2xl border bg-white text-left ${
                           isActive ? "border-gray-400" : "border-gray-200"
                         }`}
                       >
+                        <SelectedLayoutBadge active={isActive} />
                         <div className="h-32 bg-gray-100">
                           {layout.id === "Product-1" && (
                             <div className="grid h-full grid-cols-[1fr_1.4fr_1fr] items-center gap-3 bg-blue-50 px-5">
@@ -2709,10 +2807,11 @@ export default function EditSectionModal({
                         key={layout.id}
                         type="button"
                         onClick={() => selectSectionVariant(layout.id)}
-                        className={`w-full overflow-hidden rounded-2xl border bg-white text-left ${
+                        className={`relative w-full overflow-hidden rounded-2xl border bg-white text-left ${
                           isActive ? "border-gray-400" : "border-gray-200"
                         }`}
                       >
+                        <SelectedLayoutBadge active={isActive} />
                         <div className="grid h-32 grid-cols-[1fr_1fr] overflow-hidden bg-[#dfecea] p-3">
                           {layout.id === "FormDetail-1" ? (
                             <>
@@ -2894,9 +2993,11 @@ export default function EditSectionModal({
 
             {[
               "About",
+              "Service",
               "Product",
               "WhyChooseUs",
               "Gallery",
+              "Contact",
               "FAQ",
               "Testimonial",
             ].includes(activeSectionType) &&
@@ -2918,32 +3019,38 @@ export default function EditSectionModal({
                                 {key.replace(/([A-Z])/g, " $1")}
                               </span>
                               {mediaKind ? (
-                                <span className="flex h-11 w-full cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-900 transition hover:border-blue-500 focus-within:border-blue-600">
-                                  <span className="font-medium">
-                                    {stringValue
-                                      ? `Change ${mediaKind}`
-                                      : `Upload ${mediaKind}`}
+                                <span className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_8rem] sm:items-center">
+                                  <span className="flex h-11 w-full cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-900 transition hover:border-blue-500 focus-within:border-blue-600">
+                                    <span className="font-medium">
+                                      {stringValue
+                                        ? `Change ${mediaKind}`
+                                        : `Upload ${mediaKind}`}
+                                    </span>
+                                    <span className="max-w-[55%] truncate text-xs text-slate-500">
+                                      {getMediaUploadLabel(
+                                        stringValue,
+                                        mediaKind,
+                                      )}
+                                    </span>
+                                    <input
+                                      type="file"
+                                      accept={
+                                        mediaKind === "video"
+                                          ? "video/*"
+                                          : "image/*"
+                                      }
+                                      onChange={(event) =>
+                                        handleGenericMediaFileChange(
+                                          key as keyof SectionData,
+                                          event,
+                                        )
+                                      }
+                                      className="sr-only"
+                                    />
                                   </span>
-                                  <span className="max-w-[55%] truncate text-xs text-slate-500">
-                                    {getMediaUploadLabel(
-                                      stringValue,
-                                      mediaKind,
-                                    )}
-                                  </span>
-                                  <input
-                                    type="file"
-                                    accept={
-                                      mediaKind === "video"
-                                        ? "video/*"
-                                        : "image/*"
-                                    }
-                                    onChange={(event) =>
-                                      handleGenericMediaFileChange(
-                                        key as keyof SectionData,
-                                        event,
-                                      )
-                                    }
-                                    className="sr-only"
+                                  <MediaUploadPreview
+                                    src={stringValue}
+                                    type={mediaKind}
                                   />
                                 </span>
                               ) : String(value).length > 80 ? (
@@ -3011,34 +3118,40 @@ export default function EditSectionModal({
                                           {itemKey.replace(/([A-Z])/g, " $1")}
                                         </span>
                                         {mediaKind ? (
-                                          <span className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-900 transition hover:border-blue-500 focus-within:border-blue-600">
-                                            <span className="font-medium">
-                                              {stringValue
-                                                ? `Change ${mediaKind}`
-                                                : `Upload ${mediaKind}`}
+                                          <span className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_8rem] sm:items-center">
+                                            <span className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-900 transition hover:border-blue-500 focus-within:border-blue-600">
+                                              <span className="font-medium">
+                                                {stringValue
+                                                  ? `Change ${mediaKind}`
+                                                  : `Upload ${mediaKind}`}
+                                              </span>
+                                              <span className="max-w-[55%] truncate text-xs text-slate-500">
+                                                {getMediaUploadLabel(
+                                                  stringValue,
+                                                  mediaKind,
+                                                )}
+                                              </span>
+                                              <input
+                                                type="file"
+                                                accept={
+                                                  mediaKind === "video"
+                                                    ? "video/*"
+                                                    : "image/*"
+                                                }
+                                                onChange={(event) =>
+                                                  handleGenericArrayImageFileChange(
+                                                    key as keyof SectionData,
+                                                    itemIndex,
+                                                    itemKey,
+                                                    event,
+                                                  )
+                                                }
+                                                className="sr-only"
+                                              />
                                             </span>
-                                            <span className="max-w-[55%] truncate text-xs text-slate-500">
-                                              {getMediaUploadLabel(
-                                                stringValue,
-                                                mediaKind,
-                                              )}
-                                            </span>
-                                            <input
-                                              type="file"
-                                              accept={
-                                                mediaKind === "video"
-                                                  ? "video/*"
-                                                  : "image/*"
-                                              }
-                                              onChange={(event) =>
-                                                handleGenericArrayImageFileChange(
-                                                  key as keyof SectionData,
-                                                  itemIndex,
-                                                  itemKey,
-                                                  event,
-                                                )
-                                              }
-                                              className="sr-only"
+                                            <MediaUploadPreview
+                                              src={stringValue}
+                                              type={mediaKind}
                                             />
                                           </span>
                                         ) : (
@@ -3109,7 +3222,7 @@ export default function EditSectionModal({
                 </div>
               )}
 
-            {["WhyChooseUs", "Gallery", "FAQ", "Testimonial"].includes(activeSectionType) &&
+            {["WhyChooseUs", "Service", "Gallery", "Contact", "FAQ", "Testimonial"].includes(activeSectionType) &&
               activeTab.endsWith("Layout") && (
                 <div className="space-y-4">
                   {activeSectionType === "Gallery" && layoutOptions.length > 4 && (
@@ -3152,10 +3265,11 @@ export default function EditSectionModal({
                         key={layout.id}
                         type="button"
                         onClick={() => selectSectionVariant(layout.id)}
-                        className={`w-full overflow-hidden rounded-2xl border bg-white text-left ${
+                        className={`relative w-full overflow-hidden rounded-2xl border bg-white text-left ${
                           isActive ? "border-gray-400" : "border-gray-200"
                         }`}
                       >
+                        <SelectedLayoutBadge active={isActive} />
                         <div className="h-36 overflow-hidden bg-white">
                           {Component ? (
                             <div className="h-[520px] w-[1200px] origin-top-left scale-[0.32]">
@@ -3199,10 +3313,11 @@ export default function EditSectionModal({
                         key={layout.id}
                         type="button"
                         onClick={() => selectSectionVariant(layout.id)}
-                        className={`w-full overflow-hidden rounded-2xl border bg-white text-left ${
+                        className={`relative w-full overflow-hidden rounded-2xl border bg-white text-left ${
                           isActive ? "border-gray-400" : "border-gray-200"
                         }`}
                       >
+                        <SelectedLayoutBadge active={isActive} />
                         <div
                           className="grid h-32 grid-cols-[1.2fr_1fr_1fr_1fr] gap-4 p-4"
                           style={{
@@ -3232,6 +3347,92 @@ export default function EditSectionModal({
                       </button>
                     );
                   })}
+                </div>
+              )}
+
+            {activeSectionType === "Footer" &&
+              activeTab === "External Link" && (
+                <div className="space-y-4">
+                  <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                    <div className="flex items-center justify-between gap-3">
+                      <label className="block text-sm font-semibold text-gray-900">
+                        WhatsApp Link
+                      </label>
+                      {activeFooterData?.whatsappLink ? (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateFooterExternalLink("whatsappLink", "")
+                          }
+                          className="rounded-md border border-red-200 px-3 py-1 text-xs font-semibold text-red-600 hover:bg-red-50"
+                        >
+                          Delete
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateFooterExternalLink(
+                              "whatsappLink",
+                              DEFAULT_WHATSAPP_LINK,
+                            )
+                          }
+                          className="rounded-md border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-700 hover:bg-emerald-50"
+                        >
+                          Add
+                        </button>
+                      )}
+                    </div>
+                    <input
+                      value={activeFooterData?.whatsappLink ?? ""}
+                      onChange={(event) =>
+                        updateFooterExternalLink(
+                          "whatsappLink",
+                          event.target.value,
+                        )
+                      }
+                      className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                      placeholder="https://api.whatsapp.com/send?phone=962786336414"
+                    />
+                  </div>
+
+                  <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                    <div className="flex items-center justify-between gap-3">
+                      <label className="block text-sm font-semibold text-gray-900">
+                        Call Link
+                      </label>
+                      {activeFooterData?.callLink ? (
+                        <button
+                          type="button"
+                          onClick={() => updateFooterExternalLink("callLink", "")}
+                          className="rounded-md border border-red-200 px-3 py-1 text-xs font-semibold text-red-600 hover:bg-red-50"
+                        >
+                          Delete
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateFooterExternalLink(
+                              "callLink",
+                              DEFAULT_CALL_LINK,
+                            )
+                          }
+                          className="rounded-md border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-700 hover:bg-emerald-50"
+                        >
+                          Add
+                        </button>
+                      )}
+                    </div>
+                    <input
+                      value={activeFooterData?.callLink ?? ""}
+                      onChange={(event) =>
+                        updateFooterExternalLink("callLink", event.target.value)
+                      }
+                      className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                      placeholder="tel:+919876543210"
+                    />
+                  </div>
                 </div>
               )}
 
@@ -3404,7 +3605,7 @@ export default function EditSectionModal({
         </div>
       </div>
 
-      {bannerGenerationType && (
+      {generationText && (
         <div className="fixed inset-0 z-[10002] flex items-center justify-center bg-white/35 backdrop-blur-sm">
           <style>
             {`
@@ -3425,17 +3626,15 @@ export default function EditSectionModal({
                 AI
               </span>
               <span className="inline-flex overflow-hidden">
-                {`generating ${bannerGenerationType}`
-                  .split("")
-                  .map((char, index) => (
-                    <span
-                      key={`${char}-${index}`}
-                      className="inline-block animate-[bannerTextRoll_1.1s_ease-in-out_infinite]"
-                      style={{ animationDelay: `${index * 0.045}s` }}
-                    >
-                      {char === " " ? "\u00A0" : char}
-                    </span>
-                  ))}
+                {generationText.split("").map((char, index) => (
+                  <span
+                    key={`${char}-${index}`}
+                    className="inline-block animate-[bannerTextRoll_1.1s_ease-in-out_infinite]"
+                    style={{ animationDelay: `${index * 0.045}s` }}
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </span>
+                ))}
               </span>
             </div>
           </div>

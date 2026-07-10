@@ -169,15 +169,29 @@ export const legacyDataToBlocks = (data?: Record<string, unknown>): Block[] => {
   const logo = toStringValue(data.logo);
   if (logo) blocks.push({ id: "logo", type: "logo", text: logo, href: "/" });
 
+  const logoImage = toStringValue(data.logoImage);
+  if (logoImage) {
+    blocks.push({
+      id: "image-logo",
+      type: "image",
+      role: "logo",
+      src: logoImage,
+      alt: toStringValue(data.logoImageTitle) ?? logo ?? "",
+    });
+  }
+
   const menu = toMenuItems(data.menu);
   if (menu.length) blocks.push({ id: "menu", type: "menu", items: menu });
 
   const buttons = Array.isArray(data.buttons) ? data.buttons : [];
   buttons.filter(isRecord).forEach((button, index) => {
+    const label = toStringValue(button.label);
+    if (!label) return;
+
     blocks.push({
       id: `button-${index + 1}`,
       type: "button",
-      label: toStringValue(button.label) ?? "Button",
+      label,
       href: toStringValue(button.href) ?? "#",
       variant: button.variant === "secondary" ? "secondary" : "primary",
     });
@@ -237,7 +251,7 @@ export const legacyDataToBlocks = (data?: Record<string, unknown>): Block[] => {
                   {
                     id: `banner-slide-button-${index + 1}`,
                     type: "button",
-                    label: buttonLabel ?? "Learn more",
+                    label: buttonLabel ?? "",
                     href: buttonHref ?? "#",
                     variant: button?.variant === "secondary" ? "secondary" : "primary",
                   },
@@ -317,11 +331,14 @@ export const legacyDataToBlocks = (data?: Record<string, unknown>): Block[] => {
       ? data.socialLinks
       : [];
   footerSocialLinks.filter(isRecord).forEach((social, index) => {
+    const label = toStringValue(social.label);
+    if (!label) return;
+
     blocks.push({
       id: `social-button-${index + 1}`,
       type: "button",
       role: "social",
-      label: toStringValue(social.label) ?? "social",
+      label,
       href: toStringValue(social.href) ?? "#",
     });
   });

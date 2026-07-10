@@ -4,20 +4,14 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import type { SectionProps } from "../../../types/section";
 
-const fallbackItems = [
-  { question: "How quickly can we start?", answer: "You can start as soon as the basic details are ready." },
-  { question: "Can this content be changed?", answer: "Yes, text and media can be customized from the editor data." },
-  { question: "Does this match the selected category?", answer: "Yes, inserted sections merge with the active category JSON." },
-];
-
 export default function FaqFour({ data = {} }: SectionProps) {
-  const items = data.faqItems?.length ? data.faqItems : fallbackItems;
+  const items = data.faqItems ?? [];
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
     <section className="bg-white px-5 py-12 sm:px-6 sm:py-20">
       <div className="mx-auto max-w-5xl">
-        <h2 className="text-3xl font-semibold text-slate-950 sm:text-4xl">{data.title ?? "Questions, answered simply."}</h2>
+        {data.title && <h2 className="text-3xl font-semibold text-slate-950 sm:text-4xl">{data.title}</h2>}
         <div className="mt-8 space-y-5">
           {items.map((item, index) => {
             const isOpen = openIndex === index;

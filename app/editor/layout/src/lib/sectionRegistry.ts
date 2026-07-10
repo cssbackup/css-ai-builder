@@ -13,6 +13,7 @@ import AboutTwo from "../components/sections/about/AboutTwo";
 import AboutPage from "../components/sections/about/AboutPage";
 import AboutPageTwo from "../components/sections/about/AboutPageTwo";
 import AboutPageThree from "../components/sections/about/AboutPageThree";
+import ServicePage from "../components/sections/service/ServicePage";
 import ProductOne from "../components/sections/product/ProductOne";
 import ProductTwo from "../components/sections/product/ProductTwo";
 import ProductThree from "../components/sections/product/ProductThree";
@@ -26,6 +27,9 @@ import GalleryThree from "../components/sections/gallery/GalleryThree";
 import GalleryFour from "../components/sections/gallery/GalleryFour";
 import GalleryFive from "../components/sections/gallery/GalleryFive";
 import GallerySix from "../components/sections/gallery/GallerySix";
+import GalleryPage from "../components/sections/gallery/GalleryPage";
+import ContactPage from "../components/sections/contact/ContactPage";
+import ContactPageTwo from "../components/sections/contact/ContactPageTwo";
 import FormDetailOne from "../components/sections/formdetail/FormDetailOne";
 import FormDetailTwo from "../components/sections/formdetail/FormDetailTwo";
 import FormDetailThree from "../components/sections/formdetail/FormDetailThree";
@@ -55,6 +59,7 @@ export const sectionRegistry: Record<string, ComponentType<SectionProps>> = {
   "AboutPage-1": AboutPage,
   "AboutPage-2": AboutPageTwo,
   "AboutPage-3": AboutPageThree,
+  "ServicePage-1": ServicePage,
   "Product-1": ProductOne,
   "Product-2": ProductTwo,
   "Product-3": ProductThree,
@@ -68,6 +73,9 @@ export const sectionRegistry: Record<string, ComponentType<SectionProps>> = {
   "Gallery-4": GalleryFour,
   "Gallery-5": GalleryFive,
   "Gallery-6": GallerySix,
+  "GalleryPage-1": GalleryPage,
+  "ContactPage-1": ContactPage,
+  "ContactPage-2": ContactPageTwo,
   "FormDetail-1": FormDetailOne,
   "FormDetail-2": FormDetailTwo,
   "FormDetail-3": FormDetailThree,

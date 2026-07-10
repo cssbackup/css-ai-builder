@@ -42,7 +42,7 @@ export default function BannerOne({ data = {}, blocks }: SectionProps) {
         {backgroundMode === "image" && backgroundImage && (
           <Image
             src={backgroundImage.src}
-            alt={backgroundImage.alt ?? heading?.content ?? "Banner image"}
+            alt={backgroundImage.alt ?? heading?.content ?? ""}
             data-editor-media
             data-editor-media-type="image"
             data-editor-media-src={backgroundImage.src}

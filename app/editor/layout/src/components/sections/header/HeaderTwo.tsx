@@ -7,6 +7,18 @@ import React, { useState } from "react";
 import { SectionProps } from "./../../../types/section";
 import { getBlock, getBlocksByType, resolveSectionBlocks } from "../types/section";
 import BlockRenderer from "../blocks/BlockRenderer";
+import { useOptionalPreview } from "../../context/PreviewContext";
+
+const getPageLabelFromHref = (href: string, fallback: string) => {
+  const normalizedHref = href.trim();
+
+  if (!normalizedHref || normalizedHref === "#") return fallback;
+
+  return normalizedHref
+    .replace(/^#/, "")
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+};
 
 export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
   const resolvedBlocks = resolveSectionBlocks({ blocks, data });
@@ -22,10 +34,23 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
       : headerSolidColor;
   const headerTextColor = data.headerTextColor ?? "var(--header-text)";
   const [open, setOpen] = useState(false);
+  const preview = useOptionalPreview();
+  const handlePageClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+    label: string,
+  ) => {
+    if (!preview?.isPreview) {
+      event.preventDefault();
+      return;
+    }
+
+    preview.setCurrentPage(getPageLabelFromHref(href, label));
+  };
 
   return (
     <header
-      className="relative z-[70] flex min-h-16 w-full items-center px-4"
+      className="relative z-[70] flex min-h-16 w-full items-center px-4 shadow-sm transition-all duration-500"
       style={
         {
           background: headerBackground,
@@ -34,7 +59,10 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
       }
     >
       <div className="flex w-full items-center justify-between gap-4">
-        <Link href="/" className="relative shrink-0 text-(--header-text)">
+        <Link
+          href="/"
+          className="relative shrink-0 text-(--header-text) transition-opacity duration-300 hover:opacity-80"
+        >
           {data.logoImage ? (
             <Image
               src={data.logoImage}
@@ -56,7 +84,10 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
               <div key={item.label} className="group/item relative">
                 <Link
                   href={item.href}
-                  className="flex items-center gap-1 text-sm text-(--header-text) lg:text-base"
+                  onClick={(event) =>
+                    handlePageClick(event, item.href, item.label)
+                  }
+                  className="flex items-center gap-1 rounded-full px-2 py-1 text-sm text-(--header-text) transition-all duration-300 hover:bg-white/10 hover:opacity-90 lg:text-base"
                 >
                   {item.label}
                   {hasDropdown && (
@@ -74,7 +105,10 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
                         <Link
                           key={child.label}
                           href={child.href}
-                          className="block whitespace-nowrap px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={(event) =>
+                            handlePageClick(event, child.href, child.label)
+                          }
+                          className="block whitespace-nowrap px-4 py-2 text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-100"
                         >
                           {child.label}
                         </Link>
@@ -93,7 +127,7 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
               <BlockRenderer
                 key={button.id}
                 block={button}
-                className="bg-(--primary-link-bg) px-4 py-2 text-sm font-medium text-(--primary-link-color)"
+                className="rounded-md bg-(--primary-link-bg) px-4 py-2 text-sm font-medium text-(--primary-link-color) transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
               />
             ))}
           </div>
@@ -102,7 +136,7 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
         <button
           type="button"
           onClick={() => setOpen((prev) => !prev)}
-          className="cursor-pointer text-(--header-text) md:hidden"
+          className="cursor-pointer text-(--header-text) transition-opacity duration-300 hover:opacity-80 md:hidden"
           aria-label="Toggle menu"
           aria-expanded={open}
         >
@@ -112,7 +146,7 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
 
       {open && (
         <div
-          className="absolute left-0 top-16 z-[1000] w-full border-t px-4 py-4 shadow-lg md:hidden"
+          className="absolute left-0 top-16 z-[1000] w-full border-t px-4 py-4 shadow-lg animate-editor-fade md:hidden"
           style={{ background: headerBackground }}
         >
           <nav className="flex flex-col gap-3">
@@ -123,7 +157,10 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
                 <div key={item.label} className="flex flex-col gap-2">
                   <Link
                     href={item.href}
-                    onClick={() => setOpen(false)}
+                    onClick={(event) => {
+                      handlePageClick(event, item.href, item.label);
+                      setOpen(false);
+                    }}
                     className="flex items-center justify-between py-2 text-sm font-medium text-(--header-text)"
                   >
                     {item.label}
@@ -136,7 +173,10 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
                         <Link
                           key={child.label}
                           href={child.href}
-                          onClick={() => setOpen(false)}
+                          onClick={(event) => {
+                            handlePageClick(event, child.href, child.label);
+                            setOpen(false);
+                          }}
                           className="py-2 text-sm text-(--header-text)/80"
                         >
                           {child.label}
@@ -153,7 +193,7 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
                 <BlockRenderer
                   key={button.id}
                   block={button}
-                  className="mt-2 inline-flex w-fit bg-(--primary-link-bg) px-4 py-2 text-sm font-medium text-(--primary-link-color)"
+                  className="mt-2 inline-flex w-fit rounded-md bg-(--primary-link-bg) px-4 py-2 text-sm font-medium text-(--primary-link-color) transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
                 />
               ))}
           </nav>

@@ -30,7 +30,8 @@ const fallbackItems: TestimonialItemData[] = [
 ];
 
 const getItems = (data: SectionProps["data"]) =>
-  data?.testimonialItems?.length ? data.testimonialItems : fallbackItems;
+  data?.testimonialItems ?? [];
+void fallbackItems;
 const getRating = (rating?: string) =>
   Math.max(0, Math.min(5, Math.round(Number(rating) || 0)));
 
@@ -54,10 +55,10 @@ export default function TestimonialOne({ data = {} }: SectionProps) {
     <section className="bg-white px-6 py-20">
       <div className="mx-auto max-w-6xl">
         <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-600">
-          {data.pretitle ?? "Testimonials"}
+          {data.pretitle}
         </p>
         <h2 className="mt-4 max-w-2xl text-3xl font-semibold text-slate-950 sm:text-4xl">
-          {data.title ?? "Our clients say it best."}
+          {data.title}
         </h2>
         <div className="mt-6 flex justify-end gap-2">
           <button
@@ -84,7 +85,7 @@ export default function TestimonialOne({ data = {} }: SectionProps) {
               <p className="mt-5 text-sm leading-6 text-slate-600">{item.quote}</p>
               <div className="mt-6 flex items-center gap-3">
                 <div className="relative h-11 w-11 overflow-hidden rounded-full bg-slate-100">
-                  <Image src={item.image ?? "/bg1.jpg"} alt={item.name} data-editor-media data-editor-media-type="image" data-editor-media-src={item.image ?? "/bg1.jpg"} fill className="object-cover" />
+                  {item.image && <Image src={item.image} alt={item.name} data-editor-media data-editor-media-type="image" data-editor-media-src={item.image} fill className="object-cover" />}
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-950">{item.name}</h3>
@@ -99,7 +100,7 @@ export default function TestimonialOne({ data = {} }: SectionProps) {
                     fill={starIndex < getRating(item.rating) ? "currentColor" : "none"}
                   />
                 ))}
-                <span className="ml-2 text-xs font-semibold text-slate-500">{item.rating ?? "5.0"}</span>
+                {item.rating && <span className="ml-2 text-xs font-semibold text-slate-500">{item.rating}</span>}
               </div>
             </article>
           ))}

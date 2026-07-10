@@ -192,12 +192,41 @@
       ]
     },
     "Footer": {
+      "logoImage": "/etacard.png",
+      "logoImageTitle": "ETA Card logo",
       "desc": "Editable website content powered by one category and template JSON file.",
+      "footerColumns": [
+        {
+          "title": "Pages",
+          "links": [
+            { "label": "Home", "href": "#" },
+            { "label": "About", "href": "#about" },
+            { "label": "Service", "href": "#service" },
+            { "label": "Gallery", "href": "#gallery" },
+            { "label": "Contact", "href": "#contact" }
+          ]
+        },
+        {
+          "title": "Sections",
+          "links": [
+            { "label": "Listings", "href": "#" },
+            { "label": "Services", "href": "#" },
+            { "label": "Programs", "href": "#" },
+            { "label": "FAQ", "href": "#faq" }
+          ]
+        }
+      ],
       "footerContact": {
         "location": "India",
         "email": "hello@example.com",
         "phone": "+91 98765 43210"
       },
+      "footerLegalLinks": [
+        { "label": "Privacy Policy", "href": "#privacy" },
+        { "label": "Terms", "href": "#terms" }
+      ],
+      "whatsappLink": "https://api.whatsapp.com/send?phone=962786336414",
+      "callLink": "tel:+919876543210",
       "copyrightText": "Copyright 2026. All rights reserved."
     },
     "AboutPage": {
@@ -210,6 +239,116 @@
       "sideImageTitle": "About page team image",
       "philosophyTitle": "Clear thinking, careful execution.",
       "philosophyDesc": "We start by understanding the business, the audience, and the decisions visitors need to make. Then we shape pages around strong messaging, useful sections, and simple editing workflows."
+    },
+    "ServicePage": {
+      "pretitle": "Services",
+      "title": "Helpful services built around your next step.",
+      "desc": "Use this page to explain the core services, support, and outcomes your team provides for every visitor.",
+      "desc2": "Each service card can be edited from the same JSON-backed editor, including text, images, and supporting details.",
+      "subtitle": "What we provide",
+      "productSectionTitle": "Core service options",
+      "sideImage": "/bg2.jpg",
+      "sideImageTitle": "Service page image",
+      "productSlides": [
+        {
+          "image": "/bg1.jpg",
+          "alt": "Planning service",
+          "productTitle": "Planning",
+          "productSubtitle": "Service",
+          "productInfoTitle": "Planning",
+          "productInfoDesc": "Clarify goals, audience needs, and the right structure before visitors take action.",
+          "productFeatures": [
+            { "label": "Strategy", "price": "01" },
+            { "label": "Content", "price": "02" }
+          ],
+          "productTotalPrice": "Service",
+          "productShippingText": "Editable"
+        },
+        {
+          "image": "/bg2.jpg",
+          "alt": "Execution service",
+          "productTitle": "Execution",
+          "productSubtitle": "Service",
+          "productInfoTitle": "Execution",
+          "productInfoDesc": "Present offers, proof, and conversion paths through clean editable sections.",
+          "productFeatures": [
+            { "label": "Design", "price": "01" },
+            { "label": "Build", "price": "02" }
+          ],
+          "productTotalPrice": "Service",
+          "productShippingText": "Editable"
+        },
+        {
+          "image": "/blackbay.png",
+          "alt": "Support service",
+          "productTitle": "Support",
+          "productSubtitle": "Service",
+          "productInfoTitle": "Support",
+          "productInfoDesc": "Keep enquiries, updates, and follow-up simple for both visitors and your team.",
+          "productFeatures": [
+            { "label": "Follow up", "price": "01" },
+            { "label": "Updates", "price": "02" }
+          ],
+          "productTotalPrice": "Service",
+          "productShippingText": "Editable"
+        },
+        {
+          "image": "/shaye.png",
+          "alt": "Growth service",
+          "productTitle": "Growth",
+          "productSubtitle": "Service",
+          "productInfoTitle": "Growth",
+          "productInfoDesc": "Improve page content and calls to action as new visitor needs become clear.",
+          "productFeatures": [
+            { "label": "Review", "price": "01" },
+            { "label": "Improve", "price": "02" }
+          ],
+          "productTotalPrice": "Service",
+          "productShippingText": "Editable"
+        }
+      ],
+      "productItems": [
+        {
+          "title": "Planning",
+          "category": "Service",
+          "desc": "Clarify goals, audience needs, and the right structure before visitors take action.",
+          "image": "/bg1.jpg",
+          "alt": "Planning service"
+        },
+        {
+          "title": "Execution",
+          "category": "Service",
+          "desc": "Present offers, proof, and conversion paths through clean editable sections.",
+          "image": "/bg2.jpg",
+          "alt": "Execution service"
+        },
+        {
+          "title": "Support",
+          "category": "Service",
+          "desc": "Keep enquiries, updates, and follow-up simple for both visitors and your team.",
+          "image": "/blackbay.png",
+          "alt": "Support service"
+        }
+      ]
+    },
+    "ContactPage": {
+      "pretitle": "Contact us",
+      "title": "Start a clear conversation with our team.",
+      "desc": "Share a few details and our team will help you choose the right next step with simple, practical guidance.",
+      "sideImage": "/bg2.jpg",
+      "sideImageTitle": "Contact page image",
+      "footerContact": {
+        "location": "India",
+        "email": "hello@example.com",
+        "phone": "+91 98765 43210"
+      },
+      "formSubmitLabel": "Send message",
+      "formFields": [
+        { "label": "Name", "type": "text", "placeholder": "Your name" },
+        { "label": "Email", "type": "email", "placeholder": "you@example.com" },
+        { "label": "Phone", "type": "tel", "placeholder": "Your phone number" },
+        { "label": "Message", "type": "textarea", "placeholder": "Tell us what you need" }
+      ]
     },
     "Testimonial": {
       "pretitle": "Our clients",
@@ -269,9 +408,9 @@
           "logo": "PrimeHomes",
           "menu": [
             { "label": "Home", "href": "#" },
-            { "label": "Listings", "href": "#" },
-            { "label": "Neighborhoods", "href": "#" },
-            { "label": "Agents", "href": "#" },
+            { "label": "About", "href": "#" },
+            { "label": "Service", "href": "#service" },
+            { "label": "Gallery", "href": "#gallery" },
             { "label": "Contact", "href": "#" }
           ],
           "buttons": [
@@ -421,9 +560,9 @@
           "logo": "LaunchCo",
           "menu": [
             { "label": "Home", "href": "#" },
-            { "label": "Services", "href": "#" },
-            { "label": "Work", "href": "#" },
-            { "label": "Pricing", "href": "#" },
+            { "label": "About", "href": "#" },
+            { "label": "Service", "href": "#service" },
+            { "label": "Gallery", "href": "#gallery" },
             { "label": "Contact", "href": "#" }
           ],
           "buttons": [
@@ -573,9 +712,9 @@
           "logo": "BrightSchool",
           "menu": [
             { "label": "Home", "href": "#" },
-            { "label": "Admissions", "href": "#" },
-            { "label": "Programs", "href": "#" },
-            { "label": "Campus", "href": "#" },
+            { "label": "About", "href": "#" },
+            { "label": "Service", "href": "#service" },
+            { "label": "Gallery", "href": "#gallery" },
             { "label": "Contact", "href": "#" }
           ],
           "buttons": [

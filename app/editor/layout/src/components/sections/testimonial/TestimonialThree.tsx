@@ -30,7 +30,8 @@ const fallbackItems: TestimonialItemData[] = [
 ];
 
 const getItems = (data: SectionProps["data"]) =>
-  data?.testimonialItems?.length ? data.testimonialItems : fallbackItems;
+  data?.testimonialItems ?? [];
+void fallbackItems;
 const getRating = (rating?: string) =>
   Math.max(0, Math.min(5, Math.round(Number(rating) || 0)));
 
@@ -54,10 +55,10 @@ export default function TestimonialThree({ data = {} }: SectionProps) {
     <section className="bg-[#f8fafc] px-6 py-20">
       <div className="mx-auto max-w-6xl text-center">
         <p className="text-sm font-bold uppercase tracking-[0.18em] text-blue-600">
-          {data.pretitle ?? "Our clients"}
+          {data.pretitle}
         </p>
         <h2 className="mt-4 text-3xl font-semibold text-slate-950 sm:text-4xl">
-          {data.title ?? "Client stories with real outcomes."}
+          {data.title}
         </h2>
         <div className="mt-6 flex justify-center gap-2">
           <button
@@ -82,7 +83,7 @@ export default function TestimonialThree({ data = {} }: SectionProps) {
             <article key={`${item.name}-${index}`} className="min-w-[min(280px,82vw)] snap-start rounded-xl bg-white p-5 text-left shadow-sm sm:p-6 md:min-w-[340px]">
               <div className="flex items-center gap-3">
                 <div className="relative h-12 w-12 overflow-hidden rounded-full bg-slate-100">
-                  <Image src={item.image ?? "/bg1.jpg"} alt={item.name} data-editor-media data-editor-media-type="image" data-editor-media-src={item.image ?? "/bg1.jpg"} fill className="object-cover" />
+                  {item.image && <Image src={item.image} alt={item.name} data-editor-media data-editor-media-type="image" data-editor-media-src={item.image} fill className="object-cover" />}
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-950">{item.name}</h3>
@@ -98,7 +99,7 @@ export default function TestimonialThree({ data = {} }: SectionProps) {
                     fill={starIndex < getRating(item.rating) ? "currentColor" : "none"}
                   />
                 ))}
-                <span className="ml-2 text-sm font-bold text-blue-600">{item.rating ?? "5.0"}</span>
+                {item.rating && <span className="ml-2 text-sm font-bold text-blue-600">{item.rating}</span>}
               </div>
             </article>
           ))}

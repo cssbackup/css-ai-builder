@@ -91,9 +91,6 @@ export default function Templatepreview({
     });
   }, [search, selectedCategory, selectedFilter]);
 
-  const totalPages = Math.ceil(filteredTemplates.length / 4);
-  const isLastPage = page === Math.max(totalPages - 1, 0);
-  const isFirstPage = page === 0;
   const visibleTemplates = filteredTemplates.slice(page * 4, page * 4 + 4);
 
   const previewConfig = previewTemplate
@@ -155,19 +152,6 @@ export default function Templatepreview({
   const clearSearch = () => {
     setSearch("");
     setPage(0);
-  };
-
-  const handleLoadMore = () => {
-    if (isLastPage) {
-      setPage(0);
-      return;
-    }
-
-    setPage((prev) => prev + 1);
-  };
-
-  const handlePrevious = () => {
-    setPage((prev) => Math.max(prev - 1, 0));
   };
 
   const openEditor = (template: BuilderTemplate) => {

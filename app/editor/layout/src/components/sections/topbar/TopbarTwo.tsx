@@ -47,7 +47,10 @@ export default function TopbarTwo({ data = {}, blocks }: SectionProps) {
   const socialLinks = getVisibleSocialLinks(data.socialLinks);
 
   return (
-    <section style={{ background: topbarBackground, color: topbarTextColor }}>
+    <section
+      className="transition-all duration-500"
+      style={{ background: topbarBackground, color: topbarTextColor }}
+    >
       <div className="mx-auto flex min-h-11 max-w-7xl flex-col items-start justify-center gap-2 px-4 sm:flex-row sm:items-center sm:justify-between lg:px-6">
         {announcement ? (
           <BlockRenderer
@@ -64,7 +67,7 @@ export default function TopbarTwo({ data = {}, blocks }: SectionProps) {
           {phone && (
             <Link
               href={`tel:${phone.replace(/\s+/g, "")}`}
-              className="flex items-center gap-2 text-xs transition hover:opacity-80 sm:px-4 sm:text-sm lg:px-5"
+              className="flex items-center gap-2 text-xs transition-all duration-300 hover:-translate-y-0.5 hover:opacity-80 sm:px-4 sm:text-sm lg:px-5"
             >
               <FaPhoneAlt className="text-xs" />
               <span>{phone}</span>
@@ -74,7 +77,7 @@ export default function TopbarTwo({ data = {}, blocks }: SectionProps) {
           {email && (
             <Link
               href={`mailto:${email}`}
-              className="flex items-center gap-2 text-xs transition hover:opacity-80 sm:px-4 sm:text-sm lg:px-5"
+              className="flex items-center gap-2 text-xs transition-all duration-300 hover:-translate-y-0.5 hover:opacity-80 sm:px-4 sm:text-sm lg:px-5"
             >
               <FaEnvelope className="text-xs" />
               <span>{email}</span>
@@ -93,7 +96,7 @@ export default function TopbarTwo({ data = {}, blocks }: SectionProps) {
               <BlockRenderer
                 key={button.id}
                 block={button}
-                className="px-2 text-xs font-semibold transition hover:opacity-80 sm:px-4 sm:text-sm"
+                className="px-2 text-xs font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:opacity-80 sm:px-4 sm:text-sm"
               />
             ))}
             {socialLinks.map((socialLink, index) => {
@@ -103,7 +106,7 @@ export default function TopbarTwo({ data = {}, blocks }: SectionProps) {
                 <Link
                   key={`${socialLink.label}-${index}`}
                   href={socialLink.href}
-                  className="flex h-8 w-8 items-center justify-center transition hover:bg-white/10 sm:h-11 sm:w-11"
+                  className="flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/10 sm:h-11 sm:w-11"
                   aria-label={socialLink.label}
                 >
                   <Icon size={14} />

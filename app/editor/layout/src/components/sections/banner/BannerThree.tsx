@@ -12,45 +12,6 @@ import {
 import { SectionProps } from "./../../../types/section";
 import BlockRenderer from "../blocks/BlockRenderer";
 
-const fallbackSlides: CardBlock[] = [
-  {
-    id: "fallback-slide-1",
-    type: "card",
-    role: "slide",
-    title: "Build Your Website Today",
-    desc: "Create websites in minutes using AI-powered layouts.",
-    image: "/bg1.jpg",
-    alt: "AI website builder preview",
-    blocks: [
-      {
-        id: "fallback-button-1",
-        type: "button",
-        label: "Get Started",
-        href: "#",
-        variant: "primary",
-      },
-    ],
-  },
-  {
-    id: "fallback-slide-2",
-    type: "card",
-    role: "slide",
-    title: "Launch Pages Faster",
-    desc: "Use reusable blocks that your backend can control cleanly.",
-    image: "/bg2.jpg",
-    alt: "Website launch banner",
-    blocks: [
-      {
-        id: "fallback-button-2",
-        type: "button",
-        label: "Explore",
-        href: "#",
-        variant: "primary",
-      },
-    ],
-  },
-];
-
 export default function BannerThree({ data = {}, blocks }: SectionProps) {
   const resolvedBlocks = resolveSectionBlocks({ blocks, data });
   const carousel = getBlock(resolvedBlocks, "carousel", "banner-slider");
@@ -58,7 +19,7 @@ export default function BannerThree({ data = {}, blocks }: SectionProps) {
     () =>
       (carousel?.items.filter(
         (item): item is CardBlock => item.type === "card",
-      ) ?? fallbackSlides).filter((slide) => slide.image),
+      ) ?? []).filter((slide) => slide.image),
     [carousel],
   );
   const [activeIndex, setActiveIndex] = useState(0);
@@ -87,7 +48,7 @@ export default function BannerThree({ data = {}, blocks }: SectionProps) {
     setActiveIndex((index) => (index + 1) % slides.length);
   };
 
-  if (!activeSlide) return null;
+  if (!activeSlide?.image) return null;
 
   return (
     <section
@@ -96,11 +57,11 @@ export default function BannerThree({ data = {}, blocks }: SectionProps) {
     >
       <Image
         key={activeSlide.id}
-        src={activeSlide.image ?? "/bg1.jpg"}
-        alt={activeSlide.alt ?? activeSlide.title ?? "Banner slide"}
+        src={activeSlide.image}
+        alt={activeSlide.alt ?? activeSlide.title ?? ""}
         data-editor-media
         data-editor-media-type="image"
-        data-editor-media-src={activeSlide.image ?? "/bg1.jpg"}
+        data-editor-media-src={activeSlide.image}
         fill
         priority
         sizes="100vw"

@@ -5,21 +5,13 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useRef } from "react";
 import type { GalleryItemData, SectionProps } from "../../../types/section";
 
-const fallbackItems = [
-  { image: "/bg1.jpg", alt: "Gallery image one", title: "Featured view" },
-  { image: "/bg2.jpg", alt: "Gallery image two", title: "Detail view" },
-  { image: "/blackbay.png", alt: "Gallery image three", title: "Experience" },
-  { image: "/shaye.png", alt: "Gallery image four", title: "Showcase" },
-  { image: "/stylam.png", alt: "Gallery image five", title: "Process" },
-  { image: "/prod2.jpg", alt: "Gallery image six", title: "Result" },
-];
 const getItems = (data: SectionProps["data"]) =>
-  [...(data?.galleryItems ?? []), ...fallbackItems].slice(0, 6);
+  (data?.galleryItems ?? []).slice(0, 6);
 
 function GalleryImage({ item }: { item: GalleryItemData }) {
   return (
     <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-slate-100">
-      <Image src={item.image} alt={item.alt ?? item.title ?? "Gallery image"} data-editor-media data-editor-media-type="image" data-editor-media-src={item.image} fill className="object-cover" />
+      <Image src={item.image} alt={item.alt ?? item.title ?? ""} data-editor-media data-editor-media-type="image" data-editor-media-src={item.image} fill className="object-cover" />
     </div>
   );
 }
@@ -37,7 +29,7 @@ export default function GalleryThree({ data = {} }: SectionProps) {
   return (
     <section className="bg-[#f8fafc] px-6 py-20">
       <div className="mx-auto max-w-6xl text-center">
-        <h2 className="text-3xl font-semibold text-slate-950 sm:text-4xl">{data.title ?? "Explore the gallery"}</h2>
+        {data.title && <h2 className="text-3xl font-semibold text-slate-950 sm:text-4xl">{data.title}</h2>}
         <div className="mt-6 flex justify-center gap-2">
           <button
             type="button"

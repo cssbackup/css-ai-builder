@@ -1,21 +1,16 @@
 import { Award, BookOpen, Clock, Rocket, Target, Users } from "lucide-react";
 import type { SectionProps } from "../../../types/section";
 
-const fallbackItems = [
-  { title: "Trusted guidance", desc: "Clear support from the first visit to the final decision." },
-  { title: "Focused process", desc: "Simple steps, useful details, and quick next actions." },
-  { title: "Better outcomes", desc: "Layouts built to help visitors compare, trust, and contact." },
-];
 const icons = [Users, Rocket, Target, Clock, Award, BookOpen];
 
 export default function WhyChooseUsThree({ data = {} }: SectionProps) {
-  const items = data.whyChooseUsItems?.length ? data.whyChooseUsItems : fallbackItems;
+  const items = data.whyChooseUsItems ?? [];
 
   return (
     <section className="bg-[#f8fafc] px-6 py-20">
       <div className="mx-auto max-w-6xl text-center">
         <h2 className="mx-auto max-w-2xl text-3xl font-semibold text-slate-950 sm:text-4xl">
-          {data.title ?? "Built for confident decisions."}
+          {data.title}
         </h2>
         <div className="mt-12 grid gap-5 md:grid-cols-3">
           {items.map((item, index) => {

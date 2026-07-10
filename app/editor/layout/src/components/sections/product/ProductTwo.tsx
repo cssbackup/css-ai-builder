@@ -52,10 +52,10 @@ export default function ProductTwo({ data = {}, blocks }: SectionProps) {
   const [slideDirection, setSlideDirection] = useState<"next" | "prev">("next");
   const [animationKey, setAnimationKey] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const products = cardBlocks.length ? cardBlocks : fallbackProducts;
+  const products = cardBlocks;
+  void fallbackProducts;
   const sectionTitle =
-    getTextBlockByRole(resolvedBlocks, "heading")?.content ??
-    "Products Overview";
+    getTextBlockByRole(resolvedBlocks, "heading")?.content;
   const visibleCards = 3;
   const animationDuration = 420;
 
@@ -117,7 +117,7 @@ export default function ProductTwo({ data = {}, blocks }: SectionProps) {
         >
           {shownProducts.map((product, index) => (
             <div
-              key={"id" in product ? product.id : product.category}
+              key={product.id}
               className="overflow-hidden rounded-3xl border border-gray-300 bg-white"
               style={{
                 animation: `productTwoCardLift ${animationDuration}ms cubic-bezier(0.22, 1, 0.36, 1) both`,
@@ -125,15 +125,17 @@ export default function ProductTwo({ data = {}, blocks }: SectionProps) {
               }}
             >
               <div className="relative h-60 w-full">
-                <Image
-                  src={product.image ?? "/prod2.jpg"}
-                  alt={product.alt ?? product.title ?? "Product"}
-                  data-editor-media
-                  data-editor-media-type="image"
-                  data-editor-media-src={product.image ?? "/prod2.jpg"}
-                  fill
-                  className="object-cover"
-                />
+                {product.image && (
+                  <Image
+                    src={product.image}
+                    alt={product.alt ?? product.title ?? ""}
+                    data-editor-media
+                    data-editor-media-type="image"
+                    data-editor-media-src={product.image}
+                    fill
+                    className="object-cover"
+                  />
+                )}
               </div>
 
               <div className="px-4 py-3">

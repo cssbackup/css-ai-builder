@@ -76,9 +76,7 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
   const handleConfirmDeletePage = () => {
     if (!pageToDelete) return;
 
-    setPageLinks(
-      pageLinks.filter((item) => item.label !== pageToDelete),
-    );
+    setPageLinks(pageLinks.filter((item) => item.label !== pageToDelete));
 
     if (currentPage === pageToDelete) {
       const nextPage = pageLinks.find((item) => item.label !== pageToDelete);
@@ -97,12 +95,26 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
     if (!newPageName.trim() || pageLinks.length >= MAX_PAGE_ITEMS) return;
 
     const trimmedPageName = newPageName.trim();
+    const normalizedPageName = trimmedPageName.toLowerCase();
+    const alreadyExists = pageLinks.some(
+      (page) => page.label.trim().toLowerCase() === normalizedPageName,
+    );
+
+    if (alreadyExists) return;
 
     setPageLinks([
       ...pageLinks,
       { label: trimmedPageName, href: createPageHref(trimmedPageName) },
     ]);
     setCurrentPage(trimmedPageName);
+    window.dispatchEvent(
+      new CustomEvent("ai-builder-page-added", {
+        detail: {
+          label: trimmedPageName,
+          href: createPageHref(trimmedPageName),
+        },
+      }),
+    );
 
     setNewPageName("");
     setShowPopup(false);
@@ -111,7 +123,7 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
   const canAddMorePages = pageLinks.length < MAX_PAGE_ITEMS;
 
   return (
-    <header className="fixed left-0 top-0 z-20 flex h-14 w-full items-center justify-between border-b border-gray-200 px-4">
+    <header className="fixed left-0 top-0 z-20 flex h-14 w-full items-center justify-between border-b border-gray-200 bg-white/95 px-4 shadow-sm backdrop-blur transition-all duration-300">
       <div className="flex justify-between items-center w-full ">
         <div className="flex items-center gap-8">
           <Link href="/">
@@ -126,13 +138,13 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
           </Link>
 
           <div ref={dropdownRef} className="relative z-[100]">
-            <div className="flex items-center gap-2 rounded-xl border border-gray-300 bg-gray-50/80 px-4 py-1">
+            <div className="flex items-center gap-2 rounded-xl border border-gray-300 bg-gray-50/80 px-4 py-1 shadow-sm transition-all duration-300 hover:border-slate-400 hover:bg-white">
               <span className="text-md font-medium text-gray-900">Page :</span>
 
               <button
                 type="button"
                 onClick={() => setOpen((prev) => !prev)}
-                className="flex h-8 min-w-[30px] items-center justify-center gap-1 rounded-lg border border-gray-200 bg-white px-2 text-sm font-medium text-gray-800"
+                className="flex h-8 min-w-[30px] items-center justify-center gap-1 rounded-lg border border-gray-200 bg-white px-2 text-sm font-medium text-gray-800 shadow-sm transition-all duration-300 hover:border-slate-400 hover:shadow"
               >
                 {currentPage || "Page"}
 
@@ -146,11 +158,11 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
             </div>
 
             {open && (
-              <div className="absolute -right-22 top-[50px] z-[200] w-55 border-2 border-slate-200 bg-white">
+              <div className="absolute -right-22 top-[50px] z-[200] w-55 overflow-hidden border-2 border-slate-200 bg-white shadow-2xl animate-editor-pop">
                 {pageLinks.map((page) => (
                   <div
                     key={page.label}
-                    className="flex w-full items-center gap-2 border-b border-slate-200 px-2 py-3 text-sm font-medium text-slate-800 last:border-b-0 hover:bg-slate-50 hover:text-black"
+                    className="flex w-full items-center gap-2 border-b border-slate-200 px-2 py-3 text-sm font-medium text-slate-800 transition-colors duration-200 last:border-b-0 hover:bg-slate-50 hover:text-black"
                   >
                     <button
                       type="button"
@@ -172,29 +184,31 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
                         type="button"
                         aria-label={`Edit ${page.label}`}
                         onClick={() => handleEditPage(page.label)}
-                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-slate-300 bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-slate-300 bg-slate-100 text-slate-600 transition-all duration-200 hover:bg-slate-200 hover:shadow-sm"
                       >
                         <Edit size={16} />
                       </button>
                     )}
 
-                    <button
-                      type="button"
-                      aria-label={`Delete ${page.label}`}
-                      onClick={() => handleDeletePage(page.label)}
-                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-slate-300 bg-slate-100 text-red-600 hover:bg-red-50"
-                    >
-                      <Trash size={16} />
-                    </button>
+                    {page.label.toLowerCase() !== "home" && (
+                      <button
+                        type="button"
+                        aria-label={`Delete ${page.label}`}
+                        onClick={() => handleDeletePage(page.label)}
+                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-slate-300 bg-slate-100 text-red-600 transition-all duration-200 hover:bg-red-50 hover:shadow-sm"
+                      >
+                        <Trash size={16} />
+                      </button>
+                    )}
                   </div>
                 ))}
 
                 <div className="flex justify-end px-2 py-2">
                   <button
                     disabled={!canAddMorePages}
-                    className={`rounded px-5 py-2 text-xs text-white ${
+                    className={`rounded px-5 py-2 text-xs text-white transition-all duration-200 ${
                       canAddMorePages
-                        ? "bg-blue-600 hover:bg-blue-700"
+                        ? "bg-blue-600 hover:bg-blue-700 hover:shadow-md"
                         : "cursor-not-allowed bg-blue-300"
                     }`}
                     onClick={addNewPage}
@@ -218,10 +232,7 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
                   viewportMode === "desktop" ? "bg-white shadow-sm" : ""
                 }`}
               >
-                <LaptopMinimal
-                  size={28}
-                  className="text-gray-600"
-                />
+                <LaptopMinimal size={28} className="text-gray-600" />
               </button>
               <button
                 type="button"
@@ -247,14 +258,14 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
             <button
               type="button"
               onClick={togglePreview}
-              className="px-3 py-2 bg-gray-100 flex items-center gap-2 text-gray-600 rounded-lg text-sm"
+              className="flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-600 transition-all duration-300 hover:bg-gray-200"
             >
               {isPreview ? <Eye size={17} /> : <EyeOff size={17} />}
               Preview
             </button>
             <Link
               href="#"
-              className="px-3 py-2 bg-blue-500 flex items-center gap-1 rounded-lg text-white text-sm font-bold"
+              className="flex items-center gap-1 rounded-lg bg-blue-500 px-3 py-2 text-sm font-bold text-white transition-all duration-300 hover:bg-blue-600 hover:shadow-md"
             >
               Publish
               <ChevronRight size="17" className="font-extrabold" />
@@ -266,7 +277,7 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
         <button
           type="button"
           onClick={togglePreview}
-          className="px-3 py-2 bg-gray-100 flex items-center gap-2 text-gray-600 rounded-lg text-sm"
+          className="flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-600 transition-all duration-300 hover:bg-gray-200"
         >
           {isPreview ? <Eye size={17} /> : <EyeOff size={17} />}
           Preview
@@ -278,13 +289,13 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
 
       {showPopup &&
         createPortal(
-          <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-white/35 px-4 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-white/35 px-4 backdrop-blur-sm animate-editor-fade">
             <form
               onSubmit={(event) => {
                 event.preventDefault();
                 handleCreatePage();
               }}
-              className="flex w-[min(92vw,440px)] items-center gap-2"
+              className="flex w-[min(92vw,440px)] items-center gap-2 animate-editor-pop"
             >
               <input
                 type="text"

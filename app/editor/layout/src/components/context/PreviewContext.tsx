@@ -20,7 +20,7 @@ const pageLinksStorageKey = "ai-builder-page-links";
 const getStoredCurrentPage = () => {
   if (typeof window === "undefined") return "Home";
 
-  return window.localStorage.getItem(currentPageStorageKey) || "Home";
+  return "Home";
 };
 
 const getStoredPageLinks = () => {
@@ -96,4 +96,8 @@ export function usePreview() {
   }
 
   return context;
+}
+
+export function useOptionalPreview() {
+  return useContext(PreviewContext);
 }

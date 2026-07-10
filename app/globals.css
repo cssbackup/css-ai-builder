@@ -1,5 +1,52 @@
 @import "tailwindcss";
 
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes editorFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes editorPopIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-editor-fade {
+  animation: editorFadeIn 220ms ease-out both;
+}
+
+.animate-editor-pop {
+  animation: editorPopIn 240ms ease-out both;
+}
+
+.editor-smooth-surface section,
+.editor-smooth-surface [contenteditable="true"],
+.editor-smooth-surface a,
+.editor-smooth-surface button,
+.editor-smooth-surface img,
+.editor-smooth-surface video {
+  transition-duration: 240ms;
+  transition-property:
+    background-color, border-color, color, opacity, box-shadow, transform,
+    filter;
+  transition-timing-function: ease;
+}
+
 .font-agrandir-bolt {
   font-family: var(--font-agrandir-bolt), sans-serif;
 }

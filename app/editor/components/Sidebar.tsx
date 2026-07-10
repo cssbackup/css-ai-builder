@@ -14,12 +14,11 @@ import {
   ArrowRight,
   X,
   Plus,
-  PanelsTopLeft,
 } from "lucide-react";
 
 const sidebarItems = [
   {
-    label: "Home",
+    label: "Dashboard",
     icon: House,
   },
 

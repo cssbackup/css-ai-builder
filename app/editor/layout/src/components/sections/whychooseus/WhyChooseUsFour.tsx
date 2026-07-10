@@ -1,19 +1,13 @@
 import type { SectionProps } from "../../../types/section";
 
-const fallbackItems = [
-  { title: "Trusted guidance", desc: "Clear support from the first visit to the final decision." },
-  { title: "Focused process", desc: "Simple steps, useful details, and quick next actions." },
-  { title: "Better outcomes", desc: "Layouts built to help visitors compare, trust, and contact." },
-];
-
 export default function WhyChooseUsFour({ data = {} }: SectionProps) {
-  const items = data.whyChooseUsItems?.length ? data.whyChooseUsItems : fallbackItems;
+  const items = data.whyChooseUsItems ?? [];
 
   return (
     <section className="bg-white px-6 py-20">
       <div className="mx-auto max-w-5xl">
         <h2 className="text-3xl font-semibold text-slate-950 sm:text-4xl">
-          {data.title ?? "What makes the experience better."}
+          {data.title}
         </h2>
         <div className="mt-8 divide-y divide-slate-200 border-y border-slate-200">
           {items.map((item, index) => (

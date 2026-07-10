@@ -139,33 +139,7 @@ const applyBannerVariantDefaults = (
   if (variant === "Banner-3") {
     return {
       ...data,
-      bannerSlides:
-        sourceSlides.length
-          ? sourceSlides
-          : [
-              {
-                image: sourceImage,
-                alt: "Website slider one",
-                title: data.title ?? "Build a better website",
-                desc: data.desc ?? "Show your story with image slider banners.",
-                button: {
-                  label: "Learn more",
-                  href: "#",
-                  variant: "primary",
-                },
-              },
-              {
-                image: sourceImage,
-                alt: "Website slider two",
-                title: "Change every slide",
-                desc: "Each slide can have its own image, text, and button.",
-                button: {
-                  label: "Explore",
-                  href: "#",
-                  variant: "primary",
-                },
-              },
-            ],
+      bannerSlides: sourceSlides,
     };
   }
 
@@ -188,20 +162,7 @@ const applyBannerVariantDefaults = (
                 }
               : slide,
           )
-        : [
-            {
-              image: sourceImage,
-              video: sourceVideo,
-              alt: "Category video slider",
-              title: data.title ?? "Video background slide",
-              desc: data.desc ?? "Use motion behind each banner slide.",
-              button: {
-                label: "Explore",
-                href: "#",
-                variant: "primary",
-              },
-            },
-          ],
+        : [],
     };
   }
 
@@ -217,14 +178,20 @@ const mergeCategoryData = (
     ...categoryContent.categories[category]?.sections?.[section.type],
   };
 
-  if (!Object.keys(sectionContent).length) return section;
+  if (!Object.keys(sectionContent).length) {
+    const emptyData = Object.fromEntries(
+      Object.keys(section.data).map((variant) => [variant, {} as SectionData]),
+    );
+
+    return { ...section, data: emptyData };
+  }
 
   const nextData = Object.fromEntries(
-    Object.entries(section.data).map(([variant, data]) => [
+    Object.keys(section.data).map((variant) => [
       variant,
       section.type === "Banner"
-        ? applyBannerVariantDefaults(variant, { ...data, ...sectionContent })
-        : { ...data, ...sectionContent },
+        ? applyBannerVariantDefaults(variant, { ...sectionContent })
+        : { ...sectionContent },
     ]),
   );
 
@@ -449,6 +416,84 @@ export const createAboutPageSection = (category: string): SectionItem => {
       "AboutPage-1": aboutPageData,
       "AboutPage-2": aboutPageData,
       "AboutPage-3": aboutPageData,
+    },
+  };
+};
+
+export const createGalleryPageSection = (category: string): SectionItem => {
+  const galleryPageData = {
+    ...categoryContent.common.Gallery,
+    ...categoryContent.categories[category]?.sections?.Gallery,
+    ...categoryContent.categories[category]?.sections?.GalleryPage,
+  } as SectionData;
+
+  return {
+    id: "GalleryPage",
+    page: "gallery",
+    type: "Gallery",
+    variant: "GalleryPage-1",
+    data: {
+      "GalleryPage-1": galleryPageData,
+    },
+  };
+};
+
+export const createServicePageSection = (category: string): SectionItem => {
+  const servicePageData = {
+    ...categoryContent.common.ServicePage,
+    ...categoryContent.categories[category]?.sections?.ServicePage,
+  } as SectionData;
+
+  return {
+    id: "ServicePage",
+    page: "service",
+    type: "Service",
+    variant: "ServicePage-1",
+    data: {
+      "ServicePage-1": servicePageData,
+    },
+  };
+};
+
+export const createContactPageSection = (category: string): SectionItem => {
+  const contactPageData = {
+    ...categoryContent.common.ContactPage,
+    ...categoryContent.categories[category]?.sections?.ContactPage,
+  } as SectionData;
+
+  return {
+    id: "ContactPage",
+    page: "contact",
+    type: "Contact",
+    variant: "ContactPage-1",
+    data: {
+      "ContactPage-1": contactPageData,
+      "ContactPage-2": contactPageData,
+    },
+  };
+};
+
+export const createCustomPageSection = (
+  category: string,
+  pageLabel: string,
+): SectionItem => {
+  const pageSlug = pageLabel.trim().toLowerCase().replace(/\s+/g, "-");
+  const pageData = {
+    ...categoryContent.common.AboutPage,
+    ...categoryContent.categories[category]?.sections?.AboutPage,
+    pretitle: pageLabel,
+    title: pageLabel,
+  } as SectionData;
+
+  return {
+    id: `CustomPage-${pageSlug}`,
+    page: pageSlug,
+    type: "About",
+    variant: "AboutPage-1",
+    data: {
+      "AboutPage-1": pageData,
+      "AboutPage-2": pageData,
+      "AboutPage-3": pageData,
     },
   };
 };

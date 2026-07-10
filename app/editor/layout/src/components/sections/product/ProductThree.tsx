@@ -55,7 +55,8 @@ const fallbackCards: ProductCardData[] = [
 export default function ProductThree({ data = {}, blocks }: SectionProps) {
   const resolvedBlocks = resolveSectionBlocks({ blocks, data });
   const cardBlocks = getBlocksByType(resolvedBlocks, "card");
-  const productCards = cardBlocks.length ? cardBlocks : fallbackCards;
+  const productCards = cardBlocks;
+  void fallbackCards;
   const buttonBlocks = getBlocksByType(resolvedBlocks, "button");
 
   return (
@@ -64,8 +65,7 @@ export default function ProductThree({ data = {}, blocks }: SectionProps) {
         <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
           <div>
             <p className="mb-8 text-sm font-bold uppercase tracking-wide">
-              {getTextBlockByRole(resolvedBlocks, "pretitle")?.content ??
-                "How we build"}
+              {getTextBlockByRole(resolvedBlocks, "pretitle")?.content}
             </p>
 
             <BlockRenderer
@@ -98,17 +98,19 @@ export default function ProductThree({ data = {}, blocks }: SectionProps) {
 
         <div className="mt-14 grid gap-x-9 gap-y-10 sm:grid-cols-2 md:mt-24 md:gap-y-14 lg:grid-cols-3">
           {productCards.map((card) => (
-            <article key={"id" in card ? card.id : card.title}>
+            <article key={card.id}>
               <div className="relative h-[280px] overflow-hidden rounded-2xl md:h-[320px]">
-                <Image
-                  src={card.image ?? "/bg1.jpg"}
-                  alt={card.alt ?? card.title ?? "Product"}
-                  data-editor-media
-                  data-editor-media-type="image"
-                  data-editor-media-src={card.image ?? "/bg1.jpg"}
-                  fill
-                  className="object-cover"
-                />
+                {card.image && (
+                  <Image
+                    src={card.image}
+                    alt={card.alt ?? card.title ?? ""}
+                    data-editor-media
+                    data-editor-media-type="image"
+                    data-editor-media-src={card.image}
+                    fill
+                    className="object-cover"
+                  />
+                )}
               </div>
 
               <h3 className="mt-5 text-2xl font-bold tracking-tight text-white sm:mt-7 sm:text-3xl">

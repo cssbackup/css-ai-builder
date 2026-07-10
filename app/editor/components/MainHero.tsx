@@ -1,5 +1,6 @@
 "use client";
 
+import type React from "react";
 import Layout from "../layout/page";
 import { usePreview } from "../layout/src/components/context/PreviewContext";
 
@@ -16,6 +17,11 @@ export default function MainHero({ collapsed }: MainHeroProps) {
       className={`min-h-screen bg-white transition-all overflow-hidden duration-300 ${
         collapsed ? "md:pl-14" : "md:pl-42"
       }`}
+      style={
+        {
+          "--template-floating-left": collapsed ? "4.75rem" : "11.75rem",
+        } as React.CSSProperties
+      }
     >
       <div className="relative h-[calc(100vh-4rem)] w-full px-3 pt-2 mt-14">
         {showMobileFrame ? (
@@ -40,7 +46,10 @@ export default function MainHero({ collapsed }: MainHeroProps) {
                 <span className="absolute right-4 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-slate-700" />
               </div>
               <div className="pointer-events-none absolute inset-[12px] z-10 rounded-[2.55rem] ring-1 ring-white/10" />
-              <div className="phone-preview-screen relative h-full w-full overflow-y-auto overflow-x-hidden rounded-[2.55rem] bg-white">
+              <div
+                data-template-scroll
+                className="phone-preview-screen relative h-full w-full overflow-y-auto overflow-x-hidden rounded-[2.55rem] bg-white"
+              >
                 <div className="min-h-full w-full max-w-full overflow-x-hidden">
                   <Layout />
                 </div>
@@ -48,7 +57,10 @@ export default function MainHero({ collapsed }: MainHeroProps) {
             </div>
           </div>
         ) : (
-          <div className="relative h-full w-full overflow-y-auto rounded-lg border">
+          <div
+            data-template-scroll
+            className="relative h-full w-full overflow-y-auto rounded-lg border"
+          >
             <Layout />
           </div>
         )}

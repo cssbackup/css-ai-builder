@@ -2,7 +2,12 @@
 
 import { createContext, useContext, useState } from "react";
 
-const FooterContext = createContext<any>(null);
+type FooterContextValue = {
+  hideFooter: boolean;
+  setHideFooter: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const FooterContext = createContext<FooterContextValue | null>(null);
 
 export function FooterProvider({ children }: { children: React.ReactNode }) {
   const [hideFooter, setHideFooter] = useState(false);
@@ -15,5 +20,11 @@ export function FooterProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useFooter() {
-  return useContext(FooterContext);
+  const context = useContext(FooterContext);
+
+  if (!context) {
+    throw new Error("useFooter must be used inside FooterProvider");
+  }
+
+  return context;
 }

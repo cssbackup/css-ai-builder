@@ -222,6 +222,8 @@ export type SectionData = {
   footerColumns?: FooterColumnData[];
   footerContact?: FooterContactData;
   footerLegalLinks?: FooterLinkData[];
+  whatsappLink?: string;
+  callLink?: string;
   copyrightText?: string;
 };
 

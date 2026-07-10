@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Zap, Users, PenTool } from "lucide-react";
 import Button from "@/components/ui/Button";
 type WebdifferProps = {
@@ -40,8 +39,6 @@ export default function Webdiffer({ onStart }: WebdifferProps) {
       isVoid: true,
     },
   ];
-  const router = useRouter();
-
   const features = [
     "No coding needed",
     "Drag & drop builder",
