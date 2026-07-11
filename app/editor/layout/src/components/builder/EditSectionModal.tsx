@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type ChangeEvent, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type PointerEvent } from "react";
 import { Check, ChevronLeft, ChevronRight, Menu, Plus, Trash, X } from "lucide-react";
 import { agrandirBolt, generalSansMedium } from "@/app/fonts";
 import {
@@ -139,7 +139,8 @@ const pageLayoutsBySection: Record<string, { id: string; name: string }[]> = {
 };
 
 const MAX_MENU_LINKS = 7;
-const MAX_TOPBAR_SOCIAL_LINKS = 4;
+const MAX_DROPDOWN_LINKS = 10;
+const MAX_TOPBAR_SOCIAL_LINKS = 5;
 const MAX_HEADER_BUTTONS = 3;
 const MAX_BANNER_BUTTONS = 3;
 const MAX_FORM_FIELDS = 5;
@@ -147,11 +148,13 @@ const MAX_LINK_TEXT_LENGTH = 20;
 const DEFAULT_WHATSAPP_LINK = "https://api.whatsapp.com/send?phone=962786336414";
 const DEFAULT_CALL_LINK = "tel:+919876543210";
 
-const toPageLinks = (menu: MenuItem[]): PageLink[] =>
-  menu.slice(0, MAX_MENU_LINKS).map((item) => ({
+const toPageLinks = (menu: MenuItem[], limit = MAX_MENU_LINKS): PageLink[] =>
+  menu.slice(0, limit).map((item) => ({
     label: item.label,
     href: item.href,
-    children: item.children ? toPageLinks(item.children) : undefined,
+    children: item.children
+      ? toPageLinks(item.children, MAX_DROPDOWN_LINKS)
+      : undefined,
   }));
 
 const getMediaKindFromKey = (key: string): "image" | "video" | null => {
@@ -203,7 +206,7 @@ const sidebarItemsBySection: Record<string, string[]> = {
   FAQ: ["FAQ Content", "FAQ Layout"],
   Testimonial: ["Our Clients Content", "Our Clients Layout"],
   FormDetail: ["Form Content", "Form Layout"],
-  Footer: ["Footer Layout", "External Link"],
+  Footer: ["Footer Layout", "Footer Content", "External Link"],
 };
 
 const normalizeSectionType = (sectionType: string) => {
@@ -336,6 +339,20 @@ const MediaUploadPreview = ({
   </div>
 );
 
+const VisibilityButton = ({ hidden, onClick }: { hidden: boolean; onClick: () => void }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className={`rounded-md border px-3 py-1 text-xs font-semibold ${
+      hidden
+        ? "border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+        : "border-slate-300 text-slate-600 hover:bg-slate-50"
+    }`}
+  >
+    {hidden ? "Show" : "Hide"}
+  </button>
+);
+
 export default function EditSectionModal({
   sectionId,
   sectionType,
@@ -354,6 +371,7 @@ export default function EditSectionModal({
   const { currentPage, setCurrentPage, setPageLinks } = usePreview();
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const [dragStart, setDragStart] = useState<{
+    pointerId: number;
     pointerX: number;
     pointerY: number;
     modalX: number;
@@ -395,6 +413,7 @@ export default function EditSectionModal({
           label: "facebook" | "instagram" | "twitter" | "linkedin";
           href: string;
         }[];
+        hiddenContentFields?: string[];
       }
     | undefined;
 
@@ -495,6 +514,10 @@ export default function EditSectionModal({
 
   const activeFooterData = currentSection?.data?.[activeVariant] as
     | {
+        logo?: string;
+        logoImage?: string;
+        logoImageTitle?: string;
+        footerColumns?: { title: string; links: { label: string; href: string }[] }[];
         footerBackgroundType?: FooterBackgroundType;
         footerBackgroundColor?: string;
         footerGradientColor?: string;
@@ -542,12 +565,26 @@ export default function EditSectionModal({
       ? "generating layout"
       : "";
 
-  const handleModalMouseDown = (event: MouseEvent<HTMLDivElement>) => {
-    if ((event.target as HTMLElement).closest("button,input,textarea,select")) {
+  const handleModalPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.button !== 0) return;
+
+    const target = event.target as HTMLElement;
+    const interactiveLabel = target.closest("label")?.querySelector("input");
+
+    if (
+      interactiveLabel ||
+      target.closest(
+        "button,input,textarea,select,a,[role='button'],[data-editor-no-drag]",
+      )
+    ) {
       return;
     }
 
+    event.currentTarget.setPointerCapture(event.pointerId);
+    event.preventDefault();
+
     setDragStart({
+      pointerId: event.pointerId,
       pointerX: event.clientX,
       pointerY: event.clientY,
       modalX: modalPosition.x,
@@ -555,18 +592,35 @@ export default function EditSectionModal({
     });
   };
 
-  const handleModalMouseMove = (event: MouseEvent<HTMLDivElement>) => {
-    if (!dragStart) return;
-
-    setModalPosition({
-      x: dragStart.modalX + event.clientX - dragStart.pointerX,
-      y: dragStart.modalY + event.clientY - dragStart.pointerY,
-    });
-  };
-
-  const handleModalMouseUp = () => {
+  const handleModalPointerUp = () => {
     setDragStart(null);
   };
+
+  useEffect(() => {
+    if (!dragStart) return;
+
+    const handleWindowPointerMove = (event: globalThis.PointerEvent) => {
+      if (event.pointerId !== dragStart.pointerId) return;
+
+      setModalPosition({
+        x: dragStart.modalX + event.clientX - dragStart.pointerX,
+        y: dragStart.modalY + event.clientY - dragStart.pointerY,
+      });
+    };
+    const handleWindowPointerEnd = (event: globalThis.PointerEvent) => {
+      if (event.pointerId === dragStart.pointerId) setDragStart(null);
+    };
+
+    window.addEventListener("pointermove", handleWindowPointerMove);
+    window.addEventListener("pointerup", handleWindowPointerEnd);
+    window.addEventListener("pointercancel", handleWindowPointerEnd);
+
+    return () => {
+      window.removeEventListener("pointermove", handleWindowPointerMove);
+      window.removeEventListener("pointerup", handleWindowPointerEnd);
+      window.removeEventListener("pointercancel", handleWindowPointerEnd);
+    };
+  }, [dragStart]);
 
   const updateActiveTopbarData = (newData: Record<string, unknown>) => {
     if (!currentSection || !activeTopbarData) return;
@@ -895,6 +949,18 @@ export default function EditSectionModal({
 
   const updateTopbarText = (value: string) => {
     updateActiveTopbarData({ text: [value] });
+  };
+
+  const isTopbarFieldHidden = (field: string) =>
+    activeTopbarData?.hiddenContentFields?.includes(field) ?? false;
+
+  const toggleTopbarFieldVisibility = (field: string) => {
+    const hiddenFields = activeTopbarData?.hiddenContentFields ?? [];
+    updateActiveTopbarData({
+      hiddenContentFields: hiddenFields.includes(field)
+        ? hiddenFields.filter((item) => item !== field)
+        : [...hiddenFields, field],
+    });
   };
 
   const updateTopbarField = (
@@ -1245,6 +1311,51 @@ export default function EditSectionModal({
     updateActiveFooterData({ footerTextColor: color });
   };
 
+  const updateFooterLogoImage = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        updateActiveFooterData({ logoImage: reader.result, logoImageTitle: file.name });
+      }
+    };
+    reader.readAsDataURL(file);
+    event.target.value = "";
+  };
+
+  const updateFooterColumn = (columnIndex: number, field: "title", value: string) => {
+    const columns = [...(activeFooterData?.footerColumns ?? [])];
+    columns[columnIndex] = { ...columns[columnIndex], [field]: value };
+    updateActiveFooterData({ footerColumns: columns });
+  };
+
+  const updateFooterLink = (columnIndex: number, linkIndex: number, field: "label" | "href", value: string) => {
+    const columns = [...(activeFooterData?.footerColumns ?? [])];
+    const column = columns[columnIndex];
+    if (!column) return;
+    const links = [...column.links];
+    links[linkIndex] = { ...links[linkIndex], [field]: value };
+    columns[columnIndex] = { ...column, links };
+    updateActiveFooterData({ footerColumns: columns });
+  };
+
+  const addFooterLink = (columnIndex: number) => {
+    const columns = [...(activeFooterData?.footerColumns ?? [])];
+    const column = columns[columnIndex];
+    if (!column) return;
+    columns[columnIndex] = { ...column, links: [...column.links, { label: "New link", href: "#" }] };
+    updateActiveFooterData({ footerColumns: columns });
+  };
+
+  const removeFooterLink = (columnIndex: number, linkIndex: number) => {
+    const columns = [...(activeFooterData?.footerColumns ?? [])];
+    const column = columns[columnIndex];
+    if (!column) return;
+    columns[columnIndex] = { ...column, links: column.links.filter((_, index) => index !== linkIndex) };
+    updateActiveFooterData({ footerColumns: columns });
+  };
+
   const updateFooterExternalLink = (
     field: "whatsappLink" | "callLink",
     value: string,
@@ -1330,28 +1441,28 @@ export default function EditSectionModal({
     updateActiveHeaderData({ menu: updatedMenu });
   };
 
-  const MAX_DROPDOWN_LINKS = 10;
-
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-[9999] flex items-center justify-center p-3"
-      onMouseMove={handleModalMouseMove}
-      onMouseUp={handleModalMouseUp}
-      onMouseLeave={handleModalMouseUp}
+      className="pointer-events-none fixed inset-0 z-[10050]"
+      onPointerUp={handleModalPointerUp}
+      onPointerCancel={handleModalPointerUp}
     >
       <div
-        className={`pointer-events-auto relative mx-3 h-[min(76vh,720px)] w-full max-w-[880px] flex-col overflow-hidden rounded-3xl bg-[#f4f4f5] shadow-2xl animate-editor-pop ${
+        className={`pointer-events-auto fixed h-[min(76vh,720px)] w-[min(calc(100vw-1.5rem),880px)] cursor-grab flex-col overflow-hidden rounded-3xl bg-[#f4f4f5] shadow-2xl animate-editor-pop active:cursor-grabbing ${
           generationText ? "hidden" : "flex"
         }`}
         style={{
-          transform: `translate(${modalPosition.x}px, ${modalPosition.y}px)`,
+          left: `calc(50% + ${modalPosition.x}px)`,
+          top: `calc(50% + ${modalPosition.y}px)`,
+          transform: "translate(-50%, -50%)",
+          touchAction: dragStart ? "none" : "auto",
         }}
+        onPointerDown={handleModalPointerDown}
       >
         <div
           className={`relative flex items-center justify-between border-b border-gray-400 px-5 py-3 ${
             dragStart ? "cursor-grabbing" : "cursor-grab"
           }`}
-          onMouseDown={handleModalMouseDown}
         >
           <h3 className={`${agrandirBolt.className} font-medium text-2xl`}>
             {formatSectionTitle(sectionType)}
@@ -1683,9 +1794,10 @@ export default function EditSectionModal({
               activeTab === "Topbar Content" && (
                 <div className="space-y-4">
                   <div className="rounded-xl border border-gray-200 bg-white p-4">
-                    <label className="block text-sm font-semibold text-gray-900">
-                      Topbar Text
-                    </label>
+                    <div className="flex items-center justify-between gap-3">
+                      <label className="block text-sm font-semibold text-gray-900">Topbar Text</label>
+                      <VisibilityButton hidden={isTopbarFieldHidden("text")} onClick={() => toggleTopbarFieldVisibility("text")} />
+                    </div>
                     <input
                       value={activeTopbarData?.text?.[0] ?? ""}
                       onChange={(event) => updateTopbarText(event.target.value)}
@@ -1700,9 +1812,10 @@ export default function EditSectionModal({
                         key={field}
                         className="rounded-xl border border-gray-200 bg-white p-4"
                       >
-                        <label className="block text-sm font-semibold capitalize text-gray-900">
-                          {field}
-                        </label>
+                        <div className="flex items-center justify-between gap-2">
+                          <label className="block text-sm font-semibold capitalize text-gray-900">{field}</label>
+                          <VisibilityButton hidden={isTopbarFieldHidden(field)} onClick={() => toggleTopbarFieldVisibility(field)} />
+                        </div>
                         <input
                           value={activeTopbarData?.[field] ?? ""}
                           onChange={(event) =>
@@ -1738,6 +1851,9 @@ export default function EditSectionModal({
                         <Plus size={14} />
                         Add Icon
                       </button>
+                    </div>
+                    <div className="flex justify-end">
+                      <VisibilityButton hidden={isTopbarFieldHidden("socialLinks")} onClick={() => toggleTopbarFieldVisibility("socialLinks")} />
                     </div>
 
                     <div className="space-y-3">
@@ -3351,6 +3467,67 @@ export default function EditSectionModal({
               )}
 
             {activeSectionType === "Footer" &&
+              activeTab === "Footer Content" && (
+                <div className="space-y-5">
+                  <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                    <h3 className="text-sm font-semibold text-gray-900">Footer logo</h3>
+                    <p className="mt-1 text-xs text-gray-500">Use a text logo or upload an image.</p>
+                    <label className="mt-4 block text-xs font-medium text-gray-700">Logo text</label>
+                    <input
+                      value={activeFooterData?.logo ?? ""}
+                      onChange={(event) => updateActiveFooterData({ logo: event.target.value })}
+                      className="mt-1 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                      placeholder="Your site name"
+                    />
+                    <div className="mt-4 flex flex-wrap items-center gap-3">
+                      <label className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700">
+                        Upload logo
+                        <input type="file" accept="image/*" className="sr-only" onChange={updateFooterLogoImage} />
+                      </label>
+                      {activeFooterData?.logoImage && (
+                        <button
+                          type="button"
+                          onClick={() => updateActiveFooterData({ logoImage: "", logoImageTitle: "" })}
+                          className="rounded-lg border border-red-200 px-4 py-2 text-xs font-semibold text-red-600 hover:bg-red-50"
+                        >
+                          Remove image
+                        </button>
+                      )}
+                      <span className="text-xs text-gray-500">{activeFooterData?.logoImageTitle ?? "No image selected"}</span>
+                    </div>
+                  </div>
+
+                  {(activeFooterData?.footerColumns ?? []).map((column, columnIndex) => (
+                    <div key={columnIndex} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                      <div className="flex items-center justify-between gap-3">
+                        <h3 className="text-sm font-semibold text-gray-900">Link column {columnIndex + 1}</h3>
+                        <button type="button" onClick={() => addFooterLink(columnIndex)} className="flex items-center gap-1 rounded-md bg-blue-600 px-3 py-2 text-xs font-semibold text-white">
+                          <Plus size={13} /> Add link
+                        </button>
+                      </div>
+                      <input
+                        value={column.title}
+                        onChange={(event) => updateFooterColumn(columnIndex, "title", event.target.value)}
+                        className="mt-3 h-10 w-full rounded-lg border border-gray-300 px-3 text-sm outline-none focus:border-blue-600"
+                        placeholder="Column title"
+                      />
+                      <div className="mt-3 space-y-3">
+                        {column.links.map((link, linkIndex) => (
+                          <div key={linkIndex} className="grid gap-2 rounded-xl bg-slate-50 p-3 sm:grid-cols-[1fr_1.4fr_auto] sm:items-center">
+                            <input value={link.label} onChange={(event) => updateFooterLink(columnIndex, linkIndex, "label", event.target.value)} className="h-10 rounded-lg border border-gray-300 px-3 text-sm outline-none focus:border-blue-600" placeholder="Link text" />
+                            <input value={link.href} onChange={(event) => updateFooterLink(columnIndex, linkIndex, "href", event.target.value)} className="h-10 rounded-lg border border-gray-300 px-3 text-sm outline-none focus:border-blue-600" placeholder="/page or https://..." />
+                            <button type="button" aria-label="Remove footer link" onClick={() => removeFooterLink(columnIndex, linkIndex)} className="flex h-10 w-10 items-center justify-center rounded-lg border border-red-200 text-red-600 hover:bg-red-50">
+                              <Trash size={15} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+            {activeSectionType === "Footer" &&
               activeTab === "External Link" && (
                 <div className="space-y-4">
                   <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
@@ -3461,8 +3638,7 @@ export default function EditSectionModal({
                     {menuItems.map((item, index) => (
                       <div
                         key={index}
-                        draggable
-                        onDragStart={() => setDraggedIndex(index)}
+                        draggable={false}
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={() => {
                           if (draggedIndex !== null) {
@@ -3478,6 +3654,9 @@ export default function EditSectionModal({
                         <div className="grid grid-cols-1 gap-2 lg:grid-cols-[2.5rem_minmax(8rem,1fr)_minmax(8rem,1fr)_7rem_3.25rem] lg:items-center">
                           <button
                             type="button"
+                            draggable
+                            onDragStart={() => setDraggedIndex(index)}
+                            onDragEnd={() => setDraggedIndex(null)}
                             className="h-9 w-9 cursor-grab rounded-lg border border-gray-400 bg-white bg-[radial-gradient(circle_at_35%_35%,#6b7280_2px,transparent_2.5px),radial-gradient(circle_at_65%_35%,#6b7280_2px,transparent_2.5px),radial-gradient(circle_at_35%_65%,#6b7280_2px,transparent_2.5px),radial-gradient(circle_at_65%_65%,#6b7280_2px,transparent_2.5px)] px-2 py-2 text-transparent active:cursor-grabbing"
                             title="Drag menu item"
                           >
@@ -3504,6 +3683,7 @@ export default function EditSectionModal({
 
                           <button
                             type="button"
+                            onPointerDown={(event) => event.stopPropagation()}
                             onClick={() => addDropdownItem(index)}
                             disabled={
                               (item.children?.length ?? 0) >= MAX_DROPDOWN_LINKS

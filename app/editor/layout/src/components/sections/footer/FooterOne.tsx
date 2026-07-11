@@ -24,9 +24,13 @@ const socialIcons = {
 export default function FooterOne({ data = {}, blocks }: SectionProps) {
   const resolvedBlocks = resolveSectionBlocks({ blocks, data });
   const logo = getBlock(resolvedBlocks, "logo");
-  const logoImage = getBlocksByType(resolvedBlocks, "image").find(
+  const blockLogoImage = getBlocksByType(resolvedBlocks, "image").find(
     (block) => block.role === "logo",
   );
+  const logoImage = data.logoImage
+    ? { src: data.logoImage, alt: data.logoImageTitle ?? data.logo ?? "Logo" }
+    : blockLogoImage;
+  const logoText = data.logo ?? logo?.text;
   const paragraph = getTextBlockByRole(resolvedBlocks, "paragraph");
   const columnBlocks = getBlocksByType(resolvedBlocks, "list").filter(
     (block) => block.role === "footer-column",
@@ -63,9 +67,9 @@ export default function FooterOne({ data = {}, blocks }: SectionProps) {
                   className="object-contain object-left"
                 />
               </Link>
-            ) : logo?.text ? (
+            ) : logoText ? (
               <Link href="/" className="text-2xl font-bold sm:text-3xl">
-                {logo.text}
+                {logoText}
               </Link>
             ) : null}
 

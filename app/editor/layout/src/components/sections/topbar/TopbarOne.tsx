@@ -25,7 +25,7 @@ const socialIcons: Record<SocialLinkData["label"], ElementType> = {
 };
 
 const getVisibleSocialLinks = (socialLinks: SocialLinkData[] = []) =>
-  socialLinks.slice(0, 4);
+  socialLinks.slice(0, 5);
 
 export default function TopbarOne({ data = {}, blocks }: SectionProps) {
   const resolvedBlocks = resolveSectionBlocks({ blocks, data });
@@ -45,6 +45,7 @@ export default function TopbarOne({ data = {}, blocks }: SectionProps) {
   const email = data.email ?? "";
   const location = data.location ?? "";
   const socialLinks = getVisibleSocialLinks(data.socialLinks);
+  const isHidden = (field: string) => data.hiddenContentFields?.includes(field) ?? false;
 
   return (
     <section
@@ -52,7 +53,7 @@ export default function TopbarOne({ data = {}, blocks }: SectionProps) {
       style={{ background: topbarBackground, color: topbarTextColor }}
     >
       <div className="mx-auto flex min-h-12 max-w-7xl flex-col items-start justify-center gap-2 px-4 sm:flex-row sm:items-center sm:justify-between lg:px-6">
-        {announcement ? (
+        {!isHidden("text") && (announcement ? (
           <BlockRenderer
             block={announcement}
             className="text-xs font-semibold sm:text-sm"
@@ -61,10 +62,10 @@ export default function TopbarOne({ data = {}, blocks }: SectionProps) {
           topbarText && (
             <p className="text-xs font-semibold sm:text-sm">{topbarText}</p>
           )
-        )}
+        ))}
 
         <div className="flex max-w-full flex-wrap items-center gap-x-3 gap-y-2 sm:justify-end sm:divide-x sm:divide-white/20">
-          {phone && (
+          {!isHidden("phone") && phone && (
             <Link
               href={`tel:${phone.replace(/\s+/g, "")}`}
               className="flex items-center gap-2 text-xs transition-all duration-300 hover:-translate-y-0.5 hover:opacity-80 sm:px-4 sm:text-sm lg:px-5"
@@ -74,7 +75,7 @@ export default function TopbarOne({ data = {}, blocks }: SectionProps) {
             </Link>
           )}
 
-          {email && (
+          {!isHidden("email") && email && (
             <Link
               href={`mailto:${email}`}
               className="flex items-center gap-2 text-xs transition-all duration-300 hover:-translate-y-0.5 hover:opacity-80 sm:px-4 sm:text-sm lg:px-5"
@@ -84,7 +85,7 @@ export default function TopbarOne({ data = {}, blocks }: SectionProps) {
             </Link>
           )}
 
-          {location && (
+          {!isHidden("location") && location && (
             <span className="flex items-center gap-2 text-xs sm:px-4 sm:text-sm lg:px-5">
               <FaMapMarkerAlt className="text-xs" />
               <span>{location}</span>
@@ -99,7 +100,7 @@ export default function TopbarOne({ data = {}, blocks }: SectionProps) {
                 className="px-2 text-xs font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:opacity-80 sm:px-4 sm:text-sm"
               />
             ))}
-            {socialLinks.map((socialLink, index) => {
+            {!isHidden("socialLinks") && socialLinks.map((socialLink, index) => {
               const Icon = socialIcons[socialLink.label];
 
               return (

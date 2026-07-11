@@ -50,6 +50,7 @@ export default function EditableSection({
   const { isPreview } = usePreview();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showAddPopup, setShowAddPopup] = useState(false);
+  const [generatingComponent, setGeneratingComponent] = useState<string | null>(null);
   const [toolbarY, setToolbarY] = useState(48);
   const [sectionHeight, setSectionHeight] = useState(0);
   const [isInlineEditing, setIsInlineEditing] = useState(false);
@@ -65,6 +66,14 @@ export default function EditableSection({
   const handleConfirmDelete = () => {
     setShowDeleteConfirm(false);
     onDelete();
+  };
+  const handleAddComponent = (sectionType: string) => {
+    setGeneratingComponent(sectionType);
+    window.setTimeout(() => {
+      onAddSection(sectionType);
+      setGeneratingComponent(null);
+      setShowAddPopup(false);
+    }, 1600);
   };
   const sectionName = label.charAt(0).toUpperCase() + label.slice(1);
   const canShowSectionAddButton = !["topbar", "header", "footer"].includes(
@@ -133,6 +142,7 @@ export default function EditableSection({
     const target = event.target as HTMLElement;
 
     if (target.closest("[data-editor-toolbar]")) return;
+    if (target.closest("[data-editor-no-inline]")) return;
 
     const mediaElement = target.closest<HTMLElement>("[data-editor-media]");
     if (mediaElement && event.currentTarget.contains(mediaElement)) {
@@ -254,6 +264,13 @@ export default function EditableSection({
     canShowSectionAddButton &&
     sectionHeight > 0 &&
     toolbarY >= sectionHeight - TOOLBAR_HEIGHT - BOTTOM_TOOLBAR_GAP;
+  const normalizedLabel = label.toLowerCase();
+  const sectionStackClass =
+    normalizedLabel === "topbar"
+      ? "z-[130]"
+      : normalizedLabel === "header"
+        ? "z-[120]"
+        : "z-0";
 
   const addControlButtons = (
     <>
@@ -325,7 +342,7 @@ export default function EditableSection({
   return (
     <div
       ref={sectionRef}
-      className="group relative isolate"
+      className={`group relative isolate ${sectionStackClass}`}
       onMouseMove={handleSectionMouseMove}
     >
       {!isPreview && (
@@ -427,13 +444,22 @@ export default function EditableSection({
                     key={item.type}
                     type={item.type}
                     title={item.title}
-                    onClick={() => {
-                      onAddSection(item.type);
-                      setShowAddPopup(false);
-                    }}
+                    onClick={() => handleAddComponent(item.type)}
                   />
                 ))}
               </div>
+            </div>
+          </div>,
+          document.body,
+        )}
+
+      {generatingComponent &&
+        createPortal(
+          <div className="fixed inset-0 z-[10003] flex items-center justify-center bg-white/80 px-4 backdrop-blur-sm" role="status" aria-live="polite">
+            <div className="w-[min(92vw,420px)] rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-2xl">
+              <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-blue-100 border-t-blue-600" />
+              <h3 className="mt-5 text-xl font-semibold text-slate-950">Generating component</h3>
+              <p className="mt-2 text-sm text-slate-500">Preparing your {generatingComponent} section...</p>
             </div>
           </div>,
           document.body,

@@ -20,6 +20,19 @@ const getPageLabelFromHref = (href: string, fallback: string) => {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
+const scrollTemplateToTop = () => {
+  const scrollContainer = document.querySelector<HTMLElement>(
+    "[data-template-scroll]",
+  );
+
+  if (scrollContainer) {
+    scrollContainer.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
 export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
   const resolvedBlocks = resolveSectionBlocks({ blocks, data });
   const logo = getBlock(resolvedBlocks, "logo");
@@ -47,6 +60,12 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
 
     preview.setCurrentPage(getPageLabelFromHref(href, label));
   };
+  const handleLogoClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    preview?.setCurrentPage("Home");
+    setOpen(false);
+    scrollTemplateToTop();
+  };
 
   return (
     <header
@@ -60,7 +79,9 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
     >
       <div className="flex w-full items-center justify-between gap-4">
         <Link
-          href="/"
+          href="#"
+          onClick={handleLogoClick}
+          data-editor-no-inline
           className="relative shrink-0 text-(--header-text) transition-opacity duration-300 hover:opacity-80"
         >
           {data.logoImage ? (
@@ -81,7 +102,7 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
             const hasDropdown = !!item.children?.length;
 
             return (
-              <div key={item.label} className="group/item relative">
+              <div key={item.label} className="group/item relative z-[1] hover:z-[90] focus-within:z-[90]">
                 <Link
                   href={item.href}
                   onClick={(event) =>
@@ -99,8 +120,8 @@ export default function HeaderTwo({ data = {}, blocks }: SectionProps) {
                 </Link>
 
                 {hasDropdown && (
-                  <div className="invisible absolute left-0 top-full z-[1000] pt-2 opacity-0 transition-all duration-200 group-hover/item:visible group-hover/item:opacity-100">
-                    <div className="min-w-44 rounded-md border bg-white py-2 shadow-lg">
+                  <div className="invisible absolute left-0 top-full z-[1000] pt-2 opacity-0 transition-all duration-200 group-hover/item:visible group-hover/item:opacity-100 group-focus-within/item:visible group-focus-within/item:opacity-100">
+                    <div className="max-h-[min(60vh,360px)] min-w-52 overflow-y-auto rounded-xl border border-slate-200 bg-white py-2 shadow-2xl">
                       {item.children?.map((child) => (
                         <Link
                           key={child.label}

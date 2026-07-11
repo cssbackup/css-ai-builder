@@ -251,17 +251,11 @@ function EditorLayoutPage() {
 
     if (!Array.isArray(categoryPageLinks) || !categoryPageLinks.length) return;
 
-    const currentLinksStartWithCategoryLinks = categoryPageLinks.every(
-      (item, index) =>
-        item.label === pageLinks[index]?.label &&
-        item.href === pageLinks[index]?.href &&
-        areMenusEqual(item.children ?? [], pageLinks[index]?.children ?? []),
-    );
-
-    if (!currentLinksStartWithCategoryLinks) {
-      setPageLinks(categoryPageLinks);
-    }
-  }, [initialConfig.sections, pageLinks, setPageLinks]);
+    // Initialize navigation when the selected template changes. Do not depend on
+    // pageLinks here: editor changes (including dropdown children) must not be
+    // overwritten by the template defaults on the next render.
+    setPageLinks(categoryPageLinks);
+  }, [initialConfig.sections, setPageLinks]);
 
   return (
     <EditorPage

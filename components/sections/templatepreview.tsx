@@ -125,24 +125,6 @@ export default function Templatepreview({
     previewCarouselStart + 4,
   );
 
-  useEffect(() => {
-    if (!previewTemplate || filteredTemplates.length <= 1) return;
-
-    const interval = window.setInterval(() => {
-      const currentIndex = filteredTemplates.findIndex(
-        (template) => template.id === previewTemplate.id,
-      );
-      const nextIndex =
-        currentIndex === -1 ? 0 : (currentIndex + 1) % filteredTemplates.length;
-      const nextTemplate = filteredTemplates[nextIndex];
-
-      setSelectedTemplate(nextTemplate.id);
-      setPreviewTemplate(nextTemplate);
-    }, 2000);
-
-    return () => window.clearInterval(interval);
-  }, [filteredTemplates, previewTemplate]);
-
   const handleFilterSelect = (title: string) => {
     setSelectedFilter(title);
     setPage(0);

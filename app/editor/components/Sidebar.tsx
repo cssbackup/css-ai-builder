@@ -291,8 +291,14 @@ function SidebarContent({
       </div>
 
       {showPageModal && (
-        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/30 backdrop-blur-sm">
-          <div className="w-[90%] max-w-md rounded-xl bg-white p-5 shadow-2xl">
+        <div
+          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/30 backdrop-blur-sm"
+          onClick={() => setShowPageModal(false)}
+        >
+          <div
+            className="w-[90%] max-w-md rounded-xl bg-white p-5 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900">
                 Add New Page

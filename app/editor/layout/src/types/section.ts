@@ -143,6 +143,7 @@ export type FooterContactData = {
 };
 
 export type SectionData = {
+  hiddenContentFields?: string[];
   topbarBackgroundType?: "solid" | "gradient";
   topbarBackgroundColor?: string;
   topbarGradientColor?: string;
