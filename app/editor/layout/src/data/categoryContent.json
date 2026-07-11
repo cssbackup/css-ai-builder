@@ -240,6 +240,14 @@
       "philosophyTitle": "Clear thinking, careful execution.",
       "philosophyDesc": "We start by understanding the business, the audience, and the decisions visitors need to make. Then we shape pages around strong messaging, useful sections, and simple editing workflows."
     },
+    "CustomPage": {
+      "pretitle": "Demo content",
+      "title": "A flexible page ready for your content.",
+      "desc": "This demo paragraph is loaded from the same JSON content source as the rest of the template. Replace it with the message, offer, or story this page should explain.",
+      "desc2": "Use this section as a simple starting point with a small pretitle, clear heading, useful paragraph, and supporting image.",
+      "sideImage": "/bg1.jpg",
+      "sideImageTitle": "Demo page image"
+    },
     "ServicePage": {
       "pretitle": "Services",
       "title": "Helpful services built around your next step.",
@@ -417,7 +425,7 @@
             { "label": "Book Visit", "href": "#", "variant": "primary" },
             { "label": "Call Agent", "href": "#", "variant": "secondary" }
           ]
-        }, 
+        },
         "Banner": {
           "backgroundImage": "/categories/realestate/bg1.jpg",
           "backgroundImageTitle": "Modern property exterior",

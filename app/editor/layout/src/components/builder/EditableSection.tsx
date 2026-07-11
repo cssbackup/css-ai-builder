@@ -28,6 +28,7 @@ type EditableSectionProps = {
     mediaType: "image" | "video",
     fileName: string,
   ) => void;
+  stickyMode?: "scroll" | "sticky";
   canMoveUp?: boolean;
   canMoveDown?: boolean;
   onMoveUp?: () => void;
@@ -42,6 +43,7 @@ export default function EditableSection({
   onAddSection,
   onInlineTextEdit,
   onInlineMediaEdit,
+  stickyMode = "scroll",
   canMoveUp = false,
   canMoveDown = false,
   onMoveUp,
@@ -271,6 +273,8 @@ export default function EditableSection({
       : normalizedLabel === "header"
         ? "z-[120]"
         : "z-0";
+  const sectionPositionClass =
+    stickyMode === "sticky" ? "sticky top-0" : "relative";
 
   const addControlButtons = (
     <>
@@ -342,7 +346,7 @@ export default function EditableSection({
   return (
     <div
       ref={sectionRef}
-      className={`group relative isolate ${sectionStackClass}`}
+      className={`group isolate ${sectionPositionClass} ${sectionStackClass}`}
       onMouseMove={handleSectionMouseMove}
     >
       {!isPreview && (

@@ -144,6 +144,7 @@ export type FooterContactData = {
 
 export type SectionData = {
   hiddenContentFields?: string[];
+  topbarType?: "scroll" | "sticky";
   topbarBackgroundType?: "solid" | "gradient";
   topbarBackgroundColor?: string;
   topbarGradientColor?: string;
@@ -161,6 +162,7 @@ export type SectionData = {
   buttons?: ButtonData[];
 
   headerBackgroundType?: "solid" | "gradient";
+  headerType?: "scroll" | "sticky";
   headerBackgroundColor?: string;
   headerGradientColor?: string;
   headerTextColor?: string;

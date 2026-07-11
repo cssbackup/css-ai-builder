@@ -478,10 +478,20 @@ export const createCustomPageSection = (
   pageLabel: string,
 ): SectionItem => {
   const pageSlug = pageLabel.trim().toLowerCase().replace(/\s+/g, "-");
+  const categoryAboutData = categoryContent.categories[category]?.sections?.About;
   const pageData = {
-    ...categoryContent.common.AboutPage,
-    ...categoryContent.categories[category]?.sections?.AboutPage,
-    pretitle: pageLabel,
+    ...categoryContent.common.CustomPage,
+    ...categoryContent.categories[category]?.sections?.CustomPage,
+    sideImage:
+      categoryContent.categories[category]?.sections?.CustomPage?.sideImage ??
+      categoryAboutData?.sideImage ??
+      categoryAboutData?.backgroundImage ??
+      categoryContent.common.CustomPage?.sideImage,
+    sideImageTitle:
+      categoryContent.categories[category]?.sections?.CustomPage?.sideImageTitle ??
+      categoryAboutData?.sideImageTitle ??
+      categoryAboutData?.backgroundImageTitle ??
+      categoryContent.common.CustomPage?.sideImageTitle,
     title: pageLabel,
   } as SectionData;
 
@@ -489,7 +499,7 @@ export const createCustomPageSection = (
     id: `CustomPage-${pageSlug}`,
     page: pageSlug,
     type: "About",
-    variant: "AboutPage-1",
+    variant: "AboutPage-2",
     data: {
       "AboutPage-1": pageData,
       "AboutPage-2": pageData,

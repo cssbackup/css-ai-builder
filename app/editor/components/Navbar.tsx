@@ -13,7 +13,13 @@ import {
   Smartphone,
   ChevronDown,
   EyeOff,
+  Copy,
+  ExternalLink,
+  Globe2,
+  Info,
+  Link2,
   Trash,
+  X,
 } from "lucide-react";
 import { usePreview } from "../layout/src/components/context/PreviewContext";
 
@@ -58,6 +64,65 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
     childIndex: number;
     childLabel: string;
   } | null>(null);
+  const [publishedUrl, setPublishedUrl] = useState("");
+  const [showPublishedPopup, setShowPublishedPopup] = useState(false);
+  const [showDomainsPopup, setShowDomainsPopup] = useState(false);
+  const [showCopiedMessage, setShowCopiedMessage] = useState(false);
+
+  const displayPublishedUrl = publishedUrl.replace(/^https?:\/\//, "");
+
+  useEffect(() => {
+    const handlePublished = (event: Event) => {
+      const detail = (event as CustomEvent<{ url?: string }>).detail;
+      const url = detail?.url;
+
+      if (!url) return;
+
+      setPublishedUrl(url);
+      setShowPublishedPopup(true);
+      setShowCopiedMessage(false);
+    };
+
+    window.addEventListener("ai-builder-published", handlePublished);
+
+    return () => {
+      window.removeEventListener("ai-builder-published", handlePublished);
+    };
+  }, []);
+
+  const handlePublish = () => {
+    window.dispatchEvent(new CustomEvent("ai-builder-publish-request"));
+  };
+
+  const handleCopyPublishedUrl = async () => {
+    if (!publishedUrl) return;
+
+    try {
+      await window.navigator.clipboard.writeText(publishedUrl);
+    } catch {
+      const textArea = document.createElement("textarea");
+      textArea.value = publishedUrl;
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand("copy");
+      textArea.remove();
+    }
+
+    setShowCopiedMessage(true);
+  };
+
+  useEffect(() => {
+    if (!showCopiedMessage) return;
+
+    const timeout = window.setTimeout(() => {
+      setShowCopiedMessage(false);
+    }, 1800);
+
+    return () => window.clearTimeout(timeout);
+  }, [showCopiedMessage]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -124,6 +189,15 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
         };
       }),
     );
+    window.dispatchEvent(
+      new CustomEvent("ai-builder-page-added", {
+        detail: {
+          label: trimmedDropdownName,
+          href: createPageHref(trimmedDropdownName),
+        },
+      }),
+    );
+    setCurrentPage(trimmedDropdownName);
     setExpandedPageLabel(dropdownParentForNew);
     closeDropdownPopup();
   };
@@ -343,18 +417,18 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
                                 </button>
 
                                 <button
-                                type="button"
-                                aria-label={`Delete ${child.label}`}
-                                onClick={() =>
-                                  setDropdownToDelete({
-                                    parentLabel: page.label,
-                                    childIndex,
-                                    childLabel: child.label,
-                                  })
-                                }
-                                className="flex h-6 w-6 shrink-0 items-center justify-center rounded border border-slate-300 bg-slate-50 text-red-600 transition hover:bg-red-50"
-                              >
-                                <Trash size={12} />
+                                  type="button"
+                                  aria-label={`Delete ${child.label}`}
+                                  onClick={() =>
+                                    setDropdownToDelete({
+                                      parentLabel: page.label,
+                                      childIndex,
+                                      childLabel: child.label,
+                                    })
+                                  }
+                                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded border border-slate-300 bg-slate-50 text-red-600 transition hover:bg-red-50"
+                                >
+                                  <Trash size={12} />
                                 </button>
                               </div>
                             ))}
@@ -364,13 +438,13 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
                             <span className="text-[11px] font-semibold text-slate-500">
                               {dropdownLinks.length}/{MAX_DROPDOWN_ITEMS}
                             </span>
-                          <button
-                            type="button"
-                            disabled={!canAddDropdownLinks}
-                            onClick={() => openAddDropdownPopup(page.label)}
-                            className={`rounded px-2 py-1.5 text-[10px] font-semibold text-white transition ${
-                              canAddDropdownLinks
-                                ? "bg-blue-600 hover:bg-blue-700"
+                            <button
+                              type="button"
+                              disabled={!canAddDropdownLinks}
+                              onClick={() => openAddDropdownPopup(page.label)}
+                              className={`rounded px-2 py-1.5 text-[10px] font-semibold text-white transition ${
+                                canAddDropdownLinks
+                                  ? "bg-blue-600 hover:bg-blue-700"
                                   : "cursor-not-allowed bg-blue-300"
                               }`}
                             >
@@ -443,13 +517,14 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
               {isPreview ? <Eye size={17} /> : <EyeOff size={17} />}
               Preview
             </button>
-            <Link
-              href="#"
+            <button
+              type="button"
+              onClick={handlePublish}
               className="flex items-center gap-1 rounded-lg bg-blue-500 px-3 py-2 text-sm font-bold text-white transition-all duration-300 hover:bg-blue-600 hover:shadow-md"
             >
               Publish
               <ChevronRight size="17" className="font-extrabold" />
-            </Link>
+            </button>
           </nav>
         </div>
       </div>
@@ -604,7 +679,8 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
               </p>
 
               <h3 className="mt-2 text-xl font-semibold leading-7 text-slate-950">
-                Are you sure you want to delete {dropdownToDelete.childLabel} button?
+                Are you sure you want to delete {dropdownToDelete.childLabel}{" "}
+                button?
               </h3>
 
               <div className="mt-6 flex justify-center gap-3">
@@ -625,6 +701,196 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
                 </button>
               </div>
             </div>
+          </div>,
+          document.body,
+        )}
+
+      {showPublishedPopup &&
+        publishedUrl &&
+        createPortal(
+          <div className="fixed right-5 top-20 z-[10020] w-[min(92vw,430px)] rounded-2xl border border-slate-200 bg-white p-5 text-slate-950 shadow-2xl animate-editor-pop">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1">
+                <h2 className="text-xl font-semibold">Published</h2>
+                <p className="text-sm text-slate-600">
+                  Connect or buy domains for this project.
+                </p>
+              </div>
+              <button
+                type="button"
+                aria-label="Close published popup"
+                onClick={() => setShowPublishedPopup(false)}
+                className="flex h-8 w-8 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="mt-8 flex items-center justify-between gap-3">
+              <p className="text-lg font-medium">Website URL</p>
+
+              <button
+                type="button"
+                onClick={() => setShowDomainsPopup(true)}
+                className="flex items-center gap-2 text-sm font-medium text-slate-700 transition bg-gray-100 py-2 px-4 rounded-full hover:text-blue-600 underline"
+              >
+                <Link2 size={18} />
+                Add custom domain
+              </button>
+            </div>
+
+            <div className="mt-4 flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
+              <a
+                href={publishedUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="min-w-0 flex-1 truncate text-sm font-medium text-slate-700 hover:text-blue-600"
+              >
+                {displayPublishedUrl}
+              </a>
+
+              <button
+                type="button"
+                aria-label="Copy published URL"
+                onClick={handleCopyPublishedUrl}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+              >
+                <Copy size={18} />
+              </button>
+            </div>
+
+            {showCopiedMessage && (
+              <p
+                className="mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-700"
+                role="status"
+                aria-live="polite"
+              >
+                Link copied
+              </p>
+            )}
+          </div>,
+          document.body,
+        )}
+
+      {showDomainsPopup &&
+        createPortal(
+          <div className="fixed inset-0 z-[10030] flex items-center justify-center bg-slate-950/20 px-4 backdrop-blur-sm animate-editor-fade">
+            <section className="relative max-h-[88vh] w-[min(94vw,900px)] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 text-slate-950 shadow-2xl animate-editor-pop">
+              <button
+                type="button"
+                aria-label="Close domains popup"
+                onClick={() => setShowDomainsPopup(false)}
+                className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-950"
+              >
+                <X size={20} />
+              </button>
+
+              <div className="flex items-start justify-between gap-5 pr-10">
+                <div>
+                  <h2 className="text-2xl font-semibold">Domains</h2>
+                  <p className="mt-2 text-sm text-slate-600">
+                    Publish your project to custom domains.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  className="mt-5 flex items-center gap-2 text-sm text-slate-800 transition hover:text-blue-600"
+                >
+                  Open docs <ExternalLink size={15} />
+                </button>
+              </div>
+
+              <div className="mt-10 flex flex-col gap-4 rounded-xl border border-slate-200 p-5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex min-w-0 items-center gap-3">
+                  <Globe2 size={18} className="shrink-0 text-slate-500" />
+                  <a
+                    href={publishedUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="min-w-0 truncate text-sm font-medium text-slate-900 underline decoration-slate-400 underline-offset-2"
+                  >
+                    {publishedUrl || "Publish first to generate a URL"}
+                  </a>
+                  <Info size={15} className="shrink-0 text-slate-400" />
+                </div>
+
+                <button
+                  type="button"
+                  className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-800 shadow-sm transition hover:bg-slate-50"
+                >
+                  Edit URL
+                </button>
+              </div>
+
+              <div className="mt-7">
+                <h3 className="text-lg font-semibold">Custom domains</h3>
+                <p className="mt-1 text-sm text-slate-600">
+                  Connect or buy domains for this project.
+                </p>
+              </div>
+
+              <div className="mt-5 rounded-2xl border border-slate-200 p-5">
+                <div className="flex flex-col gap-5 border-b border-slate-200 pb-5 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p className="text-sm font-semibold">
+                      Buy a new domain{" "}
+                      <span className="rounded bg-violet-100 px-2 py-0.5 text-xs font-semibold text-violet-700">
+                        Pro
+                      </span>
+                    </p>
+                    <p className="mt-1 text-sm text-slate-600">
+                      Buy and automatically connect a new domain in CSS Founder.
+                    </p>
+
+                    <div className="mt-4 flex flex-wrap gap-3">
+                      {[
+                        "getsparkbuild.com",
+                        "showcasespark.com",
+                        "sparkdev.dev",
+                      ].map((domain) => (
+                        <button
+                          key={domain}
+                          type="button"
+                          className="rounded-full border border-slate-200 px-4 py-1.5 text-xs text-slate-600 transition hover:border-blue-400 hover:text-blue-600"
+                        >
+                          {domain}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="self-start rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-800 shadow-sm transition hover:bg-slate-50"
+                  >
+                    Buy new domain
+                  </button>
+                </div>
+
+                <div className="flex flex-col gap-5 pt-5 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p className="text-sm font-semibold">
+                      Connect existing domain{" "}
+                      <span className="rounded bg-violet-100 px-2 py-0.5 text-xs font-semibold text-violet-700">
+                        Pro
+                      </span>
+                    </p>
+                    <p className="mt-1 text-sm text-slate-600">
+                      Connect a domain you own from CSS Founder or any other
+                      provider.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="self-start rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-800 shadow-sm transition hover:bg-slate-50"
+                  >
+                    Connect domain
+                  </button>
+                </div>
+              </div>
+            </section>
           </div>,
           document.body,
         )}

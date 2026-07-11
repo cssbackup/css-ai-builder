@@ -8,6 +8,7 @@ import {
   createAddableSection,
   createAboutPageSection,
   createContactPageSection,
+  createCustomPageSection,
   createGalleryPageSection,
   createServicePageSection,
   getTemplateVariables,
@@ -25,6 +26,44 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 
 const formatSectionName = (sectionType: string) =>
   sectionType.charAt(0).toUpperCase() + sectionType.slice(1);
+
+const createPageSlug = (label: string) =>
+  label.trim().toLowerCase().replace(/\s+/g, "-");
+
+type EditorPageLink = {
+  label: string;
+  href: string;
+  children?: EditorPageLink[];
+};
+
+const getPageLinkLabels = (links: EditorPageLink[]) => {
+  const labels: string[] = [];
+
+  links.forEach((link) => {
+    labels.push(link.label);
+
+    if (link.children?.length) {
+      labels.push(...getPageLinkLabels(link.children));
+    }
+  });
+
+  return labels;
+};
+
+const getPublishBaseUrl = () => {
+  const configuredBaseUrl = process.env.NEXT_PUBLIC_PUBLISH_BASE_URL;
+
+  if (configuredBaseUrl) return configuredBaseUrl.replace(/\/$/, "");
+
+  if (
+    typeof window !== "undefined" &&
+    !["localhost", "127.0.0.1", "0.0.0.0"].includes(window.location.hostname)
+  ) {
+    return window.location.origin;
+  }
+
+  return "https://preview.cssfounder.com";
+};
 
 const lockedSectionTypes = new Set(["Topbar", "Header", "Footer"]);
 
@@ -90,6 +129,39 @@ const addServicePageSection = (sections: SectionItem[], category: string) => {
     servicePageSection,
     ...sections.slice(insertIndex),
   ];
+};
+
+const addCustomPageSectionsForLinks = (
+  sections: SectionItem[],
+  category: string,
+  pageLinks: EditorPageLink[],
+) => {
+  const uniqueLabels = Array.from(new Set(getPageLinkLabels(pageLinks)));
+
+  return uniqueLabels.reduce((nextSections, label) => {
+    const pageSlug = createPageSlug(label);
+
+    if (
+      !pageSlug ||
+      pageSlug === "home" ||
+      nextSections.some((section) => section.page?.toLowerCase() === pageSlug)
+    ) {
+      return nextSections;
+    }
+
+    const customPageSection = createCustomPageSection(category, label);
+    const footerIndex = nextSections.findIndex(
+      (section) => section.type === "Footer",
+    );
+
+    if (footerIndex === -1) return [...nextSections, customPageSection];
+
+    return [
+      ...nextSections.slice(0, footerIndex),
+      customPageSection,
+      ...nextSections.slice(footerIndex),
+    ];
+  }, sections);
 };
 
 const areMenusEqual = (
@@ -264,6 +336,7 @@ function EditorLayoutPage() {
       templateVariables={templateVariables}
       category={category}
       page={page}
+      templateId={templateId}
       pageLinks={pageLinks}
     />
   );
@@ -274,27 +347,28 @@ function EditorPage({
   templateVariables,
   category,
   page,
+  templateId,
   pageLinks,
 }: {
   initialSections: SectionItem[];
   templateVariables: Record<string, string>;
   category: string;
   page: string;
-  pageLinks: {
-    label: string;
-    href: string;
-    children?: { label: string; href: string }[];
-  }[];
+  templateId: string;
+  pageLinks: EditorPageLink[];
 }) {
   const [sections, setSections] = useState<SectionItem[]>(() =>
-    addContactPageSection(
-      addGalleryPageSection(
-        addServicePageSection(
-          addAboutPageSection(
-            initialSections.map((section) => ({
-              ...section,
-              id: section.id ?? section.type,
-            })),
+    addCustomPageSectionsForLinks(
+      addContactPageSection(
+        addGalleryPageSection(
+          addServicePageSection(
+            addAboutPageSection(
+              initialSections.map((section) => ({
+                ...section,
+                id: section.id ?? section.type,
+              })),
+              category,
+            ),
             category,
           ),
           category,
@@ -302,6 +376,7 @@ function EditorPage({
         category,
       ),
       category,
+      pageLinks,
     ),
   );
 
@@ -332,6 +407,56 @@ function EditorPage({
 
     return () => window.clearTimeout(timeout);
   }, [inlineUpdateToast]);
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      setSections((prevSections) =>
+        addCustomPageSectionsForLinks(prevSections, category, pageLinks),
+      );
+    }, 0);
+
+    return () => window.clearTimeout(timeout);
+  }, [category, pageLinks]);
+
+  useEffect(() => {
+    const handlePageAdded = (event: Event) => {
+      const detail = (event as CustomEvent<{ label?: string }>).detail;
+      const label = detail?.label?.trim();
+
+      if (!label) return;
+
+      const pageSlug = createPageSlug(label);
+
+      setSections((prevSections) => {
+        if (
+          prevSections.some(
+            (section) => section.page?.toLowerCase() === pageSlug,
+          )
+        ) {
+          return prevSections;
+        }
+
+        const customPageSection = createCustomPageSection(category, label);
+        const footerIndex = prevSections.findIndex(
+          (section) => section.type === "Footer",
+        );
+
+        if (footerIndex === -1) return [...prevSections, customPageSection];
+
+        return [
+          ...prevSections.slice(0, footerIndex),
+          customPageSection,
+          ...prevSections.slice(footerIndex),
+        ];
+      });
+    };
+
+    window.addEventListener("ai-builder-page-added", handlePageAdded);
+
+    return () => {
+      window.removeEventListener("ai-builder-page-added", handlePageAdded);
+    };
+  }, [category]);
 
   const updateSectionVariant = (sectionId: string, variant: string) => {
     setSections((prev) =>
@@ -439,9 +564,9 @@ function EditorPage({
   const addSectionAfter = (afterSectionId: string, sectionType: string) => {
     const nextSection = createAddableSection(sectionType, category);
     if (!nextSection) return;
-    const isAboutEditor = page.toLowerCase() === "about";
-    const scopedNextSection = isAboutEditor
-      ? { ...nextSection, page: "about" }
+    const pageSlug = createPageSlug(page);
+    const scopedNextSection = pageSlug && pageSlug !== "home"
+      ? { ...nextSection, page: pageSlug }
       : nextSection;
 
     setSections((prevSections) => {
@@ -515,6 +640,91 @@ function EditorPage({
       }),
     [pageLinks, sections],
   );
+
+  useEffect(() => {
+    const createFallbackPublishedId = () =>
+      `${templateId}-${category}-${Date.now()}`
+        .toLowerCase()
+        .replace(/[^a-z0-9-]+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+
+    const handlePublishRequest = async () => {
+      const publishedPayload = {
+        templateId,
+        category,
+        pageLinks,
+        sections: syncedSections,
+        templateVariables,
+      };
+
+      try {
+        const response = await fetch("/api/publish", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(publishedPayload),
+        });
+
+        if (!response.ok) {
+          throw new Error("Publish request failed");
+        }
+
+        const result = (await response.json()) as {
+          id?: string;
+          path?: string;
+          url?: string;
+        };
+        const publishedPath = result.path ?? `/published/${result.id}`;
+        const publishedUrl =
+          result.url ?? `${window.location.origin}${publishedPath}`;
+
+        window.dispatchEvent(
+          new CustomEvent("ai-builder-published", {
+            detail: {
+              id: result.id,
+              url: publishedUrl,
+            },
+          }),
+        );
+
+        return;
+      } catch (error) {
+        console.error("Server publish failed, using local fallback", error);
+      }
+
+      const fallbackId = createFallbackPublishedId();
+
+      window.localStorage.setItem(
+        `ai-builder-published-site-${fallbackId}`,
+        JSON.stringify({
+          ...publishedPayload,
+          id: fallbackId,
+          publishedAt: new Date().toISOString(),
+        }),
+      );
+
+      window.dispatchEvent(
+        new CustomEvent("ai-builder-published", {
+          detail: {
+            id: fallbackId,
+            url: `${getPublishBaseUrl()}/published/${fallbackId}`,
+          },
+        }),
+      );
+    };
+
+    window.addEventListener("ai-builder-publish-request", handlePublishRequest);
+
+    return () => {
+      window.removeEventListener(
+        "ai-builder-publish-request",
+        handlePublishRequest,
+      );
+    };
+  }, [category, pageLinks, syncedSections, templateId, templateVariables]);
+
   const editingSectionItem = syncedSections.find(
     (section) => (section.id ?? section.type) === editingSection,
   );
@@ -530,7 +740,7 @@ function EditorPage({
     : undefined;
   const whatsappLink = footerData?.whatsappLink;
   const callLink = footerData?.callLink;
-  const currentPageSlug = page.trim().toLowerCase();
+  const currentPageSlug = createPageSlug(page);
   const pageShellSectionTypes = ["Topbar", "Header", "Footer"];
   const visibleSections =
     currentPageSlug && currentPageSlug !== "home"
@@ -581,6 +791,12 @@ function EditorPage({
         const sectionData = (
           isRecord(variantData) ? variantData : section.data
         ) as SectionData;
+        const stickyMode =
+          section.type === "Header"
+            ? (sectionData.headerType ?? "scroll")
+            : section.type === "Topbar"
+              ? (sectionData.topbarType ?? "scroll")
+              : "scroll";
 
         if (!Component) return null;
 
@@ -591,6 +807,7 @@ function EditorPage({
             onEdit={() => setEditingSection(sectionId)}
             onDelete={() => deleteSection(sectionId)}
             onAddSection={(sectionType) => addSectionAfter(sectionId, sectionType)}
+            stickyMode={stickyMode}
             canMoveUp={canMoveUp}
             canMoveDown={canMoveDown}
             onMoveUp={() => moveSection(sectionId, -1)}

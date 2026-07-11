@@ -15,6 +15,13 @@ import {
   X,
   Plus,
 } from "lucide-react";
+import { usePreview } from "../layout/src/components/context/PreviewContext";
+
+const createPageHref = (label: string) => {
+  const slug = label.trim().toLowerCase().replace(/\s+/g, "-");
+
+  return slug === "home" ? "#" : `#${slug}`;
+};
 
 const sidebarItems = [
   {
@@ -137,6 +144,7 @@ function SidebarContent({
   const [dropdownTop, setDropdownTop] = useState(0);
   const [showPageModal, setShowPageModal] = useState(false);
   const [pageName, setPageName] = useState("");
+  const { pageLinks, setCurrentPage, setPageLinks } = usePreview();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -150,14 +158,34 @@ function SidebarContent({
 
   const handleAddPage = () => {
     if (!pageName.trim()) return;
+    const trimmedPageName = pageName.trim();
+    const normalizedPageName = trimmedPageName.toLowerCase();
+    const alreadyExists = pageLinks.some(
+      (page) => page.label.trim().toLowerCase() === normalizedPageName,
+    );
 
     setPages((prev) => [
       ...prev,
       {
-        label: pageName.trim(),
+        label: trimmedPageName,
         icon: FileText,
       },
     ]);
+
+    if (!alreadyExists) {
+      const href = createPageHref(trimmedPageName);
+      setPageLinks([...pageLinks, { label: trimmedPageName, href }]);
+      window.dispatchEvent(
+        new CustomEvent("ai-builder-page-added", {
+          detail: {
+            label: trimmedPageName,
+            href,
+          },
+        }),
+      );
+    }
+
+    setCurrentPage(trimmedPageName);
 
     setPageName("");
     setShowPageModal(false);

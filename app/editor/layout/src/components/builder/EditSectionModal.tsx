@@ -30,6 +30,7 @@ type SectionItem = {
 type HeaderBackgroundType = "solid" | "gradient";
 type TopbarBackgroundType = "solid" | "gradient";
 type FooterBackgroundType = "solid" | "gradient";
+type StickySectionType = "scroll" | "sticky";
 type BannerBackgroundMode = "image" | "video" | "solid" | "gradient";
 type EditSectionModalProps = {
   sectionId: string;
@@ -402,6 +403,7 @@ export default function EditSectionModal({
   const activeTopbarData = currentSection?.data?.[activeVariant] as
     | {
         topbarBackgroundType?: TopbarBackgroundType;
+        topbarType?: StickySectionType;
         topbarBackgroundColor?: string;
         topbarGradientColor?: string;
         topbarTextColor?: string;
@@ -423,6 +425,7 @@ export default function EditSectionModal({
       logoImage?: string;
       logoImageTitle?: string;
       headerBackgroundType?: HeaderBackgroundType;
+      headerType?: StickySectionType;
         headerBackgroundColor?: string;
         headerGradientColor?: string;
         headerTextColor?: string;
@@ -475,6 +478,7 @@ export default function EditSectionModal({
   const menuItems = activeHeaderData?.menu ?? [];
   const topbarBackgroundType =
     activeTopbarData?.topbarBackgroundType ?? "solid";
+  const topbarType = activeTopbarData?.topbarType ?? "scroll";
   const topbarSolidColor = activeTopbarData?.topbarBackgroundColor ?? "#245c6e";
   const topbarGradientColor =
     activeTopbarData?.topbarGradientColor ?? "#0668ff";
@@ -485,6 +489,7 @@ export default function EditSectionModal({
       : topbarSolidColor;
   const headerBackgroundType =
     activeHeaderData?.headerBackgroundType ?? "solid";
+  const headerType = activeHeaderData?.headerType ?? "scroll";
   const headerSolidColor = activeHeaderData?.headerBackgroundColor ?? "#245c6e";
   const headerGradientColor =
     activeHeaderData?.headerGradientColor ?? "#0668ff";
@@ -935,6 +940,10 @@ export default function EditSectionModal({
     updateActiveTopbarData({ topbarBackgroundType: type });
   };
 
+  const updateTopbarType = (type: StickySectionType) => {
+    updateActiveTopbarData({ topbarType: type });
+  };
+
   const updateTopbarSolidColor = (color: string) => {
     updateActiveTopbarData({ topbarBackgroundColor: color });
   };
@@ -1022,6 +1031,10 @@ export default function EditSectionModal({
 
   const updateHeaderBackgroundType = (type: HeaderBackgroundType) => {
     updateActiveHeaderData({ headerBackgroundType: type });
+  };
+
+  const updateHeaderType = (type: StickySectionType) => {
+    updateActiveHeaderData({ headerType: type });
   };
 
   const updateHeaderSolidColor = (color: string) => {
@@ -1374,7 +1387,7 @@ export default function EditSectionModal({
             ...item,
             children: [
               ...(item.children ?? []),
-              { label: "Dropdown Item", href: "/dropdown-item" },
+              { label: "Dropdown Item", href: "" },
             ],
           }
         : item,
@@ -1448,13 +1461,12 @@ export default function EditSectionModal({
       onPointerCancel={handleModalPointerUp}
     >
       <div
-        className={`pointer-events-auto fixed h-[min(76vh,720px)] w-[min(calc(100vw-1.5rem),880px)] cursor-grab flex-col overflow-hidden rounded-3xl bg-[#f4f4f5] shadow-2xl animate-editor-pop active:cursor-grabbing ${
+        className={`pointer-events-auto fixed h-[min(74vh,490px)] w-[min(calc(100vw-2rem),880px)] cursor-grab flex-col overflow-hidden rounded-3xl bg-[#f4f4f5] shadow-2xl animate-editor-pop active:cursor-grabbing ${
           generationText ? "hidden" : "flex"
         }`}
         style={{
-          left: `calc(50% + ${modalPosition.x}px)`,
-          top: `calc(50% + ${modalPosition.y}px)`,
-          transform: "translate(-50%, -50%)",
+          left: `calc((100vw - min(calc(100vw - 2rem), 880px)) / 2 + ${modalPosition.x}px)`,
+          top: `calc(20vh + ${modalPosition.y}px)`,
           touchAction: dragStart ? "none" : "auto",
         }}
         onPointerDown={handleModalPointerDown}
@@ -1743,10 +1755,13 @@ export default function EditSectionModal({
                 <div className="space-y-4">
                   <SectionColorPanel
                     title="Topbar Layout"
+                    sectionTypeLabel="Topbar Type"
+                    stickyType={topbarType}
                     backgroundType={topbarBackgroundType}
                     backgroundColor={topbarSolidColor}
                     gradientColor={topbarGradientColor}
                     textColor={topbarTextColor}
+                    onStickyTypeChange={updateTopbarType}
                     onBackgroundTypeChange={updateTopbarBackgroundType}
                     onBackgroundColorChange={updateTopbarSolidColor}
                     onGradientColorChange={updateTopbarGradientColor}
@@ -2043,10 +2058,13 @@ export default function EditSectionModal({
                 <div className="space-y-4">
                   <SectionColorPanel
                     title="Header Layout"
+                    sectionTypeLabel="Header Type"
+                    stickyType={headerType}
                     backgroundType={headerBackgroundType}
                     backgroundColor={headerSolidColor}
                     gradientColor={headerGradientColor}
                     textColor={headerTextColor}
+                    onStickyTypeChange={updateHeaderType}
                     onBackgroundTypeChange={updateHeaderBackgroundType}
                     onBackgroundColorChange={updateHeaderSolidColor}
                     onGradientColorChange={updateHeaderGradientColor}
@@ -3855,20 +3873,26 @@ function SidebarContent({
 
 function SectionColorPanel({
   title,
+  sectionTypeLabel,
+  stickyType,
   backgroundType,
   backgroundColor,
   gradientColor,
   textColor,
+  onStickyTypeChange,
   onBackgroundTypeChange,
   onBackgroundColorChange,
   onGradientColorChange,
   onTextColorChange,
 }: {
   title: string;
+  sectionTypeLabel?: string;
+  stickyType?: StickySectionType;
   backgroundType: "solid" | "gradient";
   backgroundColor: string;
   gradientColor: string;
   textColor: string;
+  onStickyTypeChange?: (type: StickySectionType) => void;
   onBackgroundTypeChange: (type: "solid" | "gradient") => void;
   onBackgroundColorChange: (color: string) => void;
   onGradientColorChange: (color: string) => void;
@@ -3885,6 +3909,33 @@ function SectionColorPanel({
         </div>
 
         <div className="grid gap-3 sm:grid-cols-[auto_auto_auto] sm:items-center">
+          {sectionTypeLabel && stickyType && onStickyTypeChange && (
+            <>
+              <span className="text-sm font-semibold text-gray-950 sm:whitespace-nowrap">
+                {sectionTypeLabel} :
+              </span>
+
+              {(["scroll", "sticky"] as const).map((type) => {
+                const isActive = stickyType === type;
+
+                return (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => onStickyTypeChange(type)}
+                    className={`h-10 min-w-28 rounded-xl border px-5 text-sm font-semibold capitalize text-gray-950 shadow-sm transition ${
+                      isActive
+                        ? "border-gray-300 bg-white"
+                        : "border-transparent bg-slate-200 hover:bg-white"
+                    }`}
+                  >
+                    {type}
+                  </button>
+                );
+              })}
+            </>
+          )}
+
           <span className="text-sm font-semibold text-gray-950 sm:whitespace-nowrap">
             Background Type :
           </span>

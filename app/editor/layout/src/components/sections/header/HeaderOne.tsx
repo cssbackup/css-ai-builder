@@ -54,12 +54,11 @@ export default function HeaderOne({ data = {}, blocks }: SectionProps) {
     href: string,
     label: string,
   ) => {
-    if (!preview?.isPreview) {
-      event.preventDefault();
-      return;
-    }
+    if (!preview) return;
 
+    event.preventDefault();
     preview.setCurrentPage(getPageLabelFromHref(href, label));
+    scrollTemplateToTop();
   };
   const handleLogoClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
