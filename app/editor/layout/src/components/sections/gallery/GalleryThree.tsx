@@ -50,9 +50,14 @@ export default function GalleryThree({ data = {} }: SectionProps) {
         </div>
         <div ref={scrollerRef} className="mt-8 flex snap-x gap-5 overflow-x-auto scroll-smooth pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {items.slice(0, 6).map((item, index) => (
-            <div key={`${item.image}-${index}`} className="min-w-[min(280px,82vw)] snap-start sm:min-w-[340px]">
+            <article key={`${item.image}-${index}`} className="min-w-[min(280px,82vw)] snap-start sm:min-w-[340px]">
               <GalleryImage item={item} />
-            </div>
+              {item.title && (
+                <h3 className="mt-4 text-lg font-semibold text-slate-950">
+                  {item.title}
+                </h3>
+              )}
+            </article>
           ))}
         </div>
       </div>

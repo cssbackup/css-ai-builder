@@ -64,6 +64,7 @@ export type CardBlock = BlockBase & {
   desc?: string;
   image?: string;
   alt?: string;
+  link?: string;
   blocks?: Block[];
 };
 
@@ -272,6 +273,7 @@ export const legacyDataToBlocks = (data?: Record<string, unknown>): Block[] => {
       desc: toStringValue(card.desc),
       image: toStringValue(card.image),
       alt: toStringValue(card.alt) ?? toStringValue(card.imageTitle),
+      link: toStringValue(card.link),
     });
   });
 
@@ -286,6 +288,7 @@ export const legacyDataToBlocks = (data?: Record<string, unknown>): Block[] => {
       desc: toStringValue(slide.productInfoDesc),
       image: toStringValue(slide.image),
       alt: toStringValue(slide.alt),
+      link: toStringValue(slide.link),
     });
   });
 

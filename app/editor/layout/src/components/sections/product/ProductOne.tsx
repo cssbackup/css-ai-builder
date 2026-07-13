@@ -6,6 +6,8 @@ import { useState } from "react";
 import { ProductSlideData, SectionProps } from "./../../../types/section";
 import { getBlocksByType, resolveSectionBlocks } from "../types/section";
 import BlockRenderer from "../blocks/BlockRenderer";
+import { useOptionalPreview } from "../../context/PreviewContext";
+import { findProductPageName, scrollProductPageToTop } from "./productNavigation";
 
 const fallbackSlides: ProductSlideData[] = [
   {
@@ -40,6 +42,19 @@ export default function ProductOne({ data = {}, blocks }: SectionProps) {
   void fallbackSlides;
   const activeSlide = slides[activeIndex] ?? slides[0];
   const slideButton = activeSlide?.blocks?.find((block) => block.type === "button");
+  const preview = useOptionalPreview();
+  const openProductPage = () => {
+    if (!preview || !activeSlide?.link?.trim()) return;
+
+    const existingPage = findProductPageName(
+      preview.pageLinks,
+      activeSlide.link,
+    );
+    if (!existingPage) return;
+
+    preview.setCurrentPage(existingPage);
+    scrollProductPageToTop();
+  };
 
   const nextImage = () => {
     setActiveIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
@@ -54,7 +69,21 @@ export default function ProductOne({ data = {}, blocks }: SectionProps) {
   return (
     <section className="w-full bg-white">
       <div className="mx-auto max-w-7xl bg-radial from-white via-blue-50 to-transparent px-5 py-12 md:px-10 md:py-20">
-        <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.4fr_1fr]">
+        <div
+          role={activeSlide.link ? "link" : undefined}
+          tabIndex={activeSlide.link ? 0 : undefined}
+          onClick={(event) => {
+            if ((event.target as HTMLElement).closest("button,a")) return;
+            openProductPage();
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              openProductPage();
+            }
+          }}
+          className={`grid items-center gap-10 lg:grid-cols-[1fr_1.4fr_1fr] ${activeSlide.link ? "cursor-pointer" : ""}`}
+        >
           <div>
             <h1 className="text-3xl font-bold leading-tight text-black sm:text-4xl md:text-5xl">
               {activeSlide.title}

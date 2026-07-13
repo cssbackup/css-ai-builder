@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { ProductCardData, SectionProps } from "./../../../types/section";
 import {
@@ -6,6 +8,8 @@ import {
   resolveSectionBlocks,
 } from "../types/section";
 import BlockRenderer from "../blocks/BlockRenderer";
+import { useOptionalPreview } from "../../context/PreviewContext";
+import { findProductPageName, scrollProductPageToTop } from "./productNavigation";
 
 const fallbackCards: ProductCardData[] = [
   {
@@ -58,6 +62,16 @@ export default function ProductThree({ data = {}, blocks }: SectionProps) {
   const productCards = cardBlocks;
   void fallbackCards;
   const buttonBlocks = getBlocksByType(resolvedBlocks, "button");
+  const preview = useOptionalPreview();
+  const openProductPage = (pageName?: string) => {
+    if (!preview || !pageName?.trim()) return;
+
+    const existingPage = findProductPageName(preview.pageLinks, pageName);
+    if (!existingPage) return;
+
+    preview.setCurrentPage(existingPage);
+    scrollProductPageToTop();
+  };
 
   return (
     <section className="w-full bg-[#0d1f2a] px-4 py-12 text-white md:px-8 lg:px-14">
@@ -98,7 +112,19 @@ export default function ProductThree({ data = {}, blocks }: SectionProps) {
 
         <div className="mt-14 grid gap-x-9 gap-y-10 sm:grid-cols-2 md:mt-24 md:gap-y-14 lg:grid-cols-3">
           {productCards.map((card) => (
-            <article key={card.id}>
+            <article
+              key={card.id}
+              role={card.link ? "link" : undefined}
+              tabIndex={card.link ? 0 : undefined}
+              onClick={() => openProductPage(card.link)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  openProductPage(card.link);
+                }
+              }}
+              className={card.link ? "cursor-pointer" : undefined}
+            >
               <div className="relative h-[280px] overflow-hidden rounded-2xl md:h-[320px]">
                 {card.image && (
                   <Image
