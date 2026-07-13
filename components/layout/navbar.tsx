@@ -99,7 +99,7 @@ export default function Navbar() {
                 })}
               </div>
 
-              <div className="flex items-center gap-4 sm:gap-3 ">
+              <div className="flex items-center gap-4 sm:gap-3 "> 
                 <div className="flex items-center gap-3">
                   <div className="relative inline-block">
                     <button
@@ -109,7 +109,7 @@ export default function Navbar() {
                     >
                       <Image
                         src={selectedLanguage.flag}
-                        alt={selectedLanguage.name}
+                        alt={selectedLanguage.name}  
                         width={16}
                         height={16}
                         className="h-4 w-6 rounded-sm object-contain"
