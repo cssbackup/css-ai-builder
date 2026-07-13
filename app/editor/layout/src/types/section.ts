@@ -71,6 +71,7 @@ export type ProductFeatureData = {
 export type ProductSlideData = {
   image: string;
   alt: string;
+  link?: string;
   productTitle: string;
   productSubtitle: string;
   productInfoTitle: string;
@@ -88,6 +89,7 @@ export type ProductCardData = {
   image: string;
   alt?: string;
   imageTitle?: string;
+  link?: string;
 };
 
 export type WhyChooseUsItemData = {
@@ -143,6 +145,8 @@ export type FooterContactData = {
 };
 
 export type SectionData = {
+  [field: string]: unknown;
+
   hiddenContentFields?: string[];
   topbarType?: "scroll" | "sticky";
   topbarBackgroundType?: "solid" | "gradient";

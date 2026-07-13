@@ -54,9 +54,14 @@ export default function GalleryFour({ data = {} }: SectionProps) {
         </div>
         <div ref={scrollerRef} className="flex snap-x gap-4 overflow-x-auto scroll-smooth pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {items.map((item, index) => (
-            <div key={`${item.image}-${index}`} className="min-w-[min(180px,70vw)] snap-start sm:min-w-[240px]">
+            <article key={`${item.image}-${index}`} className="min-w-[min(180px,70vw)] snap-start sm:min-w-[240px]">
               <GalleryImage item={item} />
-            </div>
+              {item.title && (
+                <h3 className="mt-4 text-lg font-semibold text-slate-950">
+                  {item.title}
+                </h3>
+              )}
+            </article>
           ))}
         </div>
       </div>

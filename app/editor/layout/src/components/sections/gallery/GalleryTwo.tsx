@@ -52,7 +52,14 @@ export default function GalleryTwo({ data = {} }: SectionProps) {
         </div>
         <div ref={scrollerRef} className="mt-10 flex gap-4 overflow-x-auto scroll-smooth pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {items.map((item, index) => (
-            <GalleryImage key={`${item.image}-${index}`} item={item} />
+            <article key={`${item.image}-${index}`}>
+              <GalleryImage item={item} />
+              {item.title && (
+                <h3 className="mt-4 text-lg font-semibold text-white">
+                  {item.title}
+                </h3>
+              )}
+            </article>
           ))}
         </div>
       </div>

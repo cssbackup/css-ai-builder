@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { ProductCardData, SectionProps } from "./../../../types/section";
 import { generalSansMedium } from "@/app/fonts";
 import { getBlocksByType, getTextBlockByRole, resolveSectionBlocks } from "../types/section";
+import { useOptionalPreview } from "../../context/PreviewContext";
+import { findProductPageName, scrollProductPageToTop } from "./productNavigation";
 
 const fallbackProducts: ProductCardData[] = [
   {
@@ -58,6 +60,16 @@ export default function ProductTwo({ data = {}, blocks }: SectionProps) {
     getTextBlockByRole(resolvedBlocks, "heading")?.content;
   const visibleCards = 3;
   const animationDuration = 420;
+  const preview = useOptionalPreview();
+  const openProductPage = (pageName?: string) => {
+    if (!preview || !pageName?.trim()) return;
+
+    const existingPage = findProductPageName(preview.pageLinks, pageName);
+    if (!existingPage) return;
+
+    preview.setCurrentPage(existingPage);
+    scrollProductPageToTop();
+  };
 
   useEffect(() => {
     if (!isAnimating) return;
@@ -116,9 +128,18 @@ export default function ProductTwo({ data = {}, blocks }: SectionProps) {
           }}
         >
           {shownProducts.map((product, index) => (
-            <div
+            <article
               key={product.id}
-              className="overflow-hidden rounded-3xl border border-gray-300 bg-white"
+              role={product.link ? "link" : undefined}
+              tabIndex={product.link ? 0 : undefined}
+              onClick={() => openProductPage(product.link)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  openProductPage(product.link);
+                }
+              }}
+              className={`overflow-hidden rounded-3xl border border-gray-300 bg-white ${product.link ? "cursor-pointer" : ""}`}
               style={{
                 animation: `productTwoCardLift ${animationDuration}ms cubic-bezier(0.22, 1, 0.36, 1) both`,
                 animationDelay: `${index * 55}ms`,
@@ -149,7 +170,7 @@ export default function ProductTwo({ data = {}, blocks }: SectionProps) {
                   {product.desc}
                 </p>
               </div>
-            </div>
+            </article>
           ))}
         </div>
 

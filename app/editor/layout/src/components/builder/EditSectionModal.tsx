@@ -158,6 +158,12 @@ const toPageLinks = (menu: MenuItem[], limit = MAX_MENU_LINKS): PageLink[] =>
       : undefined,
   }));
 
+const getPageNames = (links: PageLink[]): string[] =>
+  links.flatMap((link) => [
+    link.label,
+    ...(link.children ? getPageNames(link.children) : []),
+  ]);
+
 const getMediaKindFromKey = (key: string): "image" | "video" | null => {
   const normalizedKey = key.toLowerCase();
 
@@ -208,6 +214,54 @@ const sidebarItemsBySection: Record<string, string[]> = {
   Testimonial: ["Our Clients Content", "Our Clients Layout"],
   FormDetail: ["Form Content", "Form Layout"],
   Footer: ["Footer Layout", "Footer Content", "External Link"],
+};
+
+const componentContentFieldsByVariant: Record<string, string[]> = {
+  "About-1": ["title", "desc", "backgroundImage", "backgroundImageTitle", "buttons"],
+  "About-2": ["pretitle", "title", "subtitle", "desc", "backgroundImage", "backgroundImageTitle", "sideImage", "sideImageTitle", "philosophyTitle", "philosophyDesc", "buttons"],
+  "AboutPage-1": ["pretitle", "title", "subtitle", "desc", "desc2", "sideImage", "sideImageTitle", "philosophyTitle", "philosophyDesc"],
+  "AboutPage-2": ["pretitle", "title", "desc", "desc2", "sideImage", "sideImageTitle"],
+  "AboutPage-3": ["pretitle", "title", "subtitle", "desc", "desc2", "philosophyTitle", "philosophyDesc"],
+  "ServicePage-1": ["pretitle", "title", "subtitle", "desc", "desc2", "sideImage", "sideImageTitle", "productSectionTitle", "productItems", "productSlides"],
+  "Product-1": ["productSlides", "productFeatures", "productTotalPrice", "productShippingText"],
+  "Product-2": ["productSectionTitle", "productItems"],
+  "Product-3": ["pretitle", "title", "desc", "buttons", "productItems"],
+  "WhyChooseUs-1": ["pretitle", "title", "whyChooseUsItems"],
+  "WhyChooseUs-2": ["title", "whyChooseUsItems"],
+  "WhyChooseUs-3": ["title", "whyChooseUsItems"],
+  "WhyChooseUs-4": ["title", "whyChooseUsItems"],
+  "Gallery-1": ["title", "desc", "galleryItems"],
+  "Gallery-2": ["title", "galleryItems"],
+  "Gallery-3": ["title", "galleryItems"],
+  "Gallery-4": ["pretitle", "title", "desc", "galleryItems"],
+  "Gallery-5": ["title", "desc", "galleryItems"],
+  "Gallery-6": ["title", "galleryItems"],
+  "GalleryPage-1": ["pretitle", "title", "desc", "galleryItems"],
+  "ContactPage-1": ["pretitle", "title", "desc", "sideImage", "sideImageTitle", "footerContact", "formFields", "formSubmitLabel"],
+  "ContactPage-2": ["pretitle", "title", "desc", "footerContact", "formFields", "formSubmitLabel"],
+  "FAQ-1": ["pretitle", "title", "desc", "faqItems"],
+  "FAQ-2": ["title", "faqItems"],
+  "FAQ-3": ["title", "faqItems"],
+  "FAQ-4": ["title", "faqItems"],
+  "Testimonial-1": ["pretitle", "title", "testimonialItems"],
+  "Testimonial-2": ["pretitle", "title", "desc", "testimonialItems"],
+  "Testimonial-3": ["pretitle", "title", "testimonialItems"],
+  "FormDetail-1": ["pretitle", "title", "desc", "backgroundImage", "backgroundImageTitle", "sideImage", "galleryItems", "formFields", "formSubmitLabel"],
+  "FormDetail-2": ["title", "formFields", "formSubmitLabel"],
+  "FormDetail-3": ["title", "desc", "phone", "email", "location", "formFields", "formSubmitLabel"],
+  "FormDetail-4": ["title", "desc", "formFields", "formSubmitLabel"],
+};
+
+const knownContentFieldsBySection: Record<string, Set<string>> = {
+  About: new Set(["pretitle", "title", "subtitle", "desc", "desc2", "backgroundImage", "backgroundImageTitle", "sideImage", "sideImageTitle", "philosophyTitle", "philosophyDesc", "buttons"]),
+  Service: new Set(["pretitle", "title", "subtitle", "desc", "desc2", "sideImage", "sideImageTitle", "productSectionTitle", "productItems", "productSlides"]),
+  Product: new Set(["pretitle", "title", "desc", "buttons", "productSlides", "productFeatures", "productTotalPrice", "productShippingText", "productSectionTitle", "productItems"]),
+  WhyChooseUs: new Set(["pretitle", "title", "desc", "whyChooseUsItems"]),
+  Gallery: new Set(["pretitle", "title", "desc", "galleryItems"]),
+  Contact: new Set(["pretitle", "title", "desc", "sideImage", "sideImageTitle", "footerContact", "formFields", "formSubmitLabel"]),
+  FAQ: new Set(["pretitle", "title", "desc", "faqItems"]),
+  Testimonial: new Set(["pretitle", "title", "desc", "testimonialItems"]),
+  FormDetail: new Set(["pretitle", "title", "desc", "backgroundImage", "backgroundImageTitle", "sideImage", "galleryItems", "phone", "email", "location", "formFields", "formSubmitLabel"]),
 };
 
 const normalizeSectionType = (sectionType: string) => {
@@ -340,6 +394,445 @@ const MediaUploadPreview = ({
   </div>
 );
 
+type GenericFieldPath = Array<string | number>;
+
+type HandledFieldObject = {
+  [field: string]: HandledFieldSchema;
+};
+
+type HandledFieldSchema = true | HandledFieldObject;
+
+type AutomaticContentField = {
+  fieldName: string;
+  value: unknown;
+  path: GenericFieldPath;
+};
+
+const specializedContentFieldSchemas: Record<string, HandledFieldObject> = {
+  Topbar: {
+    topbarBackgroundType: true,
+    topbarType: true,
+    topbarBackgroundColor: true,
+    topbarGradientColor: true,
+    topbarTextColor: true,
+    text: true,
+    phone: true,
+    email: true,
+    location: true,
+    hiddenContentFields: true,
+    socialLinks: {
+      $items: { label: true, href: true },
+    },
+  },
+  Header: {
+    logo: true,
+    logoImage: true,
+    logoImageTitle: true,
+    headerBackgroundType: true,
+    headerType: true,
+    headerBackgroundColor: true,
+    headerGradientColor: true,
+    headerTextColor: true,
+    menu: true,
+    buttons: {
+      $items: { label: true, href: true, variant: true },
+    },
+  },
+  Banner: {
+    backgroundImage: true,
+    backgroundImageTitle: true,
+    pretitle: true,
+    title: true,
+    desc: true,
+    overlayColor: true,
+    titleColor: true,
+    bannerBackgroundMode: true,
+    bannerBackgroundColor: true,
+    bannerGradientColor: true,
+    backgroundVideo: true,
+    bannerHeight: true,
+    buttons: {
+      $items: { label: true, href: true, variant: true },
+    },
+    bannerSlides: {
+      $items: {
+        image: true,
+        video: true,
+        alt: true,
+        title: true,
+        desc: true,
+        button: { label: true, href: true, variant: true },
+      },
+    },
+  },
+  FormDetail: {
+    pretitle: true,
+    title: true,
+    desc: true,
+    formSubmitLabel: true,
+    formFields: {
+      $items: { label: true, type: true, placeholder: true },
+    },
+  },
+  Footer: {
+    logo: true,
+    logoImage: true,
+    logoImageTitle: true,
+    footerBackgroundType: true,
+    footerBackgroundColor: true,
+    footerGradientColor: true,
+    footerTextColor: true,
+    footerMutedTextColor: true,
+    footerColumns: {
+      $items: {
+        title: true,
+        links: { $items: { label: true, href: true } },
+      },
+    },
+    whatsappLink: true,
+    callLink: true,
+  },
+};
+
+const collectAutomaticContentFields = (
+  value: unknown,
+  schema: HandledFieldSchema | undefined,
+  path: GenericFieldPath,
+  fieldName: string,
+): AutomaticContentField[] => {
+  if (schema === true) return [];
+
+  if (!schema) return [{ fieldName, value, path }];
+
+  if (Array.isArray(value)) {
+    const itemSchema = schema.$items;
+
+    if (!itemSchema) return [{ fieldName, value, path }];
+
+    return value.flatMap((item, index) =>
+      collectAutomaticContentFields(
+        item,
+        itemSchema,
+        [...path, index],
+        `Item ${index + 1}`,
+      ),
+    );
+  }
+
+  if (typeof value === "object" && value !== null) {
+    return Object.entries(value).flatMap(([childName, childValue]) =>
+      collectAutomaticContentFields(
+        childValue,
+        schema[childName],
+        [...path, childName],
+        childName,
+      ),
+    );
+  }
+
+  return [{ fieldName, value, path }];
+};
+
+type GenericFieldEditorProps = {
+  fieldName: string;
+  value: unknown;
+  path: GenericFieldPath;
+  sectionType: string;
+  onChange: (path: GenericFieldPath, value: unknown) => void;
+  onMediaChange: (
+    path: GenericFieldPath,
+    fieldName: string,
+    file: File,
+  ) => void;
+  onAddArrayItem?: (path: GenericFieldPath) => void;
+  onDeleteArrayItem?: (path: GenericFieldPath, index: number) => void;
+  availablePageNames?: string[];
+};
+
+const userManageableCollectionFields = new Set([
+  "productItems",
+  "productSlides",
+  "testimonialItems",
+  "faqItems",
+  "galleryItems",
+]);
+
+const formatFieldLabel = (fieldName: string) =>
+  fieldName
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (letter) => letter.toUpperCase());
+
+const GenericFieldEditor = ({
+  fieldName,
+  value,
+  path,
+  sectionType,
+  onChange,
+  onMediaChange,
+  onAddArrayItem,
+  onDeleteArrayItem,
+  availablePageNames = [],
+}: GenericFieldEditorProps) => {
+  if (Array.isArray(value)) {
+    const canManageItems =
+      path.length === 1 &&
+      userManageableCollectionFields.has(fieldName) &&
+      onAddArrayItem &&
+      onDeleteArrayItem;
+
+    return (
+      <section className="rounded-xl bg-[#f4f4f5] p-4">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h4 className="text-sm font-bold text-slate-900">
+            {formatFieldLabel(fieldName)}
+          </h4>
+          {canManageItems && (
+            <button
+              type="button"
+              onClick={() => onAddArrayItem(path)}
+              className="flex items-center gap-1 rounded-md bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+            >
+              <Plus size={14} />
+              Add New
+            </button>
+          )}
+        </div>
+        {value.length ? (
+          <div className="space-y-3">
+            {value.map((item, index) => (
+              <div
+                key={`${fieldName}-${index}`}
+                className="relative rounded-xl border border-slate-200 bg-white p-3"
+              >
+                {canManageItems && (
+                  <button
+                    type="button"
+                    onClick={() => onDeleteArrayItem(path, index)}
+                    className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-lg border border-red-200 bg-white text-red-600 hover:bg-red-50"
+                    aria-label={`Delete ${formatFieldLabel(fieldName)} item ${index + 1}`}
+                  >
+                    <Trash size={15} />
+                  </button>
+                )}
+                <GenericFieldEditor
+                  fieldName={`Item ${index + 1}`}
+                  value={item}
+                  path={[...path, index]}
+                  sectionType={sectionType}
+                  onChange={onChange}
+                  onMediaChange={onMediaChange}
+                  onAddArrayItem={onAddArrayItem}
+                  onDeleteArrayItem={onDeleteArrayItem}
+                  availablePageNames={availablePageNames}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-xs text-slate-500">No items to edit.</p>
+        )}
+      </section>
+    );
+  }
+
+  if (typeof value === "object" && value !== null) {
+    return (
+      <div className="space-y-3">
+        {fieldName.startsWith("Item ") && (
+          <h5 className="text-xs font-bold uppercase tracking-wide text-slate-500">
+            {fieldName}
+          </h5>
+        )}
+        {(() => {
+          const entries = Object.entries(value);
+          const isProductItem =
+            path.length === 2 &&
+            (path[0] === "productItems" || path[0] === "productSlides");
+
+          if (isProductItem) {
+            const existingLinkIndex = entries.findIndex(
+              ([key]) => key === "link",
+            );
+            const linkEntry =
+              existingLinkIndex >= 0
+                ? entries.splice(existingLinkIndex, 1)[0]
+                : (["link", ""] as [string, unknown]);
+            const altIndex = entries.findIndex(([key]) => key === "alt");
+            entries.splice(
+              altIndex >= 0 ? altIndex + 1 : entries.length,
+              0,
+              linkEntry,
+            );
+          }
+
+          return entries.map(([childName, childValue]) => (
+          <GenericFieldEditor
+            key={childName}
+            fieldName={childName}
+            value={childValue}
+            path={[...path, childName]}
+            sectionType={sectionType}
+            onChange={onChange}
+            onMediaChange={onMediaChange}
+            onAddArrayItem={onAddArrayItem}
+            onDeleteArrayItem={onDeleteArrayItem}
+            availablePageNames={availablePageNames}
+          />
+          ));
+        })()}
+      </div>
+    );
+  }
+
+  const label = formatFieldLabel(fieldName);
+  const mediaKind =
+    typeof value === "string" ? getMediaKindFromKey(fieldName) : null;
+
+  if (mediaKind) {
+    const stringValue = value as string;
+
+    return (
+      <div>
+        <span className="mb-1 block text-xs font-semibold text-slate-600">
+          {label}
+        </span>
+        <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_8rem] sm:items-start">
+          <div className="space-y-2">
+            <label className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-900 transition hover:border-blue-500 focus-within:border-blue-600">
+              <span className="font-medium">
+                {stringValue ? `Change ${mediaKind}` : `Upload ${mediaKind}`}
+              </span>
+              <span className="max-w-[55%] truncate text-xs text-slate-500">
+                {getMediaUploadLabel(stringValue, mediaKind)}
+              </span>
+              <input
+                type="file"
+                accept={mediaKind === "video" ? "video/*" : "image/*"}
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (file) onMediaChange(path, fieldName, file);
+                  event.target.value = "";
+                }}
+                className="sr-only"
+              />
+            </label>
+            <input
+              value={stringValue}
+              onChange={(event) => onChange(path, event.target.value)}
+              className="h-10 w-full rounded-lg border border-gray-300 px-3 text-sm outline-none focus:border-blue-600"
+              placeholder={`${label} URL`}
+            />
+          </div>
+          <MediaUploadPreview src={stringValue} type={mediaKind} />
+        </div>
+      </div>
+    );
+  }
+
+  if (typeof value === "boolean") {
+    return (
+      <label className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 bg-white px-3 py-2">
+        <span className="text-xs font-semibold text-slate-600">{label}</span>
+        <input
+          type="checkbox"
+          checked={value}
+          onChange={(event) => onChange(path, event.target.checked)}
+          className="h-4 w-4 accent-blue-600"
+        />
+      </label>
+    );
+  }
+
+  const stringValue = value == null ? "" : String(value);
+  const isRating = sectionType === "Testimonial" && fieldName === "rating";
+  const isNumber = typeof value === "number" || isRating;
+  const isLongText =
+    stringValue.length > 80 ||
+    /^(desc|desc2|description|answer|quote|copyrightText)$/i.test(fieldName);
+  const isProductLink =
+    fieldName === "link" &&
+    path.length === 3 &&
+    (path[0] === "productItems" || path[0] === "productSlides");
+  const pageExists = availablePageNames.some(
+    (pageName) =>
+      pageName.trim().toLowerCase() === stringValue.trim().toLowerCase(),
+  );
+
+  return (
+    <label className="block">
+      <span className="mb-1 block text-xs font-semibold text-slate-600">
+        {label}
+      </span>
+      {isLongText ? (
+        <textarea
+          value={stringValue}
+          onChange={(event) => onChange(path, event.target.value)}
+          className="h-24 w-full resize-y rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-600"
+        />
+      ) : (
+        <input
+          type={isNumber ? "number" : "text"}
+          min={isRating ? 0 : undefined}
+          max={isRating ? 5 : undefined}
+          step={isRating ? 0.5 : undefined}
+          value={stringValue}
+          onChange={(event) => {
+            if (typeof value === "number") {
+              onChange(path, Number(event.target.value));
+              return;
+            }
+
+            if (isRating) {
+              onChange(
+                path,
+                String(
+                  Math.max(0, Math.min(5, Number(event.target.value) || 0)),
+                ),
+              );
+              return;
+            }
+
+            onChange(path, event.target.value);
+          }}
+          className="h-10 w-full rounded-lg border border-gray-300 px-3 text-sm outline-none focus:border-blue-600"
+        />
+      )}
+      {isProductLink && stringValue.trim() && !pageExists && (
+        <span className="mt-1 block text-xs font-medium text-red-600">
+          No page found.
+        </span>
+      )}
+    </label>
+  );
+};
+
+const setValueAtPath = (
+  source: unknown,
+  path: GenericFieldPath,
+  value: unknown,
+): unknown => {
+  if (!path.length) return value;
+
+  const [key, ...remainingPath] = path;
+
+  if (Array.isArray(source)) {
+    const copy = [...source];
+    const index = Number(key);
+    copy[index] = setValueAtPath(copy[index], remainingPath, value);
+    return copy;
+  }
+
+  const record =
+    typeof source === "object" && source !== null
+      ? (source as Record<string, unknown>)
+      : {};
+
+  return {
+    ...record,
+    [String(key)]: setValueAtPath(record[String(key)], remainingPath, value),
+  };
+};
+
 const VisibilityButton = ({ hidden, onClick }: { hidden: boolean; onClick: () => void }) => (
   <button
     type="button"
@@ -369,7 +862,8 @@ export default function EditSectionModal({
   const [galleryLayoutStart, setGalleryLayoutStart] = useState(0);
   const [hasChanges, setHasChanges] = useState(false);
   const [lastChangedSection, setLastChangedSection] = useState(sectionType);
-  const { currentPage, setCurrentPage, setPageLinks } = usePreview();
+  const { currentPage, pageLinks, setCurrentPage, setPageLinks } = usePreview();
+  const availablePageNames = getPageNames(pageLinks);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const [dragStart, setDragStart] = useState<{
     pointerId: number;
@@ -430,7 +924,7 @@ export default function EditSectionModal({
         headerGradientColor?: string;
         headerTextColor?: string;
         menu?: MenuItem[];
-        buttons?: { label: string; href: string }[];
+        buttons?: ButtonData[];
       }
     | undefined;
 
@@ -468,12 +962,31 @@ export default function EditSectionModal({
   const activeGenericData = currentSection?.data?.[activeVariant] as
     | SectionData
     | undefined;
-  const activeGenericStringEntries = Object.entries(activeGenericData ?? {}).filter(
-    ([, value]) => typeof value === "string",
-  );
-  const activeGenericArrayEntries = Object.entries(activeGenericData ?? {}).filter(
-    ([, value]) => Array.isArray(value),
-  );
+  const activeComponentContentFields =
+    componentContentFieldsByVariant[activeVariant];
+  const knownSectionContentFields =
+    knownContentFieldsBySection[activeSectionType];
+  const isContentFieldVisible = (field: string) =>
+    !activeComponentContentFields ||
+    activeComponentContentFields.includes(field) ||
+    !knownSectionContentFields?.has(field);
+  const visibleGenericContentEntries = Object.entries(
+    activeGenericData ?? {},
+  ).filter(([field]) => isContentFieldVisible(field));
+  const specializedContentSchema =
+    specializedContentFieldSchemas[activeSectionType];
+  const automaticContentFields = specializedContentSchema
+    ? Object.entries(activeGenericData ?? {})
+        .filter(([fieldName]) => isContentFieldVisible(fieldName))
+        .flatMap(([fieldName, value]) =>
+          collectAutomaticContentFields(
+            value,
+            specializedContentSchema[fieldName],
+            [fieldName],
+            fieldName,
+          ),
+        )
+    : [];
 
   const menuItems = activeHeaderData?.menu ?? [];
   const topbarBackgroundType =
@@ -760,58 +1273,115 @@ export default function EditSectionModal({
     });
   };
 
-  const updateGenericArrayItem = (
-    field: keyof SectionData,
-    index: number,
-    itemField: string,
-    value: string,
-  ) => {
-    const items = activeGenericData?.[field];
+  const updateGenericField = (path: GenericFieldPath, value: unknown) => {
+    const [field, ...nestedPath] = path;
+    if (typeof field !== "string" || !activeGenericData) return;
 
-    if (!Array.isArray(items)) return;
+    const nextValue = setValueAtPath(
+      activeGenericData[field as keyof SectionData],
+      nestedPath,
+      value,
+    );
+
+    if (
+      activeSectionType === "Header" &&
+      field === "menu" &&
+      Array.isArray(nextValue)
+    ) {
+      updateActiveHeaderData({ menu: nextValue });
+      return;
+    }
 
     updateActiveGenericData({
-      [field]: items.map((item, itemIndex) =>
-        itemIndex === index &&
-        typeof item === "object" &&
-        item !== null &&
-        !Array.isArray(item)
-          ? { ...item, [itemField]: value }
-          : item,
-      ),
+      [field]: nextValue,
     });
   };
 
-  const handleGenericMediaFileChange = (
-    field: keyof SectionData,
-    event: ChangeEvent<HTMLInputElement>,
+  const updateGenericMedia = (
+    path: GenericFieldPath,
+    fieldName: string,
+    file: File,
   ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    const mediaKind = getMediaKindFromKey(String(field)) ?? "image";
+    const mediaKind = getMediaKindFromKey(fieldName) ?? "image";
 
     showBannerGenerationLoader(mediaKind);
     readBannerBackgroundFile(file, (dataUrl) => {
-      updateActiveGenericData({ [field]: dataUrl });
+      updateGenericField(path, dataUrl);
     });
-    event.target.value = "";
   };
 
-  const handleGenericArrayImageFileChange = (
-    field: keyof SectionData,
+  const addGenericCollectionItem = (path: GenericFieldPath) => {
+    const [field] = path;
+    if (typeof field !== "string") return;
+
+    const items = activeGenericData?.[field as keyof SectionData];
+    if (!Array.isArray(items)) return;
+
+    const newItems: Record<string, unknown> = {
+      productItems: {
+        title: "New Product",
+        category: "Product Category",
+        desc: "Add the product description here.",
+        image: "",
+        alt: "Product image",
+        link: "",
+      },
+      productSlides: {
+        image: "",
+        alt: "Product image",
+        link: "",
+        productTitle: "New Product",
+        productSubtitle: "Product Category",
+        productInfoTitle: "Product Details",
+        productInfoDesc: "Add the product description here.",
+        productFeatures: [
+          { label: "Feature", price: "Price" },
+        ],
+        productTotalPrice: "Price",
+        productShippingText: "Add delivery information",
+        button: {
+          label: "View details",
+          href: "#",
+          variant: "primary",
+        },
+      },
+      testimonialItems: {
+        name: "New Customer",
+        role: "Customer",
+        quote: "Add the customer testimonial here.",
+        image: "",
+        rating: "5",
+      },
+      faqItems: {
+        question: "New question",
+        answer: "Add the answer here.",
+      },
+      galleryItems: {
+        image: "",
+        alt: "Gallery image",
+        title: "New gallery image",
+      },
+    };
+    const newItem = newItems[field];
+
+    if (!newItem) return;
+    updateGenericField(path, [...items, newItem]);
+  };
+
+  const deleteGenericCollectionItem = (
+    path: GenericFieldPath,
     index: number,
-    itemField: string,
-    event: ChangeEvent<HTMLInputElement>,
   ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    const mediaKind = getMediaKindFromKey(itemField) ?? "image";
+    const [field] = path;
+    if (typeof field !== "string") return;
 
-    showBannerGenerationLoader(mediaKind);
-    readBannerBackgroundFile(file, (dataUrl) => {
-      updateGenericArrayItem(field, index, itemField, dataUrl);
-    });
-    event.target.value = "";
+    const items = activeGenericData?.[field as keyof SectionData];
+    if (!Array.isArray(items)) return;
+
+    updateGenericField(
+      path,
+      items.filter((_, itemIndex) => itemIndex !== index),
+    );
   };
 
   const handleSidebarTabChange = (tab: string) => {
@@ -1073,7 +1643,7 @@ export default function EditSectionModal({
 
   const updateHeaderButton = (
     index: number,
-    field: "label" | "href",
+    field: "label" | "href" | "variant",
     value: string,
   ) => {
     const nextValue = field === "label" ? limitLinkText(value) : value;
@@ -1205,7 +1775,7 @@ export default function EditSectionModal({
 
   const updateBannerButton = (
     index: number,
-    field: "label" | "href",
+    field: "label" | "href" | "variant",
     value: string,
   ) => {
     const nextValue = field === "label" ? limitLinkText(value) : value;
@@ -1251,7 +1821,7 @@ export default function EditSectionModal({
 
   const updateBannerSlideButton = (
     index: number,
-    field: "label" | "href",
+    field: "label" | "href" | "variant",
     value: string,
   ) => {
     const nextValue = field === "label" ? limitLinkText(value) : value;
@@ -1973,6 +2543,16 @@ export default function EditSectionModal({
                           Remove logo image
                         </button>
                       )}
+                      <input
+                        value={activeHeaderData?.logoImageTitle ?? ""}
+                        onChange={(event) =>
+                          updateActiveHeaderData({
+                            logoImageTitle: event.target.value,
+                          })
+                        }
+                        className="h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                        placeholder="Logo image alt text"
+                      />
                     </div>
                   </div>
 
@@ -2010,7 +2590,7 @@ export default function EditSectionModal({
                       {(activeHeaderData?.buttons ?? []).map((button, index) => (
                         <div
                           key={index}
-                          className="grid grid-cols-1 gap-3 rounded-xl border border-gray-300 bg-white p-3 shadow-sm lg:grid-cols-[minmax(8rem,1fr)_minmax(8rem,1fr)_3.5rem]"
+                          className="grid grid-cols-1 gap-3 rounded-xl border border-gray-300 bg-white p-3 shadow-sm lg:grid-cols-[minmax(8rem,1fr)_minmax(8rem,1fr)_8rem_3.5rem]"
                         >
                           <input
                             value={button.label}
@@ -2037,6 +2617,22 @@ export default function EditSectionModal({
                             className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
                             placeholder="/link"
                           />
+
+                          <select
+                            value={button.variant ?? "primary"}
+                            onChange={(event) =>
+                              updateHeaderButton(
+                                index,
+                                "variant",
+                                event.target.value,
+                              )
+                            }
+                            className="h-11 rounded-lg border border-gray-300 px-3 text-sm outline-none focus:border-blue-600"
+                            aria-label="Header button style"
+                          >
+                            <option value="primary">Primary</option>
+                            <option value="secondary">Secondary</option>
+                          </select>
 
                           <button
                             type="button"
@@ -2197,6 +2793,19 @@ export default function EditSectionModal({
                     </div>
                   )}
 
+                  {activeVariant === "Banner-2" &&
+                    "overlayColor" in (activeBannerData ?? {}) && (
+                    <div className="rounded-xl border border-gray-200 bg-white p-4">
+                        <ColorInput
+                          label="Overlay Color"
+                          value={activeBannerData?.overlayColor ?? "#000000"}
+                          onChange={(color) =>
+                            updateBannerField("overlayColor", color)
+                          }
+                        />
+                    </div>
+                  )}
+
                   {isSliderBanner && hasBannerSlidesField && (
                     <section className="space-y-4 rounded-xl border border-gray-200 bg-white p-4">
                       <div className="flex items-center justify-between gap-3">
@@ -2309,6 +2918,44 @@ export default function EditSectionModal({
                               </div>
                             )}
 
+                            {isVideoSliderBanner && (
+                              <div>
+                                <label className="block text-sm font-semibold text-gray-900">
+                                  Poster Image URL
+                                </label>
+                                <input
+                                  value={slide.image}
+                                  onChange={(event) =>
+                                    updateBannerSlide(
+                                      index,
+                                      "image",
+                                      event.target.value,
+                                    )
+                                  }
+                                  className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                                  placeholder="/poster.jpg"
+                                />
+                              </div>
+                            )}
+
+                            <div>
+                              <label className="block text-sm font-semibold text-gray-900">
+                                Slide Image Alt Text
+                              </label>
+                              <input
+                                value={slide.alt ?? ""}
+                                onChange={(event) =>
+                                  updateBannerSlide(
+                                    index,
+                                    "alt",
+                                    event.target.value,
+                                  )
+                                }
+                                className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                                placeholder="Describe this slide image"
+                              />
+                            </div>
+
                             <div>
                               <label className="block text-sm font-semibold text-gray-900">
                                 Slide Title
@@ -2345,7 +2992,7 @@ export default function EditSectionModal({
                               />
                             </div>
 
-                            <div className="grid gap-3 lg:grid-cols-2">
+                            <div className="grid gap-3 lg:grid-cols-3">
                               <div>
                                 <label className="block text-sm font-semibold text-gray-900">
                                   Button Label
@@ -2380,6 +3027,26 @@ export default function EditSectionModal({
                                   className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
                                   placeholder="#"
                                 />
+                              </div>
+
+                              <div>
+                                <label className="block text-sm font-semibold text-gray-900">
+                                  Button Style
+                                </label>
+                                <select
+                                  value={slide.button?.variant ?? "primary"}
+                                  onChange={(event) =>
+                                    updateBannerSlideButton(
+                                      index,
+                                      "variant",
+                                      event.target.value,
+                                    )
+                                  }
+                                  className="mt-2 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                                >
+                                  <option value="primary">Primary</option>
+                                  <option value="secondary">Secondary</option>
+                                </select>
                               </div>
                             </div>
                           </div>
@@ -2550,9 +3217,7 @@ export default function EditSectionModal({
                     </div>
                   )}
 
-                  {isSimpleBanner &&
-                    activeVariant !== "Banner-2" &&
-                    hasBannerButtonsField && (
+                  {isSimpleBanner && hasBannerButtonsField && (
                     <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-4">
                       <div className="flex items-center justify-between gap-3">
                         <h4 className="text-sm font-semibold text-gray-900">
@@ -2583,7 +3248,7 @@ export default function EditSectionModal({
                           (button, index) => (
                             <div
                               key={index}
-                              className="grid grid-cols-1 gap-3 rounded-xl border border-gray-300 bg-white p-3 shadow-sm lg:grid-cols-[minmax(8rem,1fr)_minmax(8rem,1fr)_3.5rem]"
+                              className="grid grid-cols-1 gap-3 rounded-xl border border-gray-300 bg-white p-3 shadow-sm lg:grid-cols-[minmax(8rem,1fr)_minmax(8rem,1fr)_8rem_3.5rem]"
                             >
                               <input
                                 value={button.label}
@@ -2610,6 +3275,22 @@ export default function EditSectionModal({
                                 className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
                                 placeholder="/link"
                               />
+
+                              <select
+                                value={button.variant ?? "primary"}
+                                onChange={(event) =>
+                                  updateBannerButton(
+                                    index,
+                                    "variant",
+                                    event.target.value,
+                                  )
+                                }
+                                className="h-11 rounded-lg border border-gray-300 px-3 text-sm outline-none focus:border-blue-600"
+                                aria-label="Banner button style"
+                              >
+                                <option value="primary">Primary</option>
+                                <option value="secondary">Secondary</option>
+                              </select>
 
                               <button
                                 type="button"
@@ -2995,46 +3676,54 @@ export default function EditSectionModal({
                 <div className="space-y-5">
                   <section className="rounded-xl bg-[#f4f4f5] p-4">
                     <div className="grid gap-3">
-                      <input
-                        value={activeFormDetailData?.pretitle ?? ""}
-                        onChange={(event) =>
-                          updateActiveFormDetailData({
-                            pretitle: event.target.value,
-                          })
-                        }
-                        className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
-                        placeholder="Eyebrow text"
-                      />
-                      <input
-                        value={activeFormDetailData?.title ?? ""}
-                        onChange={(event) =>
-                          updateActiveFormDetailData({
-                            title: event.target.value,
-                          })
-                        }
-                        className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
-                        placeholder="Form title"
-                      />
-                      <textarea
-                        value={activeFormDetailData?.desc ?? ""}
-                        onChange={(event) =>
-                          updateActiveFormDetailData({
-                            desc: event.target.value,
-                          })
-                        }
-                        className="h-24 resize-none rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-blue-600"
-                        placeholder="Form description"
-                      />
-                      <input
-                        value={activeFormDetailData?.formSubmitLabel ?? ""}
-                        onChange={(event) =>
-                          updateActiveFormDetailData({
-                            formSubmitLabel: event.target.value,
-                          })
-                        }
-                        className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
-                        placeholder="Submit button label"
-                      />
+                      {isContentFieldVisible("pretitle") && (
+                        <input
+                          value={activeFormDetailData?.pretitle ?? ""}
+                          onChange={(event) =>
+                            updateActiveFormDetailData({
+                              pretitle: event.target.value,
+                            })
+                          }
+                          className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
+                          placeholder="Eyebrow text"
+                        />
+                      )}
+                      {isContentFieldVisible("title") && (
+                        <input
+                          value={activeFormDetailData?.title ?? ""}
+                          onChange={(event) =>
+                            updateActiveFormDetailData({
+                              title: event.target.value,
+                            })
+                          }
+                          className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
+                          placeholder="Form title"
+                        />
+                      )}
+                      {isContentFieldVisible("desc") && (
+                        <textarea
+                          value={activeFormDetailData?.desc ?? ""}
+                          onChange={(event) =>
+                            updateActiveFormDetailData({
+                              desc: event.target.value,
+                            })
+                          }
+                          className="h-24 resize-none rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-blue-600"
+                          placeholder="Form description"
+                        />
+                      )}
+                      {isContentFieldVisible("formSubmitLabel") && (
+                        <input
+                          value={activeFormDetailData?.formSubmitLabel ?? ""}
+                          onChange={(event) =>
+                            updateActiveFormDetailData({
+                              formSubmitLabel: event.target.value,
+                            })
+                          }
+                          className="h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
+                          placeholder="Submit button label"
+                        />
+                      )}
                     </div>
                   </section>
 
@@ -3137,222 +3826,20 @@ export default function EditSectionModal({
             ].includes(activeSectionType) &&
               activeTab.endsWith("Content") && (
                 <div className="space-y-5">
-                  {!!activeGenericStringEntries.length && (
-                    <section className="rounded-xl bg-[#f4f4f5] p-4">
-                      <h4 className="mb-4 text-sm font-bold text-slate-900">
-                        Main Content
-                      </h4>
-                      <div className="grid gap-3">
-                        {activeGenericStringEntries.map(([key, value]) => {
-                          const mediaKind = getMediaKindFromKey(key);
-                          const stringValue = String(value);
-
-                          return (
-                            <label key={key} className="block">
-                              <span className="mb-1 block text-xs font-semibold capitalize text-slate-600">
-                                {key.replace(/([A-Z])/g, " $1")}
-                              </span>
-                              {mediaKind ? (
-                                <span className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_8rem] sm:items-center">
-                                  <span className="flex h-11 w-full cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-900 transition hover:border-blue-500 focus-within:border-blue-600">
-                                    <span className="font-medium">
-                                      {stringValue
-                                        ? `Change ${mediaKind}`
-                                        : `Upload ${mediaKind}`}
-                                    </span>
-                                    <span className="max-w-[55%] truncate text-xs text-slate-500">
-                                      {getMediaUploadLabel(
-                                        stringValue,
-                                        mediaKind,
-                                      )}
-                                    </span>
-                                    <input
-                                      type="file"
-                                      accept={
-                                        mediaKind === "video"
-                                          ? "video/*"
-                                          : "image/*"
-                                      }
-                                      onChange={(event) =>
-                                        handleGenericMediaFileChange(
-                                          key as keyof SectionData,
-                                          event,
-                                        )
-                                      }
-                                      className="sr-only"
-                                    />
-                                  </span>
-                                  <MediaUploadPreview
-                                    src={stringValue}
-                                    type={mediaKind}
-                                  />
-                                </span>
-                              ) : String(value).length > 80 ? (
-                                <textarea
-                                  value={stringValue}
-                                  onChange={(event) =>
-                                    updateActiveGenericData({
-                                      [key]: event.target.value,
-                                    })
-                                  }
-                                  className="h-24 w-full resize-none rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-blue-600"
-                                />
-                              ) : (
-                                <input
-                                  value={stringValue}
-                                  onChange={(event) =>
-                                    updateActiveGenericData({
-                                      [key]: event.target.value,
-                                    })
-                                  }
-                                  className="h-11 w-full rounded-lg border border-gray-300 px-4 text-sm outline-none focus:border-blue-600"
-                                />
-                              )}
-                            </label>
-                          );
-                        })}
-                      </div>
-                    </section>
-                  )}
-
-                  {activeGenericArrayEntries.map(([key, value]) => (
-                      <section key={key} className="rounded-xl bg-[#f4f4f5] p-4">
-                        <h4 className="mb-4 text-sm font-bold capitalize text-slate-900">
-                          {key.replace(/([A-Z])/g, " $1")}
-                        </h4>
-                        <div className="space-y-3">
-                          {(value as unknown[]).map((item, itemIndex) => {
-                            if (
-                              typeof item !== "object" ||
-                              item === null ||
-                              Array.isArray(item)
-                            ) {
-                              return null;
-                            }
-
-                            return (
-                              <div
-                                key={`${key}-${itemIndex}`}
-                                className="grid gap-2 rounded-xl bg-white p-3"
-                              >
-                                {Object.entries(item)
-                                  .filter(
-                                    ([, itemValue]) =>
-                                      typeof itemValue === "string" ||
-                                      typeof itemValue === "number",
-                                  )
-                                  .map(([itemKey, itemValue]) => {
-                                    const mediaKind =
-                                      getMediaKindFromKey(itemKey);
-                                    const stringValue = String(itemValue);
-
-                                    return (
-                                      <label key={itemKey} className="block">
-                                        <span className="mb-1 block text-xs font-semibold capitalize text-slate-600">
-                                          {itemKey.replace(/([A-Z])/g, " $1")}
-                                        </span>
-                                        {mediaKind ? (
-                                          <span className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_8rem] sm:items-center">
-                                            <span className="flex h-10 w-full cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-900 transition hover:border-blue-500 focus-within:border-blue-600">
-                                              <span className="font-medium">
-                                                {stringValue
-                                                  ? `Change ${mediaKind}`
-                                                  : `Upload ${mediaKind}`}
-                                              </span>
-                                              <span className="max-w-[55%] truncate text-xs text-slate-500">
-                                                {getMediaUploadLabel(
-                                                  stringValue,
-                                                  mediaKind,
-                                                )}
-                                              </span>
-                                              <input
-                                                type="file"
-                                                accept={
-                                                  mediaKind === "video"
-                                                    ? "video/*"
-                                                    : "image/*"
-                                                }
-                                                onChange={(event) =>
-                                                  handleGenericArrayImageFileChange(
-                                                    key as keyof SectionData,
-                                                    itemIndex,
-                                                    itemKey,
-                                                    event,
-                                                  )
-                                                }
-                                                className="sr-only"
-                                              />
-                                            </span>
-                                            <MediaUploadPreview
-                                              src={stringValue}
-                                              type={mediaKind}
-                                            />
-                                          </span>
-                                        ) : (
-                                          <input
-                                            type={
-                                              activeSectionType ===
-                                                "Testimonial" &&
-                                              itemKey === "rating"
-                                                ? "number"
-                                                : "text"
-                                            }
-                                            min={
-                                              activeSectionType ===
-                                                "Testimonial" &&
-                                              itemKey === "rating"
-                                                ? 0
-                                                : undefined
-                                            }
-                                            max={
-                                              activeSectionType ===
-                                                "Testimonial" &&
-                                              itemKey === "rating"
-                                                ? 5
-                                                : undefined
-                                            }
-                                            step={
-                                              activeSectionType ===
-                                                "Testimonial" &&
-                                              itemKey === "rating"
-                                                ? 0.5
-                                                : undefined
-                                            }
-                                            value={stringValue}
-                                            onChange={(event) =>
-                                              updateGenericArrayItem(
-                                                key as keyof SectionData,
-                                                itemIndex,
-                                                itemKey,
-                                                activeSectionType ===
-                                                  "Testimonial" &&
-                                                  itemKey === "rating"
-                                                  ? String(
-                                                      Math.max(
-                                                        0,
-                                                        Math.min(
-                                                          5,
-                                                          Number(
-                                                            event.target.value,
-                                                          ) || 0,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : event.target.value,
-                                              )
-                                            }
-                                            className="h-10 w-full rounded-lg border border-gray-300 px-3 text-sm outline-none focus:border-blue-600"
-                                          />
-                                        )}
-                                      </label>
-                                    );
-                                  })}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </section>
-                    ))}
+                  {visibleGenericContentEntries.map(([key, value]) => (
+                    <GenericFieldEditor
+                      key={key}
+                      fieldName={key}
+                      value={value}
+                      path={[key]}
+                      sectionType={activeSectionType}
+                      onChange={updateGenericField}
+                      onMediaChange={updateGenericMedia}
+                      onAddArrayItem={addGenericCollectionItem}
+                      onDeleteArrayItem={deleteGenericCollectionItem}
+                      availablePageNames={availablePageNames}
+                    />
+                  ))}
                 </div>
               )}
 
@@ -3513,6 +4000,16 @@ export default function EditSectionModal({
                       )}
                       <span className="text-xs text-gray-500">{activeFooterData?.logoImageTitle ?? "No image selected"}</span>
                     </div>
+                    <input
+                      value={activeFooterData?.logoImageTitle ?? ""}
+                      onChange={(event) =>
+                        updateActiveFooterData({
+                          logoImageTitle: event.target.value,
+                        })
+                      }
+                      className="mt-3 h-11 w-full rounded-lg border border-gray-300 px-4 text-sm text-gray-900 outline-none focus:border-blue-600"
+                      placeholder="Logo image alt text"
+                    />
                   </div>
 
                   {(activeFooterData?.footerColumns ?? []).map((column, columnIndex) => (
@@ -3542,7 +4039,29 @@ export default function EditSectionModal({
                       </div>
                     </div>
                   ))}
+
                 </div>
+              )}
+
+            {activeTab.endsWith("Content") &&
+              automaticContentFields.length > 0 && (
+                <section className="space-y-4 rounded-xl border border-gray-200 bg-white p-4">
+                  <h4 className="text-sm font-bold text-slate-900">
+                    Additional Content
+                  </h4>
+                  {automaticContentFields.map((field) => (
+                    <GenericFieldEditor
+                      key={field.path.join(".")}
+                      fieldName={field.fieldName}
+                      value={field.value}
+                      path={field.path}
+                      sectionType={activeSectionType}
+                      onChange={updateGenericField}
+                      onMediaChange={updateGenericMedia}
+                      availablePageNames={availablePageNames}
+                    />
+                  ))}
+                </section>
               )}
 
             {activeSectionType === "Footer" &&
