@@ -34,6 +34,46 @@ html {
   animation: editorPopIn 240ms ease-out both;
 }
 
+@keyframes onboardingSwap {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes onboardingFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes onboardingBreathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.92);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+.animate-onboarding-swap {
+  animation: onboardingSwap 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 .editor-smooth-surface section,
 .editor-smooth-surface [contenteditable="true"],
 .editor-smooth-surface a,

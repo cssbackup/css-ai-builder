@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X, User, ChevronDown } from "lucide-react";
+import BrandLogo from "../ui/brand-logo";
 
 export default function Navbar() {
   const navItems = [
@@ -62,14 +63,7 @@ export default function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex shrink-0 items-center">
-            <Image
-              src="/logo.png"
-              alt="Nav logo"
-              width={90}
-              height={90}
-              className="h-11 w-auto"
-              priority
-            />
+            <BrandLogo />
           </Link>
 
           <div className="flex gap-4 ">
@@ -157,7 +151,7 @@ export default function Navbar() {
                   </div>
 
                   <a
-                    href="#"
+                    href="/auth"
                     className="flex items-center gap-2 text-sm font-medium text-gray-900 hover:text-red-600"
                     title="Login"
                   >

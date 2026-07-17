@@ -1,9 +1,5 @@
-import Hero from "../../components/sections/hero";
+import HomeExperience from "../../components/home/home-experience";
 
 export default function Home() {
-  return (
-    <>
-      <Hero />
-    </>
-  );
+  return <HomeExperience />;
 }

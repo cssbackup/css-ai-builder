@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BrandLogo from "../ui/brand-logo";
 
 export default function Footer() {
   const links = [
@@ -13,9 +14,10 @@ export default function Footer() {
         <div className="border-t border-gray-200">
           <div className="mx-auto max-w-7xl px-4 py-2">
             <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
-              <p className="text-sm text-gray-600">
-                © {new Date().getFullYear()} CSS AI Builder
-              </p>
+              <div className="flex items-center gap-1 text-sm text-gray-600">
+                <BrandLogo className="origin-left scale-[.62]" />
+                <span className="-ml-9">© {new Date().getFullYear()}</span>
+              </div>
 
               <nav>
                 <ul className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">

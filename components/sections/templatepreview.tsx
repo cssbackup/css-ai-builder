@@ -9,7 +9,10 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
+  Eye,
+  Palette,
   Search,
+  Sparkles,
   X,
 } from "lucide-react";
 import {
@@ -27,8 +30,6 @@ const pageFilters = [
   "Single Page Website",
   "Multiple Pages Website",
 ];
-
-const steps = ["Business Info", "Category", "Choose Design"];
 
 type TemplatePreviewProps = {
   selectedCategory: string;
@@ -167,22 +168,27 @@ export default function Templatepreview({
   };
 
   return (
-    <div className="w-full px-4">
-      <div className="mx-auto flex w-full max-w-4xl flex-col rounded-[22px] border border-gray-300 bg-white px-4 py-6 shadow-sm sm:p-8 lg:max-w-5xl lg:p-6 xl:max-w-6xl xl:p-4 2xl:max-w-7xl 2xl:p-10">
-        <div className="shrink-0 text-center">
-          <Stepper currentStep={3} />
-
-          <h2 className="text-xl font-bold leading-tight tracking-tight text-slate-950 sm:text-2xl lg:mt-4 lg:text-3xl 2xl:mt-6 2xl:text-4xl">
-            Select your {selectedCategory || "website"} design.
-          </h2>
-
-          <p className="mx-auto mt-2 max-w-xl text-xs leading-5 text-slate-500 sm:text-sm 2xl:text-lg">
-            Choose any template. The content stays the same for this category,
-            while each template uses a different component combination.
-          </p>
+    <div className="w-full">
+      <div className="relative mx-auto flex w-full max-w-7xl flex-col overflow-hidden border border-white/80 bg-white/95 px-5 py-5 shadow-[0_30px_80px_rgba(25,60,150,.18)] backdrop-blur-xl sm:px-7 lg:px-9 lg:py-7">
+        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#315ff4] via-[#7ea4ff] to-cyan-300" />
+        <div className="flex shrink-0 items-start gap-3 border-b border-blue-100 pb-5">
+          <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[linear-gradient(145deg,#244bd5,#6e91ff)] text-white shadow-[0_12px_28px_rgba(49,95,244,.25)]">
+            <Palette size={19} />
+          </span>
+          <div>
+            <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[.18em] text-[#315ff4]">
+              <Sparkles size={11} /> Curated by AI
+            </div>
+            <h2 className="mt-1 text-xl font-semibold tracking-[-.04em] text-[#08132f] sm:text-2xl">
+              Pick a look for your {selectedCategory || "website"}
+            </h2>
+            <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+              Preview a direction, then make every section and detail your own.
+            </p>
+          </div>
         </div>
 
-        <div className="mt-4 flex shrink-0 flex-col gap-2 sm:gap-3 md:mt-6 md:flex-row md:gap-4 lg:mt-4 2xl:mt-8">
+        <div className="mt-5 flex shrink-0 flex-col gap-3 md:flex-row">
           <div className="relative flex flex-1 items-center">
             <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 sm:left-5" />
 
@@ -194,14 +200,14 @@ export default function Templatepreview({
               }}
               type="text"
               placeholder="Search template e.g. template-2, Realestate, Business..."
-              className="h-12 w-full rounded-full border border-slate-100 bg-slate-50 pl-11 pr-11 text-xs text-slate-700 outline-none placeholder:text-slate-700 focus:border-red-200 sm:pl-14 sm:pr-12 sm:text-sm lg:h-10 2xl:h-14"
+              className="h-12 w-full rounded-2xl border border-blue-100 bg-blue-50/50 pl-11 pr-11 text-sm text-[#08132f] outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-[#315ff4] focus:bg-white focus:ring-4 focus:ring-blue-100"
             />
 
             {search && (
               <button
                 type="button"
                 onClick={clearSearch}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-red-600 sm:right-5"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-[#315ff4] sm:right-5"
                 aria-label="Clear search"
               >
                 <X size={17} />
@@ -213,10 +219,10 @@ export default function Templatepreview({
             <button
               type="button"
               onClick={() => setOpen(!open)}
-              className={`flex h-12 w-full cursor-pointer items-center justify-between gap-4 rounded-full border px-5 text-xs font-bold sm:text-sm md:w-[220px] lg:h-10 2xl:h-14 ${
+              className={`flex h-12 w-full cursor-pointer items-center justify-between gap-4 rounded-2xl border px-5 text-sm font-semibold transition-all duration-300 md:w-[220px] ${
                 open
-                  ? "border-red-200 bg-red-50 text-red-700"
-                  : "border-red-100 bg-white text-red-700"
+                  ? "border-[#315ff4] bg-blue-50 text-[#315ff4] ring-4 ring-blue-100"
+                  : "border-blue-100 bg-white text-[#315ff4] hover:border-blue-300"
               }`}
             >
               <span className="truncate">{selectedFilter}</span>
@@ -224,15 +230,15 @@ export default function Templatepreview({
             </button>
 
             {open && (
-              <div className="absolute right-0 z-10 mt-2 w-full overflow-hidden rounded-xl border border-slate-100 bg-white shadow-lg md:w-[220px]">
+              <div className="absolute right-0 z-10 mt-2 w-full overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-[0_18px_45px_rgba(25,60,150,.16)] md:w-[220px]">
                 {pageFilters.map((item) => (
                   <button
                     key={item}
                     type="button"
                     onClick={() => handleFilterSelect(item)}
-                    className={`block w-full cursor-pointer px-5 py-4 text-left text-sm font-semibold transition hover:bg-red-50 hover:text-red-600 ${
+                    className={`block w-full cursor-pointer px-5 py-3.5 text-left text-sm font-semibold transition hover:bg-blue-50 hover:text-[#315ff4] ${
                       selectedFilter === item
-                        ? "bg-red-50 text-red-600"
+                        ? "bg-blue-50 text-[#315ff4]"
                         : "text-slate-700"
                     }`}
                   >
@@ -250,7 +256,7 @@ export default function Templatepreview({
               <button
                 type="button"
                 onClick={() => setPreviewTemplate(null)}
-                className="fixed right-4 top-4 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-red-600 text-white shadow-lg transition hover:bg-red-700"
+                className="fixed right-4 top-4 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-[#315ff4] text-white shadow-lg transition hover:bg-[#244bd5]"
                 aria-label="Close preview"
               >
                 <X size={22} />
@@ -307,7 +313,7 @@ export default function Templatepreview({
                     <button
                       type="button"
                       onClick={() => setPreviewTemplate(null)}
-                      className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-red-50 hover:text-red-600"
+                      className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-blue-100 bg-white text-slate-700 shadow-sm transition hover:bg-blue-50 hover:text-[#315ff4]"
                       aria-label="Close template preview"
                     >
                       <X size={18} />
@@ -362,7 +368,7 @@ export default function Templatepreview({
                         <button
                           type="button"
                           onClick={() => handlePreviewSlide("previous")}
-                          className="absolute left-0 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-800 shadow-md transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                          className="absolute left-0 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-blue-100 bg-white text-slate-800 shadow-md transition hover:border-blue-300 hover:bg-blue-50 hover:text-[#315ff4]"
                           aria-label="Previous template"
                         >
                           <ChevronLeft size={20} strokeWidth={2.5} />
@@ -371,7 +377,7 @@ export default function Templatepreview({
                         <button
                           type="button"
                           onClick={() => handlePreviewSlide("next")}
-                          className="absolute right-0 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-800 shadow-md transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                          className="absolute right-0 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-blue-100 bg-white text-slate-800 shadow-md transition hover:border-blue-300 hover:bg-blue-50 hover:text-[#315ff4]"
                           aria-label="Next template"
                         >
                           <ChevronRight size={20} strokeWidth={2.5} />
@@ -390,8 +396,8 @@ export default function Templatepreview({
                             onClick={() => selectPreviewTemplate(item)}
                             className={`group relative overflow-hidden rounded-2xl border bg-white p-2 text-left transition ${
                               isActive
-                                ? "border-red-500 shadow-lg"
-                                : "border-slate-200 shadow-sm hover:border-red-300 hover:shadow-md"
+                                ? "border-[#315ff4] shadow-lg"
+                                : "border-blue-100 shadow-sm hover:border-blue-300 hover:shadow-md"
                             }`}
                           >
                             <div className="relative overflow-hidden rounded-xl">
@@ -404,7 +410,7 @@ export default function Templatepreview({
                               />
 
                               {isActive && (
-                                <span className="absolute left-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-white">
+                                <span className="absolute left-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#315ff4] text-white">
                                   <Check size={11} strokeWidth={3} />
                                 </span>
                               )}
@@ -432,7 +438,7 @@ export default function Templatepreview({
           </div>
         )}
 
-        <div className="mt-5 flex-1 px-1 pt-2 sm:px-2 sm:pt-1 md:mt-6 lg:mt-4 2xl:mt-8">
+        <div className="mt-5 flex-1 px-1 pt-1">
           <div className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 md:grid-cols-3 lg:gap-5 xl:grid-cols-4">
             {visibleTemplates.map((item) => {
               const isActive = selectedTemplate === item.id;
@@ -445,8 +451,10 @@ export default function Templatepreview({
                     setSelectedTemplate(item.id);
                     setPreviewTemplate(item);
                   }}
-                  className={`relative cursor-pointer rounded-2xl border bg-white p-3 text-left transition hover:border-red-500 hover:shadow-md ${
-                    isActive ? "border-red-500 shadow-md" : "border-slate-200"
+                  className={`group relative cursor-pointer overflow-hidden rounded-2xl border bg-white p-2.5 text-left transition-all duration-300 ease-out hover:-translate-y-1 hover:border-blue-300 hover:shadow-[0_18px_38px_rgba(49,95,244,.14)] ${
+                    isActive
+                      ? "border-[#315ff4] shadow-[0_18px_38px_rgba(49,95,244,.18)]"
+                      : "border-blue-100"
                   }`}
                 >
                   <div className="relative overflow-hidden rounded-xl">
@@ -455,11 +463,11 @@ export default function Templatepreview({
                       alt={getTemplateDisplayTitle(item)}
                       width={480}
                       height={260}
-                      className="h-28 w-full object-cover"
+                      className="h-32 w-full object-cover transition duration-500 group-hover:scale-105"
                     />
 
                     {isActive && (
-                      <span className="absolute left-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-white">
+                      <span className="absolute left-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#315ff4] text-white shadow-lg">
                         <Check size={11} strokeWidth={3} />
                       </span>
                     )}
@@ -469,15 +477,18 @@ export default function Templatepreview({
                         ? "Single"
                         : "Multiple"}
                     </span>
+                    <span className="absolute inset-x-2 bottom-2 flex translate-y-3 items-center justify-center gap-1 rounded-lg bg-[#08132f]/80 py-1.5 text-[9px] font-semibold text-white opacity-0 backdrop-blur transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                      <Eye size={11} /> Preview design
+                    </span>
                   </div>
 
-                  <div className="mt-4">
-                    <h3 className="truncate text-sm font-extrabold text-slate-900 sm:text-base">
+                  <div className="px-1 pb-1 pt-3">
+                    <h3 className="truncate text-sm font-semibold text-[#08132f] sm:text-base">
                       {getTemplateDisplayTitle(item)}
                     </h3>
 
-                    <p className="truncate text-xs font-semibold text-slate-500">
-                      TemplateId-{item.numericId} - {selectedCategory}
+                    <p className="mt-0.5 truncate text-[10px] font-medium uppercase tracking-[.08em] text-slate-400">
+                      Direction {item.numericId} · {selectedCategory}
                     </p>
                   </div>
                 </button>
@@ -516,55 +527,6 @@ export default function Templatepreview({
           </div>
         )} */}
       </div>
-    </div>
-  );
-}
-
-function Stepper({ currentStep }: { currentStep: number }) {
-  return (
-    <div className="mx-auto mb-2 flex w-full max-w-3xl items-center justify-center gap-1 overflow-hidden px-1">
-      {steps.map((step, index) => {
-        const isCompleted = index < currentStep;
-        const isActive = index === currentStep;
-
-        return (
-          <div key={step} className="flex min-w-0 flex-1 items-center">
-            <div
-              className={[
-                "flex min-w-0 flex-1 items-center justify-center gap-1 rounded-full border px-1.5 py-1 text-[10px] font-bold sm:gap-2 sm:px-3 sm:text-xs",
-                isCompleted
-                  ? "border-red-600 bg-red-600 text-white"
-                  : isActive
-                    ? "border-red-600 bg-white text-red-600 shadow-sm"
-                    : "border-slate-300 bg-white text-slate-950",
-              ].join(" ")}
-            >
-              <span
-                className={[
-                  "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px]",
-                  isCompleted
-                    ? "border-white bg-red-700 text-white"
-                    : isActive
-                      ? "border-red-600 bg-white text-red-600"
-                      : "border-slate-400 bg-white text-slate-800",
-                ].join(" ")}
-              >
-                {isCompleted ? <Check size={12} strokeWidth={3} /> : index + 1}
-              </span>
-
-              <span className="truncate 2xl:text-md semibold">{step}</span>
-            </div>
-
-            {index < steps.length - 1 && (
-              <div
-                className={`h-px w-2 shrink-0 sm:w-6 ${
-                  index < currentStep ? "bg-red-600" : "bg-slate-300"
-                }`}
-              />
-            )}
-          </div>
-        );
-      })}
     </div>
   );
 }
