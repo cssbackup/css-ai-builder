@@ -130,7 +130,7 @@ export default function CategoryStep({
   };
 
   return (
-    <section className="relative mx-auto w-full origin-center overflow-hidden border border-white/80 bg-white/95 shadow-[0_34px_90px_rgba(9,35,120,.24)] backdrop-blur-xl [@media(max-height:650px)]:scale-[.9] [@media(max-height:580px)]:scale-[.8]">
+    <section className="relative mx-auto w-full origin-center overflow-hidden border border-white/80 bg-white/95 shadow-[0_34px_90px_rgba(9,35,120,.24)] backdrop-blur-xl [@media(max-height:580px)]:scale-[.86]">
       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#315ff4] via-[#6d8cff] to-[#9fc6ff]" />
 
       <div className="px-4 py-4 sm:px-6 lg:px-8 lg:py-5">
@@ -244,7 +244,7 @@ export default function CategoryStep({
                 </FieldLabel>
               </div>
 
-              <div className="grid grid-cols-2 content-start items-start gap-x-4 gap-y-7 px-1 xl:grid-cols-[1.4fr_.82fr_.78fr]">
+              <div className="grid grid-cols-2 content-start items-start gap-x-4 gap-y-7 px-1 xl:grid-cols-[1.4fr_.72fr_1.12fr]">
                 <div className="order-1 col-span-2 xl:col-span-1">
                   <RadioGroup
                     legend="What is your website related to?"
@@ -338,9 +338,9 @@ export default function CategoryStep({
                 )}
 
                 <div
-                  className={`order-3 col-span-1 grid gap-2 xl:col-start-3 xl:row-start-1 ${
+                  className={`order-3 col-span-1 grid content-start gap-2 xl:col-start-3 xl:row-start-1 ${
                     value.hasLogo === "yes"
-                      ? "min-[1180px]:grid-cols-[minmax(150px,.75fr)_minmax(220px,1.25fr)] min-[1180px]:items-end"
+                      ? "min-[900px]:grid-cols-[190px_minmax(180px,1fr)] min-[900px]:items-end"
                       : ""
                   }`}
                 >
@@ -451,16 +451,13 @@ function LogoUpload({
           </p>
         </div>
 
-        <span className="pointer-events-none inline-flex h-7 w-auto shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-[#315ff4] px-2.5 text-[9px] font-semibold text-white shadow-[0_6px_14px_rgba(49,95,244,.22)]">
-          {fileName ? "Change" : "Upload"}
-          <input
-            type="file"
-            accept="image/png,image/jpeg,image/webp,image/svg+xml"
-            onChange={onChange}
-            className="sr-only"
-          />
-        </span>
       </div>
+      <input
+        type="file"
+        accept="image/png,image/jpeg,image/webp,image/svg+xml"
+        onChange={onChange}
+        className="sr-only"
+      />
       {hasError && <ErrorLine message="Please choose your logo image." />}
     </label>
   );

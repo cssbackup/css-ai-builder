@@ -120,7 +120,7 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
         <span className="size-2 rounded-full bg-lime-500" />
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl overflow-hidden">
+      <div className="relative z-10 w-full max-w-[1280px] overflow-hidden">
         <div className="w-full">
           {step === 0 && (
             <Categorystep
@@ -158,8 +158,8 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
         </div>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-white/80 bg-white/80 px-4 py-2.5 shadow-[0_-16px_40px_rgba(31,64,142,.08)] backdrop-blur-xl sm:px-8">
-        <div className="mx-auto flex max-w-7xl items-center justify-between">
+      <div className="fixed inset-x-0 bottom-0 z-30  bg-transparent px-4 py-2.5 shadow-[0_-16px_40px_rgba(31,64,142,.08)] backdrop-blur-xl sm:px-8">
+        <div className="mx-auto flex max-w-[1480px] items-center justify-between">
           <button
             type="button"
             onClick={step === 0 ? onBack : () => setStep((prev) => prev - 1)}
