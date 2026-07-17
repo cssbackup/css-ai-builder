@@ -55,7 +55,7 @@ export default function Navbar({
         {activeTab}
       </h1>
 
-      <label className="flex h-10 min-w-0 flex-1 items-center gap-2.5 rounded-xl bg-zinc-100/80 px-3 text-zinc-500 focus-within:ring-2 focus-within:ring-blue-200 sm:ml-2 sm:max-w-md lg:ml-4">
+      {/* <label className="flex h-10 min-w-0 flex-1 items-center gap-2.5 rounded-xl bg-zinc-100/80 px-3 text-zinc-500 focus-within:ring-2 focus-within:ring-blue-200 sm:ml-2 sm:max-w-md lg:ml-4">
         <Search size={17} />
         <input
           type="search"
@@ -63,7 +63,7 @@ export default function Navbar({
           placeholder="Search websites"
           className="min-w-0 flex-1 bg-transparent text-xs text-zinc-900 outline-none placeholder:text-zinc-400"
         />
-      </label>
+      </label> */}
 
       <div className="ml-auto flex items-center gap-2">
         <Link

@@ -1,20 +1,22 @@
 import {
   CircleHelp,
   LayoutDashboard,
-  LayoutTemplate,
   PanelLeftClose,
   PanelLeftOpen,
   Settings,
   Shapes,
   UserRound,
+  CreditCard,
+  ReceiptText,
 } from "lucide-react";
-import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
+import BrandLogo from "../../../components/ui/brand-logo";
 
 export type DashboardTab =
   | "Dashboard"
   | "My Websites"
-  | "Templates"
+  | "Payments"
+  | "Billing"
   | "Profile"
   | "Settings"
   | "Help";
@@ -34,7 +36,8 @@ const mainItems: NavItem[] = [
   { label: "Dashboard", icon: LayoutDashboard },
   { label: "Profile", icon: UserRound },
   { label: "My Websites", icon: Shapes },
-  { label: "Templates", icon: LayoutTemplate },
+  { label: "Payments", icon: CreditCard },
+  { label: "Billing", icon: ReceiptText },
 ];
 
 const supportItems: NavItem[] = [
@@ -85,9 +88,9 @@ export default function Sidebar({
           className="flex cursor-pointer items-center gap-2.5 border-0 bg-transparent"
         >
           {!compact ? (
-            <Image src="/logo.png" alt="Logo" width={70} height={70} />
+            <BrandLogo className="origin-left scale-90" />
           ) : (
-            <Image src="/logo.png" alt="Logo" width={56} height={56} />
+            <BrandLogo compact />
           )}
         </button>
 

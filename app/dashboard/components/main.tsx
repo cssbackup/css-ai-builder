@@ -13,6 +13,7 @@ export default function Main() {
   const [user, setUser] = useState<{
     name: string;
     email: string;
+    password?: string;
     avatar?: string;
   }>({
     name: "muneeb.hk",
@@ -20,6 +21,22 @@ export default function Main() {
     avatar: "/muneeb.png",
   });
   const profileRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const saved = window.localStorage.getItem("lestow-user");
+    if (!saved) return;
+    try {
+      const details = JSON.parse(saved);
+      if (details.name && details.email) setUser(details);
+    } catch {
+      window.localStorage.removeItem("lestow-user");
+    }
+  }, []);
+
+  const saveUser = (nextUser: typeof user) => {
+    setUser(nextUser);
+    window.localStorage.setItem("lestow-user", JSON.stringify(nextUser));
+  };
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -77,7 +94,7 @@ export default function Main() {
           <DashboardChildren
             activeTab={activeTab}
             user={user}
-            onUserSave={setUser}
+            onUserSave={saveUser}
           />
         </main>
       </div>

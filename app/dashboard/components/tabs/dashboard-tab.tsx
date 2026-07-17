@@ -1,11 +1,14 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import TemplateActions from "../template-actions";
+import SiteStatusView, { type SiteFilter } from "./site-status-view";
 import {
   ArrowRight,
   CheckCircle2,
   Clock3,
-  ExternalLink,
   Globe2,
   Layers3,
   Play,
@@ -42,6 +45,7 @@ const recentSites = [
 const summaryCards = [
   {
     label: "Total websites",
+    filter: "all" as SiteFilter,
     count: 3,
     status: "All sites",
     detail: "2 published · 1 draft",
@@ -53,6 +57,7 @@ const summaryCards = [
   },
   {
     label: "Live websites",
+    filter: "published" as SiteFilter,
     count: 2,
     status: "Published",
     detail: "Available to visitors",
@@ -64,24 +69,26 @@ const summaryCards = [
   },
   {
     label: "Draft websites",
+    filter: "draft" as SiteFilter,
     count: 1,
     status: "In progress",
     detail: "Haelli Homes",
     footer: "Edited yesterday",
     icon: Clock3,
-    href: "/editor/layout?templateId=template-1&category=Realestate",
     surface: "border-[#f1dfc5] bg-[#faebd7]",
     accent: "text-[#b96a22]",
     tagStyle: "bg-white/65 text-[#b96a22]",
   },
 ];
 
-function SummaryCard({ card }: { card: (typeof summaryCards)[number] }) {
+function SummaryCard({ card, onSelect }: { card: (typeof summaryCards)[number]; onSelect: (filter: SiteFilter) => void }) {
   const Icon = card.icon;
 
   return (
-    <article
-      className={`${card.surface} group flex  flex-col rounded-2xl border p-3 shadow-[0_8px_24px_rgba(45,40,65,0.05)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_14px_32px_rgba(45,40,65,0.1)]`}
+    <button
+      type="button"
+      onClick={() => onSelect(card.filter)}
+      className={`${card.surface} group flex cursor-pointer flex-col rounded-2xl border p-3 text-left shadow-[0_8px_24px_rgba(45,40,65,0.05)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_14px_32px_rgba(45,40,65,0.1)]`}
     >
       <div className="flex justify-between items-center gap-2 ">
         <span
@@ -108,16 +115,9 @@ function SummaryCard({ card }: { card: (typeof summaryCards)[number] }) {
       </div>
       <div className="mt-3 flex items-center border-t border-white/45 pt-2">
         <span className="text-[9px] text-zinc-600">{card.footer}</span>
-        {card.href && (
-          <Link
-            href={card.href}
-            className={`${card.accent} ml-auto flex items-center gap-1 text-[9px] font-semibold`}
-          >
-            Continue editing <ArrowRight size={11} />
-          </Link>
-        )}
+        <span className={`${card.accent} ml-auto flex items-center gap-1 text-[9px] font-semibold`}>View websites <ArrowRight size={11} /></span>
       </div>
-    </article>
+    </button>
   );
 }
 
@@ -126,6 +126,10 @@ export default function DashboardTabContent({
 }: {
   userName: string;
 }) {
+  const [siteFilter, setSiteFilter] = useState<SiteFilter | null>(null);
+
+  if (siteFilter) return <SiteStatusView filter={siteFilter} onBack={() => setSiteFilter(null)} />;
+
   return (
     <section className="mx-auto w-full max-w-[1320px] px-4 py-5 sm:px-6 sm:py-7 lg:px-9 lg:py-9">
       <div className="relative isolate overflow-hidden rounded-[26px] border border-blue-100 bg-[#eef2ff] p-4 shadow-[0_20px_55px_rgba(48,75,155,.10)] sm:p-6">
@@ -175,7 +179,7 @@ export default function DashboardTabContent({
         <div className="relative mt-6 rounded-2xl border border-white/80 bg-white/55 p-2.5 shadow-[0_10px_35px_rgba(42,52,94,.08)] backdrop-blur-md sm:mt-8 sm:p-3">
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {summaryCards.map((card) => (
-              <SummaryCard key={card.label} card={card} />
+              <SummaryCard key={card.label} card={card} onSelect={setSiteFilter} />
             ))}
           </div>
         </div>
@@ -229,23 +233,6 @@ export default function DashboardTabContent({
         ))}
       </div>
 
-      <div className="mt-8 flex items-center gap-3 rounded-2xl border border-blue-100 bg-blue-50/70 p-5">
-        <span className="grid size-10 place-items-center rounded-xl bg-white text-blue-700">
-          <ExternalLink size={18} />
-        </span>
-        <div className="flex-1">
-          <h3 className="text-sm font-medium">Continue editing</h3>
-          <p className="mt-1 text-xs text-zinc-500">
-            Your latest draft is ready where you left it.
-          </p>
-        </div>
-        <Link
-          href="/editor/layout?templateId=template-1&category=Realestate"
-          className="rounded-lg px-3 py-2 text-xs font-medium text-blue-700 transition hover:bg-white"
-        >
-          Open editor
-        </Link>
-      </div>
     </section>
   );
 }

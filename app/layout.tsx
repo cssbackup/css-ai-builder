@@ -4,8 +4,8 @@ import "./globals.css";
 import "./main.css";
 
 export const metadata: Metadata = {
-  title: "CSS AI Builder",
-  description: "Create your website with CSS AI Builder in Minutes",
+  title: "Lestow — AI Website Builder",
+  description: "Create your website with Lestow AI in minutes",
   icons: {
     icon: "/fav-icon.ico",
   },

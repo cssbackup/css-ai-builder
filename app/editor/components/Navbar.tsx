@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import Image from "next/image";
 import {
   Menu,
   Eye,
@@ -22,6 +21,7 @@ import {
   X,
 } from "lucide-react";
 import { usePreview } from "../layout/src/components/context/PreviewContext";
+import BrandLogo from "../../../components/ui/brand-logo";
 
 const MAX_PAGE_ITEMS = 7;
 const MAX_DROPDOWN_ITEMS = 10;
@@ -284,14 +284,7 @@ export default function Navbar({ onMenuClick }: HeaderProps) {
       <div className="flex justify-between items-center w-full ">
         <div className="flex items-center gap-8">
           <Link href="/">
-            <Image
-              src="/logo.png"
-              alt="Nav logo"
-              width={90}
-              height={90}
-              className="h-9 w-auto"
-              priority
-            />
+            <BrandLogo className="scale-75 origin-left" />
           </Link>
 
           <div ref={dropdownRef} className="relative z-[100]">
