@@ -52,6 +52,8 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
     logoName: "",
   });
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedTemplate, setSelectedTemplate] = useState("");
+  const [showTemplatePreview, setShowTemplatePreview] = useState(false);
 
   useEffect(() => {
     setHideFooter(true);
@@ -84,13 +86,17 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
       return;
     }
 
+    if (step === 2 && !selectedTemplate) {
+      return;
+    }
+
     setLoadspinner(true);
 
     await new Promise((resolve) => setTimeout(resolve, 200));
     if (step < steps.length - 1) {
       setStep((prev) => prev + 1);
     } else {
-      console.log("Completed");
+      setShowTemplatePreview(true);
     }
 
     setLoadspinner(false);
@@ -114,13 +120,7 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
       <div className="pointer-events-none absolute -right-24 bottom-[-120px] size-[460px] rounded-full bg-emerald-300/25 blur-[110px]" />
       <div className="pointer-events-none absolute right-[8%] top-[5%] size-72 rounded-full border border-blue-900/10 shadow-[0_0_90px_rgba(30,67,133,.14)]" />
       <div className="pointer-events-none absolute right-[12%] top-[9%] size-48 rounded-full border border-blue-900/10" />
-      <div className="pointer-events-none absolute bottom-[7%] left-[8%] flex gap-2 opacity-60">
-        <span className="size-2 rounded-full bg-[#0b1f4a]" />
-        <span className="size-2 rounded-full bg-blue-500" />
-        <span className="size-2 rounded-full bg-lime-500" />
-      </div>
-
-      <div className="relative z-10 w-full max-w-7xl overflow-hidden">
+      <div className="relative z-10 w-full max-w-[1280px] overflow-visible">
         <div className="w-full">
           {step === 0 && (
             <Categorystep
@@ -149,49 +149,64 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
           {step === 1 && (
             <CategoryType
               selectedCategory={selectedCategory}
-              onCategoryChange={setSelectedCategory}
+              onCategoryChange={(category) => {
+                setSelectedCategory(category);
+                setSelectedTemplate("");
+              }}
             />
           )}
           {step === 2 && (
-            <TemplatePreview selectedCategory={selectedCategory} />
+            <TemplatePreview
+              selectedCategory={selectedCategory}
+              selectedTemplate={selectedTemplate}
+              showPreview={showTemplatePreview}
+              onTemplateChange={setSelectedTemplate}
+              onClosePreview={() => setShowTemplatePreview(false)}
+            />
           )}
         </div>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-white/80 bg-white/80 px-4 py-2.5 shadow-[0_-16px_40px_rgba(31,64,142,.08)] backdrop-blur-xl sm:px-8">
-        <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <button
-            type="button"
-            onClick={step === 0 ? onBack : () => setStep((prev) => prev - 1)}
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-blue-100 bg-white px-4 text-xs font-semibold text-slate-600 transition hover:border-blue-300 hover:text-[#315ff4]"
-          >
-            <ArrowLeft size={14} /> Back
-          </button>
+      {!showTemplatePreview && (
+        <div className="fixed inset-x-0 bottom-0 z-30 bg-transparent px-4 py-2.5 shadow-[0_-16px_40px_rgba(31,64,142,.08)] backdrop-blur-xs sm:px-11">
+          <div className="mx-auto flex max-w-[1480px] items-center justify-between">
+            <button
+              type="button"
+              onClick={step === 0 ? onBack : () => setStep((prev) => prev - 1)}
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-blue-500 bg-white px-4 text-sm font-semibold text-slate-600 transition hover:-translate-y-0.5 hover:border-blue-300 hover:text-[#315ff4]"
+            >
+              <ArrowLeft size={14} /> Back
+            </button>
 
-          <div className="hidden items-center gap-2 text-[10px] font-medium text-slate-400 sm:flex">
-            <span className="size-1.5 rounded-full bg-[#315ff4]" />
-            Your progress is saved automatically
+            <div className="hidden items-center gap-2 text-[12px] font-medium text-slate-600 sm:flex">
+              <span className="size-1.5 rounded-full bg-[#315ff4]" />
+              Your progress is saved automatically
+            </div>
+
+            <button
+              type="button"
+              onClick={handleContinue}
+              disabled={
+                loadspinner ||
+                (step === 1 && !selectedCategory) ||
+                (step === 2 && !selectedTemplate)
+              }
+              className="group inline-flex h-10 min-w-[128px] items-center justify-center gap-2 rounded-xl bg-[linear-gradient(120deg,#244bd5,#315ff4_55%,#6c91ff)] px-5 text-xs font-semibold text-white shadow-[0_12px_26px_rgba(49,95,244,.3)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(49,95,244,.38)] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {loadspinner && (
+                <span className="size-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              )}
+              {loadspinner ? "Loading..." : "Continue"}
+              {!loadspinner && (
+                <ArrowRight
+                  size={14}
+                  className="transition group-hover:translate-x-0.5"
+                />
+              )}
+            </button>
           </div>
-
-          <button
-            type="button"
-            onClick={handleContinue}
-            disabled={loadspinner || (step === 1 && !selectedCategory)}
-            className="group inline-flex h-10 min-w-[128px] items-center justify-center gap-2 rounded-xl bg-[linear-gradient(120deg,#244bd5,#315ff4_55%,#6c91ff)] px-5 text-xs font-semibold text-white shadow-[0_12px_26px_rgba(49,95,244,.3)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(49,95,244,.38)] disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {loadspinner && (
-              <span className="size-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-            )}
-            {loadspinner ? "Loading..." : "Continue"}
-            {!loadspinner && (
-              <ArrowRight
-                size={14}
-                className="transition group-hover:translate-x-0.5"
-              />
-            )}
-          </button>
         </div>
-      </div>
+      )}
     </main>
   );
 }
