@@ -14,7 +14,6 @@ import {
   Search,
   ChevronDown,
   ChevronUp,
-  Compass,
   Sparkles,
   X,
 } from "lucide-react";
@@ -131,7 +130,7 @@ export default function Categorystep({
 
   return (
     <div className="w-full">
-      <div className="relative mx-auto flex max-w-7xl flex-col overflow-hidden  border border-white/80 bg-white/95 px-5 py-5 shadow-[0_30px_80px_rgba(25,60,150,.18)] backdrop-blur-xl sm:px-7 lg:px-9 lg:py-7">
+      <div className="onboarding-responsive-scroll relative mx-auto flex max-h-[calc(100dvh-90px)] max-w-7xl flex-col overflow-y-auto border border-white/80 bg-white/95 px-5 py-5 shadow-[0_30px_80px_rgba(25,60,150,.18)] backdrop-blur-xl sm:max-h-[calc(100dvh-106px)] sm:px-7 lg:max-h-none lg:overflow-visible lg:px-9 lg:py-7">
         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#315ff4] via-[#7ea4ff] to-cyan-300" />
         <div className="flex shrink-0 items-start gap-3 border-b border-blue-100 pb-5">
           {/* <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[linear-gradient(145deg,#244bd5,#6e91ff)] text-white shadow-[0_12px_28px_rgba(49,95,244,.25)]">
@@ -184,7 +183,7 @@ export default function Categorystep({
                   : "border-blue-100 bg-white text-[#08132f] hover:border-blue-300"
               }`}
             >
-              <span className="truncate">Popular Types</span>
+              <span className="truncate">Popular Categories</span>
               {open ? (
                 <ChevronUp className="shrink-0" size={16} />
               ) : (
@@ -195,15 +194,15 @@ export default function Categorystep({
             {open && (
               <div
                 className="
-                  absolute right-0 z-20 mt-2 max-h-64 w-full overflow-y-auto
+                  absolute right-0 z-50 mt-2 max-h-64 w-full overflow-y-auto
                   rounded-2xl border border-blue-100 bg-white py-2 shadow-[0_18px_45px_rgba(25,60,150,.16)]
-                  md:w-[210px]
+                  md:w-[210px] lg:max-h-none lg:overflow-visible
                 "
               >
                 <button
                   type="button"
                   onClick={handleAllItems}
-                  className={`block w-full px-5 py-3 text-left text-sm transition hover:bg-blue-50 hover:text-[#315ff4] ${
+                  className={`block w-full px-5 py-2 text-left text-sm transition hover:bg-blue-50 hover:text-[#315ff4] ${
                     selected === ""
                       ? "bg-blue-50 font-bold text-[#315ff4]"
                       : "font-semibold text-slate-900"
@@ -219,7 +218,7 @@ export default function Categorystep({
                     key={item.title}
                     type="button"
                     onClick={() => handleSelect(item.title)}
-                    className={`flex w-full cursor-pointer items-center justify-between gap-3 px-5 py-3 text-left text-sm transition hover:bg-blue-50 hover:text-[#315ff4] ${
+                    className={`flex w-full cursor-pointer items-center justify-between gap-3 px-5 py-2 text-left text-sm transition hover:bg-blue-50 hover:text-[#315ff4] ${
                       selected === item.title
                         ? "bg-blue-50 font-bold text-[#315ff4]"
                         : "text-slate-700"
@@ -236,13 +235,13 @@ export default function Categorystep({
           </div>
         </div>
 
-        <div className="mt-5 flex-1 overflow-y-auto px-1 pt-1 max-[550px]:max-h-[300px]">
+        <div className="mt-5 flex-1 px-1 pt-1">
           <div
             className="
               grid grid-cols-1 gap-3
               min-[480px]:grid-cols-2
               md:grid-cols-3
-              lg:grid-cols-4
+              lg:grid-cols-5
               lg:gap-4
             "
           >

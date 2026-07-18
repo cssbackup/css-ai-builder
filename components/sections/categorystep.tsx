@@ -130,7 +130,7 @@ export default function CategoryStep({
   };
 
   return (
-    <section className="relative mx-auto w-full origin-center overflow-hidden border border-white/80 bg-white/95 shadow-[0_34px_90px_rgba(9,35,120,.24)] backdrop-blur-xl [@media(max-height:580px)]:scale-[.86]">
+    <section className="relative mx-auto max-h-[calc(100dvh-90px)] w-full origin-center overflow-x-hidden overflow-y-auto border border-white/80 bg-white/95 shadow-[0_34px_90px_rgba(9,35,120,.24)] backdrop-blur-xl sm:max-h-[calc(100dvh-106px)] lg:max-h-none lg:overflow-hidden [@media(max-height:580px)]:lg:scale-[.86]">
       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#315ff4] via-[#6d8cff] to-[#9fc6ff]" />
 
       <div className="px-4 py-4 sm:px-6 lg:px-8 lg:py-5">
@@ -201,7 +201,7 @@ export default function CategoryStep({
               className="mt-4 grid items-start gap-y-7"
               onSubmit={(event) => event.preventDefault()}
             >
-              <div className="grid grid-cols-[.8fr_1.2fr] content-start gap-2.5">
+              <div className="grid grid-cols-1 content-start gap-2.5 sm:grid-cols-[.8fr_1.2fr]">
                 <FieldLabel
                   label={labels.name}
                   error={hasNameError ? "This field is required." : undefined}
@@ -244,8 +244,8 @@ export default function CategoryStep({
                 </FieldLabel>
               </div>
 
-              <div className="grid grid-cols-2 content-start items-start gap-x-4 gap-y-7 px-1 xl:grid-cols-[1.4fr_.72fr_1.12fr]">
-                <div className="order-1 col-span-2 xl:col-span-1">
+              <div className="grid grid-cols-1 content-start items-start gap-x-4 gap-y-7 px-1 sm:grid-cols-2 xl:grid-cols-[1.4fr_.72fr_1.12fr]">
+                <div className="order-1 col-span-1 sm:col-span-2 xl:col-span-1">
                   <RadioGroup
                     legend="What is your website related to?"
                     name="website-related"
@@ -269,7 +269,7 @@ export default function CategoryStep({
                 </div>
 
                 {value.includeDetails && (
-                  <div className="order-5 relative col-span-2 grid animate-onboarding-swap gap-2 pt-1 xl:col-span-3 xl:grid-cols-[1fr_1fr_1.2fr]">
+                  <div className="order-5 relative col-span-1 grid animate-onboarding-swap gap-2 pt-1 sm:col-span-2 xl:col-span-3 xl:grid-cols-[1fr_1fr_1.2fr]">
                     <button
                       type="button"
                       aria-label="Close additional details"
@@ -281,7 +281,7 @@ export default function CategoryStep({
                     >
                       ×
                     </button>
-                    <div className="grid grid-cols-2 gap-2 xl:contents">
+                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:contents">
                       <FieldLabel
                         label="Email ID"
                         compact
@@ -372,7 +372,7 @@ export default function CategoryStep({
                   <button
                     type="button"
                     onClick={() => updateBusinessInfo({ includeDetails: true })}
-                    className="order-4 col-span-2 inline-flex h-9 w-fit items-center gap-2 justify-self-start rounded-lg border border-blue-200 bg-white px-3.5 text-[13px] font-semibold text-[#315ff4] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#315ff4] hover:shadow-md xl:col-span-3"
+                    className="order-4 col-span-1 inline-flex h-9 w-fit items-center gap-2 justify-self-start rounded-lg border border-blue-200 bg-white px-3.5 text-[13px] font-semibold text-[#315ff4] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#315ff4] hover:shadow-md sm:col-span-2 xl:col-span-3"
                   >
                     <span className="text-md leading-none">+</span>
                     Add more details
@@ -402,10 +402,10 @@ function FieldLabel({
 }) {
   return (
     <label
-      className={`grid ${compact ? "gap-1.5" : "gap-2"} text-[17px] font-medium text-[#08132f]`}
+      className={`grid content-start ${compact ? "gap-1.5" : "gap-2"} text-[17px] font-medium text-[#08132f]`}
     >
-      {label}
-      {children}
+      <span className="block leading-normal">{label}</span>
+      <div className="min-w-0">{children}</div>
       {error && <ErrorLine message={error} />}
     </label>
   );

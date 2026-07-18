@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { createPortal } from "react-dom";
 import {
   Check,
   ChevronDown,
@@ -16,14 +17,10 @@ import {
   X,
 } from "lucide-react";
 import {
-  buildSelectedConfig,
-  getTemplateVariables,
   getTemplatesForCategory,
   hasCategoryContent,
   type BuilderTemplate,
 } from "@/app/editor/layout/src/data/templateFlow";
-import { sectionRegistry } from "@/app/editor/layout/src/lib/sectionRegistry";
-import type { SectionData } from "@/app/editor/layout/src/types/section";
 
 const pageFilters = [
   "All Pages",
@@ -33,20 +30,37 @@ const pageFilters = [
 
 type TemplatePreviewProps = {
   selectedCategory: string;
+  selectedTemplate: string;
+  showPreview: boolean;
+  onTemplateChange: (templateId: string) => void;
+  onClosePreview: () => void;
 };
 
 export default function Templatepreview({
   selectedCategory,
+  selectedTemplate,
+  showPreview,
+  onTemplateChange,
+  onClosePreview,
 }: TemplatePreviewProps) {
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState("All Pages");
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
-  const [previewTemplate, setPreviewTemplate] =
-    useState<BuilderTemplate | null>(null);
+  const [previewScale, setPreviewScale] = useState(0.45);
+  const [previewViewportHeight, setPreviewViewportHeight] = useState(900);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const previewScreenRef = useRef<HTMLDivElement>(null);
+  const previewTemplate = useMemo(
+    () =>
+      showPreview
+        ? (getTemplatesForCategory(selectedCategory).find(
+            (item) => item.id === selectedTemplate,
+          ) ?? null)
+        : null,
+    [selectedCategory, selectedTemplate, showPreview],
+  );
 
   useEffect(() => {
     document.body.style.overflow = previewTemplate ? "hidden" : "";
@@ -54,6 +68,22 @@ export default function Templatepreview({
     return () => {
       document.body.style.overflow = "";
     };
+  }, [previewTemplate]);
+
+  useEffect(() => {
+    if (!previewTemplate || !previewScreenRef.current) return;
+
+    const screen = previewScreenRef.current;
+    const updateScale = () => {
+      const scale = screen.clientWidth / 1440;
+      setPreviewScale(scale);
+      setPreviewViewportHeight(screen.clientHeight / scale);
+    };
+    const observer = new ResizeObserver(updateScale);
+
+    observer.observe(screen);
+
+    return () => observer.disconnect();
   }, [previewTemplate]);
 
   useEffect(() => {
@@ -94,12 +124,6 @@ export default function Templatepreview({
 
   const visibleTemplates = filteredTemplates.slice(page * 4, page * 4 + 4);
 
-  const previewConfig = previewTemplate
-    ? buildSelectedConfig(previewTemplate.id, selectedCategory)
-    : null;
-  const previewVariables = previewTemplate
-    ? getTemplateVariables(previewTemplate.id)
-    : {};
   const previewFeatures = previewTemplate
     ? [
         `${previewTemplate.prebuilt_pages}+ Pre-built Pages`,
@@ -114,18 +138,6 @@ export default function Templatepreview({
         (template) => template.id === previewTemplate.id,
       )
     : -1;
-  const previewCarouselStart =
-    previewTemplateIndex < 0
-      ? 0
-      : Math.min(
-          Math.max(previewTemplateIndex - 1, 0),
-          Math.max(filteredTemplates.length - 4, 0),
-        );
-  const previewCarouselTemplates = filteredTemplates.slice(
-    previewCarouselStart,
-    previewCarouselStart + 4,
-  );
-
   const handleFilterSelect = (title: string) => {
     setSelectedFilter(title);
     setPage(0);
@@ -138,7 +150,7 @@ export default function Templatepreview({
   };
 
   const openEditor = (template: BuilderTemplate) => {
-    setSelectedTemplate(template.id);
+    onTemplateChange(template.id);
     const params = new URLSearchParams({
       templateId: template.id,
       category: selectedCategory,
@@ -151,8 +163,11 @@ export default function Templatepreview({
     selectedCategory ? `${selectedCategory} ${template.title}` : template.title;
 
   const selectPreviewTemplate = (template: BuilderTemplate) => {
-    setSelectedTemplate(template.id);
-    setPreviewTemplate(template);
+    onTemplateChange(template.id);
+  };
+
+  const closePreview = () => {
+    onClosePreview();
   };
 
   const handlePreviewSlide = (direction: "previous" | "next") => {
@@ -169,7 +184,7 @@ export default function Templatepreview({
 
   return (
     <div className="w-full">
-      <div className="relative mx-auto flex w-full max-w-7xl flex-col overflow-hidden border border-white/80 bg-white/95 px-5 py-5 shadow-[0_30px_80px_rgba(25,60,150,.18)] backdrop-blur-xl sm:px-7 lg:px-9 lg:py-7">
+      <div className="onboarding-responsive-scroll relative mx-auto flex max-h-[calc(100dvh-90px)] w-full max-w-7xl flex-col overflow-y-auto border border-white/80 bg-white/95 px-5 py-5 shadow-[0_30px_80px_rgba(25,60,150,.18)] backdrop-blur-xl sm:max-h-[calc(100dvh-106px)] sm:px-7 lg:max-h-none lg:overflow-visible lg:px-9 lg:py-7">
         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#315ff4] via-[#7ea4ff] to-cyan-300" />
         <div className="flex shrink-0 items-start gap-3 border-b border-blue-100 pb-5">
           <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[linear-gradient(145deg,#244bd5,#6e91ff)] text-white shadow-[0_12px_28px_rgba(49,95,244,.25)]">
@@ -250,100 +265,90 @@ export default function Templatepreview({
           </div>
         </div>
 
-        {previewTemplate && (
-          <div className="fixed inset-0 z-20 bg-white">
-            <div className="relative h-screen w-full overflow-hidden bg-slate-50">
-              <button
-                type="button"
-                onClick={() => setPreviewTemplate(null)}
-                className="fixed right-4 top-4 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-[#315ff4] text-white shadow-lg transition hover:bg-[#244bd5]"
-                aria-label="Close preview"
-              >
-                <X size={22} />
-              </button>
+        {previewTemplate &&
+          typeof document !== "undefined" &&
+          createPortal(
+            <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-[#f7fbff] p-1 sm:p-2">
+              <section className="relative flex h-[calc(100dvh-8px)] w-[calc(100vw-8px)] max-w-[1400px] flex-col overflow-hidden rounded-[22px] border border-blue-100 bg-white shadow-[0_24px_70px_rgba(40,91,145,.14)] sm:h-[calc(100dvh-16px)] sm:w-[calc(100vw-16px)] sm:rounded-[28px] lg:h-[92dvh] lg:max-h-[860px] lg:w-[94vw]">
+                <div className="onboarding-responsive-scroll relative z-10 grid min-h-0 flex-1 content-start gap-4 overflow-y-auto px-3 py-3 sm:px-5 lg:grid-cols-[minmax(0,1fr)_310px] lg:content-stretch lg:overflow-hidden xl:grid-cols-[minmax(0,1fr)_340px]">
+                  <div className="relative order-1 flex h-[clamp(260px,62vw,520px)] min-h-0 items-center justify-center overflow-hidden rounded-[22px] border border-blue-100 bg-transparent p-3 lg:h-auto lg:min-h-0">
+                    <button
+                      type="button"
+                      onClick={closePreview}
+                      className="absolute right-3 top-3 z-30 grid size-8 place-items-center rounded-full border border-blue-100 bg-white text-slate-500 shadow-md transition hover:border-blue-300 hover:text-[#315ff4] lg:hidden"
+                      aria-label="Close template preview"
+                    >
+                      <X size={17} />
+                    </button>
 
-              <div className="flex h-full flex-col gap-5 overflow-y-auto p-4 sm:p-6 lg:overflow-hidden">
-                <div className="grid min-h-0 flex-1 items-end gap-5 lg:grid-cols-[minmax(0,1fr)_390px] xl:grid-cols-[minmax(0,1fr)_410px] 2xl:grid-cols-[minmax(0,1fr)_710px] ">
-                  <div className="flex min-h-0 flex-col justify-end gap-8 pt-10 lg:h-full lg:pt-0 ">
-                    {/* <h2 className="text-2xl font-bold text-slate-950 underline">
-                    {getTemplateDisplayTitle(previewTemplate)}
-                  </h2>  */}
-
-                    <div className="relative mx-auto w-full xl:max-w-[520px] 2xl:max-w-[710px] mb-6">
+                    <div className="relative inline-block max-h-full max-w-full">
                       <Image
                         src="/macbook-frame.png"
-                        alt="Laptop"
-                        width={1200}
-                        height={760}
-                        className="pointer-events-none relative z-20 w-full"
+                        alt={`${getTemplateDisplayTitle(previewTemplate)} shown on a laptop`}
+                        width={1071}
+                        height={694}
+                        priority
+                        className="pointer-events-none relative z-20 block h-auto max-h-full w-auto max-w-full lg:max-h-[55dvh]"
                       />
 
-                      <div className="absolute left-[7%] top-[3%] z-10 h-[88%] w-[86%] overflow-hidden bg-white">
-                        <div
-                          className="origin-top-left bg-white"
+                      <div
+                        ref={previewScreenRef}
+                        className="absolute left-[7.65%] top-[3%] z-10 h-[87.7%] w-[84.7%] overflow-hidden bg-white"
+                      >
+                        <iframe
+                          key={`${previewTemplate.id}-${selectedCategory}`}
+                          src={`/template-preview?templateId=${encodeURIComponent(previewTemplate.id)}&category=${encodeURIComponent(selectedCategory)}`}
+                          title={`${getTemplateDisplayTitle(previewTemplate)} scrollable website preview`}
+                          className="absolute left-0 top-0 border-0 bg-white"
                           style={{
-                            ...previewVariables,
                             width: "1440px",
-                            transform: "scale(0.45)",
+                            height: `${previewViewportHeight}px`,
+                            transform: `scale(${previewScale})`,
                             transformOrigin: "top left",
                           }}
-                        >
-                          {previewConfig?.sections.map((section) => {
-                            const Component = sectionRegistry[section.variant];
-                            const defaultVariant = `${section.type}-1`;
-                            const variantData =
-                              section.data?.[section.variant] ??
-                              section.data?.[defaultVariant];
-
-                            if (!Component) return null;
-
-                            return (
-                              <Component
-                                key={section.type}
-                                data={variantData as SectionData}
-                              />
-                            );
-                          })}
-                        </div>
+                        />
                       </div>
                     </div>
                   </div>
 
-                  <div className="relative overflow-hidden rounded-[10px] border border-gray-200 bg-white p-5 shadow-xl lg:max-h-[85vh] lg:p-4 mb-5">
+                  <aside className="relative order-2 flex min-h-[380px] flex-col rounded-[22px] border border-blue-100/80 bg-white p-4 shadow-[0_20px_50px_rgba(41,91,151,.12)] sm:min-h-[420px] lg:min-h-0">
                     <button
                       type="button"
-                      onClick={() => setPreviewTemplate(null)}
-                      className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-blue-100 bg-white text-slate-700 shadow-sm transition hover:bg-blue-50 hover:text-[#315ff4]"
+                      onClick={closePreview}
+                      className="absolute right-3 top-3 z-10 hidden size-8 place-items-center rounded-full border border-blue-100 bg-white text-slate-500 shadow-sm transition hover:border-blue-300 hover:text-[#315ff4] lg:grid"
                       aria-label="Close template preview"
                     >
-                      <X size={18} />
+                      <X size={17} />
                     </button>
-                    {/* 
-                    <p className="text-xs font-bold uppercase tracking-wider text-red-600">
-                      TemplateId-{previewTemplate.numericId}
-                    </p> */}
 
-                    <h3 className="text-2xl font-bold text-slate-950">
-                      {getTemplateDisplayTitle(previewTemplate)}
-                    </h3>
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-[9px] font-bold uppercase tracking-[.18em] text-emerald-600">
+                          Ready to customize
+                        </p>
+                        <h3 className="mt-1 text-xl font-semibold leading-tight tracking-[-.04em] text-[#08132f]">
+                          {getTemplateDisplayTitle(previewTemplate)}
+                        </h3>
+                      </div>
+                      <span className="absolute right-3 top-3 rounded-full bg-blue-50 px-2.5 py-1 text-[9px] font-bold uppercase text-[#315ff4] lg:right-12">
+                        {previewTemplate.type === "Single Page Website"
+                          ? "Single"
+                          : "Multiple"}
+                      </span>
+                    </div>
 
-                    {/* <p className="mt-3 text-sm leading-6 text-slate-600">
-                      {previewTemplate.preview_description}
-                    </p> */}
-
-                    <div className="border-t pt-4 mt-3">
-                      <h4 className="font-bold text-slate-950">
-                        {"What's included:"}
+                    <div className="mt-4 min-h-0 flex-1 border-t border-blue-100 pt-3">
+                      <h4 className="text-xs font-semibold text-[#08132f]">
+                        What&apos;s included
                       </h4>
-
-                      <ul className="mt-2 space-y-3">
+                      <ul className="mt-2 space-y-2">
                         {previewFeatures.map((feature) => (
                           <li
                             key={feature}
-                            className="flex items-center gap-2 text-sm text-slate-700"
+                            className="flex items-start gap-2 text-[11px] leading-4 text-slate-600"
                           >
-                            <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white">
-                              <Check size={10} strokeWidth={3} />
+                            <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,#315ff4,#20c997)] text-white">
+                              <Check size={9} strokeWidth={3} />
                             </span>
                             {feature}
                           </li>
@@ -354,89 +359,87 @@ export default function Templatepreview({
                     <button
                       type="button"
                       onClick={() => openEditor(previewTemplate)}
-                      className="mt-6 w-full cursor-pointer rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-1 font-bold text-white transition hover:opacity-90"
+                      className="mt-4 w-full rounded-xl bg-[linear-gradient(120deg,#315ff4,#3478f6_52%,#20c997)] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(49,95,244,.24)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(49,95,244,.3)]"
                     >
-                      Edit here
+                      Edit Template
                     </button>
-                  </div>
+                  </aside>
                 </div>
 
-                {previewCarouselTemplates.length > 0 && (
-                  <div className="relative mx-auto w-full max-w-7xl shrink-0 px-10 pb-1 sm:px-12">
-                    {filteredTemplates.length > 1 && (
-                      <>
-                        <button
-                          type="button"
-                          onClick={() => handlePreviewSlide("previous")}
-                          className="absolute left-0 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-blue-100 bg-white text-slate-800 shadow-md transition hover:border-blue-300 hover:bg-blue-50 hover:text-[#315ff4]"
-                          aria-label="Previous template"
-                        >
-                          <ChevronLeft size={20} strokeWidth={2.5} />
-                        </button>
+                {filteredTemplates.length > 0 && (
+                  <div className="relative z-10 shrink-0 border-t border-blue-100/80 bg-white/68 px-3 pb-3 pt-2.5 backdrop-blur-xl sm:px-5">
+                    <div className="mb-2 flex items-center gap-3">
+                      <span className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[.18em] text-[#315ff4]">
+                        Choose more templates
+                      </span>
+                      <span className="h-px flex-1 bg-gradient-to-r from-blue-300 via-emerald-200 to-transparent" />
+                    </div>
 
-                        <button
-                          type="button"
-                          onClick={() => handlePreviewSlide("next")}
-                          className="absolute right-0 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-blue-100 bg-white text-slate-800 shadow-md transition hover:border-blue-300 hover:bg-blue-50 hover:text-[#315ff4]"
-                          aria-label="Next template"
-                        >
-                          <ChevronRight size={20} strokeWidth={2.5} />
-                        </button>
-                      </>
-                    )}
-
-                    <div className="grid grid-cols-1 gap-3 min-[520px]:grid-cols-2 lg:grid-cols-4">
-                      {previewCarouselTemplates.map((item) => {
-                        const isActive = previewTemplate.id === item.id;
-
-                        return (
+                    <div className="relative px-8 sm:px-10">
+                      {filteredTemplates.length > 1 && (
+                        <>
                           <button
-                            key={item.id}
                             type="button"
-                            onClick={() => selectPreviewTemplate(item)}
-                            className={`group relative overflow-hidden rounded-2xl border bg-white p-2 text-left transition ${
-                              isActive
-                                ? "border-[#315ff4] shadow-lg"
-                                : "border-blue-100 shadow-sm hover:border-blue-300 hover:shadow-md"
-                            }`}
+                            onClick={() => handlePreviewSlide("previous")}
+                            className="absolute left-0 top-1/2 z-20 grid size-7 -translate-y-1/2 place-items-center rounded-full border border-blue-100 bg-white text-slate-600 shadow-md transition hover:border-blue-300 hover:text-[#315ff4]"
+                            aria-label="Previous template"
                           >
-                            <div className="relative overflow-hidden rounded-xl">
+                            <ChevronLeft size={16} strokeWidth={2.5} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handlePreviewSlide("next")}
+                            className="absolute right-0 top-1/2 z-20 grid size-7 -translate-y-1/2 place-items-center rounded-full border border-blue-100 bg-white text-slate-600 shadow-md transition hover:border-blue-300 hover:text-[#315ff4]"
+                            aria-label="Next template"
+                          >
+                            <ChevronRight size={16} strokeWidth={2.5} />
+                          </button>
+                        </>
+                      )}
+
+                      <div className="flex snap-x gap-2.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        {filteredTemplates.map((item) => {
+                          const isActive = previewTemplate.id === item.id;
+
+                          return (
+                            <button
+                              key={item.id}
+                              type="button"
+                              onClick={() => selectPreviewTemplate(item)}
+                              className={`group relative w-[180px] shrink-0 snap-start overflow-hidden rounded-xl border bg-white p-1.5 text-left transition sm:w-[220px] ${
+                                isActive
+                                  ? "border-[#315ff4] shadow-[0_8px_22px_rgba(49,95,244,.18)]"
+                                  : "border-blue-100 hover:-translate-y-0.5 hover:border-blue-300"
+                              }`}
+                            >
                               <Image
                                 src={item.previewimage ?? item.image}
                                 alt={getTemplateDisplayTitle(item)}
-                                width={380}
-                                height={260}
-                                className="h-24 w-full object-cover transition duration-300 group-hover:scale-105 sm:h-28"
+                                width={320}
+                                height={120}
+                                className="h-[62px] w-full rounded-lg object-cover transition duration-300 group-hover:scale-[1.02] sm:h-[72px]"
                               />
-
                               {isActive && (
-                                <span className="absolute left-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#315ff4] text-white">
+                                <span className="absolute left-2.5 top-2.5 grid size-5 place-items-center rounded-full bg-[#315ff4] text-white shadow-md">
                                   <Check size={11} strokeWidth={3} />
                                 </span>
                               )}
-
-                              <span className="absolute right-2 top-2 rounded-md bg-blue-50 px-2 py-1 text-[8px] font-bold uppercase tracking-wider text-blue-600">
+                              <span className="absolute right-2.5 top-2.5 rounded-md bg-white/90 px-1.5 py-0.5 text-[7px] font-bold uppercase text-[#315ff4] backdrop-blur">
                                 {item.type === "Single Page Website"
                                   ? "Single"
                                   : "Multiple"}
                               </span>
-                            </div>
-
-                            {/* <div className="mt-3">
-                            <h3 className="truncate text-sm font-extrabold text-slate-900">
-                              {getTemplateDisplayTitle(item)}
-                            </h3>
-                          </div> */}
-                          </button>
-                        );
-                      })}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 )}
-              </div>
-            </div>
-          </div>
-        )}
+              </section>
+            </div>,
+            document.body,
+          )}
 
         <div className="mt-5 flex-1 px-1 pt-1">
           <div className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 md:grid-cols-3 lg:gap-5 xl:grid-cols-4">
@@ -448,8 +451,7 @@ export default function Templatepreview({
                   key={item.id}
                   type="button"
                   onClick={() => {
-                    setSelectedTemplate(item.id);
-                    setPreviewTemplate(item);
+                    onTemplateChange(item.id);
                   }}
                   className={`group relative cursor-pointer overflow-hidden rounded-2xl border bg-white p-2.5 text-left transition-all duration-300 ease-out hover:-translate-y-1 hover:border-blue-300 hover:shadow-[0_18px_38px_rgba(49,95,244,.14)] ${
                     isActive
