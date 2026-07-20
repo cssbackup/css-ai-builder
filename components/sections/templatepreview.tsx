@@ -10,9 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
-  Palette,
   Search,
-  Sparkles,
   X,
 } from "lucide-react";
 import {

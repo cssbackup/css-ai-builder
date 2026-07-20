@@ -2,6 +2,7 @@
 
 import { useState, type ChangeEvent } from "react";
 import { Briefcase, Check, ImagePlus, User, Users } from "lucide-react";
+import Image from "next/image";
 
 type Category = "clients" | "myself" | "company";
 
@@ -43,6 +44,7 @@ const categories = [
       namePlaceholder: "Enter client name",
       descPlaceholder: "Tell us about agency...",
     },
+    image: "/onboarding-clients.png",
   },
   {
     id: "myself",
@@ -55,6 +57,7 @@ const categories = [
       namePlaceholder: "Enter your website name",
       descPlaceholder: "Tell us about your brand...",
     },
+    image: "/onboarding-myself.png",
   },
   {
     id: "company",
@@ -67,6 +70,7 @@ const categories = [
       namePlaceholder: "Enter your business name",
       descPlaceholder: "Tell us what your business does...",
     },
+    image: "/onboarding-company.png",
   },
 ] as const;
 
@@ -130,23 +134,9 @@ export default function CategoryStep({
   };
 
   return (
-    <section className="relative mx-auto max-h-[calc(100dvh-90px)] w-full origin-center overflow-x-hidden overflow-y-auto border border-white/80 bg-white/95 shadow-[0_34px_90px_rgba(9,35,120,.24)] backdrop-blur-xl sm:max-h-[calc(100dvh-106px)] lg:max-h-none lg:overflow-hidden [@media(max-height:580px)]:lg:scale-[.86]">
-      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#315ff4] via-[#6d8cff] to-[#9fc6ff]" />
-
-      <div className="px-4 py-4 sm:px-6 lg:px-8 lg:py-5">
-        <div className="flex justify-center items-center gap-3 border-b border-blue-100 pb-4">
-          <div className="text-center">
-            <h1 className="mt-0.5 text-xl font-medium tracking-[-.04em] text-[#08132f] sm:text-2xl 2xl:text-3xl">
-              Shape your website blueprint
-            </h1>
-            <p className="mt-0.5 text-[14px] text-slate-500">
-              Give our AI the right signals and it will compose your first
-              direction.
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-3">
+    <section className="relative mx-auto max-h-[calc(100dvh-156px)] w-full origin-center overflow-x-hidden overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-[0_18px_60px_rgba(23,38,76,.08)]">
+      <div className="px-4 py-5 sm:px-6 lg:px-7 lg:py-6">
+        <div>
           <div className="min-w-0">
             <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
               {categories.map((item) => {
@@ -161,31 +151,44 @@ export default function CategoryStep({
                       setSelected(item.id);
                       updateBusinessInfo({ audience: item.id });
                     }}
-                    className={`group relative flex min-h-[50px] items-center justify-center gap-2 rounded-2xl border px-2 text-left transition-all duration-300 ease-out active:scale-[.985] sm:min-h-[58px] sm:justify-start sm:px-3.5 ${
+                    className={`group relative flex min-h-[82px] items-center justify-start gap-3 overflow-hidden rounded-lg border px-3 pr-14 text-left transition-all duration-500 ease-out active:scale-[.985] sm:px-4 sm:pr-[74px] ${
                       isActive
-                        ? "border-[#315ff4] bg-[#315ff4] text-white shadow-[0_14px_30px_rgba(49,95,244,.25)]"
+                        ? "border-[#315ff4] bg-blue-50/40 text-[#10182d] shadow-[0_8px_24px_rgba(49,95,244,.1)] ring-1 ring-[#315ff4]"
                         : hasAudienceError
                           ? "border-blue-400 bg-white text-[#08132f]"
-                          : "border-slate-200 bg-white text-[#08132f] hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-lg"
+                          : "border-slate-200 bg-white text-[#08132f] hover:border-blue-300 hover:bg-blue-50/30"
                     }`}
                   >
                     <span
-                      className={`hidden size-8 shrink-0 place-items-center rounded-xl min-[440px]:grid ${isActive ? "bg-white/16" : "bg-blue-50 text-[#315ff4]"}`}
+                      className={`grid size-8 shrink-0 place-items-center rounded-lg transition-all duration-500 ${isActive ? "bg-white text-[#315ff4] shadow-sm" : "bg-slate-50 text-slate-500"}`}
                     >
                       <Icon size={17} />
                     </span>
                     <span className="min-w-0">
-                      <strong className="block truncate text-[10px] min-[380px]:text-xs sm:text-[16px] font-medium">
+                      <strong className="block truncate text-xs font-medium sm:text-[15px]">
                         {item.title}
                       </strong>
-                      <small
-                        className={`hidden text-[12px] sm:block ${isActive ? "text-blue-100" : "text-slate-400"}`}
-                      >
+                      <small className="hidden text-[12px] text-slate-400 sm:block">
                         {item.subtitle}
                       </small>
                     </span>
+                    <span
+                      className={`pointer-events-none absolute -bottom-1 right-1 h-[54px] w-[72px] transition-all duration-500 ease-out sm:right-2 ${
+                        isActive
+                          ? "translate-y-0 scale-100 opacity-100"
+                          : "translate-y-1 scale-90 opacity-55 grayscale-[25%]"
+                      }`}
+                    >
+                      <Image
+                        src={item.image}
+                        alt=""
+                        fill
+                        sizes="72px"
+                        className="scale-150 object-contain"
+                      />
+                    </span>
                     {isActive && (
-                      <span className="absolute right-2 top-2 grid size-5 place-items-center rounded-full bg-white text-[#315ff4]">
+                      <span className="absolute right-2 top-2 z-10 grid size-4 place-items-center rounded-full bg-[#315ff4] text-white transition-all duration-300">
                         <Check size={11} strokeWidth={3} />
                       </span>
                     )}
@@ -198,10 +201,10 @@ export default function CategoryStep({
             )}
 
             <form
-              className="mt-4 grid items-start gap-y-7 px-1"
+              className="mt-5 grid items-start gap-y-5"
               onSubmit={(event) => event.preventDefault()}
             >
-              <div className="grid grid-cols-1 content-start gap-2.5 sm:grid-cols-[.8fr_1.2fr]">
+              <div className="grid min-w-0 grid-cols-1 content-start gap-3 sm:grid-cols-2">
                 <FieldLabel
                   label={labels.name}
                   error={hasNameError ? "This field is required." : undefined}
@@ -244,8 +247,8 @@ export default function CategoryStep({
                 </FieldLabel>
               </div>
 
-              <div className="grid grid-cols-1 content-start items-start gap-x-4 gap-y-7 px-1 sm:grid-cols-2 xl:grid-cols-[1.4fr_.72fr_1.12fr]">
-                <div className="order-1 col-span-1 sm:col-span-2 xl:col-span-1">
+              <div className="grid min-w-0 grid-cols-1 content-start items-start gap-x-4 gap-y-5 md:grid-cols-2 xl:grid-cols-[minmax(0,1.35fr)_minmax(0,.8fr)_minmax(0,.72fr)]">
+                <div className="order-1 col-span-1 md:col-span-2 xl:col-span-1">
                   <RadioGroup
                     legend="What is your website related to?"
                     name="website-related"
@@ -337,13 +340,7 @@ export default function CategoryStep({
                   </div>
                 )}
 
-                <div
-                  className={`order-3 col-span-1 grid content-start gap-2 xl:col-start-3 xl:row-start-1 ${
-                    value.hasLogo === "yes"
-                      ? "min-[900px]:grid-cols-[190px_minmax(180px,1fr)] min-[900px]:items-end"
-                      : ""
-                  }`}
-                >
+                <div className="order-3 col-span-1 grid min-w-0 content-start gap-2 xl:col-start-3 xl:row-start-1">
                   <RadioGroup
                     legend="Do you already have a logo?"
                     name="has-logo"
@@ -372,7 +369,7 @@ export default function CategoryStep({
                   <button
                     type="button"
                     onClick={() => updateBusinessInfo({ includeDetails: true })}
-                    className="order-4 col-span-1 inline-flex h-9 w-fit items-center gap-2 justify-self-start rounded-lg border border-black bg-black px-3.5 text-[13px] font-medium text-white shadow-[0_8px_18px_rgba(29,92,214,.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-800 hover:shadow-[0_10px_22px_rgba(29,92,214,.28)] sm:col-span-2 xl:col-span-3"
+                    className="order-4 col-span-1 inline-flex h-8 w-fit items-center gap-2 justify-self-start rounded-md px-1 text-[13px] font-medium text-[#315ff4] transition hover:text-blue-800 md:col-span-2 xl:col-span-3"
                   >
                     <span className="text-md leading-none">+</span>
                     Add more details
@@ -387,7 +384,7 @@ export default function CategoryStep({
   );
 }
 const fieldClass = (hasError: boolean, compact = false) =>
-  `${compact ? "h-11" : "h-12 sm:h-[52px]"} w-full rounded-xl border bg-white/95 px-3.5 text-sm leading-5 text-[#08132f] shadow-[0_5px_16px_rgba(31,64,142,.06)] outline-none transition-all duration-300 placeholder:text-sm placeholder:leading-5 placeholder:text-slate-400 focus:border-[#315ff4] focus:bg-white focus:ring-4 focus:ring-blue-100/80 ${hasError ? "border-red-400" : "border-slate-200"}`;
+  `${compact ? "h-10" : "h-11"} min-w-0 w-full rounded-lg border bg-white px-3 text-[14px] leading-5 text-[#08132f] outline-none transition placeholder:text-[13px] placeholder:text-slate-400 focus:border-[#315ff4] focus:ring-3 focus:ring-blue-100/70 ${hasError ? "border-red-400" : "border-slate-200"}`;
 
 function FieldLabel({
   label,
@@ -402,7 +399,7 @@ function FieldLabel({
 }) {
   return (
     <label
-      className={`grid content-start ${compact ? "gap-1.5" : "gap-2"} text-[17px] font-medium text-[#08132f]`}
+      className={`grid min-w-0 content-start ${compact ? "gap-1.5" : "gap-2"} text-[15px] font-medium text-[#08132f]`}
     >
       <span className="block leading-normal">{label}</span>
       <div className="min-w-0">{children}</div>
@@ -425,7 +422,7 @@ function LogoUpload({
   return (
     <label
       className={`block cursor-pointer rounded-lg border bg-white p-2 text-[#08132f] transition-all duration-300 ease-out hover:border-blue-300 focus-within:border-[#315ff4] focus-within:ring-2 focus-within:ring-blue-100 ${
-        hasError ? "border-red-400" : "border-white/20"
+        hasError ? "border-red-400" : "border-slate-200"
       }`}
     >
       <div className="flex items-center gap-2">
@@ -443,10 +440,10 @@ function LogoUpload({
         )}
 
         <div className="min-w-0 flex-1">
-          <strong className="block truncate text-xs text-[#08132f]">
+          <strong className="block truncate text-[13px] text-[#08132f]">
             {fileName || "Upload your logo"}
           </strong>
-          <p className="mt-0.5 text-[9px] text-slate-400 max-[500px]:hidden">
+          <p className="mt-0.5 text-[11px] text-slate-400 max-[500px]:hidden">
             PNG, JPG, WebP or SVG
           </p>
         </div>
@@ -479,19 +476,19 @@ function RadioGroup<T extends string>({
 }) {
   return (
     <fieldset>
-      <legend className="mb-2 text-[17px] font-medium text-[#08132f]">
+      <legend className="mb-2 text-[15px] font-medium text-[#08132f]">
         {legend}
       </legend>
-      <div className="flex flex-wrap gap-1.5 xl:flex-nowrap xl:gap-2">
+      <div className="flex min-w-0 flex-wrap gap-2">
         {options.map((option) => {
           const isSelected = value === option.value;
 
           return (
             <label
               key={option.value}
-              className={`cursor-pointer whitespace-nowrap rounded-lg border px-4 py-1.5 text-[14px] font-medium transition-all duration-300 ease-out active:scale-[.97] ${
+              className={`cursor-pointer whitespace-nowrap rounded-lg border px-3 py-2 text-[13px] font-medium transition active:scale-[.97] ${
                 isSelected
-                  ? "border-blue-700 bg-blue-700 text-white shadow-[0_6px_14px_rgba(29,92,214,.2)]"
+                  ? "border-[#315ff4] bg-blue-50 text-[#315ff4]"
                   : hasError
                     ? "border-red-400 bg-white text-slate-700"
                     : "border-blue-100 bg-white text-slate-700 shadow-sm hover:border-blue-400 hover:bg-blue-50/50 hover:text-blue-700"
@@ -519,7 +516,7 @@ function ErrorLine({ message }: { message: string }) {
   return (
     <span
       role="alert"
-      className="mt-1 flex items-center gap-1.5 text-[10px] font-medium leading-none text-red-500 animate-onboarding-swap"
+      className="mt-1 flex items-center gap-1.5 text-[11px] font-medium leading-none text-red-500 animate-onboarding-swap"
     >
       <span className="h-px w-3 shrink-0 bg-red-500" aria-hidden="true" />
       {message}
