@@ -14,7 +14,6 @@ import {
   Search,
   ChevronDown,
   ChevronUp,
-  Sparkles,
   X,
 } from "lucide-react";
 import { getCategoryNamesWithContent } from "@/app/editor/layout/src/data/templateFlow";

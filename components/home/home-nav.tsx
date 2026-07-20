@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const links = [
   ["AI Builder", "#workflow"],
@@ -33,32 +33,7 @@ export default function HomeNav() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-7">
-          {links.map(([label, href], index) => (
-            <a
-              key={label}
-              href={href}
-              className="group flex items-center gap-1.5 text-[13px] font-medium text-white/75 transition hover:text-white"
-            >
-              {label}
-              {index < 4 && (
-                <ChevronDown
-                  size={13}
-                  className="opacity-45 transition group-hover:translate-y-0.5"
-                />
-              )}
-            </a>
-          ))}
-        </nav>
-
         <div className="hidden items-center gap-4 lg:flex">
-          <button
-            type="button"
-            className="hidden flex items-center gap-1.5 text-[12px] font-medium text-white/75"
-          >
-            EN <ChevronDown size={12} />
-          </button>
-
           <Link
             href="/auth"
             className="rounded-lg bg-white px-8 py-3 text-[14px] font-medium text-[#173fdb] shadow-lg shadow-blue-950/10 transition hover:-translate-y-0.5 hover:bg-[#dfffb7] hover:text-black"

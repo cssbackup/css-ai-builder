@@ -18,9 +18,6 @@ export default function HomeExperience() {
             <HomeNav />
             <HeroSection onStart={() => setShowOnboarding(true)} />
             <CrewSection />
-            {/* <WorkflowSection /> */}
-
-            {/* <StudioSection /> */}
             <LaunchSection />
           </main>
         </MotionShell>
