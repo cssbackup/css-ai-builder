@@ -136,7 +136,7 @@ export default function CategoryStep({
       <div className="px-4 py-4 sm:px-6 lg:px-8 lg:py-5">
         <div className="flex justify-center items-center gap-3 border-b border-blue-100 pb-4">
           <div className="text-center">
-            <h1 className="mt-0.5 text-xl font-medium tracking-[-.04em] text-[#08132f] sm:text-2xl">
+            <h1 className="mt-0.5 text-xl font-medium tracking-[-.04em] text-[#08132f] sm:text-2xl 2xl:text-3xl">
               Shape your website blueprint
             </h1>
             <p className="mt-0.5 text-[14px] text-slate-500">
@@ -198,7 +198,7 @@ export default function CategoryStep({
             )}
 
             <form
-              className="mt-4 grid items-start gap-y-7"
+              className="mt-4 grid items-start gap-y-7 px-1"
               onSubmit={(event) => event.preventDefault()}
             >
               <div className="grid grid-cols-1 content-start gap-2.5 sm:grid-cols-[.8fr_1.2fr]">
@@ -372,7 +372,7 @@ export default function CategoryStep({
                   <button
                     type="button"
                     onClick={() => updateBusinessInfo({ includeDetails: true })}
-                    className="order-4 col-span-1 inline-flex h-9 w-fit items-center gap-2 justify-self-start rounded-lg border border-blue-200 bg-white px-3.5 text-[13px] font-semibold text-[#315ff4] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#315ff4] hover:shadow-md sm:col-span-2 xl:col-span-3"
+                    className="order-4 col-span-1 inline-flex h-9 w-fit items-center gap-2 justify-self-start rounded-lg border border-black bg-black px-3.5 text-[13px] font-medium text-white shadow-[0_8px_18px_rgba(29,92,214,.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-800 hover:shadow-[0_10px_22px_rgba(29,92,214,.28)] sm:col-span-2 xl:col-span-3"
                   >
                     <span className="text-md leading-none">+</span>
                     Add more details
@@ -387,7 +387,7 @@ export default function CategoryStep({
   );
 }
 const fieldClass = (hasError: boolean, compact = false) =>
-  `${compact ? "h-11" : "h-12 sm:h-[52px]"} w-full rounded-xl border bg-white px-3.5 text-sm text-[#08132f] shadow-[0_5px_18px_rgba(31,64,142,.06)] outline-none transition-all duration-300 ease-out placeholder:text-sm placeholder:text-slate-300 focus:border-[#315ff4] focus:ring-4 focus:ring-blue-100 ${hasError ? "border-red-400" : "border-slate-200"}`;
+  `${compact ? "h-11" : "h-12 sm:h-[52px]"} w-full rounded-xl border bg-white/95 px-3.5 text-sm leading-5 text-[#08132f] shadow-[0_5px_16px_rgba(31,64,142,.06)] outline-none transition-all duration-300 placeholder:text-sm placeholder:leading-5 placeholder:text-slate-400 focus:border-[#315ff4] focus:bg-white focus:ring-4 focus:ring-blue-100/80 ${hasError ? "border-red-400" : "border-slate-200"}`;
 
 function FieldLabel({
   label,
@@ -424,8 +424,8 @@ function LogoUpload({
 }) {
   return (
     <label
-      className={`block cursor-pointer rounded-xl border bg-white/85 p-2 transition-all duration-300 ease-out hover:border-blue-300 hover:bg-white focus-within:border-[#315ff4] focus-within:ring-2 focus-within:ring-blue-100 ${
-        hasError ? "border-blue-700" : "border-blue-100"
+      className={`block cursor-pointer rounded-lg border bg-white p-2 text-[#08132f] transition-all duration-300 ease-out hover:border-blue-300 focus-within:border-[#315ff4] focus-within:ring-2 focus-within:ring-blue-100 ${
+        hasError ? "border-red-400" : "border-white/20"
       }`}
     >
       <div className="flex items-center gap-2">
@@ -450,7 +450,6 @@ function LogoUpload({
             PNG, JPG, WebP or SVG
           </p>
         </div>
-
       </div>
       <input
         type="file"
@@ -490,12 +489,12 @@ function RadioGroup<T extends string>({
           return (
             <label
               key={option.value}
-              className={`cursor-pointer whitespace-nowrap rounded-full border px-4 py-1.5 text-[14px] font-medium transition-all duration-300 ease-out active:scale-[.97] ${
+              className={`cursor-pointer whitespace-nowrap rounded-lg border px-4 py-1.5 text-[14px] font-medium transition-all duration-300 ease-out active:scale-[.97] ${
                 isSelected
-                  ? "border-gray-500 bg-gray-500 text-white shadow-[0_6px_14px_rgba(49,95,244,.2)]"
+                  ? "border-blue-700 bg-blue-700 text-white shadow-[0_6px_14px_rgba(29,92,214,.2)]"
                   : hasError
                     ? "border-red-400 bg-white text-slate-700"
-                    : "border-blue-100 bg-white text-slate-600 hover:border-[#315ff4] hover:text-[#315ff4]"
+                    : "border-blue-100 bg-white text-slate-700 shadow-sm hover:border-blue-400 hover:bg-blue-50/50 hover:text-blue-700"
               }`}
             >
               <input

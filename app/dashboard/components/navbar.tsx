@@ -2,11 +2,9 @@ import type { RefObject } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Bell,
   ChevronDown,
   LogOut,
   Plus,
-  Search,
   Settings,
   Menu,
   UserRound,
@@ -51,7 +49,7 @@ export default function Navbar({
       >
         <Menu size={20} />
       </button>
-      <h1 className="hidden min-w-fit text-base font-semibold sm:block">
+      <h1 className="hidden min-w-fit text-base font-semibold sm:block 2xl:text-xl">
         {activeTab}
       </h1>
 
@@ -72,15 +70,6 @@ export default function Navbar({
         >
           <Plus size={16} /> New website
         </Link>
-
-        <button
-          type="button"
-          aria-label="Notifications"
-          className="relative grid size-10 cursor-pointer place-items-center rounded-full text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
-        >
-          <Bell size={19} />
-          <span className="absolute right-2 top-2 size-1.5 rounded-full bg-blue-600 ring-2 ring-white" />
-        </button>
 
         <div ref={profileRef} className="relative">
           <button
@@ -147,12 +136,16 @@ export default function Navbar({
                 <Settings size={16} /> Settings
               </button>
               <div className="my-1 h-px bg-zinc-100" />
-              <button
-                type="button"
+              <Link
+                href="/auth"
+                onClick={() => {
+                  window.localStorage.removeItem("lestow-user");
+                  window.sessionStorage.removeItem("lestow-dashboard-tab");
+                }}
                 className="flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg px-2 text-xs text-red-600 hover:bg-red-50"
               >
                 <LogOut size={16} /> Sign out
-              </button>
+              </Link>
             </div>
           )}
         </div>

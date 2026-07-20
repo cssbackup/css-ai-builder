@@ -10,7 +10,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
-  Eye,
   Palette,
   Search,
   Sparkles,
@@ -184,17 +183,11 @@ export default function Templatepreview({
 
   return (
     <div className="w-full">
-      <div className="onboarding-responsive-scroll relative mx-auto flex max-h-[calc(100dvh-90px)] w-full max-w-7xl flex-col overflow-y-auto border border-white/80 bg-white/95 px-5 py-5 shadow-[0_30px_80px_rgba(25,60,150,.18)] backdrop-blur-xl sm:max-h-[calc(100dvh-106px)] sm:px-7 lg:max-h-none lg:overflow-visible lg:px-9 lg:py-7">
+      <div className="onboarding-responsive-scroll relative mx-auto flex max-h-[calc(100dvh-90px)] w-full max-w-7xl flex-col overflow-y-auto border border-white/80 bg-white/95 px-5 py-5 shadow-[0_30px_80px_rgba(25,60,150,.18)] backdrop-blur-xl sm:max-h-[calc(100dvh-106px)] sm:px-7 lg:max-h-none lg:overflow-visible lg:px-9 lg:py-7 2xl:max-w-[1500px] 2xl:px-11 2xl:py-9">
         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#315ff4] via-[#7ea4ff] to-cyan-300" />
         <div className="flex shrink-0 items-start gap-3 border-b border-blue-100 pb-5">
-          <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[linear-gradient(145deg,#244bd5,#6e91ff)] text-white shadow-[0_12px_28px_rgba(49,95,244,.25)]">
-            <Palette size={19} />
-          </span>
           <div>
-            <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[.18em] text-[#315ff4]">
-              <Sparkles size={11} /> Curated by AI
-            </div>
-            <h2 className="mt-1 text-xl font-semibold tracking-[-.04em] text-[#08132f] sm:text-2xl">
+            <h2 className="mt-1 text-xl font-semibold tracking-[-.04em] text-[#08132f] sm:text-2xl 2xl:text-3xl">
               Pick a look for your {selectedCategory || "website"}
             </h2>
             <p className="mt-1 text-xs text-slate-500 sm:text-sm">
@@ -311,7 +304,7 @@ export default function Templatepreview({
                     </div>
                   </div>
 
-                  <aside className="relative order-2 flex min-h-[380px] flex-col rounded-[22px] border border-blue-100/80 bg-white p-4 shadow-[0_20px_50px_rgba(41,91,151,.12)] sm:min-h-[420px] lg:min-h-0">
+                  <aside className="relative order-2 h-fit flex flex-col rounded-[22px] border border-blue-100/80 bg-white p-4 shadow-[0_20px_50px_rgba(41,91,151,.12)] ">
                     <button
                       type="button"
                       onClick={closePreview}
@@ -478,9 +471,6 @@ export default function Templatepreview({
                       {item.type === "Single Page Website"
                         ? "Single"
                         : "Multiple"}
-                    </span>
-                    <span className="absolute inset-x-2 bottom-2 flex translate-y-3 items-center justify-center gap-1 rounded-lg bg-[#08132f]/80 py-1.5 text-[9px] font-semibold text-white opacity-0 backdrop-blur transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                      <Eye size={11} /> Preview design
                     </span>
                   </div>
 

@@ -2,6 +2,15 @@
 
 html {
   scroll-behavior: smooth;
+  /* Keep compact laptop layouts unchanged, then scale the complete UI
+     progressively on large desktop displays instead of leaving it undersized. */
+  font-size: clamp(16px, calc(10px + 0.4167vw), 18px);
+}
+
+body {
+  min-width: 320px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 @keyframes editorFadeIn {
