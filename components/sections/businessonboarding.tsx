@@ -6,6 +6,7 @@ import Categorystep from "./categorystep";
 import CategoryType from "./categorytype";
 import TemplatePreview from "./templatepreview";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import HomeNav from "../home/home-nav";
 
 type BusinessInfo = {
   audience: "" | "clients" | "myself" | "company";
@@ -42,16 +43,16 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
     audience: "clients",
     name: "",
     description: "",
-    websiteRelated: "",
-    pageType: "",
+    websiteRelated: "products",
+    pageType: "single-page",
     email: "",
     mobile: "",
     address: "",
     includeDetails: false,
-    hasLogo: "",
+    hasLogo: "no",
     logoName: "",
   });
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Business");
   const [selectedTemplate, setSelectedTemplate] = useState("");
   const [showTemplatePreview, setShowTemplatePreview] = useState(false);
 
@@ -103,24 +104,15 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
   };
 
   return (
-    <main className="relative flex h-dvh w-full items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_12%_18%,rgba(185,213,255,.55),transparent_30%),radial-gradient(circle_at_88%_82%,rgba(197,244,218,.5),transparent_28%),linear-gradient(140deg,#ffffff_0%,#f3f8ff_48%,#eaf3ff_100%)] px-2.5 pb-[70px] pt-2.5 text-[#08132f] sm:px-5 sm:pb-[74px] sm:pt-4">
-      <div className="pointer-events-none absolute left-[28%] top-[-165px] h-[290px] w-[820px] -skew-x-[22deg] overflow-hidden opacity-70">
-        <span className="absolute inset-y-0 left-0 w-[18%] bg-gradient-to-r from-transparent via-[#071a3d]/20 to-blue-900/15" />
-        <span className="absolute inset-y-0 left-[20%] w-[19%] bg-gradient-to-r from-blue-900/8 via-blue-700/30 to-blue-500/18" />
-        <span className="absolute inset-y-0 left-[41%] w-[20%] bg-gradient-to-r from-blue-500/12 via-blue-600/34 to-blue-400/14" />
-        <span className="absolute inset-y-0 right-[16%] w-[20%] bg-gradient-to-r from-blue-300/8 via-blue-500/20 to-transparent" />
-      </div>
-      <div className="pointer-events-none absolute bottom-[-190px] left-[12%] h-[330px] w-[900px] -skew-x-[22deg] overflow-hidden opacity-65">
-        <span className="absolute inset-y-0 left-0 w-[18%] bg-gradient-to-r from-transparent via-emerald-950/16 to-green-800/14" />
-        <span className="absolute inset-y-0 left-[20%] w-[22%] bg-gradient-to-r from-green-800/10 via-lime-500/34 to-lime-300/14" />
-        <span className="absolute inset-y-0 left-[44%] w-[24%] bg-gradient-to-r from-lime-300/12 via-green-500/28 to-emerald-700/14" />
-        <span className="absolute inset-y-0 right-[5%] w-[24%] bg-gradient-to-r from-emerald-700/12 via-[#0b2a5b]/18 to-transparent" />
-      </div>
-      <div className="pointer-events-none absolute -left-28 -top-32 size-[430px] rounded-full bg-blue-300/25 blur-[105px]" />
-      <div className="pointer-events-none absolute -right-24 bottom-[-120px] size-[460px] rounded-full bg-emerald-300/25 blur-[110px]" />
-      <div className="pointer-events-none absolute right-[8%] top-[5%] size-72 rounded-full border border-blue-900/10 shadow-[0_0_90px_rgba(30,67,133,.14)]" />
-      <div className="pointer-events-none absolute right-[12%] top-[9%] size-48 rounded-full border border-blue-900/10" />
-      <div className="relative z-10 w-full max-w-[1280px] overflow-visible">
+    <main className="relative flex h-dvh w-full items-center justify-center overflow-hidden bg-[#315ff4] px-2.5 pb-[70px] pt-[82px] text-[#08132f] sm:px-5 sm:pb-[74px] sm:pt-[88px]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_52%_46%,rgba(163,197,255,.64),transparent_30%),radial-gradient(circle_at_13%_78%,rgba(118,255,210,.53),transparent_24%),linear-gradient(120deg,#2855ed_0%,#3768ff_58%,#2d5df4_100%)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(255,255,255,.34)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.34)_1px,transparent_1px)] [background-size:clamp(74px,10.6vw,152px)_clamp(74px,10.6vw,152px)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(118deg,transparent_17%,rgba(255,255,255,.13)_31%,transparent_43%,rgba(255,255,255,.15)_61%,transparent_74%)]" />
+      <div className="pointer-events-none absolute bottom-[-26%] left-1/2 h-[72%] w-[90%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(ellipse,rgba(177,255,210,.75),rgba(87,153,255,.3)_45%,transparent_70%)] blur-2xl" />
+
+      <HomeNav />
+
+      <div className="relative z-10 w-full max-w-[1280px] overflow-visible 2xl:max-w-[1500px]">
         <div className="w-full">
           {step === 0 && (
             <Categorystep
@@ -178,7 +170,7 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
               <ArrowLeft size={14} /> Back
             </button>
 
-            <div className="hidden items-center gap-2 text-[12px] font-medium text-slate-600 sm:flex">
+            <div className="hidden items-center gap-2 text-[12px] font-medium text-white/80 sm:flex">
               <span className="size-1.5 rounded-full bg-[#315ff4]" />
               Your progress is saved automatically
             </div>
@@ -191,7 +183,7 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
                 (step === 1 && !selectedCategory) ||
                 (step === 2 && !selectedTemplate)
               }
-              className="group inline-flex h-10 min-w-[128px] items-center justify-center gap-2 rounded-xl bg-[linear-gradient(120deg,#244bd5,#315ff4_55%,#6c91ff)] px-5 text-xs font-semibold text-white shadow-[0_12px_26px_rgba(49,95,244,.3)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(49,95,244,.38)] disabled:cursor-not-allowed disabled:opacity-50"
+              className="group inline-flex h-10 min-w-[128px] items-center justify-center gap-2 rounded-xl bg-white px-5 text-xs font-semibold shadow-[0_12px_26px_rgba(49,95,244,.3)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(49,95,244,.38)] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loadspinner && (
                 <span className="size-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />

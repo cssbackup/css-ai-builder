@@ -11,8 +11,8 @@ import {
   Clock3,
   Globe2,
   Layers3,
-  Play,
   Plus,
+  Sparkles,
 } from "lucide-react";
 
 const recentSites = [
@@ -123,8 +123,10 @@ function SummaryCard({ card, onSelect }: { card: (typeof summaryCards)[number]; 
 
 export default function DashboardTabContent({
   userName,
+  onManageWebsites,
 }: {
   userName: string;
+  onManageWebsites: () => void;
 }) {
   const [siteFilter, setSiteFilter] = useState<SiteFilter | null>(null);
 
@@ -147,32 +149,32 @@ export default function DashboardTabContent({
         <div className="absolute -right-16 -top-24 -z-10 size-80 rounded-full bg-blue-300/20 blur-xl" />
 
         <div className="relative max-w-md py-2 sm:py-3">
-          <p className="text-[11px] font-medium text-zinc-600">
-            Welcome back, {userName.split(" ")[0] || userName}
+          <p className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-white/75 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[.1em] text-blue-700 backdrop-blur">
+            <Sparkles size={11} /> AI workspace ready
           </p>
-          <h2 className="mt-2 text-3xl font-semibold leading-[1.05] tracking-[-0.04em] text-zinc-950 sm:text-4xl">
-            Build websites
+          <h2 className="mt-3 text-3xl font-semibold leading-[1.05] tracking-[-0.04em] text-zinc-950 sm:text-4xl 2xl:text-5xl">
+            Welcome back,
             <br />
-            in minutes.
+            {userName.split(" ")[0] || userName}.
           </h2>
-          <p className="mt-3 text-sm text-zinc-600">
-            AI-powered. Fast. Beautiful.
+          <p className="mt-3 max-w-sm text-sm leading-6 text-zinc-600">
+            Create with AI, manage your drafts, and publish every website from
+            one smart workspace.
           </p>
           <div className="mt-5 flex flex-wrap gap-2.5">
-            <a
-              href="/a2.mp4"
-              target="_blank"
-              rel="noreferrer"
-              className="flex h-10 items-center gap-2 rounded-xl bg-blue-600 px-4 text-xs font-medium text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:bg-blue-700"
-            >
-              <Play size={14} fill="currentColor" /> Watch demo
-            </a>
             <Link
               href="/"
-              className="flex h-10 items-center gap-2 rounded-xl border border-blue-100 bg-white/90 px-4 text-xs font-medium text-blue-700 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:border-blue-300"
+              className="flex h-10 items-center gap-2 rounded-xl bg-blue-600 px-4 text-xs font-medium text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:bg-blue-700"
             >
               <Plus size={15} /> Create website
             </Link>
+            <button
+              type="button"
+              onClick={onManageWebsites}
+              className="flex h-10 items-center gap-2 rounded-xl border border-blue-100 bg-white/90 px-4 text-xs font-medium text-blue-700 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:border-blue-300"
+            >
+              <Globe2 size={15} /> Manage websites
+            </button>
           </div>
         </div>
 

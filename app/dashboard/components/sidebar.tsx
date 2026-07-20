@@ -6,7 +6,7 @@ import {
   Settings,
   Shapes,
   UserRound,
-  CreditCard,
+  Gem,
   ReceiptText,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -15,7 +15,7 @@ import BrandLogo from "../../../components/ui/brand-logo";
 export type DashboardTab =
   | "Dashboard"
   | "My Websites"
-  | "Payments"
+  | "Plan"
   | "Billing"
   | "Profile"
   | "Settings"
@@ -36,7 +36,7 @@ const mainItems: NavItem[] = [
   { label: "Dashboard", icon: LayoutDashboard },
   { label: "Profile", icon: UserRound },
   { label: "My Websites", icon: Shapes },
-  { label: "Payments", icon: CreditCard },
+  { label: "Plan", icon: Gem },
   { label: "Billing", icon: ReceiptText },
 ];
 

@@ -24,7 +24,12 @@ import {
   AlertTriangle,
 } from "lucide-react";
 
-type UserProfile = { name: string; email: string; password?: string; avatar?: string };
+type UserProfile = {
+  name: string;
+  email: string;
+  password?: string;
+  avatar?: string;
+};
 
 export default function ProfileTab({
   user,
@@ -231,15 +236,23 @@ export default function ProfileTab({
             {fields.map((field) => (
               <label
                 key={field.key}
-                className={`${field.key === "address" ? "md:col-span-2 xl:col-span-3" : ""} grid gap-1.5 text-[10px] font-medium text-zinc-500`}
+                className={`${field.key === "address" ? "md:col-span-2 xl:col-span-3" : ""} grid gap-1.5 text-[14px] font-medium text-zinc-500`}
               >
                 {field.label}
                 <span className="relative">
                   <input
                     disabled={!editing || field.key === "email"}
-                    type={field.key === "password" && showPassword ? "text" : field.type}
+                    type={
+                      field.key === "password" && showPassword
+                        ? "text"
+                        : field.type
+                    }
                     value={form[field.key]}
-                    placeholder={field.key === "password" ? "Enter a new password" : undefined}
+                    placeholder={
+                      field.key === "password"
+                        ? "Enter a new password"
+                        : undefined
+                    }
                     onChange={(event) =>
                       setForm((current) => ({
                         ...current,
@@ -252,7 +265,9 @@ export default function ProfileTab({
                     <button
                       type="button"
                       onClick={() => setShowPassword((visible) => !visible)}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
                       className="absolute right-3 top-1/2 grid size-7 -translate-y-1/2 cursor-pointer place-items-center rounded-lg text-zinc-400 transition hover:bg-blue-50 hover:text-blue-700"
                     >
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -266,35 +281,104 @@ export default function ProfileTab({
 
         <section className="mt-5 rounded-2xl border border-red-200 bg-white p-5 shadow-sm sm:p-7">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-            <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-red-50 text-red-600"><Trash2 size={18} /></span>
-            <div className="flex-1"><h3 className="text-sm font-semibold text-zinc-900">Delete account</h3><p className="mt-1 max-w-2xl text-[11px] leading-5 text-zinc-500">Your account, websites, saved assets, and subscription data will be permanently deleted. This action is irreversible and cannot be undone.</p></div>
-            <button type="button" onClick={() => setDeleteOpen(true)} className="h-9 rounded-xl bg-red-50 px-4 text-xs font-medium text-red-700 transition hover:bg-red-600 hover:text-white">Delete account</button>
+            <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-red-50 text-red-600">
+              <Trash2 size={18} />
+            </span>
+            <div className="flex-1">
+              <h3 className="text-sm font-semibold text-zinc-900">
+                Delete account
+              </h3>
+              <p className="mt-1 max-w-2xl text-[13px] leading-5 text-zinc-500">
+                Your account, websites, saved assets, and subscription data will
+                be permanently deleted. This action is irreversible and cannot
+                be undone.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setDeleteOpen(true)}
+              className="h-9 rounded-xl bg-red-50 px-4 text-xs font-medium text-red-700 transition hover:bg-red-600 hover:text-white"
+            >
+              Delete account
+            </button>
           </div>
         </section>
       </form>
 
       {deleteOpen && (
         <div className="fixed inset-0 z-[130] grid place-items-center overflow-y-auto bg-zinc-900/25 p-4 backdrop-blur-sm animate-[editorFadeIn_180ms_ease-out]">
-          <section role="dialog" aria-modal="true" aria-labelledby="delete-account-title" className="relative w-full max-w-md rounded-3xl border border-white/70 bg-white p-6 shadow-[0_30px_90px_rgba(15,23,42,.28)] sm:p-8">
-            <button type="button" onClick={() => setDeleteOpen(false)} aria-label="Close delete account dialog" className="absolute right-4 top-4 grid size-9 place-items-center rounded-full bg-zinc-100 text-zinc-500 transition hover:bg-zinc-200 hover:text-zinc-900"><X size={17} /></button>
-            <h2 id="delete-account-title" className="pr-10 text-xl font-semibold">Delete account</h2>
-            <p className="mt-3 text-xs leading-5 text-zinc-500">Your account and all associated websites will be permanently deleted. Active subscriptions will be cancelled immediately.</p>
-            <p className="mt-2 rounded-xl border border-blue-100 bg-blue-50 px-3 py-2.5 text-[11px] leading-5 text-blue-800">After deletion, you can create a new account using the same email address after 2 days.</p>
-            <div className="mt-5 flex items-start gap-3 rounded-xl bg-red-50 p-3 text-xs font-medium text-red-700"><AlertTriangle className="mt-0.5 shrink-0" size={16} /><span>This action cannot be undone.</span></div>
-            <label className="mt-5 grid gap-2 text-xs font-medium text-zinc-700">Enter your account name <strong>{form.name}</strong> to confirm.
-              <input value={deleteName} onChange={(event) => setDeleteName(event.target.value)} placeholder="Account name" className="h-11 rounded-xl border border-zinc-200 px-3 text-xs font-normal outline-none focus:border-red-400 focus:ring-4 focus:ring-red-50" />
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-account-title"
+            className="relative w-full max-w-md rounded-3xl border border-white/70 bg-white p-6 shadow-[0_30px_90px_rgba(15,23,42,.28)] sm:p-8"
+          >
+            <button
+              type="button"
+              onClick={() => setDeleteOpen(false)}
+              aria-label="Close delete account dialog"
+              className="absolute right-4 top-4 grid size-9 place-items-center rounded-full bg-zinc-100 text-zinc-500 transition hover:bg-zinc-200 hover:text-zinc-900"
+            >
+              <X size={17} />
+            </button>
+            <h2
+              id="delete-account-title"
+              className="pr-10 text-xl font-semibold"
+            >
+              Delete account
+            </h2>
+            <p className="mt-3 text-xs leading-5 text-zinc-500">
+              Your account and all associated websites will be permanently
+              deleted. Active subscriptions will be cancelled immediately.
+            </p>
+            <p className="mt-2 rounded-xl border border-blue-100 bg-blue-50 px-3 py-2.5 text-[11px] leading-5 text-blue-800">
+              After deletion, you can create a new account using the same email
+              address after 2 days.
+            </p>
+            <div className="mt-5 flex items-start gap-3 rounded-xl bg-red-50 p-3 text-xs font-medium text-red-700">
+              <AlertTriangle className="mt-0.5 shrink-0" size={16} />
+              <span>This action cannot be undone.</span>
+            </div>
+            <label className="mt-5 grid gap-2 text-xs font-medium text-zinc-700">
+              Enter your account name <strong>{form.name}</strong> to confirm.
+              <input
+                value={deleteName}
+                onChange={(event) => setDeleteName(event.target.value)}
+                placeholder="Account name"
+                className="h-11 rounded-xl border border-zinc-200 px-3 text-xs font-normal outline-none focus:border-red-400 focus:ring-4 focus:ring-red-50"
+              />
             </label>
-            <label className="mt-4 grid gap-2 text-xs font-medium leading-5 text-zinc-700">Type <strong>DELETE MY ACCOUNT</strong> below.
-              <input value={deletePhrase} onChange={(event) => setDeletePhrase(event.target.value)} placeholder="Verification phrase" className="h-11 rounded-xl border border-zinc-200 px-3 text-xs font-normal outline-none focus:border-red-400 focus:ring-4 focus:ring-red-50" />
+            <label className="mt-4 grid gap-2 text-xs font-medium leading-5 text-zinc-700">
+              Type <strong>DELETE MY ACCOUNT</strong> below.
+              <input
+                value={deletePhrase}
+                onChange={(event) => setDeletePhrase(event.target.value)}
+                placeholder="Verification phrase"
+                className="h-11 rounded-xl border border-zinc-200 px-3 text-xs font-normal outline-none focus:border-red-400 focus:ring-4 focus:ring-red-50"
+              />
             </label>
             <div className="mt-6 grid grid-cols-2 gap-3">
-              <button type="button" onClick={() => setDeleteOpen(false)} className="h-10 rounded-xl border border-zinc-200 bg-white text-xs font-medium text-zinc-600 hover:bg-zinc-50">Cancel</button>
               <button
                 type="button"
-                disabled={deleteName !== form.name || deletePhrase !== "DELETE MY ACCOUNT"}
-                onClick={() => { window.localStorage.removeItem("lestow-user"); router.push("/auth"); }}
+                onClick={() => setDeleteOpen(false)}
+                className="h-10 rounded-xl border border-zinc-200 bg-white text-xs font-medium text-zinc-600 hover:bg-zinc-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={
+                  deleteName !== form.name ||
+                  deletePhrase !== "DELETE MY ACCOUNT"
+                }
+                onClick={() => {
+                  window.localStorage.removeItem("lestow-user");
+                  router.push("/auth");
+                }}
                 className="h-10 rounded-xl bg-red-600 text-xs font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-red-100 disabled:text-red-400"
-              >Delete account</button>
+              >
+                Delete account
+              </button>
             </div>
           </section>
         </div>

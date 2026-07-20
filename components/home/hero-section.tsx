@@ -59,8 +59,8 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
               <span className="block overflow-hidden pb-3">
                 <span data-hero-line className="block">
                   Website in{" "}
-                  <span className="font-serif italic tracking-[-.065em] text-black bg-lime-300 px-5">
-                    <span className="text-[110px]">10 </span> Minutes
+                  <span className="bg-lime-300 px-2 font-serif italic tracking-[-.065em] text-black sm:px-5">
+                    <span>10 </span> Minutes
                   </span>
                 </span>
               </span>

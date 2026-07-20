@@ -18,7 +18,7 @@ export default function HomeNav() {
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 text-white">
-      <div className="mx-auto flex h-[76px] max-w-[1380px] items-center justify-between px-5 sm:px-8">
+      <div className="mx-auto flex h-[76px] max-w-[1380px] items-center justify-between px-5 sm:px-8 2xl:max-w-[1580px]">
         <Link
           href="/"
           aria-label="Lestow home"

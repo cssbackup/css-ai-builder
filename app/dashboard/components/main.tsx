@@ -23,19 +23,49 @@ export default function Main() {
   const profileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("lestow-user");
-    if (!saved) return;
-    try {
-      const details = JSON.parse(saved);
-      if (details.name && details.email) setUser(details);
-    } catch {
-      window.localStorage.removeItem("lestow-user");
-    }
+    const restoreTab = window.setTimeout(() => {
+      const savedTab = window.sessionStorage.getItem("lestow-dashboard-tab");
+      const dashboardTabs: DashboardTab[] = [
+        "Dashboard",
+        "My Websites",
+        "Plan",
+        "Billing",
+        "Profile",
+        "Settings",
+        "Help",
+      ];
+
+      if (dashboardTabs.includes(savedTab as DashboardTab)) {
+        setActiveTab(savedTab as DashboardTab);
+      }
+    }, 0);
+
+    return () => window.clearTimeout(restoreTab);
+  }, []);
+
+  useEffect(() => {
+    const restoreUser = window.setTimeout(() => {
+      const saved = window.localStorage.getItem("lestow-user");
+      if (!saved) return;
+      try {
+        const details = JSON.parse(saved);
+        if (details.name && details.email) setUser(details);
+      } catch {
+        window.localStorage.removeItem("lestow-user");
+      }
+    }, 0);
+
+    return () => window.clearTimeout(restoreUser);
   }, []);
 
   const saveUser = (nextUser: typeof user) => {
     setUser(nextUser);
     window.localStorage.setItem("lestow-user", JSON.stringify(nextUser));
+  };
+
+  const selectTab = (tab: DashboardTab) => {
+    setActiveTab(tab);
+    window.sessionStorage.setItem("lestow-dashboard-tab", tab);
   };
 
   useEffect(() => {
@@ -72,7 +102,7 @@ export default function Main() {
         onCollapse={() => setCollapsed((current) => !current)}
         onMobileClose={() => setMobileOpen(false)}
         onSelect={(tab) => {
-          setActiveTab(tab);
+          selectTab(tab);
           setMobileOpen(false);
         }}
       />
@@ -85,7 +115,7 @@ export default function Main() {
           profileRef={profileRef}
           onMenuClick={() => setMobileOpen(true)}
           onNavigate={(tab) => {
-            setActiveTab(tab);
+            selectTab(tab);
             setProfileOpen(false);
           }}
           onProfileToggle={() => setProfileOpen((current) => !current)}
@@ -95,6 +125,7 @@ export default function Main() {
             activeTab={activeTab}
             user={user}
             onUserSave={saveUser}
+            onNavigate={selectTab}
           />
         </main>
       </div>
