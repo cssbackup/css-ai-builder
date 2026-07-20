@@ -181,11 +181,11 @@ export default function Templatepreview({
 
   return (
     <div className="w-full">
-      <div className="onboarding-responsive-scroll relative mx-auto flex max-h-[calc(100dvh-90px)] w-full max-w-7xl flex-col overflow-y-auto border border-white/80 bg-white/95 px-5 py-5 shadow-[0_30px_80px_rgba(25,60,150,.18)] backdrop-blur-xl sm:max-h-[calc(100dvh-106px)] sm:px-7 lg:max-h-none lg:overflow-visible lg:px-9 lg:py-7 2xl:max-w-[1500px] 2xl:px-11 2xl:py-9">
-        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#315ff4] via-[#7ea4ff] to-cyan-300" />
-        <div className="flex shrink-0 items-start gap-3 border-b border-blue-100 pb-5">
+      <section className="onboarding-responsive-scroll relative mx-auto max-h-[calc(100dvh-156px)] w-full overflow-x-hidden overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-[0_18px_60px_rgba(23,38,76,.08)] lg:max-h-none lg:overflow-visible">
+        <div className="px-4 py-5 sm:px-6 lg:px-7 lg:py-6 2xl:px-9">
+        <div className="flex shrink-0 items-start gap-3 border-b border-slate-200 pb-5">
           <div>
-            <h2 className="mt-1 text-xl font-semibold tracking-[-.04em] text-[#08132f] sm:text-2xl 2xl:text-3xl">
+            <h2 className="text-xl font-semibold tracking-[-.035em] text-[#08132f] sm:text-2xl">
               Pick a look for your {selectedCategory || "website"}
             </h2>
             <p className="mt-1 text-xs text-slate-500 sm:text-sm">
@@ -206,7 +206,7 @@ export default function Templatepreview({
               }}
               type="text"
               placeholder="Search template e.g. template-2, Realestate, Business..."
-              className="h-12 w-full rounded-2xl border border-blue-100 bg-blue-50/50 pl-11 pr-11 text-sm text-[#08132f] outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-[#315ff4] focus:bg-white focus:ring-4 focus:ring-blue-100"
+              className="h-11 w-full rounded-lg border border-slate-200 bg-white pl-11 pr-11 text-sm text-[#08132f] outline-none transition placeholder:text-slate-400 focus:border-[#315ff4] focus:ring-3 focus:ring-blue-100/70"
             />
 
             {search && (
@@ -225,10 +225,10 @@ export default function Templatepreview({
             <button
               type="button"
               onClick={() => setOpen(!open)}
-              className={`flex h-12 w-full cursor-pointer items-center justify-between gap-4 rounded-2xl border px-5 text-sm font-semibold transition-all duration-300 md:w-[220px] ${
+              className={`flex h-11 w-full cursor-pointer items-center justify-between gap-4 rounded-lg border px-4 text-sm font-medium transition md:w-[220px] ${
                 open
-                  ? "border-[#315ff4] bg-blue-50 text-[#315ff4] ring-4 ring-blue-100"
-                  : "border-blue-100 bg-white text-[#315ff4] hover:border-blue-300"
+                  ? "border-[#315ff4] bg-blue-50 text-[#315ff4] ring-3 ring-blue-100/70"
+                  : "border-slate-200 bg-white text-[#315ff4] hover:border-blue-300"
               }`}
             >
               <span className="truncate">{selectedFilter}</span>
@@ -236,7 +236,7 @@ export default function Templatepreview({
             </button>
 
             {open && (
-              <div className="absolute right-0 z-10 mt-2 w-full overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-[0_18px_45px_rgba(25,60,150,.16)] md:w-[220px]">
+              <div className="absolute right-0 z-10 mt-2 w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_18px_45px_rgba(25,60,150,.16)] md:w-[220px]">
                 {pageFilters.map((item) => (
                   <button
                     key={item}
@@ -444,10 +444,10 @@ export default function Templatepreview({
                   onClick={() => {
                     onTemplateChange(item.id);
                   }}
-                  className={`group relative cursor-pointer overflow-hidden rounded-2xl border bg-white p-2.5 text-left transition-all duration-300 ease-out hover:-translate-y-1 hover:border-blue-300 hover:shadow-[0_18px_38px_rgba(49,95,244,.14)] ${
+                  className={`group relative cursor-pointer overflow-hidden rounded-lg border bg-white p-2.5 text-left transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_12px_28px_rgba(49,95,244,.1)] ${
                     isActive
-                      ? "border-[#315ff4] shadow-[0_18px_38px_rgba(49,95,244,.18)]"
-                      : "border-blue-100"
+                      ? "border-[#315ff4] bg-blue-50/30 shadow-[0_8px_24px_rgba(49,95,244,.1)] ring-1 ring-[#315ff4]"
+                      : "border-slate-200"
                   }`}
                 >
                   <div className="relative overflow-hidden rounded-xl">
@@ -516,7 +516,8 @@ export default function Templatepreview({
             </button>
           </div>
         )} */}
-      </div>
+        </div>
+      </section>
     </div>
   );
 }

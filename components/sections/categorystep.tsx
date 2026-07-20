@@ -135,10 +135,10 @@ export default function CategoryStep({
 
   return (
     <section className="relative mx-auto max-h-[calc(100dvh-156px)] w-full origin-center overflow-x-hidden overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-[0_18px_60px_rgba(23,38,76,.08)]">
-      <div className="px-4 py-5 sm:px-6 lg:px-7 lg:py-6">
+      <div className="px-4 py-5 sm:px-6 lg:px-7 lg:py-6 2xl:px-9">
         <div>
           <div className="min-w-0">
-            <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
+            <div className="grid grid-cols-3 gap-2 sm:gap-2.5 2xl:gap-3">
               {categories.map((item) => {
                 const Icon = item.icon;
                 const isActive = selected === item.id;
@@ -151,7 +151,7 @@ export default function CategoryStep({
                       setSelected(item.id);
                       updateBusinessInfo({ audience: item.id });
                     }}
-                    className={`group relative flex min-h-[82px] items-center justify-start gap-3 overflow-hidden rounded-lg border px-3 pr-14 text-left transition-all duration-500 ease-out active:scale-[.985] sm:px-4 sm:pr-[74px] ${
+                    className={`group relative flex min-h-[82px] items-center justify-start gap-3 overflow-hidden rounded-lg border px-3 pr-14 text-left transition-all duration-500 ease-out active:scale-[.985] sm:px-4 sm:pr-[74px] 2xl:min-h-[90px] 2xl:px-5 2xl:pr-24 ${
                       isActive
                         ? "border-[#315ff4] bg-blue-50/40 text-[#10182d] shadow-[0_8px_24px_rgba(49,95,244,.1)] ring-1 ring-[#315ff4]"
                         : hasAudienceError
@@ -160,20 +160,20 @@ export default function CategoryStep({
                     }`}
                   >
                     <span
-                      className={`grid size-8 shrink-0 place-items-center rounded-lg transition-all duration-500 ${isActive ? "bg-white text-[#315ff4] shadow-sm" : "bg-slate-50 text-slate-500"}`}
+                      className={`grid size-8 shrink-0 place-items-center rounded-lg transition-all duration-500 2xl:size-11 ${isActive ? "bg-white text-[#315ff4] shadow-sm" : "bg-slate-50 text-slate-500"}`}
                     >
                       <Icon size={17} />
                     </span>
                     <span className="min-w-0">
-                      <strong className="block truncate text-xs font-medium sm:text-[15px]">
+                      <strong className="block truncate text-xs font-medium sm:text-[15px] 2xl:text-lg">
                         {item.title}
                       </strong>
-                      <small className="hidden text-[12px] text-slate-400 sm:block">
+                      <small className="hidden text-[12px] text-slate-400 sm:block 2xl:text-sm">
                         {item.subtitle}
                       </small>
                     </span>
                     <span
-                      className={`pointer-events-none absolute -bottom-1 right-1 h-[54px] w-[72px] transition-all duration-500 ease-out sm:right-2 ${
+                      className={`pointer-events-none absolute -bottom-1 right-1 h-[54px] w-[72px] transition-all duration-500 ease-out sm:right-2 2xl:h-[68px] 2xl:w-[90px] ${
                         isActive
                           ? "translate-y-0 scale-100 opacity-100"
                           : "translate-y-1 scale-90 opacity-55 grayscale-[25%]"
@@ -201,7 +201,7 @@ export default function CategoryStep({
             )}
 
             <form
-              className="mt-5 grid items-start gap-y-5"
+              className="mt-5 grid items-start gap-y-5 2xl:mt-6 2xl:gap-y-6"
               onSubmit={(event) => event.preventDefault()}
             >
               <div className="grid min-w-0 grid-cols-1 content-start gap-3 sm:grid-cols-2">
@@ -247,7 +247,7 @@ export default function CategoryStep({
                 </FieldLabel>
               </div>
 
-              <div className="grid min-w-0 grid-cols-1 content-start items-start gap-x-4 gap-y-5 md:grid-cols-2 xl:grid-cols-[minmax(0,1.35fr)_minmax(0,.8fr)_minmax(0,.72fr)]">
+              <div className="grid min-w-0 grid-cols-1 content-start items-start gap-x-4 gap-y-5 md:grid-cols-2 xl:grid-cols-[minmax(0,1.35fr)_minmax(0,.8fr)_minmax(0,.72fr)] 2xl:gap-y-6">
                 <div className="order-1 col-span-1 md:col-span-2 xl:col-span-1">
                   <RadioGroup
                     legend="What is your website related to?"
@@ -369,7 +369,7 @@ export default function CategoryStep({
                   <button
                     type="button"
                     onClick={() => updateBusinessInfo({ includeDetails: true })}
-                    className="order-4 col-span-1 inline-flex h-8 w-fit items-center gap-2 justify-self-start rounded-md px-1 text-[13px] font-medium text-[#315ff4] transition hover:text-blue-800 md:col-span-2 xl:col-span-3"
+                    className="order-4 col-span-1 inline-flex h-8 w-fit items-center gap-2 justify-self-start rounded-md px-1 text-[13px] font-medium text-[#315ff4] transition hover:text-blue-800 md:col-span-2 xl:col-span-3 2xl:text-[15px]"
                   >
                     <span className="text-md leading-none">+</span>
                     Add more details
@@ -384,7 +384,7 @@ export default function CategoryStep({
   );
 }
 const fieldClass = (hasError: boolean, compact = false) =>
-  `${compact ? "h-10" : "h-11"} min-w-0 w-full rounded-lg border bg-white px-3 text-[14px] leading-5 text-[#08132f] outline-none transition placeholder:text-[13px] placeholder:text-slate-400 focus:border-[#315ff4] focus:ring-3 focus:ring-blue-100/70 ${hasError ? "border-red-400" : "border-slate-200"}`;
+  `${compact ? "h-10 2xl:h-11" : "h-11 2xl:h-12"} min-w-0 w-full rounded-lg border bg-white px-3 text-[14px] leading-5 text-[#08132f] outline-none transition placeholder:text-[13px] placeholder:text-slate-400 focus:border-[#315ff4] focus:ring-3 focus:ring-blue-100/70 2xl:px-4 2xl:text-base 2xl:placeholder:text-[15px] ${hasError ? "border-red-400" : "border-slate-200"}`;
 
 function FieldLabel({
   label,
@@ -399,7 +399,7 @@ function FieldLabel({
 }) {
   return (
     <label
-      className={`grid min-w-0 content-start ${compact ? "gap-1.5" : "gap-2"} text-[15px] font-medium text-[#08132f]`}
+      className={`grid min-w-0 content-start ${compact ? "gap-1.5" : "gap-2"} text-[15px] font-medium text-[#08132f] 2xl:text-[17px]`}
     >
       <span className="block leading-normal">{label}</span>
       <div className="min-w-0">{children}</div>
@@ -476,7 +476,7 @@ function RadioGroup<T extends string>({
 }) {
   return (
     <fieldset>
-      <legend className="mb-2 text-[15px] font-medium text-[#08132f]">
+      <legend className="mb-2 text-[15px] font-medium text-[#08132f] 2xl:mb-3 2xl:text-[17px]">
         {legend}
       </legend>
       <div className="flex min-w-0 flex-wrap gap-2">
@@ -486,7 +486,7 @@ function RadioGroup<T extends string>({
           return (
             <label
               key={option.value}
-              className={`cursor-pointer whitespace-nowrap rounded-lg border px-3 py-2 text-[13px] font-medium transition active:scale-[.97] ${
+              className={`cursor-pointer whitespace-nowrap rounded-lg border px-3 py-2 text-[13px] font-medium transition active:scale-[.97] 2xl:px-4 2xl:py-2.5 2xl:text-[15px] ${
                 isSelected
                   ? "border-[#315ff4] bg-blue-50 text-[#315ff4]"
                   : hasError
