@@ -129,174 +129,167 @@ export default function Categorystep({
 
   return (
     <div className="w-full">
-      <div className="onboarding-responsive-scroll relative mx-auto flex max-h-[calc(100dvh-90px)] max-w-7xl flex-col overflow-y-auto border border-white/80 bg-white/95 px-5 py-5 shadow-[0_30px_80px_rgba(25,60,150,.18)] backdrop-blur-xl sm:max-h-[calc(100dvh-106px)] sm:px-7 lg:max-h-none lg:overflow-visible lg:px-9 lg:py-7 2xl:max-w-[1500px] 2xl:px-11 2xl:py-9">
-        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#315ff4] via-[#7ea4ff] to-cyan-300" />
-        <div className="flex shrink-0 items-start gap-3 border-b border-blue-100 pb-5">
-          {/* <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[linear-gradient(145deg,#244bd5,#6e91ff)] text-white shadow-[0_12px_28px_rgba(49,95,244,.25)]">
-            <Compass size={19} />
-          </span> */}
-          <div>
-            <h2 className="mt-1 text-xl font-semibold tracking-[-.04em] text-[#08132f] sm:text-2xl 2xl:text-3xl">
-              Choose your website category
-            </h2>
-            <p className="mt-1 text-xs text-slate-500 sm:text-sm">
-              Select the closest match. AI will tailor the pages and content
-              around it.
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-5 flex shrink-0 flex-col gap-3 md:flex-row">
-          <div className="relative flex-1 flex items-center">
-            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 sm:left-5 sm:h-4 2xl:h-10 sm:w-4" />
-
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              type="text"
-              placeholder="Search for a category (e.g., Realestate, Education)..."
-              className="h-12 w-full rounded-2xl border border-blue-100 bg-blue-50/50 pl-11 pr-11 text-sm text-[#08132f] outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-[#315ff4] focus:bg-white focus:ring-4 focus:ring-blue-100"
-            />
-
-            {search && (
-              <button
-                type="button"
-                onClick={clearSearch}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-[#315ff4] sm:right-5"
-              >
-                <X size={17} />
-              </button>
-            )}
+      <section className="onboarding-responsive-scroll relative mx-auto max-h-[calc(100dvh-156px)] w-full overflow-x-hidden overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-[0_18px_60px_rgba(23,38,76,.08)] lg:max-h-none lg:overflow-visible">
+        <div className="px-4 py-5 sm:px-6 lg:px-7 lg:py-6 2xl:px-9">
+          <div className="flex shrink-0 items-start gap-3 border-b border-slate-200 pb-5">
+            <div>
+              <h2 className="text-xl font-semibold tracking-[-.035em] text-[#08132f] sm:text-2xl">
+                Choose your website category
+              </h2>
+              <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+                Select the closest match. AI will tailor the pages and content
+                around it.
+              </p>
+            </div>
           </div>
 
-          <div ref={dropdownRef} className="relative shrink-0">
-            <button
-              type="button"
-              onClick={() => setOpen(!open)}
-              className={`flex h-12 w-full cursor-pointer items-center justify-between gap-4 rounded-2xl border px-5 text-sm font-semibold transition-all duration-300 md:w-[210px] ${
-                open
-                  ? "border-[#315ff4] bg-blue-50 text-[#315ff4] ring-4 ring-blue-100"
-                  : "border-blue-100 bg-white text-[#08132f] hover:border-blue-300"
-              }`}
-            >
-              <span className="truncate">Popular Categories</span>
-              {open ? (
-                <ChevronUp className="shrink-0" size={16} />
-              ) : (
-                <ChevronDown className="shrink-0" size={16} />
-              )}
-            </button>
+          <div className="mt-5 flex shrink-0 flex-col gap-3 md:flex-row">
+            <div className="relative flex-1 flex items-center">
+              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
 
-            {open && (
-              <div
-                className="
-                  absolute right-0 z-50 mt-2 max-h-64 w-full overflow-y-auto
-                  rounded-2xl border border-blue-100 bg-white py-2 shadow-[0_18px_45px_rgba(25,60,150,.16)]
-                  md:w-[210px] lg:max-h-none lg:overflow-visible
-                "
-              >
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                type="text"
+                placeholder="Search for a category (e.g., Realestate, Education)..."
+                className="h-11 w-full rounded-lg border border-slate-200 bg-white pl-11 pr-11 text-sm text-[#08132f] outline-none transition placeholder:text-slate-400 focus:border-[#315ff4] focus:ring-3 focus:ring-blue-100/70"
+              />
+
+              {search && (
                 <button
                   type="button"
-                  onClick={handleAllItems}
-                  className={`block w-full px-5 py-2 text-left text-sm transition hover:bg-blue-50 hover:text-[#315ff4] ${
-                    selected === ""
+                  onClick={clearSearch}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-[#315ff4] sm:right-5"
+                >
+                  <X size={17} />
+                </button>
+              )}
+            </div>
+
+            <div ref={dropdownRef} className="relative shrink-0">
+              <button
+                type="button"
+                onClick={() => setOpen(!open)}
+                className={`flex h-11 w-full cursor-pointer items-center justify-between gap-4 rounded-lg border px-4 text-sm font-medium transition md:w-[210px] ${open
+                  ? "border-[#315ff4] bg-blue-50 text-[#315ff4] ring-3 ring-blue-100/70"
+                  : "border-slate-200 bg-white text-[#08132f] hover:border-blue-300"
+                  }`}
+              >
+                <span className="truncate">Popular Categories</span>
+                {open ? (
+                  <ChevronUp className="shrink-0" size={16} />
+                ) : (
+                  <ChevronDown className="shrink-0" size={16} />
+                )}
+              </button>
+
+              {open && (
+                <div
+                  className="
+                  absolute right-0 z-50 mt-2 max-h-64 w-full overflow-y-auto
+                  rounded-lg border border-slate-200 bg-white py-2 shadow-[0_18px_45px_rgba(25,60,150,.16)]
+                  md:w-[210px] lg:max-h-none lg:overflow-visible
+                "
+                >
+                  <button
+                    type="button"
+                    onClick={handleAllItems}
+                    className={`block w-full px-5 py-2 text-left text-sm transition hover:bg-blue-50 hover:text-[#315ff4] ${selected === ""
                       ? "bg-blue-50 font-bold text-[#315ff4]"
                       : "font-semibold text-slate-900"
-                  }`}
-                >
-                  All Items
-                </button>
+                      }`}
+                  >
+                    All Items
+                  </button>
 
-                <div className="my-1 border-t border-slate-100" />
+                  <div className="my-1 border-t border-slate-100" />
 
-                {availableTypes.map((item) => (
-                  <button
-                    key={item.title}
-                    type="button"
-                    onClick={() => handleSelect(item.title)}
-                    className={`flex w-full cursor-pointer items-center justify-between gap-3 px-5 py-2 text-left text-sm transition hover:bg-blue-50 hover:text-[#315ff4] ${
-                      selected === item.title
+                  {availableTypes.map((item) => (
+                    <button
+                      key={item.title}
+                      type="button"
+                      onClick={() => handleSelect(item.title)}
+                      className={`flex w-full cursor-pointer items-center justify-between gap-3 px-5 py-2 text-left text-sm transition hover:bg-blue-50 hover:text-[#315ff4] ${selected === item.title
                         ? "bg-blue-50 font-bold text-[#315ff4]"
                         : "text-slate-700"
-                    }`}
-                  >
-                    <span>{item.title}</span>
-                    {selected === item.title && (
-                      <Check size={14} strokeWidth={3} />
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
+                        }`}
+                    >
+                      <span>{item.title}</span>
+                      {selected === item.title && (
+                        <Check size={14} strokeWidth={3} />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className="mt-5 flex-1 px-1 pt-1">
-          <div
-            className="
+          <div className="mt-5 flex-1 px-1 pt-1">
+            <div
+              className="
               grid grid-cols-1 gap-3
               min-[480px]:grid-cols-2
               md:grid-cols-3
               lg:grid-cols-5
               lg:gap-4
             "
-          >
-            {filteredTypes.map((item) => {
-              const Icon = item.icon;
-              const isActive = selected === item.title;
+            >
+              {filteredTypes.map((item) => {
+                const Icon = item.icon;
+                const isActive = selected === item.title;
 
-              return (
-                <button
-                  key={item.title}
-                  type="button"
-                  onClick={() => handleSelect(item.title)}
-                  className={`group relative min-h-[100px] cursor-pointer overflow-hidden rounded-2xl border p-4 text-left transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_16px_35px_rgba(49,95,244,.13)] ${
-                    isActive
-                      ? "border-[#315ff4] bg-[linear-gradient(145deg,#315ff4,#678cff)] text-white shadow-[0_16px_35px_rgba(49,95,244,.25)]"
-                      : "border-blue-100 bg-[linear-gradient(145deg,#fff,#f7faff)] hover:border-blue-300"
-                  }`}
-                >
-                  {isActive && (
-                    <span className="absolute right-3 top-3 z-10 flex size-6 items-center justify-center rounded-full bg-white text-[#315ff4] shadow">
-                      <Check size={15} />
-                    </span>
-                  )}
-
-                  <div className="flex justify-between items-center">
-                    <h3
-                      className={`text-base font-semibold ${isActive ? "text-white" : "text-[#08132f]"}`}
-                    >
-                      {item.title}
-                    </h3>
-
-                    <div
-                      className={`flex h-9 w-9 items-center justify-center rounded-xl sm:h-8 sm:w-8 ${
-                        isActive
-                          ? "bg-white/15 text-white"
-                          : "bg-blue-50 text-[#315ff4]"
+                return (
+                  <button
+                    key={item.title}
+                    type="button"
+                    onClick={() => handleSelect(item.title)}
+                    className={`group relative min-h-[90px] cursor-pointer overflow-hidden rounded-lg border p-4 text-left transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(49,95,244,.1)] ${isActive
+                      ? "border-[#315ff4] bg-blue-50/50 text-[#08132f] shadow-[0_8px_24px_rgba(49,95,244,.1)] ring-1 ring-[#315ff4]"
+                      : "border-slate-200 bg-white hover:border-blue-300 hover:bg-blue-50/30"
                       }`}
-                    >
-                      <Icon size={14} />
-                    </div>
-                  </div>
-
-                  <p
-                    className={`mt-2 text-xs leading-5 ${isActive ? "text-blue-100" : "text-slate-500"}`}
                   >
-                    {item.desc}
-                  </p>
-                </button>
-              );
-            })}
-          </div>
+                    {isActive && (
+                      <span className="absolute right-3 top-3 z-10 flex size-5 items-center justify-center rounded-full bg-[#315ff4] text-white shadow">
+                        <Check size={15} />
+                      </span>
+                    )}
 
-          {filteredTypes.length === 0 && (
-            <p className="py-10 text-center text-sm text-slate-400">
-              No category found.
-            </p>
-          )}
+                    <div className="flex justify-between items-center">
+                      <h3
+                        className="text-base font-semibold text-[#08132f]"
+                      >
+                        {item.title}
+                      </h3>
+
+                      <div
+                        className={`flex h-9 w-9 items-center justify-center rounded-xl sm:h-8 sm:w-8 ${isActive
+                          ? "bg-white text-[#315ff4] shadow-sm"
+                          : "bg-slate-50 text-slate-500"
+                          }`}
+                      >
+                        <Icon size={14} />
+                      </div>
+                    </div>
+
+                    <p
+                      className="mt-2 text-xs leading-5 text-slate-500"
+                    >
+                      {item.desc}
+                    </p>
+                  </button>
+                );
+              })}
+            </div>
+
+            {filteredTypes.length === 0 && (
+              <p className="py-10 text-center text-sm text-slate-400">
+                No category found.
+              </p>
+            )}
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

@@ -3,8 +3,6 @@ import DashboardTabContent from "./dashboard-tab";
 import WebsitesTab from "./websites-tab";
 import PlansTab from "./plans-tab";
 import BillingTab from "./billing-tab";
-import SettingsTab from "./settings-tab";
-import HelpTab from "./help-tab";
 import ProfileTab from "./profile-tab";
 
 type UserProfile = { name: string; email: string; password?: string; avatar?: string };
@@ -17,12 +15,8 @@ export default function DashboardChildren({ activeTab, user, onUserSave, onNavig
       return <PlansTab />;
     case "Billing":
       return <BillingTab onNavigate={onNavigate} />;
-    case "Settings":
-      return <SettingsTab user={user} onSave={onUserSave} />;
     case "Profile":
       return <ProfileTab user={user} onSave={onUserSave} />;
-    case "Help":
-      return <HelpTab />;
     default:
       return (
         <DashboardTabContent
