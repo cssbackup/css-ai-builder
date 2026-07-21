@@ -152,7 +152,7 @@ export default function DashboardTabContent({
           <p className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-white/75 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[.1em] text-blue-700 backdrop-blur">
             <Sparkles size={11} /> AI workspace ready
           </p>
-          <h2 className="mt-3 text-3xl font-semibold leading-[1.05] tracking-[-0.04em] text-zinc-950 sm:text-4xl 2xl:text-5xl">
+          <h2 className="mt-3 text-2xl font-semibold leading-[1.05] tracking-[-0.04em] text-zinc-950 sm:text-3xl 2xl:text-3xl">
             Welcome back,
             <br />
             {userName.split(" ")[0] || userName}.

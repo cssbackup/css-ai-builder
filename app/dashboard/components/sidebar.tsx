@@ -1,9 +1,9 @@
+import Link from "next/link";
 import {
-  CircleHelp,
   LayoutDashboard,
   PanelLeftClose,
+  LogOut,
   PanelLeftOpen,
-  Settings,
   Shapes,
   UserRound,
   Gem,
@@ -18,8 +18,6 @@ export type DashboardTab =
   | "Plan"
   | "Billing"
   | "Profile"
-  | "Settings"
-  | "Help";
 
 type SidebarProps = {
   activeTab: DashboardTab;
@@ -40,10 +38,7 @@ const mainItems: NavItem[] = [
   { label: "Billing", icon: ReceiptText },
 ];
 
-const supportItems: NavItem[] = [
-  { label: "Settings", icon: Settings },
-  { label: "Help", icon: CircleHelp },
-];
+const supportItems: NavItem[] = [];
 
 export default function Sidebar({
   activeTab,
@@ -64,9 +59,8 @@ export default function Sidebar({
         type="button"
         title={compact ? label : undefined}
         onClick={() => onSelect(label)}
-        className={`flex h-11 w-full cursor-pointer items-center rounded-xl transition-colors ${
-          compact ? "justify-center px-0" : "gap-3 px-3"
-        } ${active ? "bg-white text-blue-700 shadow-[0_5px_22px_rgba(55,48,80,0.08)]" : "text-zinc-600 hover:bg-white/70 hover:text-zinc-950"}`}
+        className={`flex h-11 w-full cursor-pointer items-center rounded-xl transition-colors ${compact ? "justify-center px-0" : "gap-3 px-3"
+          } ${active ? "bg-white text-blue-700 shadow-[0_5px_22px_rgba(55,48,80,0.08)]" : "text-zinc-600 hover:bg-white/70 hover:text-zinc-950"}`}
       >
         <Icon size={19} strokeWidth={1.8} />
         {!compact && <span className="text-sm">{label}</span>}
@@ -131,6 +125,14 @@ export default function Sidebar({
         <div className="space-y-1">{mainItems.map(renderItem)}</div>
         <div className="mt-auto space-y-1 pb-5">
           {supportItems.map(renderItem)}
+          <Link href="/auth" title={compact ? "Log out" : undefined}
+            className={`flex h-11 w-full cursor-pointer items-center rounded-xl text-red-600 transition-colors bg-red-50 hover:text-red-600 ${compact ? "justify-center px-0" : "gap-3 px-3"
+              }`}>
+            <LogOut size={19} />
+
+            {!compact && <span className="text-sm">Log out</span>}
+          </Link>
+
         </div>
       </nav>
     </aside>

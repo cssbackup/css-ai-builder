@@ -49,7 +49,7 @@ export default function AuthPage() {
     router.push("/dashboard");
   };
 
-  const switchMode = (next: AuthMode) => {
+  const switchMode = (next: AuthMode) => { 
     setMode(next);
     setRecoveryStep(null);
     setShowPassword(false);

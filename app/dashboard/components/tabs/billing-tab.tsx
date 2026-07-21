@@ -11,6 +11,7 @@ import {
   Search,
   Settings2,
   ShieldCheck,
+  Trash2,
   Users,
   WalletCards,
   X,
@@ -71,7 +72,29 @@ const invoices: {
   amount: string;
   plan: string;
   status: string;
-}[] = [];
+}[] = [
+  {
+    id: "INV-2026-001",
+    date: "July 15, 2026",
+    amount: "$29.00 USD",
+    plan: "Starter",
+    status: "Paid",
+  },
+  {
+    id: "INV-2026-002",
+    date: "June 15, 2026",
+    amount: "$29.00 USD",
+    plan: "Starter",
+    status: "Paid",
+  },
+  {
+    id: "INV-2026-003",
+    date: "May 15, 2026",
+    amount: "$49.00 USD",
+    plan: "Professional",
+    status: "Pending",
+  }
+];
 
 const emptyCardForm: CardForm = {
   holder: "",
@@ -95,6 +118,7 @@ export default function BillingTab({
   } | null>(null);
   const [cardForm, setCardForm] = useState<CardForm>(emptyCardForm);
   const [cardError, setCardError] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const filteredInvoices = useMemo(() => {
     const value = query.trim().toLowerCase();
@@ -167,11 +191,19 @@ export default function BillingTab({
 
       return cardModal?.mode === "edit"
         ? normalized.map((method) =>
-            method.id === cardModal.methodId ? nextMethod : method,
-          )
+          method.id === cardModal.methodId ? nextMethod : method,
+        )
         : [...normalized, nextMethod];
     });
     setCardModal(null);
+  };
+
+  const deleteSelectedMethods = () => {
+    setPaymentMethods((current) =>
+      current.filter((method) => !selectedMethods.includes(method.id)),
+    );
+    setSelectedMethods([]);
+    setShowDeleteConfirm(false);
   };
 
   return (
@@ -237,6 +269,18 @@ export default function BillingTab({
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
+            {selectedMethods.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setShowDeleteConfirm(true)}
+                className="inline-flex h-9 items-center gap-2 rounded-xl border border-red-200 bg-white px-3.5 text-[11px] font-medium text-red-600 shadow-sm transition hover:border-red-300 hover:bg-red-50"
+              >
+                <Trash2 size={14} /> Delete
+                {/* <span className="grid min-w-5 place-items-center rounded-full bg-red-100 px-1.5 py-0.5 text-[9px] font-semibold text-red-700">
+                  {selectedMethods.length}
+                </span> */}
+              </button>
+            )}
             <button
               type="button"
               onClick={() =>
@@ -277,7 +321,7 @@ export default function BillingTab({
                   return (
                     <tr
                       key={method.id}
-                      className="text-[13px] text-zinc-600 transition hover:bg-blue-50/35"
+                      className="text-[13px] text-zinc-600 transition bg-white hover:bg-blue-50/35"
                     >
                       <td className="px-4 py-3.5">
                         <button
@@ -330,6 +374,19 @@ export default function BillingTab({
               </tbody>
             </table>
           </div>
+          {paymentMethods.length === 0 && (
+            <div className="grid place-items-center px-6 py-12 text-center">
+              <Search size={20} className="text-zinc-300" />
+              <p className="mt-3 text-xs font-medium text-zinc-700">
+                {query ? "No matching card" : "No card is added"}
+              </p>
+              <p className="mt-1 text-[10px] text-zinc-400">
+                {query
+                  ? "Try another card."
+                  : "Add your card for hassle free process."}
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -583,6 +640,64 @@ export default function BillingTab({
               </button>
             </div>
           </form>
+        </div>
+      )}
+
+      {showDeleteConfirm && selectedMethods.length > 0 && (
+        <div className="fixed inset-0 z-[20000] flex items-center justify-center bg-zinc-950/50 p-4 backdrop-blur-sm">
+          <button
+            type="button"
+            aria-label="Close delete confirmation"
+            onClick={() => setShowDeleteConfirm(false)}
+            className="absolute inset-0 cursor-default"
+          />
+
+          <div
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="delete-payment-title"
+            aria-describedby="delete-payment-description"
+            className="relative z-10 w-full max-w-sm overflow-hidden rounded-[28px] border border-white/80 bg-white p-6 text-center shadow-[0_30px_90px_rgba(15,23,42,.3)]"
+          >
+            <div className="pointer-events-none absolute -right-12 -top-12 size-36 rounded-full bg-red-100/70 blur-3xl" />
+            <div className="relative">
+              <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-red-50 text-red-600 ring-8 ring-red-50/60">
+                <Trash2 size={24} strokeWidth={2.2} />
+              </span>
+              <h3
+                id="delete-payment-title"
+                className="mt-6 text-xl font-semibold tracking-tight text-zinc-950"
+              >
+                Delete {selectedMethods.length === 1 ? "payment method" : "payment methods"}?
+              </h3>
+              <p
+                id="delete-payment-description"
+                className="mx-auto mt-2 max-w-xs text-[12px] leading-5 text-zinc-500"
+              >
+                {selectedMethods.length === 1
+                  ? "This card will be permanently removed from your account."
+                  : `${selectedMethods.length} selected cards will be permanently removed from your account.`}
+                {" "}This action cannot be undone.
+              </p>
+
+              <div className="mt-7 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="h-11 flex-1 rounded-xl border border-zinc-200 text-xs font-semibold text-zinc-600 transition hover:bg-zinc-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={deleteSelectedMethods}
+                  className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[linear-gradient(120deg,#ef4444,#dc2626)] text-xs font-semibold text-white shadow-lg shadow-red-200 transition hover:-translate-y-0.5 hover:shadow-xl"
+                >
+                  <Trash2 size={14} /> Delete
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </section>

@@ -11,12 +11,12 @@ type BusinessInfo = {
   name: string;
   description: string;
   websiteRelated:
-    | ""
-    | "service-provider"
-    | "products"
-    | "blog"
-    | "ngo"
-    | "campaign-page";
+  | ""
+  | "service-provider"
+  | "products"
+  | "blog"
+  | "ngo"
+  | "campaign-page";
   pageType: "" | "multi-page" | "single-page";
   email: string;
   mobile: string;
@@ -31,6 +31,8 @@ type CategoryStepProps = {
   showErrors: boolean;
   onChange: (value: BusinessInfo) => void;
 };
+
+export const MIN_DESCRIPTION_LENGTH = 80;
 
 const categories = [
   {
@@ -106,7 +108,9 @@ export default function CategoryStep({
   const labels = active?.labels ?? defaultLabels;
   const hasAudienceError = showErrors && !value.audience;
   const hasNameError = showErrors && !value.name.trim();
-  const hasDescriptionError = showErrors && !value.description.trim();
+  const descriptionLength = value.description.trim().length;
+  const hasDescriptionError =
+    showErrors && descriptionLength < MIN_DESCRIPTION_LENGTH;
   const hasWebsiteError = showErrors && !value.websiteRelated;
   const hasPageTypeError = showErrors && !value.pageType;
   const hasEmailError =
@@ -135,10 +139,10 @@ export default function CategoryStep({
 
   return (
     <section className="relative mx-auto max-h-[calc(100dvh-156px)] w-full origin-center overflow-x-hidden overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-[0_18px_60px_rgba(23,38,76,.08)]">
-      <div className="px-4 py-5 sm:px-6 lg:px-7 lg:py-6 2xl:px-9">
+      <div className="px-4 py-5 sm:px-6 lg:px-7 lg:py-8 2xl:px-9">
         <div>
           <div className="min-w-0">
-            <div className="grid grid-cols-3 gap-2 sm:gap-2.5 2xl:gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-2.5 2xl:gap-3">
               {categories.map((item) => {
                 const Icon = item.icon;
                 const isActive = selected === item.id;
@@ -151,33 +155,31 @@ export default function CategoryStep({
                       setSelected(item.id);
                       updateBusinessInfo({ audience: item.id });
                     }}
-                    className={`group relative flex min-h-[82px] items-center justify-start gap-3 overflow-hidden rounded-lg border px-3 pr-14 text-left transition-all duration-500 ease-out active:scale-[.985] sm:px-4 sm:pr-[74px] 2xl:min-h-[90px] 2xl:px-5 2xl:pr-24 ${
-                      isActive
-                        ? "border-[#315ff4] bg-blue-50/40 text-[#10182d] shadow-[0_8px_24px_rgba(49,95,244,.1)] ring-1 ring-[#315ff4]"
-                        : hasAudienceError
-                          ? "border-blue-400 bg-white text-[#08132f]"
-                          : "border-slate-200 bg-white text-[#08132f] hover:border-blue-300 hover:bg-blue-50/30"
-                    }`}
+                    className={`group relative flex min-h-[70px] md:min-h-[82px] items-center justify-start gap-3 overflow-hidden rounded-lg border px-3 pr-14 text-left transition-all duration-500 ease-out active:scale-[.985] sm:px-4 sm:pr-[74px] 2xl:min-h-[90px] 2xl:px-5 2xl:pr-24 ${isActive
+                      ? "border-[#315ff4] bg-blue-50/40 text-[#10182d] shadow-[0_8px_24px_rgba(49,95,244,.1)] ring-1 ring-[#315ff4]"
+                      : hasAudienceError
+                        ? "border-blue-400 bg-white text-[#08132f]"
+                        : "border-slate-200 bg-white text-[#08132f] hover:border-blue-300 hover:bg-blue-50/30"
+                      }`}
                   >
                     <span
-                      className={`grid size-8 shrink-0 place-items-center rounded-lg transition-all duration-500 2xl:size-11 ${isActive ? "bg-white text-[#315ff4] shadow-sm" : "bg-slate-50 text-slate-500"}`}
+                      className={`hidden md:grid size-8 shrink-0 place-items-center rounded-lg transition-all duration-500 2xl:size-11 ${isActive ? "bg-white text-[#315ff4] shadow-sm" : "bg-slate-50 text-slate-500"}`}
                     >
                       <Icon size={17} />
                     </span>
                     <span className="min-w-0">
-                      <strong className="block truncate text-xs font-medium sm:text-[15px] 2xl:text-lg">
+                      <strong className="block truncate text-sm font-medium sm:text-[12px] 2xl:text-[18px]">
                         {item.title}
                       </strong>
-                      <small className="hidden text-[12px] text-slate-400 sm:block 2xl:text-sm">
+                      <small className="text-[12px] text-slate-400 sm:block 2xl:text-xs">
                         {item.subtitle}
                       </small>
                     </span>
                     <span
-                      className={`pointer-events-none absolute -bottom-1 right-1 h-[54px] w-[72px] transition-all duration-500 ease-out sm:right-2 2xl:h-[68px] 2xl:w-[90px] ${
-                        isActive
-                          ? "translate-y-0 scale-100 opacity-100"
-                          : "translate-y-1 scale-90 opacity-55 grayscale-[25%]"
-                      }`}
+                      className={`hidden md:block pointer-events-none absolute -bottom-1 right-1 h-[54px] w-[72px] transition-all duration-500 ease-out sm:right-2 2xl:h-[68px] 2xl:w-[90px] ${isActive
+                        ? "translate-y-0 scale-100 opacity-100"
+                        : "translate-y-1 scale-90 opacity-55 grayscale-[25%]"
+                        }`}
                     >
                       <Image
                         src={item.image}
@@ -201,7 +203,7 @@ export default function CategoryStep({
             )}
 
             <form
-              className="mt-5 grid items-start gap-y-5 2xl:mt-6 2xl:gap-y-6"
+              className="mt-5 grid items-start gap-y-5 2xl:mt-10 2xl:gap-y-10"
               onSubmit={(event) => event.preventDefault()}
             >
               <div className="grid min-w-0 grid-cols-1 content-start gap-3 sm:grid-cols-2">
@@ -224,7 +226,7 @@ export default function CategoryStep({
                   label={labels.desc}
                   error={
                     hasDescriptionError
-                      ? "Please add a short description."
+                      ? `Please enter at least ${MIN_DESCRIPTION_LENGTH} characters (${MIN_DESCRIPTION_LENGTH - descriptionLength} more needed).`
                       : undefined
                   }
                 >
@@ -236,12 +238,13 @@ export default function CategoryStep({
                           description: event.target.value,
                         })
                       }
+                      minLength={MIN_DESCRIPTION_LENGTH}
                       maxLength={300}
                       placeholder={labels.descPlaceholder}
-                      className={`${fieldClass(hasDescriptionError)} resize-none py-2.5 pr-14`}
+                      className={`${fieldClass(hasDescriptionError)} resize-none py-2.5 pr-32`}
                     />
                     <span className="absolute bottom-3 right-3 text-[10px] font-medium text-slate-400">
-                      {value.description.length}/300
+                      {value.description.length}/300 · Min {MIN_DESCRIPTION_LENGTH}
                     </span>
                   </div>
                 </FieldLabel>
@@ -272,7 +275,7 @@ export default function CategoryStep({
                 </div>
 
                 {value.includeDetails && (
-                  <div className="order-5 relative col-span-1 grid animate-onboarding-swap gap-2 pt-1 sm:col-span-2 xl:col-span-3 xl:grid-cols-[1fr_1fr_1.2fr]">
+                  <div className="order-5 relative col-span-1 mt-3.5 grid animate-onboarding-swap gap-2 pt-1 sm:col-span-2 xl:col-span-3 xl:grid-cols-[1fr_1fr_1.2fr]">
                     <button
                       type="button"
                       aria-label="Close additional details"
@@ -280,7 +283,7 @@ export default function CategoryStep({
                       onClick={() =>
                         updateBusinessInfo({ includeDetails: false })
                       }
-                      className="absolute right-0 top-0 z-10 grid size-6 place-items-center rounded-full bg-[#315ff4] text-base font-semibold leading-none text-white shadow-[0_6px_16px_rgba(49,95,244,.3)] transition-all duration-200 hover:rotate-90 hover:bg-[#244bd5] hover:shadow-[0_8px_20px_rgba(49,95,244,.4)]"
+                      className="absolute right-0 top-0 z-10 grid size-6 place-items-center rounded-full bg-[#315ff4] text-base font-medium leading-none text-white shadow-[0_6px_16px_rgba(49,95,244,.3)] transition-all duration-200 hover:rotate-90 hover:bg-[#244bd5]"
                     >
                       ×
                     </button>
@@ -384,7 +387,7 @@ export default function CategoryStep({
   );
 }
 const fieldClass = (hasError: boolean, compact = false) =>
-  `${compact ? "h-10 2xl:h-11" : "h-11 2xl:h-12"} min-w-0 w-full rounded-lg border bg-white px-3 text-[14px] leading-5 text-[#08132f] outline-none transition placeholder:text-[13px] placeholder:text-slate-400 focus:border-[#315ff4] focus:ring-3 focus:ring-blue-100/70 2xl:px-4 2xl:text-base 2xl:placeholder:text-[15px] ${hasError ? "border-red-400" : "border-slate-200"}`;
+  `${compact ? "h-10 2xl:h-11" : "h-11 2xl:h-14"} min-w-0 w-full rounded-lg border bg-white px-3 text-[14px] leading-5 text-[#08132f] outline-none transition placeholder:text-[13px] placeholder:text-slate-400 focus:border-[#315ff4] focus:ring-3 focus:ring-blue-100/70 2xl:px-4 2xl:text-base 2xl:placeholder:text-[15px] ${hasError ? "border-red-400" : "border-slate-200"}`;
 
 function FieldLabel({
   label,
@@ -421,9 +424,8 @@ function LogoUpload({
 }) {
   return (
     <label
-      className={`block cursor-pointer rounded-lg border bg-white p-2 text-[#08132f] transition-all duration-300 ease-out hover:border-blue-300 focus-within:border-[#315ff4] focus-within:ring-2 focus-within:ring-blue-100 ${
-        hasError ? "border-red-400" : "border-slate-200"
-      }`}
+      className={`block cursor-pointer rounded-lg border bg-white p-2 text-[#08132f] transition-all duration-300 ease-out hover:border-blue-300 focus-within:border-[#315ff4] focus-within:ring-2 focus-within:ring-blue-100 ${hasError ? "border-red-400" : "border-slate-200"
+        }`}
     >
       <div className="flex items-center gap-2">
         {preview ? (
@@ -486,13 +488,12 @@ function RadioGroup<T extends string>({
           return (
             <label
               key={option.value}
-              className={`cursor-pointer whitespace-nowrap rounded-lg border px-3 py-2 text-[13px] font-medium transition active:scale-[.97] 2xl:px-4 2xl:py-2.5 2xl:text-[15px] ${
-                isSelected
-                  ? "border-[#315ff4] bg-blue-50 text-[#315ff4]"
-                  : hasError
-                    ? "border-red-400 bg-white text-slate-700"
-                    : "border-blue-100 bg-white text-slate-700 shadow-sm hover:border-blue-400 hover:bg-blue-50/50 hover:text-blue-700"
-              }`}
+              className={`cursor-pointer whitespace-nowrap rounded-lg border px-3 py-2 text-[13px] font-medium transition active:scale-[.97] 2xl:px-4 2xl:py-2.5 2xl:text-[15px] ${isSelected
+                ? "border-[#315ff4] bg-blue-50 text-[#315ff4]"
+                : hasError
+                  ? "border-red-400 bg-white text-slate-700"
+                  : "border-blue-100 bg-white text-slate-700 shadow-sm hover:border-blue-400 hover:bg-blue-50/50 hover:text-blue-700"
+                }`}
             >
               <input
                 type="radio"

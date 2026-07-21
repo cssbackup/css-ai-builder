@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useFooter } from "../layout/footercontext";
-import Categorystep from "./categorystep";
+import Categorystep, { MIN_DESCRIPTION_LENGTH } from "./categorystep";
 import CategoryType from "./categorytype";
 import TemplatePreview from "./templatepreview";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -14,12 +14,12 @@ type BusinessInfo = {
   name: string;
   description: string;
   websiteRelated:
-    | ""
-    | "service-provider"
-    | "products"
-    | "blog"
-    | "ngo"
-    | "campaign-page";
+  | ""
+  | "service-provider"
+  | "products"
+  | "blog"
+  | "ngo"
+  | "campaign-page";
   pageType: "" | "multi-page" | "single-page";
   email: string;
   mobile: string;
@@ -68,7 +68,7 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
   const isBusinessInfoValid =
     Boolean(businessInfo.audience) &&
     Boolean(businessInfo.name.trim()) &&
-    Boolean(businessInfo.description.trim()) &&
+    businessInfo.description.trim().length >= MIN_DESCRIPTION_LENGTH &&
     Boolean(businessInfo.websiteRelated) &&
     Boolean(businessInfo.pageType) &&
     (!businessInfo.includeDetails ||
@@ -122,7 +122,8 @@ export default function BusinessOnboarding({ onBack }: { onBack: () => void }) {
                   if (
                     nextValue.audience &&
                     nextValue.name.trim() &&
-                    nextValue.description.trim() &&
+                    nextValue.description.trim().length >=
+                      MIN_DESCRIPTION_LENGTH &&
                     nextValue.websiteRelated &&
                     nextValue.pageType &&
                     (!nextValue.includeDetails ||
@@ -253,7 +254,7 @@ function OnboardingBackdrop() {
 
         <path
           d="M1295 760 A270 270 0 0 1 1565 490 L1565 760 Z"
-          fill="#ff9c79"
+          fill="#FFD3C4"
           opacity=".9"
         />
         <rect
