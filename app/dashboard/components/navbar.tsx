@@ -5,7 +5,6 @@ import {
   ChevronDown,
   LogOut,
   Plus,
-  Settings,
   Menu,
   UserRound,
 } from "lucide-react";
@@ -128,13 +127,7 @@ export default function Navbar({
               >
                 <UserRound size={16} /> Profile
               </button>
-              <button
-                type="button"
-                onClick={() => onNavigate("Settings")}
-                className="flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg px-2 text-xs text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
-              >
-                <Settings size={16} /> Settings
-              </button>
+
               <div className="my-1 h-px bg-zinc-100" />
               <Link
                 href="/auth"

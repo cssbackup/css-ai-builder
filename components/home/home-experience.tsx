@@ -4,7 +4,6 @@ import MotionShell from "./motion-shell";
 import HomeNav from "./home-nav";
 import HeroSection from "./hero-section";
 import LaunchSection from "./launch-section";
-import CursorBlob from "./cursor-blob";
 import BusinessOnboarding from "@/components/sections/businessonboarding";
 import { FooterProvider } from "@/components/layout/footercontext";
 
@@ -14,7 +13,6 @@ export default function HomeExperience() {
     <FooterProvider>
       {!showOnboarding ? (
         <MotionShell>
-          <CursorBlob />
           <main className="overflow-clip bg-[#050b13] selection:bg-[#b9ff66] selection:text-[#07111e]">
             <HomeNav />
             <HeroSection onStart={() => setShowOnboarding(true)} />

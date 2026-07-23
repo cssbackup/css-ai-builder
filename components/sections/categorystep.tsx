@@ -32,7 +32,7 @@ type CategoryStepProps = {
   onChange: (value: BusinessInfo) => void;
 };
 
-export const MIN_DESCRIPTION_LENGTH = 80;
+export const MIN_DESCRIPTION_LENGTH = 0;
 
 const categories = [
   {

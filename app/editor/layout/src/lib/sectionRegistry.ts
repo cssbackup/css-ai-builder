@@ -8,6 +8,8 @@ import BannerOne from "../components/sections/banner/BannerOne";
 import BannerTwo from "../components/sections/banner/BannerTwo";
 import BannerThree from "../components/sections/banner/BannerThree";
 import BannerFour from "../components/sections/banner/BannerFour";
+import BusinessBanner1 from "../components/sections/banner/BusinessBanner1";
+import EcommerceBanner1 from "../components/sections/banner/EcommerceBanner1";
 import AboutOne from "../components/sections/about/AboutOne";
 import AboutTwo from "../components/sections/about/AboutTwo";
 import AboutPage from "../components/sections/about/AboutPage";
@@ -54,6 +56,8 @@ export const sectionRegistry: Record<string, ComponentType<SectionProps>> = {
   "Banner-2": BannerTwo,
   "Banner-3": BannerThree,
   "Banner-4": BannerFour,
+  "BusinessBanner1": BusinessBanner1,
+  "EcommerceBanner1": EcommerceBanner1,
   "About-1": AboutOne,
   "About-2": AboutTwo,
   "AboutPage-1": AboutPage,

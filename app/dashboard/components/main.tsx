@@ -31,8 +31,6 @@ export default function Main() {
         "Plan",
         "Billing",
         "Profile",
-        "Settings",
-        "Help",
       ];
 
       if (dashboardTabs.includes(savedTab as DashboardTab)) {
@@ -81,11 +79,10 @@ export default function Main() {
 
   return (
     <div
-      className={`grid h-dvh grid-cols-1 overflow-hidden bg-[#fbfaf9] text-[#18181b] transition-[grid-template-columns] duration-300 ${
-        collapsed
-          ? "md:grid-cols-[76px_minmax(0,1fr)]"
-          : "md:grid-cols-[260px_minmax(0,1fr)]"
-      }`}
+      className={`grid h-dvh grid-cols-1 overflow-hidden bg-[#fbfaf9] text-[#18181b] transition-[grid-template-columns] duration-300 ${collapsed
+        ? "md:grid-cols-[76px_minmax(0,1fr)]"
+        : "md:grid-cols-[260px_minmax(0,1fr)]"
+        }`}
     >
       {mobileOpen && (
         <button

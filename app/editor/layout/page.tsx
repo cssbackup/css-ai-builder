@@ -323,9 +323,6 @@ function EditorLayoutPage() {
 
     if (!Array.isArray(categoryPageLinks) || !categoryPageLinks.length) return;
 
-    // Initialize navigation when the selected template changes. Do not depend on
-    // pageLinks here: editor changes (including dropdown children) must not be
-    // overwritten by the template defaults on the next render.
     setPageLinks(categoryPageLinks);
   }, [initialConfig.sections, setPageLinks]);
 
@@ -547,19 +544,18 @@ function EditorPage({
       }),
     );
     setInlineUpdateToast(
-      `${formatSectionName(sectionType)} ${
-        mediaType === "video" ? "Video" : "Image"
+      `${formatSectionName(sectionType)} ${mediaType === "video" ? "Video" : "Image"
       } - Updated`,
     );
   };
 
   const deleteSection = (sectionId: string) => {
-  setSections((prevSections) =>
-    prevSections.filter((section) => (section.id ?? section.type) !== sectionId)
-  );
+    setSections((prevSections) =>
+      prevSections.filter((section) => (section.id ?? section.type) !== sectionId)
+    );
 
-  setEditingSection(null);
-};
+    setEditingSection(null);
+  };
 
   const addSectionAfter = (afterSectionId: string, sectionType: string) => {
     const nextSection = createAddableSection(sectionType, category);
@@ -733,7 +729,7 @@ function EditorPage({
   );
   const footerVariantData = footerSection
     ? footerSection.data?.[footerSection.variant] ??
-      footerSection.data?.["Footer-1"]
+    footerSection.data?.["Footer-1"]
     : undefined;
   const footerData = isRecord(footerVariantData)
     ? (footerVariantData as SectionData)
@@ -745,10 +741,10 @@ function EditorPage({
   const visibleSections =
     currentPageSlug && currentPageSlug !== "home"
       ? syncedSections.filter(
-          (section) =>
-            pageShellSectionTypes.includes(section.type) ||
-            section.page?.toLowerCase() === currentPageSlug,
-        )
+        (section) =>
+          pageShellSectionTypes.includes(section.type) ||
+          section.page?.toLowerCase() === currentPageSlug,
+      )
       : syncedSections.filter((section) => !section.page);
   const scrollToTopbar = () => {
     const scrollContainer = document.querySelector<HTMLElement>(

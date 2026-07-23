@@ -214,7 +214,7 @@ export type SectionData = {
   productItems?: ProductCardData[];
 
   whyChooseUsItems?: WhyChooseUsItemData[];
-  galleryItems?: GalleryItemData[];
+  galleryItems?: GalleryItemData[]; 
   formFields?: FormFieldData[];
   formSubmitLabel?: string;
   faqItems?: FaqItemData[];
