@@ -168,9 +168,9 @@ export const selectedConfig: SelectedConfig = {
     },
     {
       type: "MarqueeSlide",
-       variant: "About-1",
-       data:{
-         "Marquee": {
+      variant: "MarqueeSlide-1",
+      data: {
+        "MarqueeSlide-1": {
           "text": [
             "NIKE",
             "ADDIDAS",
@@ -179,7 +179,7 @@ export const selectedConfig: SelectedConfig = {
             "PUMA · ZUDIO · BEWAKOF"
           ]
         },
-       }
+      }
     },
     {
       type: "About",

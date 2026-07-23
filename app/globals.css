@@ -11,6 +11,26 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+@keyframes marqueeScroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marqueeScroll 24s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation-play-state: paused;
+  }
+}
+
 @keyframes editorFadeIn {
   from {
     opacity: 0;

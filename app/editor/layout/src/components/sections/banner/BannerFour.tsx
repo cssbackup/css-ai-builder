@@ -68,60 +68,61 @@ export default function BannerFour({ data = {} }: SectionProps) {
 
       <div className="pointer-events-none absolute inset-0 bg-black/55" />
 
-      <div className="relative z-10 flex h-full items-center px-5 py-12 sm:px-6 md:px-12">
-        <div className="max-w-2xl space-y-4 text-white">
+      <div className="absolute left-6 top-6 z-20 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.28em] text-white/75 sm:left-10 sm:top-9">
+        <span className="h-2 w-2 animate-pulse rounded-full bg-red-500" />
+        Motion feature
+      </div>
+
+      <div className="relative z-10 flex h-full items-end px-5 pb-8 pt-28 sm:px-8 sm:pb-10 lg:px-12 lg:pb-12">
+        <div className="grid w-full items-end gap-7 border-t border-white/35 pt-7 text-white lg:grid-cols-[1fr_360px]">
+          <div>
           {activeSlide.title && (
-            <h1 className="text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl">
+            <h1 className="max-w-4xl text-4xl font-semibold leading-[1.02] sm:text-5xl lg:text-7xl">
               {activeSlide.title}
             </h1>
           )}
+          </div>
+          <div>
           {activeSlide.desc && (
-            <p className="max-w-xl text-sm leading-relaxed text-white/85 sm:text-base md:text-lg">
+            <p className="max-w-xl text-sm leading-6 text-white/75 sm:text-base">
               {activeSlide.desc}
             </p>
           )}
           {activeSlide.button && (
             <a
               href={activeSlide.button.href}
-              className="inline-flex rounded-md bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+              className="mt-5 inline-flex rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-red-500 hover:text-white"
             >
               {activeSlide.button.label}
             </a>
           )}
+          </div>
         </div>
       </div>
 
       {slides.length > 1 && (
         <>
-          <button
-            type="button"
-            onClick={goToPreviousSlide}
-            className="absolute left-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-950 shadow-lg transition hover:bg-white sm:left-4 sm:h-10 sm:w-10"
-            aria-label="Previous video slide"
-          >
-            <ChevronLeft size={22} />
-          </button>
-          <button
-            type="button"
-            onClick={goToNextSlide}
-            className="absolute right-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-950 shadow-lg transition hover:bg-white sm:right-4 sm:h-10 sm:w-10"
-            aria-label="Next video slide"
-          >
-            <ChevronRight size={22} />
-          </button>
-
-          <div className="absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 gap-2">
-            {slides.map((slide, index) => (
-              <button
-                key={`${slide.title}-${index}`}
-                type="button"
-                onClick={() => setActiveIndex(index)}
-                className={`h-2 rounded-full transition-all ${
-                  index === safeActiveIndex ? "w-8 bg-white" : "w-2 bg-white/50"
-                }`}
-                aria-label={`Show video slide ${index + 1}`}
-              />
-            ))}
+          <div className="absolute right-6 top-6 z-20 flex items-center gap-2 sm:right-10 sm:top-8">
+            <span className="mr-2 text-xs font-semibold tabular-nums text-white/70">
+              {String(safeActiveIndex + 1).padStart(2, "0")} /{" "}
+              {String(slides.length).padStart(2, "0")}
+            </span>
+            <button
+              type="button"
+              onClick={goToPreviousSlide}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/35 bg-black/20 text-white backdrop-blur transition hover:bg-white hover:text-slate-950"
+              aria-label="Previous video slide"
+            >
+              <ChevronLeft size={19} />
+            </button>
+            <button
+              type="button"
+              onClick={goToNextSlide}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/35 bg-black/20 text-white backdrop-blur transition hover:bg-white hover:text-slate-950"
+              aria-label="Next video slide"
+            >
+              <ChevronRight size={19} />
+            </button>
           </div>
         </>
       )}

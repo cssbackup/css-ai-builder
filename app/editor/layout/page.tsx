@@ -13,7 +13,7 @@ import {
   createServicePageSection,
   getTemplateVariables,
 } from "./src/data/templateFlow";
-import { sectionRegistry } from "./src/lib/sectionRegistry";
+import { getSectionComponent } from "./src/lib/sectionRegistry";
 
 import EditableSection from "./src/components/builder/EditableSection";
 import EditSectionModal from "./src/components/builder/EditSectionModal";
@@ -779,7 +779,11 @@ function EditorPage({
           Boolean(nextSection) &&
           !isLockedSection(section) &&
           !isLockedSection(nextSection);
-        const Component = sectionRegistry[section.variant];
+        const Component = getSectionComponent(
+          category,
+          section.type,
+          section.variant,
+        );
         const defaultVariant = `${section.type}-1`;
         const variantData =
           section.data?.[section.variant] ?? section.data?.[defaultVariant];

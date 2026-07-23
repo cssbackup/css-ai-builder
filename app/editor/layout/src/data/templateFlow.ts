@@ -1,6 +1,7 @@
 import { selectedConfig } from "./selectedConfig";
 import categoryContentJson from "./categoryContent.json";
 import type { SectionData, SectionItem, SelectedConfig } from "../types/section";
+import { getCategorySectionVariant } from "../lib/categorySectionVariant";
 
 export type CategoryKey = string;
 
@@ -31,7 +32,13 @@ type CategoryContentRecord = {
   >;
 };
 
-const categoryContent = categoryContentJson as CategoryContentRecord;
+const categoryContent =
+  categoryContentJson as unknown as CategoryContentRecord;
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" &&
+  value !== null &&
+  !Array.isArray(value);
+
 export const builderTemplates = categoryContent.templates;
 
 export const getCategoryNamesWithContent = () =>
@@ -122,7 +129,7 @@ const applyBannerVariantDefaults = (
   if (variant === "Banner-1") {
     return {
       ...data,
-      bannerBackgroundMode: "image",
+      bannerBackgroundMode: data.bannerBackgroundMode ?? "image",
       backgroundImage: sourceImage,
     };
   }
@@ -130,7 +137,7 @@ const applyBannerVariantDefaults = (
   if (variant === "Banner-2") {
     return {
       ...data,
-      bannerBackgroundMode: "video",
+      bannerBackgroundMode: data.bannerBackgroundMode ?? "video",
       backgroundVideo: sourceVideo,
       backgroundImage: sourceImage,
     };
@@ -173,12 +180,24 @@ const mergeCategoryData = (
   section: SectionItem,
   category: string,
 ): SectionItem => {
+  const categorySectionType =
+    section.type === "MarqueeSlide" ? "Marquee" : section.type;
+  const categorySection =
+    categoryContent.categories[category]?.sections?.[categorySectionType] ?? {};
+  const nestedVariants = isRecord(categorySection.variants)
+    ? categorySection.variants
+    : undefined;
+  const categorySectionData = Object.fromEntries(
+    Object.entries(categorySection).filter(
+      ([key]) => key !== "variants" && key !== "defaultVariant",
+    ),
+  );
   const sectionContent = {
     ...categoryContent.common[section.type],
-    ...categoryContent.categories[category]?.sections?.[section.type],
+    ...categorySectionData,
   };
 
-  if (!Object.keys(sectionContent).length) {
+  if (!Object.keys(sectionContent).length && !nestedVariants) {
     const emptyData = Object.fromEntries(
       Object.keys(section.data).map((variant) => [variant, {} as SectionData]),
     );
@@ -187,12 +206,28 @@ const mergeCategoryData = (
   }
 
   const nextData = Object.fromEntries(
-    Object.keys(section.data).map((variant) => [
-      variant,
-      section.type === "Banner"
-        ? applyBannerVariantDefaults(variant, { ...sectionContent })
-        : { ...sectionContent },
-    ]),
+    Object.keys(section.data).map((variant) => {
+      const categoryVariant = getCategorySectionVariant(
+        category,
+        section.type,
+        variant,
+      );
+      const variantContent =
+        nestedVariants && isRecord(nestedVariants[categoryVariant])
+          ? nestedVariants[categoryVariant]
+          : {};
+      const mergedContent = {
+        ...sectionContent,
+        ...variantContent,
+      };
+
+      return [
+        variant,
+        section.type === "Banner"
+          ? applyBannerVariantDefaults(variant, mergedContent)
+          : mergedContent,
+      ];
+    }),
   );
 
   return { ...section, data: nextData };

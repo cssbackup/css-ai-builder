@@ -52,40 +52,48 @@ export default function BannerThree({ data = {}, blocks }: SectionProps) {
 
   return (
     <section
-      className="relative w-full overflow-hidden"
-      style={{ height: `${bannerHeight}dvh` }}
+      className="relative grid w-full overflow-hidden bg-[#f3efe7] lg:grid-cols-[58%_42%]"
+      style={{ minHeight: `${bannerHeight}dvh` }}
     >
-      <Image
-        key={activeSlide.id}
-        src={activeSlide.image}
-        alt={activeSlide.alt ?? activeSlide.title ?? ""}
-        data-editor-media
-        data-editor-media-type="image"
-        data-editor-media-src={activeSlide.image}
-        fill
-        priority
-        sizes="100vw"
-        unoptimized={activeSlide.image?.startsWith("data:")}
-        className="object-cover transition-opacity duration-500"
-      />
-      <div className="pointer-events-none absolute inset-0 bg-black/50" />
+      <div className="relative min-h-[420px] overflow-hidden lg:m-5 lg:mr-0">
+        <Image
+          key={activeSlide.id}
+          src={activeSlide.image}
+          alt={activeSlide.alt ?? activeSlide.title ?? ""}
+          data-editor-media
+          data-editor-media-type="image"
+          data-editor-media-src={activeSlide.image}
+          fill
+          priority
+          sizes="(min-width: 1024px) 58vw, 100vw"
+          unoptimized={activeSlide.image?.startsWith("data:")}
+          className="object-cover transition-opacity duration-500"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 to-transparent" />
+        <span className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+          Featured story
+        </span>
+      </div>
 
-      <div className="relative z-10 flex h-full items-center px-5 py-12 sm:px-6 md:px-12">
-        <div className="max-w-2xl space-y-4 text-white">
+      <div className="relative flex items-center px-6 py-16 sm:px-10 lg:px-12">
+        <div className="max-w-xl">
+          <p className="mb-5 text-xs font-bold uppercase tracking-[0.3em] text-[#9b6848]">
+            Slide {String(safeActiveIndex + 1).padStart(2, "0")}
+          </p>
           {activeSlide.title && (
-            <h1 className="text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl">
+            <h1 className="font-serif text-4xl leading-[1.02] text-[#27211d] sm:text-5xl lg:text-6xl">
               {activeSlide.title}
             </h1>
           )}
           {activeSlide.desc && (
-            <p className="max-w-xl text-sm leading-relaxed text-white/85 sm:text-base md:text-lg">
+            <p className="mt-6 max-w-lg text-sm leading-7 text-[#6d625b] sm:text-base">
               {activeSlide.desc}
             </p>
           )}
           {slideButton && (
             <BlockRenderer
               block={slideButton}
-              className="inline-flex rounded-md bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+              className="mt-8 inline-flex rounded-full bg-[#27211d] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#9b6848]"
             />
           )}
         </div>
@@ -93,31 +101,35 @@ export default function BannerThree({ data = {}, blocks }: SectionProps) {
 
       {slides.length > 1 && (
         <>
-          <button
-            type="button"
-            onClick={goToPreviousSlide}
-            className="absolute left-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-950 shadow-lg transition hover:bg-white sm:left-4 sm:h-10 sm:w-10"
-            aria-label="Previous banner slide"
-          >
-            <ChevronLeft size={22} />
-          </button>
-          <button
-            type="button"
-            onClick={goToNextSlide}
-            className="absolute right-2 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-950 shadow-lg transition hover:bg-white sm:right-4 sm:h-10 sm:w-10"
-            aria-label="Next banner slide"
-          >
-            <ChevronRight size={22} />
-          </button>
+          <div className="absolute bottom-5 left-5 z-20 flex gap-2 lg:bottom-10 lg:left-[calc(58%+3rem)]">
+            <button
+              type="button"
+              onClick={goToPreviousSlide}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#27211d]/20 bg-white text-[#27211d] transition hover:bg-[#27211d] hover:text-white"
+              aria-label="Previous banner slide"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button
+              type="button"
+              onClick={goToNextSlide}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#27211d]/20 bg-white text-[#27211d] transition hover:bg-[#27211d] hover:text-white"
+              aria-label="Next banner slide"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
 
-          <div className="absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+          <div className="absolute bottom-7 right-6 z-20 flex gap-2 lg:right-10">
             {slides.map((slide, index) => (
               <button
                 key={slide.id}
                 type="button"
                 onClick={() => setActiveIndex(index)}
                 className={`h-2 rounded-full transition-all ${
-                  index === safeActiveIndex ? "w-8 bg-white" : "w-2 bg-white/50"
+                  index === safeActiveIndex
+                    ? "w-8 bg-[#9b6848]"
+                    : "w-2 bg-[#27211d]/20"
                 }`}
                 aria-label={`Show banner slide ${index + 1}`}
               />
