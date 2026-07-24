@@ -7,25 +7,59 @@ import type { SectionProps } from "../../../types/section";
 
 export default function Header1({
     data = {},
-    solidBackground = false,
+    solidBackground = false
 }: SectionProps & { solidBackground?: boolean }) {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [editorFrame, setEditorFrame] = useState<{
+        top: number;
+        left: number;
+        width: number;
+    } | null>(null);
 
     useEffect(() => {
         const scrollContainer = document.querySelector<HTMLElement>(
             "[data-template-scroll]",
         );
         const scrollTarget: Window | HTMLElement = scrollContainer ?? window;
-        const handleScroll = () => {
+        const updateHeader = () => {
             const scrollTop = scrollContainer?.scrollTop ?? window.scrollY;
+
             setIsScrolled(scrollTop > 50);
         };
+        const updateEditorFrame = () => {
+            if (!scrollContainer) {
+                setEditorFrame(null);
+                return;
+            }
 
-        handleScroll();
-        scrollTarget.addEventListener("scroll", handleScroll, { passive: true });
+            const bounds = scrollContainer.getBoundingClientRect();
 
-        return () => scrollTarget.removeEventListener("scroll", handleScroll);
+            setEditorFrame({
+                top: bounds.top,
+                left: bounds.left,
+                width: bounds.width,
+            });
+        };
+
+        updateHeader();
+        updateEditorFrame();
+        scrollTarget.addEventListener("scroll", updateHeader, {
+            passive: true,
+        });
+        window.addEventListener("resize", updateEditorFrame);
+
+        const resizeObserver = scrollContainer
+            ? new ResizeObserver(updateEditorFrame)
+            : null;
+
+        if (scrollContainer) resizeObserver?.observe(scrollContainer);
+
+        return () => {
+            scrollTarget.removeEventListener("scroll", updateHeader);
+            window.removeEventListener("resize", updateEditorFrame);
+            resizeObserver?.disconnect();
+        };
     }, []);
 
     const isActive = isScrolled || solidBackground;
@@ -36,12 +70,21 @@ export default function Header1({
                 ? "bg-[#f4f2ef] text-black shadow-sm"
                 : "bg-transparent text-white"
                 }`}
+            style={
+                editorFrame
+                    ? {
+                        top: editorFrame.top,
+                        left: editorFrame.left,
+                        width: editorFrame.width,
+                    }
+                    : undefined
+            }
         >
             <div className="flex items-center gap-3">
                 {data.logoImage && (
                     <Image
                         src={data.logoImage}
-                        alt={data.logoImageTitle ?? data.logo ?? "Logo"}
+                        alt="Logo"
                         width={32}
                         height={32}
                         className="w-8 h-8 object-contain transition-all duration-300"
@@ -64,11 +107,8 @@ export default function Header1({
             </nav>
 
             <button
-                type="button"
                 className="md:hidden z-[60] flex flex-col gap-1.5"
-                onClick={() => setIsOpen((open) => !open)}
-                aria-label="Toggle navigation menu"
-                aria-expanded={isOpen}
+                onClick={() => setIsOpen(!isOpen)}
             >
                 <div className={`w-6 h-0.5 transition-all ${isActive ? "bg-black" : "bg-white"} ${isOpen ? "rotate-45 translate-y-2" : ""}`}></div>
                 <div className={`w-6 h-0.5 transition-all ${isActive ? "bg-black" : "bg-white"} ${isOpen ? "opacity-0" : ""}`}></div>

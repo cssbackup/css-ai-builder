@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ArrowUp, MessageCircle, Phone } from "lucide-react";
 import {
@@ -11,7 +11,6 @@ import {
   createCustomPageSection,
   createGalleryPageSection,
   createServicePageSection,
-  getTemplateVariables,
 } from "./src/data/templateFlow";
 import { getSectionComponent } from "./src/lib/sectionRegistry";
 
@@ -308,7 +307,6 @@ function EditorLayoutPage() {
     () => buildSelectedConfig(templateId, category),
     [templateId, category],
   );
-  const templateVariables = getTemplateVariables(initialConfig.templateId);
 
   useEffect(() => {
     setCurrentPage("Home");
@@ -330,7 +328,6 @@ function EditorLayoutPage() {
     <EditorPage
       key={`${templateId}-${category}`}
       initialSections={initialConfig.sections}
-      templateVariables={templateVariables}
       category={category}
       page={page}
       templateId={templateId}
@@ -341,14 +338,12 @@ function EditorLayoutPage() {
 
 function EditorPage({
   initialSections,
-  templateVariables,
   category,
   page,
   templateId,
   pageLinks,
 }: {
   initialSections: SectionItem[];
-  templateVariables: Record<string, string>;
   category: string;
   page: string;
   templateId: string;
@@ -651,7 +646,6 @@ function EditorPage({
         category,
         pageLinks,
         sections: syncedSections,
-        templateVariables,
       };
 
       try {
@@ -719,7 +713,7 @@ function EditorPage({
         handlePublishRequest,
       );
     };
-  }, [category, pageLinks, syncedSections, templateId, templateVariables]);
+  }, [category, pageLinks, syncedSections, templateId]);
 
   const editingSectionItem = syncedSections.find(
     (section) => (section.id ?? section.type) === editingSection,
@@ -760,10 +754,7 @@ function EditorPage({
   };
 
   return (
-    <main
-      className="editor-smooth-surface w-full max-w-full overflow-x-hidden [overflow-wrap:anywhere]"
-      style={templateVariables as React.CSSProperties}
-    >
+    <main className="editor-smooth-surface w-full max-w-full overflow-x-hidden [overflow-wrap:anywhere]">
       {visibleSections.map((section) => {
         const sectionId = section.id ?? section.type;
         const sectionIndex = visibleSections.findIndex(
@@ -841,6 +832,7 @@ function EditorPage({
       {editingSectionItem && (
         <EditSectionModal
           key={editingSectionItem.id ?? editingSectionItem.type}
+          category={category}
           sectionId={editingSectionItem.id ?? editingSectionItem.type}
           sectionType={editingSectionItem.type}
           sections={syncedSections}

@@ -1,7 +1,4 @@
-import {
-  buildSelectedConfig,
-  getTemplateVariables,
-} from "@/app/editor/layout/src/data/templateFlow";
+import { buildSelectedConfig } from "@/app/editor/layout/src/data/templateFlow";
 import { getSectionComponent } from "@/app/editor/layout/src/lib/sectionRegistry";
 import type { SectionData } from "@/app/editor/layout/src/types/section";
 
@@ -22,13 +19,9 @@ export default async function TemplatePreviewPage({
   const templateId = params.templateId ?? "template-1";
   const category = params.category ?? "Business";
   const config = buildSelectedConfig(templateId, category);
-  const variables = getTemplateVariables(config.templateId);
 
   return (
-    <main
-      className="min-h-screen w-full overflow-x-hidden bg-white"
-      style={variables}
-    >
+    <main className="min-h-screen w-full overflow-x-hidden bg-white">
       {config.sections.map((section) => {
         const Component = getSectionComponent(
           category,

@@ -1,218 +1,4 @@
 {
-  "templates": [
-    {
-      "id": "template-1",
-      "numericId": 1,
-      "title": "Classic Image",
-      "type": "Single Page Website",
-      "image": "/haelli.png",
-      "previewimage": "/haellipreview.png",
-      "preview_description": "Header 1 with image banner, about layout 1, product carousel, and footer.",
-      "prebuilt_pages": 6,
-      "sectionVariants": {
-        "Topbar": "Topbar-1",
-        "Header": "Header-1",
-        "Banner": "Banner-1",
-        "About": "About-1",
-        "Product": "Product-1",
-        "WhyChooseUs": "WhyChooseUs-1",
-        "Gallery": "Gallery-1",
-        "FormDetail": "FormDetail-1",
-        "FAQ": "FAQ-1",
-        "Testimonial": "Testimonial-1",
-        "Footer": "Footer-1"
-      },
-      "variables": {
-        "--primary-bg": "#00cadd",
-        "--primary-text": "#ffffff",
-        "--secondary-bg": "#ffffff",
-        "--secondary-text": "#000000",
-        "--header-bg": "#245c6e",
-        "--header-text": "#ffffff",
-        "--hero-bg": "#000000",
-        "--hero-title": "#ffffff",
-        "--primary-pretitle-text": "#ffffff",
-        "--primary-title-text": "#ffffff",
-        "--primary-subtitle-text": "#ffffff",
-        "--secondary-pretitle-text": "#ffffff",
-        "--secondary-title-text": "#ffffff",
-        "--secondary-subtitle-text": "#ffffff",
-        "--primary-link-bg": "#ffffff",
-        "--primary-link-color": "#000000",
-        "--secondary-link-bg": "#00cadd",
-        "--secondary-link-color": "#ffffff",
-        "--text-white": "white",
-        "--blue-bg": "#0668ff",
-        "--lightcream-bg": "#fbfaf6"
-      }
-    },
-    {
-      "id": "template-2",
-      "numericId": 2,
-      "title": "Video Lead",
-      "type": "Multiple Pages Website",
-      "image": "/shaye.png",
-      "previewimage": "/shayepreview.png",
-      "preview_description": "Header 2 with video banner, about layout 2, product cards, and footer.",
-      "prebuilt_pages": 8,
-      "sectionVariants": {
-        "Topbar": "Topbar-2",
-        "Header": "Header-2",
-        "Banner": "Banner-2",
-        "About": "About-2",
-        "Product": "Product-2",
-        "WhyChooseUs": "WhyChooseUs-2",
-        "Gallery": "Gallery-2",
-        "FormDetail": "FormDetail-2",
-        "FAQ": "FAQ-2",
-        "Testimonial": "Testimonial-2",
-        "Footer": "Footer-1"
-      },
-      "variables": {
-        "--header-bg": "#111827",
-        "--header-text": "#ffffff",
-        "--hero-bg": "#020617",
-        "--hero-title": "#f8fafc",
-        "--primary-link-bg": "#ffffff",
-        "--primary-link-color": "#000000",
-        "--blue-bg": "#2563eb",
-        "--lightcream-bg": "#fbfaf6"
-      }
-    },
-    {
-      "id": "template-3",
-      "numericId": 3,
-      "title": "Slider Showcase",
-      "type": "Single Page Website",
-      "image": "/stylam.png",
-      "previewimage": "/stylampreview.png",
-      "preview_description": "Header 2 with image slider banner, about layout 2, product grid, and footer.",
-      "prebuilt_pages": 5,
-      "sectionVariants": {
-        "Topbar": "Topbar-1",
-        "Header": "Header-2",
-        "Banner": "Banner-3",
-        "About": "About-2",
-        "Product": "Product-3",
-        "WhyChooseUs": "WhyChooseUs-3",
-        "Gallery": "Gallery-3",
-        "FormDetail": "FormDetail-3",
-        "FAQ": "FAQ-3",
-        "Testimonial": "Testimonial-3",
-        "Footer": "Footer-1"
-      },
-      "variables": {
-        "--header-bg": "#0f766e",
-        "--header-text": "#ffffff",
-        "--hero-bg": "#042f2e",
-        "--hero-title": "#ffffff",
-        "--primary-link-bg": "#ffffff",
-        "--primary-link-color": "#0f172a",
-        "--blue-bg": "#0f766e",
-        "--lightcream-bg": "#f8fafc"
-      }
-    },
-    {
-      "id": "template-4",
-      "numericId": 4,
-      "title": "Motion Slidersss",
-      "type": "Multiple Pages Website",
-      "image": "/blackbay.png",
-      "previewimage": "/blackbaypreview.png",
-      "preview_description": "Header 1 with video slider banner, about layout 1, product cards, and footer.",
-      "prebuilt_pages": 7,
-      "sectionVariants": {
-        "Topbar": "Topbar-2",
-        "Header": "Header-1",
-        "Banner": "Banner-4",
-        "About": "About-1",
-        "Product": "Product-2",
-        "WhyChooseUs": "WhyChooseUs-4",
-        "Gallery": "Gallery-4",
-        "FormDetail": "FormDetail-4",
-        "FAQ": "FAQ-4",
-        "Testimonial": "Testimonial-1",
-        "Footer": "Footer-1"
-      },
-      "variables": {
-        "--header-bg": "#1f2937",
-        "--header-text": "#ffffff",
-        "--hero-bg": "#111827",
-        "--hero-title": "#ffffff",
-        "--primary-link-bg": "#facc15",
-        "--primary-link-color": "#111827",
-        "--blue-bg": "#1d4ed8",
-        "--lightcream-bg": "#fff7ed"
-      }
-    },
-    {
-      "id": "template-5",
-      "numericId": 5,
-      "title": "Editorial Blocks",
-      "type": "Single Page Website",
-      "image": "/stylampreview.png",
-      "previewimage": "/stylampreview.png",
-      "preview_description": "Header 2 with image banner, editorial about layout, product carousel, and footer.",
-      "prebuilt_pages": 4,
-      "sectionVariants": {
-        "Topbar": "Topbar-1",
-        "Header": "Header-2",
-        "Banner": "Banner-1",
-        "About": "About-2",
-        "Product": "Product-1",
-        "WhyChooseUs": "WhyChooseUs-1",
-        "Gallery": "Gallery-1",
-        "FormDetail": "FormDetail-1",
-        "FAQ": "FAQ-1",
-        "Testimonial": "Testimonial-1",
-        "Footer": "Footer-1"
-      },
-      "variables": {
-        "--header-bg": "#334155",
-        "--header-text": "#ffffff",
-        "--hero-bg": "#1e293b",
-        "--hero-title": "#ffffff",
-        "--primary-link-bg": "#ffffff",
-        "--primary-link-color": "#1e293b",
-        "--blue-bg": "#475569",
-        "--lightcream-bg": "#f8fafc"
-      }
-    },
-    {
-      "id": "template-6",
-      "numericId": 6,
-      "title": "Editorial Blocksddddd",
-      "type": "Single Page Website",
-      "image": "/stylampreview.png",
-      "previewimage": "/stylampreview.png",
-      "preview_description": "Header 2 with image banner, editorial about layout, product carousel, and footer.",
-      "prebuilt_pages": 4,
-      "sectionVariants": {
-        "Topbar": "Topbar-1",
-        "Header": "Header-2",
-        "Banner": "Banner-1",
-        "EcommerceMarquee1": "EcommerceMarquee1",
-        "About": "About-2",
-        "Product": "Product-1",
-        "WhyChooseUs": "WhyChooseUs-1",
-        "Gallery": "Gallery-1",
-        "FormDetail": "FormDetail-1",
-        "FAQ": "FAQ-1",
-        "Testimonial": "Testimonial-1",
-        "Footer": "Footer-1"
-      },
-      "variables": {
-        "--header-bg": "#334155",
-        "--header-text": "#ffffff",
-        "--hero-bg": "#1e293b",
-        "--hero-title": "#ffffff",
-        "--primary-link-bg": "#ffffff",
-        "--primary-link-color": "#1e293b",
-        "--blue-bg": "#475569",
-        "--lightcream-bg": "#f8fafc"
-      }
-    }
-  ],
   "common": {
     "Topbar": {
       "text": [
@@ -528,17 +314,36 @@
   },
   "categories": {
     "Realestate": {
-      "templates": [
-        "template-1",
-        "template-2",
-        "template-3",
-        "template-4",
-        "template-5",
-        "template-6"
-      ],
+      "templateComponents": {
+        "template-1": {
+          "Topbar": "RealEstateTopbar1",
+          "Header": "RealEstateHeader1",
+          "Banner": "RealEstateBanner1",
+          "About": "RealEstateAbout1",
+          "Product": "RealEstateProduct1",
+          "WhyChooseUs": "RealEstateWhyChooseUs1",
+          "Gallery": "RealEstateGallery1",
+          "FormDetail": "RealEstateFormDetail1",
+          "FAQ": "RealEstateFAQ1",
+          "Testimonial": "RealEstateTestimonial1",
+          "Footer": "RealEstateFooter1"
+        },
+        "template-2": {
+          "Topbar": "RealEstateTopbar2",
+          "Header": "RealEstateHeader2",
+          "Banner": "RealEstateBanner2",
+          "About": "RealEstateAbout2",
+          "Product": "RealEstateProduct2",
+          "WhyChooseUs": "RealEstateWhyChooseUs2",
+          "Gallery": "RealEstateGallery2",
+          "FormDetail": "RealEstateFormDetail2",
+          "FAQ": "RealEstateFAQ2",
+          "Testimonial": "RealEstateTestimonial2",
+          "Footer": "RealEstateFooter2"
+        }
+      },
       "sections": {
         "Header": {
-          "defaultVariant": "RealEstateHeader1",
           "variants": {
             "RealEstateHeader1": {
               "logo": "PrimeHomes",
@@ -578,7 +383,7 @@
               ]
             },
             "RealEstateHeader2": {
-              "logo": "PrimeHomes",
+              "logo": "PrimeHomes Signature",
               "menu": [
                 {
                   "label": "Home",
@@ -617,7 +422,6 @@
           }
         },
         "Banner": {
-          "defaultVariant": "RealEstateBanner1",
           "variants": {
             "RealEstateBanner1": {
               "backgroundImage": "/categories/realestate/bg1.jpg",
@@ -667,7 +471,7 @@
               "backgroundVideo": "/categories/realestate/video.mp4",
               "bannerHeight": 70,
               "pretitle": "Exclusive property collection",
-              "title": "Remarkable spaces for the way you want to live.",
+              "title": "Discover distinctive homes in the right locations.",
               "desc": "Explore a considered portfolio of residences, investment opportunities, and distinctive addresses selected around your ambitions.",
               "buttons": [
                 {
@@ -711,7 +515,6 @@
           }
         },
         "About": {
-          "defaultVariant": "RealEstateAbout1",
           "variants": {
             "RealEstateAbout1": {
               "pretitle": "Why buyers trust us",
@@ -735,7 +538,7 @@
             },
             "RealEstateAbout2": {
               "pretitle": "Why buyers trust us",
-              "title": "Real estate guidance from search to keys.",
+              "title": "Local property expertise for confident decisions.",
               "subtitle": "Verified homes, smarter visits, clearer decisions",
               "desc": "We help families and investors shortlist the right properties using neighborhood insight, pricing context, and documentation checks.",
               "desc2": "From first call to final paperwork, our advisors keep every step simple, transparent, and focused on your goals.",
@@ -756,7 +559,6 @@
           }
         },
         "Product": {
-          "defaultVariant": "RealEstateProduct1",
           "variants": {
             "RealEstateProduct1": {
               "productSectionTitle": "Featured Properties",
@@ -832,7 +634,7 @@
               ]
             },
             "RealEstateProduct2": {
-              "productSectionTitle": "Featured Properties",
+              "productSectionTitle": "Handpicked Luxury Homes",
               "productTitle": "Signature Residences",
               "productSubtitle": "Ready for site visits this week",
               "productInfoTitle": "Prime City Homes",
@@ -907,7 +709,6 @@
           }
         },
         "WhyChooseUs": {
-          "defaultVariant": "RealEstateWhyChooseUs1",
           "variants": {
             "RealEstateWhyChooseUs1": {
               "pretitle": "Why choose PrimeHomes",
@@ -933,7 +734,7 @@
             },
             "RealEstateWhyChooseUs2": {
               "pretitle": "Why choose PrimeHomes",
-              "title": "Property decisions with clearer proof.",
+              "title": "A more personal way to find your property.",
               "desc": "Help buyers compare real options, verified documents, and guided site visits.",
               "whyChooseUsItems": [
                 {
@@ -956,7 +757,6 @@
           }
         },
         "Gallery": {
-          "defaultVariant": "RealEstateGallery1",
           "variants": {
             "RealEstateGallery1": {
               "pretitle": "Property gallery",
@@ -987,7 +787,7 @@
             },
             "RealEstateGallery2": {
               "pretitle": "Property gallery",
-              "title": "Homes, interiors, and location views.",
+              "title": "A closer look at our signature properties.",
               "desc": "Show category-specific property visuals in every gallery layout.",
               "galleryItems": [
                 {
@@ -1015,7 +815,6 @@
           }
         },
         "FormDetail": {
-          "defaultVariant": "RealEstateFormDetail1",
           "variants": {
             "RealEstateFormDetail1": {
               "pretitle": "Book a visit",
@@ -1044,7 +843,7 @@
             },
             "RealEstateFormDetail2": {
               "pretitle": "Book a visit",
-              "title": "Tell us what kind of home you need.",
+              "title": "Schedule a private property consultation.",
               "desc": "Share your budget, location, and timeline so an advisor can respond.",
               "backgroundImage": "/categories/realestate/bg1.jpg",
               "backgroundImageTitle": "Property enquiry visual",
@@ -1070,7 +869,6 @@
           }
         },
         "FAQ": {
-          "defaultVariant": "RealEstateFAQ1",
           "variants": {
             "RealEstateFAQ1": {
               "pretitle": "Property FAQ",
@@ -1092,7 +890,7 @@
             },
             "RealEstateFAQ2": {
               "pretitle": "Property FAQ",
-              "title": "Questions buyers often ask.",
+              "title": "Helpful answers for your property journey.",
               "faqItems": [
                 {
                   "question": "Can I book a site visit?",
@@ -1111,7 +909,6 @@
           }
         },
         "Topbar": {
-          "defaultVariant": "RealEstateTopbar1",
           "variants": {
             "RealEstateTopbar1": {
               "text": [
@@ -1137,7 +934,7 @@
             },
             "RealEstateTopbar2": {
               "text": [
-                "Fast setup, editable sections, category-ready media"
+                "New premium listings added every week"
               ],
               "phone": "+91 98765 43210",
               "email": "hello@example.com",
@@ -1160,7 +957,6 @@
           }
         },
         "Testimonial": {
-          "defaultVariant": "RealEstateTestimonial1",
           "variants": {
             "RealEstateTestimonial1": {
               "pretitle": "Our clients",
@@ -1213,7 +1009,7 @@
             },
             "RealEstateTestimonial2": {
               "pretitle": "Our clients",
-              "title": "Trusted by people who care about results.",
+              "title": "Home buyers share their PrimeHomes experience.",
               "desc": "Use real customer feedback to build trust with new visitors.",
               "testimonialItems": [
                 {
@@ -1263,7 +1059,6 @@
           }
         },
         "Footer": {
-          "defaultVariant": "RealEstateFooter1",
           "variants": {
             "RealEstateFooter1": {
               "logoImage": "/etacard.png",
@@ -1338,7 +1133,7 @@
             },
             "RealEstateFooter2": {
               "logoImage": "/etacard.png",
-              "logoImageTitle": "ETA Card logo",
+              "logoImageTitle": "PrimeHomes Signature logo",
               "desc": "Editable website content powered by one category and template JSON file.",
               "footerColumns": [
                 {
@@ -1412,48 +1207,70 @@
       }
     },
     "Business": {
-      "templates": [
-        "template-1",
-        "template-2",
-        "template-3",
-        "template-4",
-        "template-5"
-      ],
+      "templateComponents": {
+        "template-1": {
+          "Topbar": null,
+          "Header": "BusinessHeader1",
+          "Banner": "BusinessBanner1",
+          "Marquee": "BusinessMarquee1",
+          "Product": "BusinessProduct1",
+          "Stats":"BusinessStats1",
+          "WhyChooseUs": "BusinessWhyChooseUs1",
+          "Gallery": "BusinessGallery1",
+          "FormDetail": "BusinessFormDetail1",
+          "FAQ": "BusinessFAQ1",
+          "Testimonial": "BusinessTestimonial1",
+          "Footer": "BusinessFooter1"
+        },
+        "template-2": {
+          "Topbar": "BusinessTopbar2",
+          "Header": "BusinessHeader2",
+          "Banner": "BusinessBanner2",
+          "Marquee": "BusinessMarquee2",
+          "About": "BusinessAbout2",
+          "Product": "BusinessProduct2",
+          "WhyChooseUs": "BusinessWhyChooseUs2",
+          "Gallery": "BusinessGallery2",
+          "FormDetail": "BusinessFormDetail2",
+          "FAQ": "BusinessFAQ2",
+          "Testimonial": "BusinessTestimonial2",
+          "Footer": "BusinessFooter2"
+        }
+      },
       "sections": {
         "Header": {
-          "defaultVariant": "BusinessHeader1",
           "variants": {
             "BusinessHeader1": {
-          "logoImage": "/categories/business/logo/app_logo.png",
-          "logo": "Gen-z",
-          "menu": [
-            {
-              "label": "Home",
-              "href": "/"
+              "logoImage": "/categories/business/template1/app_logo.png",
+              "logo": "Gen-z",
+              "menu": [
+                {
+                  "label": "Home",
+                  "href": "/"
+                },
+                {
+                  "label": "About",
+                  "href": "/about"
+                },
+                {
+                  "label": "Collection",
+                  "href": "/collection"
+                },
+                {
+                  "label": "Contact Us",
+                  "href": "/contact"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Shop The Collection",
+                  "href": "/collection",
+                  "variant": "primary"
+                }
+              ]
             },
-            {
-              "label": "About",
-              "href": "/about"
-            },
-            {
-              "label": "Collection",
-              "href": "/collection"
-            },
-            {
-              "label": "Contact Us",
-              "href": "/contact"
-            }
-          ],
-          "buttons": [
-            {
-              "label": "Shop The Collection",
-              "href": "/collection",
-              "variant": "primary"
-            }
-          ]
-        },
             "BusinessHeader2": {
-              "logo": "LaunchCo",
+              "logo": "LaunchCo Advisory",
               "menu": [
                 {
                   "label": "Home",
@@ -1494,19 +1311,19 @@
         "Banner": {
           "variants": {
             "BusinessBanner1": {
-              "backgroundImage": "/categories/business/bg.png",
-          "backgroundImageTitle": "Summer Collection Campaign",
-          "bannerHeight": 100,
-          "pretitle": "The New Season",
-          "title": "Elevate Your Everyday Aesthetic.",
-          "desc": "Discover the latest collection featuring bold silhouettes and premium sustainable fabrics.",
-             "buttons": [
-            {
-              "label": "Shop Collection",
-              "href": "#",
-              "variant": "primary"
-            }
-          ],
+              "backgroundImage": "/categories/business/template1/bg.png",
+              "backgroundImageTitle": "Summer Collection Campaign",
+              "bannerHeight": 100,
+              "pretitle": "The New Season",
+              "title": "Elevate Your Everyday Aesthetic.",
+              "desc": "Discover the latest collection featuring bold silhouettes and premium sustainable fabrics.",
+              "buttons": [
+                {
+                  "label": "Shop Collection",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ],
               "bannerSlides": [
                 {
                   "image": "/categories/business/blackbay.png",
@@ -1540,8 +1357,10 @@
               "backgroundVideo": "/categories/business/video.mp4",
               "bannerBackgroundMode": "video",
               "bannerHeight": 80,
+              "badge": "Built to perform",
+              "decorativeNumber": "02",
               "pretitle": "Build your business presence",
-              "title": "Turn b2 your company website into a powerful growth engine.",
+              "title": "Turn ambitious business ideas into measurable growth.",
               "desc": "Showcase your expertise, services, results, and customer success through a modern business experience.",
               "buttons": [
                 {
@@ -1582,11 +1401,9 @@
                 }
               ]
             }
-          },
-          "defaultVariant": "BusinessBanner2"
+          }
         },
         "Marquee": {
-          "defaultVariant": "BusinessMarquee1",
           "variants": {
             "BusinessMarquee1": {
               "text": [
@@ -1599,17 +1416,16 @@
             },
             "BusinessMarquee2": {
               "text": [
-                "NIKE",
-                "ADDIDAS",
-                "RED-TAPE",
-                "ALLEN-SOLLY",
-                "PUMA · ZUDIO · BEWAKOF"
+                "STRATEGY",
+                "OPERATIONS",
+                "MARKETING",
+                "TECHNOLOGY",
+                "GROWTH · INSIGHT · IMPACT"
               ]
             }
           }
         },
         "About": {
-          "defaultVariant": "BusinessAbout1",
           "variants": {
             "BusinessAbout1": {
               "pretitle": "About the company",
@@ -1633,7 +1449,7 @@
             },
             "BusinessAbout2": {
               "pretitle": "About the company",
-              "title": "A business website built around trust.",
+              "title": "Practical strategy for the next stage of growth.",
               "subtitle": "Services, proof, and fast lead capture",
               "desc": "Show what your business does, why customers choose you, and how visitors can get in touch.",
               "desc2": "The content is business-specific while template designs can change component by component.",
@@ -1654,83 +1470,41 @@
           }
         },
         "Product": {
-          "defaultVariant": "BusinessProduct1",
           "variants": {
             "BusinessProduct1": {
-              "productSectionTitle": "Core Services",
-              "productTitle": "Business Growth Services",
-              "productSubtitle": "Ready to customize",
-              "productInfoTitle": "Everything your company needs online",
-              "productInfoDesc": "Use service cards to explain offers, packages, capabilities, or featured work.",
-              "productFeatures": [
-                {
-                  "label": "Strategy",
-                  "price": "Included"
-                },
-                {
-                  "label": "Website",
-                  "price": "Included"
-                },
-                {
-                  "label": "SEO",
-                  "price": "Optional"
-                }
-              ],
-              "productTotalPrice": "Custom",
-              "productShippingText": "Fast setup available",
-              "productSlides": [
-                {
-                  "image": "/categories/business/bg1.jpg",
-                  "alt": "Consulting",
-                  "productTitle": "Consulting",
-                  "productSubtitle": "Growth Planning",
-                  "productInfoTitle": "Clear strategy",
-                  "productInfoDesc": "A focused service block for your leading offer.",
-                  "productFeatures": [
-                    {
-                      "label": "Audit",
-                      "price": "Included"
-                    },
-                    {
-                      "label": "Plan",
-                      "price": "Included"
-                    }
-                  ],
-                  "productTotalPrice": "Custom",
-                  "productShippingText": "Fast setup available",
-                  "button": {
-                    "label": "Talk to us",
-                    "href": "#",
-                    "variant": "primary"
-                  }
-                }
-              ],
+              "pretitle": "BANQUET ·",
+              "title": "Dressed for the table, remembered for the",
+              "highlightedText": "room.",
+              "productInfoDesc": "Each piece is made to order in our Shanghai atelier, with a fitting consultation included.",
               "productItems": [
                 {
-                  "title": "Consulting",
-                  "category": "Service",
-                  "desc": "A focused service block for your leading business offer.",
-                  "image": "/categories/business/bg1.jpg",
-                  "alt": "Business consulting"
+                  "category": "BANQUET",
+                  "title": "Pomegranate Dupioni",
+                  "desc": "Pure dupioni silk · Hand-embroidered collar",
+                  "image": "/categories/business/template1/polo.png"
                 },
                 {
-                  "title": "Operations",
-                  "category": "Service",
-                  "desc": "Show the process and support your customers can expect.",
-                  "image": "/categories/business/bg2.jpg",
-                  "alt": "Business operations"
-                }
-              ],
-              "buttons": [
+                  "category": "BANQUET",
+                  "title": "Midnight Charmeuse",
+                  "desc": "Silk charmeuse · Gold piping · Side slit",
+                  "image": "/categories/business/template1/7.jfif"
+                },
                 {
-                  "label": "Talk to us",
-                  "href": "#",
-                  "variant": "primary"
+                  "category": "BANQUET",
+                  "title": "Jade Jacquard",
+                  "desc": "Silk jacquard · Phoenix motif · Qing-era pattern",
+                  "image": "/categories/business/template1/8.jfif"
+                },
+                {
+                  "category": "BANQUET",
+                  "title": "Ivory Shantung",
+                  "desc": "Shantung silk · Vermillion piping · Classic silhouette",
+                  "image": "/categories/business/template1/9.jfif"
                 }
               ]
             },
             "BusinessProduct2": {
-              "productSectionTitle": "Core Services",
+              "productSectionTitle": "Growth Advisory Services",
               "productTitle": "Business Growth Services",
               "productSubtitle": "Ready to customize",
               "productInfoTitle": "Everything your company needs online",
@@ -1804,8 +1578,32 @@
             }
           }
         },
+        "Stats":{
+          "variants":{
+            "BusinessStats1":{
+               "pretitle": "शिल्प कौशल · CRAFTMANSHIP",
+          "title": "Fourteen hours of finishing. One button at a time.",
+          "desc": "Every knot button is hand-formed from the same bolt of silk as the garment itself. Our master button-maker, Wu Lifen, has been making them since 1982. There is no machine that does what her hands do.",
+          "stats": [
+            {
+              "value": "14h",
+              "label": "PER GARMENT"
+            },
+            {
+              "value": "12",
+              "label": "KNOT BUTTONS"
+            },
+            {
+              "value": "3rd",
+              "label": "GENERATION"
+            }
+          ],
+          "backgroundImage": "/categories/business/template1/stats-banner.jpg",
+          "backgroundImageTitle": "Hand-finished silk garment craftsmanship"
+            }
+          }
+        },
         "WhyChooseUs": {
-          "defaultVariant": "BusinessWhyChooseUs1",
           "variants": {
             "BusinessWhyChooseUs1": {
               "pretitle": "Why choose LaunchCo",
@@ -1831,7 +1629,7 @@
             },
             "BusinessWhyChooseUs2": {
               "pretitle": "Why choose LaunchCo",
-              "title": "Business pages built for trust and leads.",
+              "title": "Experienced partners for complex business challenges.",
               "desc": "Explain your offer clearly and guide visitors toward action.",
               "whyChooseUsItems": [
                 {
@@ -1854,7 +1652,6 @@
           }
         },
         "Gallery": {
-          "defaultVariant": "BusinessGallery1",
           "variants": {
             "BusinessGallery1": {
               "pretitle": "Work gallery",
@@ -1885,7 +1682,7 @@
             },
             "BusinessGallery2": {
               "pretitle": "Work gallery",
-              "title": "Show your team, work, and process.",
+              "title": "Ideas, collaboration, and outcomes in action.",
               "desc": "Business visuals stay inside the business category folder.",
               "galleryItems": [
                 {
@@ -1913,7 +1710,6 @@
           }
         },
         "FormDetail": {
-          "defaultVariant": "BusinessFormDetail1",
           "variants": {
             "BusinessFormDetail1": {
               "pretitle": "Start a project",
@@ -1942,7 +1738,7 @@
             },
             "BusinessFormDetail2": {
               "pretitle": "Start a project",
-              "title": "Tell us about your business goal.",
+              "title": "Book a focused business strategy session.",
               "desc": "Capture business enquiries with fields that match service-led websites.",
               "backgroundImage": "/categories/business/blackbay.png",
               "backgroundImageTitle": "Business enquiry visual",
@@ -1968,7 +1764,6 @@
           }
         },
         "FAQ": {
-          "defaultVariant": "BusinessFAQ1",
           "variants": {
             "BusinessFAQ1": {
               "pretitle": "Business FAQ",
@@ -1990,7 +1785,7 @@
             },
             "BusinessFAQ2": {
               "pretitle": "Business FAQ",
-              "title": "Common questions before starting.",
+              "title": "What to know before working with our advisors.",
               "faqItems": [
                 {
                   "question": "Can this show services?",
@@ -2009,7 +1804,6 @@
           }
         },
         "Topbar": {
-          "defaultVariant": "BusinessTopbar1",
           "variants": {
             "BusinessTopbar1": {
               "text": [
@@ -2035,7 +1829,7 @@
             },
             "BusinessTopbar2": {
               "text": [
-                "Fast setup, editable sections, category-ready media"
+                "Helping ambitious companies move forward"
               ],
               "phone": "+91 98765 43210",
               "email": "hello@example.com",
@@ -2058,7 +1852,6 @@
           }
         },
         "Testimonial": {
-          "defaultVariant": "BusinessTestimonial1",
           "variants": {
             "BusinessTestimonial1": {
               "pretitle": "Our clients",
@@ -2111,7 +1904,7 @@
             },
             "BusinessTestimonial2": {
               "pretitle": "Our clients",
-              "title": "Trusted by people who care about results.",
+              "title": "Business leaders on the value we delivered.",
               "desc": "Use real customer feedback to build trust with new visitors.",
               "testimonialItems": [
                 {
@@ -2161,7 +1954,6 @@
           }
         },
         "Footer": {
-          "defaultVariant": "BusinessFooter1",
           "variants": {
             "BusinessFooter1": {
               "logoImage": "/etacard.png",
@@ -2236,7 +2028,7 @@
             },
             "BusinessFooter2": {
               "logoImage": "/etacard.png",
-              "logoImageTitle": "ETA Card logo",
+              "logoImageTitle": "LaunchCo Advisory logo",
               "desc": "Editable website content powered by one category and template JSON file.",
               "footerColumns": [
                 {
@@ -2310,16 +2102,36 @@
       }
     },
     "School": {
-      "templates": [
-        "template-1",
-        "template-2",
-        "template-3",
-        "template-4",
-        "template-5"
-      ],
+      "templateComponents": {
+        "template-1": {
+          "Topbar": "SchoolTopbar1",
+          "Header": "SchoolHeader1",
+          "Banner": "SchoolBanner1",
+          "About": "SchoolAbout1",
+          "Product": "SchoolProduct1",
+          "WhyChooseUs": "SchoolWhyChooseUs1",
+          "Gallery": "SchoolGallery1",
+          "FormDetail": "SchoolFormDetail1",
+          "FAQ": "SchoolFAQ1",
+          "Testimonial": "SchoolTestimonial1",
+          "Footer": "SchoolFooter1"
+        },
+        "template-2": {
+          "Topbar": "SchoolTopbar2",
+          "Header": "SchoolHeader2",
+          "Banner": "SchoolBanner2",
+          "About": "SchoolAbout2",
+          "Product": "SchoolProduct2",
+          "WhyChooseUs": "SchoolWhyChooseUs2",
+          "Gallery": "SchoolGallery2",
+          "FormDetail": "SchoolFormDetail2",
+          "FAQ": "SchoolFAQ2",
+          "Testimonial": "SchoolTestimonial2",
+          "Footer": "SchoolFooter2"
+        }
+      },
       "sections": {
         "Header": {
-          "defaultVariant": "SchoolHeader1",
           "variants": {
             "SchoolHeader1": {
               "logo": "BrightSchool",
@@ -2359,7 +2171,7 @@
               ]
             },
             "SchoolHeader2": {
-              "logo": "BrightSchool",
+              "logo": "BrightSchool Academy",
               "menu": [
                 {
                   "label": "Home",
@@ -2398,7 +2210,6 @@
           }
         },
         "Banner": {
-          "defaultVariant": "SchoolBanner1",
           "variants": {
             "SchoolBanner1": {
               "backgroundImage": "/categories/school/bg22.jpg",
@@ -2460,7 +2271,7 @@
               "backgroundVideo": "/categories/school/video.mp4",
               "bannerHeight": 70,
               "pretitle": "Admissions now open",
-              "title": "Big ideas begin in a place where every student belongs.",
+              "title": "Where curious minds grow with confidence.",
               "desc": "Discover a joyful learning community where strong academics, creativity, and thoughtful guidance help young people thrive.",
               "buttons": [
                 {
@@ -2516,7 +2327,6 @@
           }
         },
         "About": {
-          "defaultVariant": "SchoolAbout1",
           "variants": {
             "SchoolAbout1": {
               "pretitle": "About our school",
@@ -2540,7 +2350,7 @@
             },
             "SchoolAbout2": {
               "pretitle": "About our school",
-              "title": "Strong academics with thoughtful student care.",
+              "title": "A caring community built around every learner.",
               "subtitle": "A balanced environment for learning and growth",
               "desc": "We help students build strong fundamentals, creative confidence, and real-world curiosity through guided learning.",
               "desc2": "Parents get clear communication, structured programs, and a school community focused on every child.",
@@ -2561,7 +2371,6 @@
           }
         },
         "Product": {
-          "defaultVariant": "SchoolProduct1",
           "variants": {
             "SchoolProduct1": {
               "productSectionTitle": "School Programs",
@@ -2610,7 +2419,7 @@
               ]
             },
             "SchoolProduct2": {
-              "productSectionTitle": "School Programs",
+              "productSectionTitle": "Enrichment and Learning Programs",
               "productTitle": "Academic Pathways",
               "productSubtitle": "Admissions open",
               "productInfoTitle": "Programs for every stage",
@@ -2658,7 +2467,6 @@
           }
         },
         "WhyChooseUs": {
-          "defaultVariant": "SchoolWhyChooseUs1",
           "variants": {
             "SchoolWhyChooseUs1": {
               "pretitle": "Why choose BrightSchool",
@@ -2684,7 +2492,7 @@
             },
             "SchoolWhyChooseUs2": {
               "pretitle": "Why choose BrightSchool",
-              "title": "A school experience parents can trust.",
+              "title": "Learning, wellbeing, and opportunity in balance.",
               "desc": "Use this section to explain care, academics, activities, and communication.",
               "whyChooseUsItems": [
                 {
@@ -2707,7 +2515,6 @@
           }
         },
         "Gallery": {
-          "defaultVariant": "SchoolGallery1",
           "variants": {
             "SchoolGallery1": {
               "pretitle": "Campus gallery",
@@ -2738,7 +2545,7 @@
             },
             "SchoolGallery2": {
               "pretitle": "Campus gallery",
-              "title": "Classrooms, campus, and student life.",
+              "title": "Everyday moments from life at BrightSchool.",
               "desc": "School visuals always come from the school category folder.",
               "galleryItems": [
                 {
@@ -2766,7 +2573,6 @@
           }
         },
         "FormDetail": {
-          "defaultVariant": "SchoolFormDetail1",
           "variants": {
             "SchoolFormDetail1": {
               "pretitle": "Admissions enquiry",
@@ -2795,7 +2601,7 @@
             },
             "SchoolFormDetail2": {
               "pretitle": "Admissions enquiry",
-              "title": "Ask about admissions and campus visits.",
+              "title": "Plan your family's visit to our campus.",
               "desc": "Parents can enquire about classes, tours, and the admission process.",
               "backgroundImage": "/categories/school/bg33.png",
               "backgroundImageTitle": "School admission visual",
@@ -2821,7 +2627,6 @@
           }
         },
         "FAQ": {
-          "defaultVariant": "SchoolFAQ1",
           "variants": {
             "SchoolFAQ1": {
               "pretitle": "School FAQ",
@@ -2843,7 +2648,7 @@
             },
             "SchoolFAQ2": {
               "pretitle": "School FAQ",
-              "title": "Admissions questions answered.",
+              "title": "Answers for families joining our community.",
               "faqItems": [
                 {
                   "question": "Are admissions open?",
@@ -2862,7 +2667,6 @@
           }
         },
         "Topbar": {
-          "defaultVariant": "SchoolTopbar1",
           "variants": {
             "SchoolTopbar1": {
               "text": [
@@ -2888,7 +2692,7 @@
             },
             "SchoolTopbar2": {
               "text": [
-                "Fast setup, editable sections, category-ready media"
+                "Campus tours available for prospective families"
               ],
               "phone": "+91 98765 43210",
               "email": "hello@example.com",
@@ -2911,7 +2715,6 @@
           }
         },
         "Testimonial": {
-          "defaultVariant": "SchoolTestimonial1",
           "variants": {
             "SchoolTestimonial1": {
               "pretitle": "Our clients",
@@ -2964,7 +2767,7 @@
             },
             "SchoolTestimonial2": {
               "pretitle": "Our clients",
-              "title": "Trusted by people who care about results.",
+              "title": "What parents and students say about our school.",
               "desc": "Use real customer feedback to build trust with new visitors.",
               "testimonialItems": [
                 {
@@ -3014,7 +2817,6 @@
           }
         },
         "Footer": {
-          "defaultVariant": "SchoolFooter1",
           "variants": {
             "SchoolFooter1": {
               "logoImage": "/etacard.png",
@@ -3089,7 +2891,7 @@
             },
             "SchoolFooter2": {
               "logoImage": "/etacard.png",
-              "logoImageTitle": "ETA Card logo",
+              "logoImageTitle": "BrightSchool Academy logo",
               "desc": "Editable website content powered by one category and template JSON file.",
               "footerColumns": [
                 {
@@ -3163,16 +2965,38 @@
       }
     },
     "Ecommerce": {
-      "templates": [
-        "template-1",
-        "template-2",
-        "template-3",
-        "template-4",
-        "template-5"
-      ],
+      "templateComponents": {
+        "template-1": {
+          "Topbar": "EcommerceTopbar1",
+          "Header": "EcommerceHeader1",
+          "Banner": "EcommerceBanner1",
+          "Marquee": "EcommerceMarquee1",
+          "About": "EcommerceAbout1",
+          "Product": "EcommerceProduct1",
+          "WhyChooseUs": "EcommerceWhyChooseUs1",
+          "Gallery": "EcommerceGallery1",
+          "FormDetail": "EcommerceFormDetail1",
+          "FAQ": "EcommerceFAQ1",
+          "Testimonial": "EcommerceTestimonial1",
+          "Footer": "EcommerceFooter1"
+        },
+        "template-2": {
+          "Topbar": "EcommerceTopbar2",
+          "Header": "EcommerceHeader2",
+          "Banner": "EcommerceBanner2",
+          "Marquee": "EcommerceMarquee2",
+          "About": "EcommerceAbout2",
+          "Product": "EcommerceProduct2",
+          "WhyChooseUs": "EcommerceWhyChooseUs2",
+          "Gallery": "EcommerceGallery2",
+          "FormDetail": "EcommerceFormDetail2",
+          "FAQ": "EcommerceFAQ2",
+          "Testimonial": "EcommerceTestimonial2",
+          "Footer": "EcommerceFooter2"
+        }
+      },
       "sections": {
         "Header": {
-          "defaultVariant": "EcommerceHeader1",
           "variants": {
             "EcommerceHeader1": {
               "logo": "BrightSchool",
@@ -3212,7 +3036,7 @@
               ]
             },
             "EcommerceHeader2": {
-              "logo": "BrightSchool",
+              "logo": "Modern Market",
               "menu": [
                 {
                   "label": "Home",
@@ -3251,7 +3075,6 @@
           }
         },
         "Banner": {
-          "defaultVariant": "EcommerceBanner1",
           "variants": {
             "EcommerceBanner1": {
               "backgroundImage": "/categories/ecommerce/bg.png",
@@ -3273,7 +3096,7 @@
               "backgroundImageTitle": "Summer Collection Campaign",
               "bannerHeight": 100,
               "pretitle": "The new edit",
-              "title": "Objects of character, selected for modern living.",
+              "title": "Fresh arrivals chosen for effortless everyday style.",
               "desc": "Meet a refined collection of everyday pieces where thoughtful materials, clean form, and lasting quality come together.",
               "buttons": [
                 {
@@ -3291,7 +3114,6 @@
           }
         },
         "Marquee": {
-          "defaultVariant": "EcommerceMarquee1",
           "variants": {
             "EcommerceMarquee1": {
               "text": [
@@ -3304,17 +3126,16 @@
             },
             "EcommerceMarquee2": {
               "text": [
-                "NIKE",
-                "ADDIDAS",
-                "RED-TAPE",
-                "ALLEN-SOLLY",
-                "PUMA · ZUDIO · BEWAKOF"
+                "NEW ARRIVALS",
+                "BEST SELLERS",
+                "LIMITED EDITS",
+                "EVERYDAY ESSENTIALS",
+                "STYLE · QUALITY · DELIVERY"
               ]
             }
           }
         },
         "About": {
-          "defaultVariant": "EcommerceAbout1",
           "variants": {
             "EcommerceAbout1": {
               "pretitle": "About our school",
@@ -3337,10 +3158,10 @@
               ]
             },
             "EcommerceAbout2": {
-              "pretitle": "About our school",
-              "title": "Strong academics with thoughtful student care.",
-              "subtitle": "A balanced environment for learning and growth",
-              "desc": "We help students build strong fundamentals, creative confidence, and real-world curiosity through guided learning.",
+              "pretitle": "Our collection",
+              "title": "Considered products for modern everyday living.",
+              "subtitle": "Useful design, lasting quality, effortless style",
+              "desc": "We select versatile pieces that combine thoughtful details, reliable materials, and a fresh point of view.",
               "desc2": "Parents get clear communication, structured programs, and a school community focused on every child.",
               "backgroundImage": "/categories/school/bg11.jpg",
               "backgroundImageTitle": "School classroom",
@@ -3359,7 +3180,6 @@
           }
         },
         "Product": {
-          "defaultVariant": "EcommerceProduct1",
           "variants": {
             "EcommerceProduct1": {
               "productSectionTitle": "School Programs",
@@ -3408,10 +3228,10 @@
               ]
             },
             "EcommerceProduct2": {
-              "productSectionTitle": "School Programs",
-              "productTitle": "Academic Pathways",
-              "productSubtitle": "Admissions open",
-              "productInfoTitle": "Programs for every stage",
+              "productSectionTitle": "Trending Collections",
+              "productTitle": "The Modern Essentials Edit",
+              "productSubtitle": "New season arrivals",
+              "productInfoTitle": "Customer favorites, thoughtfully selected",
               "productInfoDesc": "Present classes, activities, facilities, and admission highlights with reusable cards.",
               "productFeatures": [
                 {
@@ -3456,7 +3276,6 @@
           }
         },
         "WhyChooseUs": {
-          "defaultVariant": "EcommerceWhyChooseUs1",
           "variants": {
             "EcommerceWhyChooseUs1": {
               "pretitle": "Why choose BrightSchool",
@@ -3481,9 +3300,9 @@
               ]
             },
             "EcommerceWhyChooseUs2": {
-              "pretitle": "Why choose BrightSchool",
-              "title": "A school experience parents can trust.",
-              "desc": "Use this section to explain care, academics, activities, and communication.",
+              "pretitle": "Why shop with us",
+              "title": "Better products and a simpler shopping experience.",
+              "desc": "Discover thoughtfully selected products, responsive support, and dependable delivery.",
               "whyChooseUsItems": [
                 {
                   "title": "Balanced learning",
@@ -3505,7 +3324,6 @@
           }
         },
         "Gallery": {
-          "defaultVariant": "EcommerceGallery1",
           "variants": {
             "EcommerceGallery1": {
               "pretitle": "Campus gallery",
@@ -3535,9 +3353,9 @@
               ]
             },
             "EcommerceGallery2": {
-              "pretitle": "Campus gallery",
-              "title": "Classrooms, campus, and student life.",
-              "desc": "School visuals always come from the school category folder.",
+              "pretitle": "Shop the look",
+              "title": "Fresh inspiration from our latest collection.",
+              "desc": "Explore product combinations, seasonal favorites, and details from the ecommerce collection.",
               "galleryItems": [
                 {
                   "image": "/categories/school/bg11.jpg",
@@ -3564,7 +3382,6 @@
           }
         },
         "FormDetail": {
-          "defaultVariant": "EcommerceFormDetail1",
           "variants": {
             "EcommerceFormDetail1": {
               "pretitle": "Admissions enquiry",
@@ -3592,9 +3409,9 @@
               ]
             },
             "EcommerceFormDetail2": {
-              "pretitle": "Admissions enquiry",
-              "title": "Ask about admissions and campus visits.",
-              "desc": "Parents can enquire about classes, tours, and the admission process.",
+              "pretitle": "Personal shopping help",
+              "title": "Need help finding the right product?",
+              "desc": "Tell us what you are looking for and our team will recommend suitable options.",
               "backgroundImage": "/categories/school/bg33.png",
               "backgroundImageTitle": "School admission visual",
               "formSubmitLabel": "Send admission enquiry",
@@ -3619,7 +3436,6 @@
           }
         },
         "FAQ": {
-          "defaultVariant": "EcommerceFAQ1",
           "variants": {
             "EcommerceFAQ1": {
               "pretitle": "School FAQ",
@@ -3640,8 +3456,8 @@
               ]
             },
             "EcommerceFAQ2": {
-              "pretitle": "School FAQ",
-              "title": "Admissions questions answered.",
+              "pretitle": "Shopping FAQ",
+              "title": "Orders, delivery, and returns made clear.",
               "faqItems": [
                 {
                   "question": "Are admissions open?",
@@ -3660,7 +3476,6 @@
           }
         },
         "Topbar": {
-          "defaultVariant": "EcommerceTopbar1",
           "variants": {
             "EcommerceTopbar1": {
               "text": [
@@ -3686,7 +3501,7 @@
             },
             "EcommerceTopbar2": {
               "text": [
-                "Fast setup, editable sections, category-ready media"
+                "Complimentary shipping on qualifying orders"
               ],
               "phone": "+91 98765 43210",
               "email": "hello@example.com",
@@ -3709,7 +3524,6 @@
           }
         },
         "Testimonial": {
-          "defaultVariant": "EcommerceTestimonial1",
           "variants": {
             "EcommerceTestimonial1": {
               "pretitle": "Our clients",
@@ -3762,7 +3576,7 @@
             },
             "EcommerceTestimonial2": {
               "pretitle": "Our clients",
-              "title": "Trusted by people who care about results.",
+              "title": "Why customers return to shop with us.",
               "desc": "Use real customer feedback to build trust with new visitors.",
               "testimonialItems": [
                 {
@@ -3812,7 +3626,6 @@
           }
         },
         "Footer": {
-          "defaultVariant": "EcommerceFooter1",
           "variants": {
             "EcommerceFooter1": {
               "logoImage": "/etacard.png",
@@ -3887,7 +3700,7 @@
             },
             "EcommerceFooter2": {
               "logoImage": "/etacard.png",
-              "logoImageTitle": "ETA Card logo",
+              "logoImageTitle": "Modern Market logo",
               "desc": "Editable website content powered by one category and template JSON file.",
               "footerColumns": [
                 {

@@ -1,35 +1,46 @@
-import type { SectionProps } from "../../../types/section";
+import Image from "next/image";
 import Link from "next/link";
 
+import type { SectionProps } from "../../../types/section";
 
 export default function BusinessBanner1({ data = {} }: SectionProps) {
   return (
-    <section className="relative w-full h-screen flex flex-col justify-center items-start text-left px-8 md:px-24 overflow-hidden">
-      {data?.backgroundImage && (
-        <img
+    <section
+      className="relative flex w-full flex-col items-start justify-center overflow-hidden px-8 text-left md:px-24"
+      style={{ minHeight: `${data.bannerHeight ?? 100}dvh` }}
+    >
+      {data.backgroundImage && (
+        <Image
           src={data.backgroundImage}
-          alt="Banner Background"
-          className="absolute inset-0 w-full h-full md:h-auto object-cover z-0"
+          alt={data.backgroundImageTitle ?? data.title ?? ""}
+          data-editor-media
+          data-editor-media-type="image"
+          data-editor-media-src={data.backgroundImage}
+          fill
+          priority
+          sizes="100vw"
+          unoptimized={data.backgroundImage.startsWith("data:")}
+          className="z-0 object-cover"
         />
       )}
 
-      <div className="absolute inset-0 bg-black/40 z-10"></div>
+      <div className="absolute inset-0 z-10 bg-black/40" />
 
-      <div className="relative z-20 flex flex-col items-start max-w-3xl text-white mt-16">
+      <div className="relative z-20 mt-16 flex max-w-3xl flex-col items-start text-white">
         {data.pretitle && (
-          <span className="text-xs md:text-sm tracking-[0.2em] uppercase mb-4">
+          <span className="mb-4 text-xs uppercase tracking-[0.2em] md:text-sm">
             {data.pretitle}
           </span>
         )}
 
         {data.title && (
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif italic text-[#cfa94e] mb-6 tracking-wide leading-tight">
+          <h1 className="mb-6 font-serif text-4xl italic leading-tight tracking-wide text-[#cfa94e] md:text-6xl lg:text-7xl">
             {data.title}
           </h1>
         )}
 
         {data.desc && (
-          <p className="text-sm md:text-lg font-light mb-10 max-w-2xl text-gray-200">
+          <p className="mb-10 max-w-2xl text-sm font-light text-gray-200 md:text-lg">
             {data.desc}
           </p>
         )}
@@ -38,12 +49,12 @@ export default function BusinessBanner1({ data = {} }: SectionProps) {
           <div className="flex flex-wrap justify-start gap-4">
             {data.buttons.map((btn, index) => (
               <Link
-                key={index}
+                key={`${btn.label}-${index}`}
                 href={btn.href}
                 className={
                   btn.variant === "primary"
-                    ? "bg-[#c03a2b] text-white px-8 py-4 text-[10px] tracking-[0.15em] uppercase hover:bg-[#d95345] transition-colors"
-                    : "border border-white text-white px-8 py-4 text-[10px] tracking-[0.15em] uppercase hover:bg-white hover:text-black transition-colors"
+                    ? "bg-[#c03a2b] px-8 py-4 text-[10px] uppercase tracking-[0.15em] text-white transition-colors hover:bg-[#d95345]"
+                    : "border border-white px-8 py-4 text-[10px] uppercase tracking-[0.15em] text-white transition-colors hover:bg-white hover:text-black"
                 }
               >
                 {btn.label}

@@ -2,11 +2,10 @@ const categoryComponentPrefixes: Record<string, string> = {
   Realestate: "RealEstate",
 };
 
-const getTwoLayoutIndex = (variant: string) => {
+const getLayoutIndex = (variant: string) => {
   const match = variant.match(/(\d+)$/);
-  const layoutNumber = match ? Number(match[1]) : 1;
 
-  return layoutNumber % 2 === 0 ? 2 : 1;
+  return match ? Number(match[1]) : 1;
 };
 
 export const getCategorySectionVariant = (
@@ -17,7 +16,7 @@ export const getCategorySectionVariant = (
   const prefix = categoryComponentPrefixes[category] ?? category;
   const componentSectionType =
     sectionType === "MarqueeSlide" ? "Marquee" : sectionType;
-  const layoutIndex = getTwoLayoutIndex(templateVariant);
+  const layoutIndex = getLayoutIndex(templateVariant);
 
   return `${prefix}${componentSectionType}${layoutIndex}`;
 };

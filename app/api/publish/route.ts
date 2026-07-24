@@ -49,7 +49,6 @@ export async function POST(request: Request) {
       category?: string;
       pageLinks?: unknown[];
       sections?: unknown[];
-      templateVariables?: Record<string, string>;
     };
 
     if (!Array.isArray(body.sections) || !body.sections.length) {
@@ -66,7 +65,6 @@ export async function POST(request: Request) {
       category: body.category ?? "Template",
       pageLinks: body.pageLinks ?? [],
       sections: body.sections,
-      templateVariables: body.templateVariables ?? {},
       publishedAt: new Date().toISOString(),
     };
 

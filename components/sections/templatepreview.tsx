@@ -5,24 +5,18 @@ import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import {
   Check,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  ChevronUp,
   Search,
   X,
 } from "lucide-react";
 import {
+  getCategoryLayoutOptions,
+  getTemplateComponentVariant,
   getTemplatesForCategory,
   hasCategoryContent,
   type BuilderTemplate,
 } from "@/app/editor/layout/src/data/templateFlow";
-
-const pageFilters = [
-  "All Pages",
-  "Single Page Website",
-  "Multiple Pages Website",
-];
 
 type TemplatePreviewProps = {
   selectedCategory: string;
@@ -40,21 +34,45 @@ export default function Templatepreview({
   onClosePreview,
 }: TemplatePreviewProps) {
   const router = useRouter();
-  const [selectedFilter, setSelectedFilter] = useState("All Pages");
   const [search, setSearch] = useState("");
-  const [open, setOpen] = useState(false);
   const [previewScale, setPreviewScale] = useState(0.45);
   const [previewViewportHeight, setPreviewViewportHeight] = useState(900);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const previewScreenRef = useRef<HTMLDivElement>(null);
+  const bannerLayoutOptions = useMemo(
+    () => getCategoryLayoutOptions(selectedCategory, "Banner"),
+    [selectedCategory],
+  );
+  const availableTemplates = useMemo(() => {
+    return selectedCategory
+      ? getTemplatesForCategory(selectedCategory)
+      : [];
+  }, [selectedCategory]);
+  const bannerLayoutByTemplateId = useMemo(
+    () =>
+      new Map(
+        availableTemplates.map((template) => [
+          template.id,
+          bannerLayoutOptions.find(
+            (layout) =>
+              layout.componentVariant ===
+              getTemplateComponentVariant(
+                selectedCategory,
+                template.id,
+                "Banner",
+              ),
+          ),
+        ]),
+      ),
+    [availableTemplates, bannerLayoutOptions, selectedCategory],
+  );
   const previewTemplate = useMemo(
     () =>
       showPreview
-        ? (getTemplatesForCategory(selectedCategory).find(
+        ? (availableTemplates.find(
           (item) => item.id === selectedTemplate,
         ) ?? null)
         : null,
-    [selectedCategory, selectedTemplate, showPreview],
+    [availableTemplates, selectedTemplate, showPreview],
   );
 
   useEffect(() => {
@@ -81,49 +99,36 @@ export default function Templatepreview({
     return () => observer.disconnect();
   }, [previewTemplate]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const filteredTemplates = useMemo(() => {
     const query = search.trim().toLowerCase();
-    const sourceTemplates = selectedCategory
-      ? getTemplatesForCategory(selectedCategory)
-      : [];
+    const sourceTemplates = availableTemplates;
 
     return sourceTemplates.filter((item) => {
-      const matchesFilter =
-        selectedFilter === "All Pages" || item.type === selectedFilter;
+      const displayTitle =
+        bannerLayoutByTemplateId.get(item.id)?.name ?? item.title;
       const matchesSearch =
         !query ||
-        `${selectedCategory} ${item.title}`.toLowerCase().includes(query) ||
-        item.title.toLowerCase().includes(query) ||
+        `${selectedCategory} ${displayTitle}`.toLowerCase().includes(query) ||
+        displayTitle.toLowerCase().includes(query) ||
         selectedCategory.toLowerCase().includes(query) ||
-        item.type.toLowerCase().includes(query) ||
         item.id.toLowerCase().includes(query);
 
-      return matchesFilter && matchesSearch;
+      return matchesSearch;
     });
-  }, [search, selectedCategory, selectedFilter]);
+  }, [
+    availableTemplates,
+    bannerLayoutByTemplateId,
+    search,
+    selectedCategory,
+  ]);
 
   const visibleTemplates = filteredTemplates;
 
   const previewFeatures = previewTemplate
     ? [
-      `${previewTemplate.prebuilt_pages}+ Pre-built Pages`,
-      "Same category content across templates",
-      "Different section component combinations",
+      `${previewTemplate.componentCount} mapped sections`,
+      "Components selected by this category template",
+      "Content loaded from the selected category",
       "Editable header, banner, about, products, and footer",
       "Mobile-first modular structure",
     ]
@@ -133,11 +138,6 @@ export default function Templatepreview({
       (template) => template.id === previewTemplate.id,
     )
     : -1;
-  const handleFilterSelect = (title: string) => {
-    setSelectedFilter(title);
-    setOpen(false);
-  };
-
   const clearSearch = () => {
     setSearch("");
   };
@@ -153,7 +153,12 @@ export default function Templatepreview({
   };
 
   const getTemplateDisplayTitle = (template: BuilderTemplate) =>
-    selectedCategory ? `${selectedCategory} ${template.title}` : template.title;
+    bannerLayoutByTemplateId.get(template.id)?.name ?? template.title;
+
+  const getTemplateComponentName = (template: BuilderTemplate) =>
+    bannerLayoutByTemplateId.get(template.id)?.componentVariant ??
+    getTemplateComponentVariant(selectedCategory, template.id, "Banner") ??
+    "No banner";
 
   const selectPreviewTemplate = (template: BuilderTemplate) => {
     onTemplateChange(template.id);
@@ -190,7 +195,7 @@ export default function Templatepreview({
             </div>
           </div>
 
-          <div className="mt-5 flex shrink-0 flex-col gap-3 md:flex-row">
+          <div className="mt-5 flex shrink-0">
             <div className="relative flex flex-1 items-center">
               <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 sm:left-5" />
 
@@ -216,37 +221,6 @@ export default function Templatepreview({
               )}
             </div>
 
-            <div ref={dropdownRef} className="relative shrink-0">
-              <button
-                type="button"
-                onClick={() => setOpen(!open)}
-                className={`flex h-11 w-full cursor-pointer items-center justify-between gap-4 rounded-lg border px-4 text-sm font-medium transition md:w-[220px] ${open
-                  ? "border-[#315ff4] bg-blue-50 text-[#315ff4] ring-3 ring-blue-100/70"
-                  : "border-slate-200 bg-white text-[#315ff4] hover:border-blue-300"
-                  }`}
-              >
-                <span className="truncate">{selectedFilter}</span>
-                {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-              </button>
-
-              {open && (
-                <div className="absolute right-0 z-10 mt-2 w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_18px_45px_rgba(25,60,150,.16)] md:w-[220px]">
-                  {pageFilters.map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => handleFilterSelect(item)}
-                      className={`block w-full cursor-pointer px-5 py-3.5 text-left text-sm font-semibold transition hover:bg-blue-50 hover:text-[#315ff4] ${selectedFilter === item
-                        ? "bg-blue-50 text-[#315ff4]"
-                        : "text-slate-700"
-                        }`}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
           </div>
 
           {previewTemplate &&
@@ -314,11 +288,6 @@ export default function Templatepreview({
                             {getTemplateDisplayTitle(previewTemplate)}
                           </h3>
                         </div>
-                        <span className="absolute right-3 top-3 rounded-full bg-blue-50 px-2.5 py-1 text-[9px] font-bold uppercase text-[#315ff4] lg:right-12">
-                          {previewTemplate.type === "Single Page Website"
-                            ? "Single"
-                            : "Multiple"}
-                        </span>
                       </div>
 
                       <div className="mt-4 min-h-0 flex-1 border-t border-blue-100 pt-3">
@@ -396,7 +365,7 @@ export default function Templatepreview({
                                   }`}
                               >
                                 <Image
-                                  src={item.previewimage ?? item.image}
+                                  src={item.image}
                                   alt={getTemplateDisplayTitle(item)}
                                   width={320}
                                   height={120}
@@ -407,11 +376,6 @@ export default function Templatepreview({
                                     <Check size={11} strokeWidth={3} />
                                   </span>
                                 )}
-                                <span className="absolute right-2.5 top-2.5 rounded-md bg-white/90 px-1.5 py-0.5 text-[7px] font-bold uppercase text-[#315ff4] backdrop-blur">
-                                  {item.type === "Single Page Website"
-                                    ? "Single"
-                                    : "Multiple"}
-                                </span>
                               </button>
                             );
                           })}
@@ -456,11 +420,6 @@ export default function Templatepreview({
                         </span>
                       )}
 
-                      <span className="absolute right-2 top-2 rounded-md bg-blue-50 px-2 py-1 text-[8px] font-bold uppercase tracking-wider text-blue-600">
-                        {item.type === "Single Page Website"
-                          ? "Single"
-                          : "Multiple"}
-                      </span>
                     </div>
 
                     <div className="px-1 pb-1 pt-3">
@@ -469,7 +428,7 @@ export default function Templatepreview({
                       </h3>
 
                       <p className="mt-0.5 truncate text-[10px] font-medium uppercase tracking-[.08em] text-slate-400">
-                        Direction {item.numericId} · {selectedCategory}
+                        {getTemplateComponentName(item)}
                       </p>
                     </div>
                   </button>

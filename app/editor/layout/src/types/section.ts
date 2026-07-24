@@ -31,18 +31,6 @@ export type SocialLinkData = {
   href: string;
 };
 
-export type TopbarData = {
-  topbarBackgroundType?: "solid" | "gradient";
-  topbarBackgroundColor?: string;
-  topbarGradientColor?: string;
-  topbarTextColor?: string;
-  text?: string[];
-  phone?: string;
-  email?: string;
-  location?: string;
-  socialLinks?: SocialLinkData[];
-};
-
 export type ButtonData = {
   label: string;
   href: string;
@@ -87,9 +75,15 @@ export type ProductCardData = {
   category: string;
   desc: string;
   image: string;
+  price?: string;
   alt?: string;
   imageTitle?: string;
   link?: string;
+};
+
+export type StatItemData = {
+  label: string;
+  value: string;
 };
 
 export type WhyChooseUsItemData = {
@@ -195,6 +189,8 @@ export type SectionData = {
   buttonBackground?: string;
   buttonColor?: string;
 
+  highlightedText?: string;
+
   length?: number;
   sideImage?: string;
   sideImageTitle?: string;
@@ -212,6 +208,7 @@ export type SectionData = {
   productSlides?: ProductSlideData[];
   productSectionTitle?: string;
   productItems?: ProductCardData[];
+  stats?: StatItemData[];
 
   whyChooseUsItems?: WhyChooseUsItemData[];
   galleryItems?: GalleryItemData[]; 

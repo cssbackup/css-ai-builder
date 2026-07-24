@@ -1,17 +1,49 @@
+import Image from "next/image";
+import Link from "next/link";
+
 import type { SectionProps } from "../../../types/section";
-import {
-  BannerButtons,
-  BannerMedia,
-  getBannerStyle,
-} from "./categoryBannerShared";
 
 export default function SchoolBanner1({ data = {} }: SectionProps) {
+  const background =
+    data.bannerBackgroundMode === "gradient"
+      ? `linear-gradient(135deg, ${data.bannerBackgroundColor ?? "#143b65"}, ${data.bannerGradientColor ?? "#143b65"})`
+      : data.bannerBackgroundMode === "solid"
+        ? (data.bannerBackgroundColor ?? "#143b65")
+        : "#143b65";
+
   return (
     <section
-      className="relative flex w-full items-center overflow-hidden bg-[#143b65] px-5 py-16 sm:px-10"
-      style={getBannerStyle(data, "#143b65")}
+      className="relative flex w-full items-center overflow-hidden px-5 py-16 sm:px-10"
+      style={{ minHeight: `${data.bannerHeight ?? 70}dvh`, background }}
     >
-      <BannerMedia data={data} className="object-cover" />
+      {data.bannerBackgroundMode === "video" && data.backgroundVideo ? (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster={data.backgroundImage}
+          data-editor-media
+          data-editor-media-type="video"
+          data-editor-media-src={data.backgroundVideo}
+          className="absolute inset-0 h-full w-full object-cover"
+        >
+          <source src={data.backgroundVideo} />
+        </video>
+      ) : data.backgroundImage ? (
+        <Image
+          src={data.backgroundImage}
+          alt={data.backgroundImageTitle ?? data.title ?? ""}
+          data-editor-media
+          data-editor-media-type="image"
+          data-editor-media-src={data.backgroundImage}
+          fill
+          priority
+          sizes="100vw"
+          unoptimized={data.backgroundImage.startsWith("data:")}
+          className="object-cover"
+        />
+      ) : null}
       <div className="absolute inset-0 bg-[#0e3157]/55" />
       <div className="absolute -left-16 -top-20 h-52 w-52 rounded-full bg-[#ffd45c]/90" />
       <div className="absolute -bottom-16 right-[8%] h-40 w-40 rounded-full bg-[#ef6b5b]/90" />
@@ -27,13 +59,23 @@ export default function SchoolBanner1({ data = {} }: SectionProps) {
           <p className="mt-6 max-w-xl text-base leading-7 text-slate-600">
             {data.desc}
           </p>
-          <div className="mt-8">
-            <BannerButtons
-              data={data}
-              primaryClassName="inline-flex rounded-full bg-[#ef6b5b] px-6 py-3 text-sm font-bold text-white"
-              secondaryClassName="inline-flex rounded-full border-2 border-[#143b65] px-6 py-3 text-sm font-bold text-[#143b65]"
-            />
-          </div>
+          {data.buttons?.length ? (
+            <div className="mt-8 flex flex-wrap gap-3">
+              {data.buttons.map((button, index) => (
+                <Link
+                  key={`${button.label}-${index}`}
+                  href={button.href}
+                  className={
+                    button.variant === "secondary"
+                      ? "inline-flex rounded-full border-2 border-[#143b65] px-6 py-3 text-sm font-bold text-[#143b65]"
+                      : "inline-flex rounded-full bg-[#ef6b5b] px-6 py-3 text-sm font-bold text-white"
+                  }
+                >
+                  {button.label}
+                </Link>
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
     </section>
