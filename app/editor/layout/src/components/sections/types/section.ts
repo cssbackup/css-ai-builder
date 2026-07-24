@@ -1,5 +1,3 @@
-import type { ComponentType } from "react";
-
 export type SectionType =
   | "banner"
   | "about"
@@ -109,8 +107,6 @@ export type LayoutComponentProps = {
   blocks?: Block[];
   data?: Record<string, unknown>;
 };
-
-export type LayoutComponent = ComponentType<LayoutComponentProps>;
 
 export const getBlocksByType = <T extends Block["type"]>(
   blocks: Block[],

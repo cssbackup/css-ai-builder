@@ -167,6 +167,21 @@ export const selectedConfig: SelectedConfig = {
       },
     },
     {
+      type: "MarqueeSlide",
+      variant: "MarqueeSlide-1",
+      data: {
+        "MarqueeSlide-1": {
+          "text": [
+            "NIKE",
+            "ADDIDAS",
+            "RED-TAPE",
+            "ALLEN-SOLLY",
+            "PUMA · ZUDIO · BEWAKOF"
+          ]
+        },
+      }
+    },
+    {
       type: "About",
       variant: "About-1",
       data: {

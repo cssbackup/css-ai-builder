@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { ArrowUp, MessageCircle, Phone } from "lucide-react";
 import {
   PreviewProvider,
   usePreview,
 } from "../../editor/layout/src/components/context/PreviewContext";
-import { sectionRegistry } from "../../editor/layout/src/lib/sectionRegistry";
+import { getSectionComponent } from "../../editor/layout/src/lib/sectionRegistry";
 import { SectionData, SectionItem } from "../../editor/layout/src/types/section";
 
 type PublishedPageLink = {
@@ -22,7 +22,6 @@ type PublishedSitePayload = {
   category: string;
   pageLinks: PublishedPageLink[];
   sections: SectionItem[];
-  templateVariables: Record<string, string>;
   publishedAt: string;
 };
 
@@ -148,12 +147,13 @@ function PublishedSiteContent() {
   }
 
   return (
-    <main
-      className="min-h-screen w-full overflow-x-hidden [overflow-wrap:anywhere]"
-      style={payload.templateVariables as React.CSSProperties}
-    >
+    <main className="min-h-screen w-full overflow-x-hidden [overflow-wrap:anywhere]">
       {visibleSections.map((section) => {
-        const Component = sectionRegistry[section.variant];
+        const Component = getSectionComponent(
+          payload.category,
+          section.type,
+          section.variant,
+        );
         const defaultVariant = `${section.type}-1`;
         const variantData =
           section.data?.[section.variant] ?? section.data?.[defaultVariant];

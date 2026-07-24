@@ -10,7 +10,8 @@ import {
   SectionData,
   SocialLinkData,
 } from "../../types/section";
-import { sectionRegistry } from "../../lib/sectionRegistry";
+import { getSectionComponent } from "../../lib/sectionRegistry";
+import { getCategoryLayoutOptions } from "../../data/templateFlow";
 import { PageLink, usePreview } from "../context/PreviewContext";
 
 type MenuItem = {
@@ -33,6 +34,7 @@ type FooterBackgroundType = "solid" | "gradient";
 type StickySectionType = "scroll" | "sticky";
 type BannerBackgroundMode = "image" | "video" | "solid" | "gradient";
 type EditSectionModalProps = {
+  category: string;
   sectionId: string;
   sectionType: string;
   sections: SectionItem[];
@@ -44,28 +46,6 @@ type EditSectionModalProps = {
     newData: Record<string, SectionData>,
   ) => void;
 };
-
-const headerLayouts = [
-  { id: "Header-1", name: "Header 1" },
-  { id: "Header-2", name: "Header 2" },
-];
-
-const topbarLayouts = [
-  { id: "Topbar-1", name: "Topbar 1" },
-  { id: "Topbar-2", name: "Topbar 2" },
-];
-
-const bannerLayouts = [
-  { id: "Banner-1", name: "Image Banner" },
-  { id: "Banner-2", name: "Video Banner" },
-  { id: "Banner-3", name: "Image Slider" },
-  { id: "Banner-4", name: "Video Slider" },
-];
-
-const aboutLayouts = [
-  { id: "About-1", name: "About 1" },
-  { id: "About-2", name: "About 2" },
-];
 
 const aboutPageLayouts = [
   { id: "AboutPage-1", name: "About Page" },
@@ -81,56 +61,6 @@ const contactPageLayouts = [
   { id: "ContactPage-1", name: "Contact Page" },
   { id: "ContactPage-2", name: "Contact Page Two" },
 ];
-
-const productLayouts = [
-  { id: "Product-1", name: "Product 1" },
-  { id: "Product-2", name: "Product 2" },
-  { id: "Product-3", name: "Product 3" },
-];
-
-const formDetailLayouts = [
-  { id: "FormDetail-1", name: "Form 1" },
-  { id: "FormDetail-2", name: "Form 2" },
-  { id: "FormDetail-3", name: "Form 3" },
-  { id: "FormDetail-4", name: "Form 4" },
-];
-
-const footerLayouts = [{ id: "Footer-1", name: "Footer 1" }];
-
-const layoutsBySection: Record<string, { id: string; name: string }[]> = {
-  Topbar: topbarLayouts,
-  Header: headerLayouts,
-  Banner: bannerLayouts,
-  About: aboutLayouts,
-  Product: productLayouts,
-  FormDetail: formDetailLayouts,
-  Footer: footerLayouts,
-  WhyChooseUs: [
-    { id: "WhyChooseUs-1", name: "Why Choose Us 1" },
-    { id: "WhyChooseUs-2", name: "Why Choose Us 2" },
-    { id: "WhyChooseUs-3", name: "Why Choose Us 3" },
-    { id: "WhyChooseUs-4", name: "Why Choose Us 4" },
-  ],
-  Gallery: [
-    { id: "Gallery-1", name: "Gallery 1" },
-    { id: "Gallery-2", name: "Gallery 2" },
-    { id: "Gallery-3", name: "Gallery 3" },
-    { id: "Gallery-4", name: "Gallery 4" },
-    { id: "Gallery-5", name: "Gallery 5" },
-    { id: "Gallery-6", name: "Gallery 6" },
-  ],
-  FAQ: [
-    { id: "FAQ-1", name: "FAQ 1" },
-    { id: "FAQ-2", name: "FAQ 2" },
-    { id: "FAQ-3", name: "FAQ 3" },
-    { id: "FAQ-4", name: "FAQ 4" },
-  ],
-  Testimonial: [
-    { id: "Testimonial-1", name: "Our Clients 1" },
-    { id: "Testimonial-2", name: "Our Clients 2" },
-    { id: "Testimonial-3", name: "Our Clients 3" },
-  ],
-};
 
 const pageLayoutsBySection: Record<string, { id: string; name: string }[]> = {
   About: aboutPageLayouts,
@@ -364,12 +294,24 @@ const getVisibleSocialLinks = (
   socialLinks: { label: SocialLinkData["label"]; href: string }[] = [],
 ) => socialLinks.slice(0, MAX_TOPBAR_SOCIAL_LINKS);
 
-const SelectedLayoutBadge = ({ active }: { active: boolean }) =>
-  active ? (
-    <span className="absolute right-3 top-3 z-20 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-emerald-500 text-white shadow-lg">
-      <Check size={16} strokeWidth={3} />
+const SelectedLayoutBadge = ({
+  active,
+  title,
+}: {
+  active: boolean;
+  title: string;
+}) => (
+  <>
+    {active && (
+      <span className="absolute right-3 top-3 z-20 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-emerald-500 text-white shadow-lg">
+        <Check size={16} strokeWidth={3} />
+      </span>
+    )}
+    <span className="absolute bottom-2 left-2 right-2 z-20 truncate rounded-lg bg-white/95 px-3 py-2 text-xs font-semibold text-slate-800 shadow-sm backdrop-blur">
+      {title}
     </span>
-  ) : null;
+  </>
+);
 
 const MediaUploadPreview = ({
   src,
@@ -848,6 +790,7 @@ const VisibilityButton = ({ hidden, onClick }: { hidden: boolean; onClick: () =>
 );
 
 export default function EditSectionModal({
+  category,
   sectionId,
   sectionType,
   sections,
@@ -1061,11 +1004,15 @@ export default function EditSectionModal({
     (activeSectionType === "Topbar" && activeTab === "Topbar Layout") ||
     (activeSectionType === "Header" && activeTab === "Header Layout") ||
     (activeSectionType === "Footer" && activeTab === "Footer Layout");
-  const sectionLayoutOptions = layoutsBySection[activeSectionType] ?? [];
+  const categoryLayoutOptions = getCategoryLayoutOptions(
+    category,
+    activeSectionType,
+  );
   const pageLayoutOptions = pageLayoutsBySection[activeSectionType] ?? [];
-  const layoutOptions = isPageSection
-    ? [...sectionLayoutOptions, ...pageLayoutOptions]
-    : sectionLayoutOptions;
+  const sectionLayoutOptions = isPageSection
+    ? pageLayoutOptions
+    : categoryLayoutOptions;
+  const layoutOptions = sectionLayoutOptions;
   const visibleLayoutOptions =
     activeSectionType === "Gallery" && layoutOptions.length > 4
       ? Array.from(
@@ -1075,8 +1022,8 @@ export default function EditSectionModal({
         )
       : layoutOptions;
   const activeAboutLayouts = isPageSection
-    ? [...aboutLayouts, ...aboutPageLayouts]
-    : aboutLayouts;
+    ? aboutPageLayouts
+    : categoryLayoutOptions;
   const generationText = bannerGenerationType
     ? `generating ${bannerGenerationType}`
     : layoutGenerationActive
@@ -2338,7 +2285,7 @@ export default function EditSectionModal({
                     onTextColorChange={updateTopbarTextColor}
                   />
 
-                  {topbarLayouts.map((layout) => {
+                  {sectionLayoutOptions.map((layout) => {
                     const isActive = currentSection?.variant === layout.id;
 
                     return (
@@ -2350,7 +2297,7 @@ export default function EditSectionModal({
                           isActive ? "border-gray-400" : "border-gray-200"
                         }`}
                       >
-                        <SelectedLayoutBadge active={isActive} />
+                        <SelectedLayoutBadge active={isActive} title={layout.name} />
                         <div
                           className="flex h-20 items-center justify-between px-5"
                           style={{
@@ -2667,7 +2614,7 @@ export default function EditSectionModal({
                     onTextColorChange={updateHeaderTextColor}
                   />
 
-                  {headerLayouts.map((layout) => {
+                  {sectionLayoutOptions.map((layout) => {
                     const isActive = currentSection?.variant === layout.id;
 
                     return (
@@ -2679,7 +2626,7 @@ export default function EditSectionModal({
                           isActive ? "border-gray-400" : "border-gray-200"
                         }`}
                       >
-                        <SelectedLayoutBadge active={isActive} />
+                        <SelectedLayoutBadge active={isActive} title={layout.name} />
                         <div className="h-20 bg-gray-100">
                           {layout.id === "Header-1" && (
                             <div className="h-full">
@@ -3312,7 +3259,7 @@ export default function EditSectionModal({
             {activeSectionType === "Banner" &&
               activeTab === "Banner Layout" && (
                 <div className="space-y-4">
-                  {bannerLayouts.map((layout) => {
+                  {sectionLayoutOptions.map((layout) => {
                     const isActive = currentSection?.variant === layout.id;
 
                     return (
@@ -3324,7 +3271,7 @@ export default function EditSectionModal({
                           isActive ? "border-gray-400" : "border-gray-200"
                         }`}
                       >
-                        <SelectedLayoutBadge active={isActive} />
+                        <SelectedLayoutBadge active={isActive} title={layout.name} />
                         <div className="h-28 bg-gray-100">
                           {layout.id === "Banner-1" && (
                             <div className="relative flex h-full items-center overflow-hidden bg-slate-900 px-5">
@@ -3456,7 +3403,7 @@ export default function EditSectionModal({
                         isActive ? "border-gray-400" : "border-gray-200"
                       }`}
                     >
-                      <SelectedLayoutBadge active={isActive} />
+                      <SelectedLayoutBadge active={isActive} title={layout.name} />
                       <div className="h-32 bg-gray-100">
                         {layout.id === "AboutPage-1" && (
                           <div className="grid h-full grid-cols-[1.1fr_0.9fr] gap-3 bg-white p-4">
@@ -3547,7 +3494,7 @@ export default function EditSectionModal({
             {activeSectionType === "Product" &&
               activeTab === "Product Layout" && (
                 <div className="space-y-4">
-                  {productLayouts.map((layout) => {
+                  {sectionLayoutOptions.map((layout) => {
                     const isActive = currentSection?.variant === layout.id;
 
                     return (
@@ -3559,7 +3506,7 @@ export default function EditSectionModal({
                           isActive ? "border-gray-400" : "border-gray-200"
                         }`}
                       >
-                        <SelectedLayoutBadge active={isActive} />
+                        <SelectedLayoutBadge active={isActive} title={layout.name} />
                         <div className="h-32 bg-gray-100">
                           {layout.id === "Product-1" && (
                             <div className="grid h-full grid-cols-[1fr_1.4fr_1fr] items-center gap-3 bg-blue-50 px-5">
@@ -3614,7 +3561,7 @@ export default function EditSectionModal({
             {activeSectionType === "FormDetail" &&
               activeTab === "Form Layout" && (
                 <div className="space-y-4">
-                  {formDetailLayouts.map((layout) => {
+                  {sectionLayoutOptions.map((layout) => {
                     const isActive = currentSection?.variant === layout.id;
 
                     return (
@@ -3626,7 +3573,7 @@ export default function EditSectionModal({
                           isActive ? "border-gray-400" : "border-gray-200"
                         }`}
                       >
-                        <SelectedLayoutBadge active={isActive} />
+                        <SelectedLayoutBadge active={isActive} title={layout.name} />
                         <div className="grid h-32 grid-cols-[1fr_1fr] overflow-hidden bg-[#dfecea] p-3">
                           {layout.id === "FormDetail-1" ? (
                             <>
@@ -3661,9 +3608,6 @@ export default function EditSectionModal({
                               </div>
                             </>
                           )}
-                        </div>
-                        <div className="px-4 py-3 text-sm font-semibold text-slate-800">
-                          {layout.name}
                         </div>
                       </button>
                     );
@@ -3879,7 +3823,13 @@ export default function EditSectionModal({
 
                   {visibleLayoutOptions.map((layout) => {
                     const isActive = currentSection?.variant === layout.id;
-                    const Component = sectionRegistry[layout.id];
+                    const Component = getSectionComponent(
+                      category,
+                      activeSectionType,
+                      layout.id,
+                    );
+                    const layoutData =
+                      currentSection?.data?.[layout.id] ?? activeGenericData;
 
                     return (
                       <button
@@ -3890,20 +3840,17 @@ export default function EditSectionModal({
                           isActive ? "border-gray-400" : "border-gray-200"
                         }`}
                       >
-                        <SelectedLayoutBadge active={isActive} />
+                        <SelectedLayoutBadge active={isActive} title={layout.name} />
                         <div className="h-36 overflow-hidden bg-white">
                           {Component ? (
                             <div className="h-[520px] w-[1200px] origin-top-left scale-[0.32]">
-                              <Component data={activeGenericData} />
+                              <Component data={layoutData} />
                             </div>
                           ) : (
                             <div className="flex h-full items-center justify-center text-sm font-semibold">
                               {layout.name}
                             </div>
                           )}
-                        </div>
-                        <div className="px-4 py-3 text-sm font-semibold text-slate-800">
-                          {layout.name}
                         </div>
                       </button>
                     );
@@ -3926,7 +3873,7 @@ export default function EditSectionModal({
                     onTextColorChange={updateFooterTextColor}
                   />
 
-                  {footerLayouts.map((layout) => {
+                  {sectionLayoutOptions.map((layout) => {
                     const isActive = currentSection?.variant === layout.id;
 
                     return (
@@ -3938,7 +3885,7 @@ export default function EditSectionModal({
                           isActive ? "border-gray-400" : "border-gray-200"
                         }`}
                       >
-                        <SelectedLayoutBadge active={isActive} />
+                        <SelectedLayoutBadge active={isActive} title={layout.name} />
                         <div
                           className="grid h-32 grid-cols-[1.2fr_1fr_1fr_1fr] gap-4 p-4"
                           style={{

@@ -73,28 +73,28 @@ const invoices: {
   plan: string;
   status: string;
 }[] = [
-  {
-    id: "INV-2026-001",
-    date: "July 15, 2026",
-    amount: "$29.00 USD",
-    plan: "Starter",
-    status: "Paid",
-  },
-  {
-    id: "INV-2026-002",
-    date: "June 15, 2026",
-    amount: "$29.00 USD",
-    plan: "Starter",
-    status: "Paid",
-  },
-  {
-    id: "INV-2026-003",
-    date: "May 15, 2026",
-    amount: "$49.00 USD",
-    plan: "Professional",
-    status: "Pending",
-  }
-];
+    {
+      id: "INV-2026-001",
+      date: "July 15, 2026",
+      amount: "$29.00 USD",
+      plan: "Starter",
+      status: "Paid",
+    },
+    {
+      id: "INV-2026-002",
+      date: "June 15, 2026",
+      amount: "$29.00 USD",
+      plan: "Starter",
+      status: "Paid",
+    },
+    {
+      id: "INV-2026-003",
+      date: "May 15, 2026",
+      amount: "$49.00 USD",
+      plan: "Professional",
+      status: "Pending",
+    }
+  ];
 
 const emptyCardForm: CardForm = {
   holder: "",

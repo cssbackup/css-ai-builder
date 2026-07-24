@@ -1,54 +1,169 @@
 import { selectedConfig } from "./selectedConfig";
 import categoryContentJson from "./categoryContent.json";
 import type { SectionData, SectionItem, SelectedConfig } from "../types/section";
-
-export type CategoryKey = string;
+import { getCategorySectionVariant } from "../lib/categorySectionVariant";
 
 export type BuilderTemplate = {
   id: string;
-  numericId: number;
   title: string;
-  type: "Single Page Website" | "Multiple Pages Website";
   image: string;
-  previewimage?: string;
-  preview_description: string;
-  prebuilt_pages: number;
-  sectionVariants: Record<string, string>;
-  variables?: Record<string, string>;
+  componentCount: number;
 };
 
 type SectionContentMap = Partial<Record<string, Record<string, unknown>>>;
+type TemplateComponentMap = Record<string, string | null>;
 
 type CategoryContentRecord = {
-  templates: BuilderTemplate[];
   common: SectionContentMap;
   categories: Record<
     string,
     {
-      templates: string[];
+      templateComponents: Record<string, TemplateComponentMap>;
       sections: SectionContentMap;
     }
   >;
 };
 
-const categoryContent = categoryContentJson as CategoryContentRecord;
-export const builderTemplates = categoryContent.templates;
+const categoryContent =
+  categoryContentJson as unknown as CategoryContentRecord;
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" &&
+  value !== null &&
+  !Array.isArray(value);
 
 export const getCategoryNamesWithContent = () =>
   Object.keys(categoryContent.categories);
+
+export type CategoryLayoutOption = {
+  id: string;
+  name: string;
+  componentVariant: string;
+};
+
+const getCategoryVariantTitle = (
+  variantData: Record<string, unknown>,
+  fallback: string,
+) => {
+  const preferredFields = [
+    "title",
+    "productSectionTitle",
+    "logo",
+    "pretitle",
+    "desc",
+  ];
+
+  for (const field of preferredFields) {
+    if (typeof variantData[field] === "string" && variantData[field].trim()) {
+      return variantData[field];
+    }
+  }
+
+  const text = variantData.text;
+
+  return Array.isArray(text) && typeof text[0] === "string" && text[0].trim()
+    ? text[0]
+    : fallback;
+};
+
+export const getCategoryLayoutOptions = (
+  category: string,
+  sectionType: string,
+): CategoryLayoutOption[] => {
+  const categorySectionType =
+    sectionType === "MarqueeSlide" ? "Marquee" : sectionType;
+  const categorySection =
+    categoryContent.categories[category]?.sections?.[categorySectionType];
+  const variants =
+    isRecord(categorySection) && isRecord(categorySection.variants)
+      ? categorySection.variants
+      : undefined;
+
+  if (!variants) return [];
+
+  return Object.entries(variants).map(
+    ([componentVariant, variantData], index) => {
+      const match = componentVariant.match(/(\d+)$/);
+      const layoutNumber = match ? Number(match[1]) : index + 1;
+      const content = isRecord(variantData) ? variantData : {};
+
+      return {
+        id: `${sectionType}-${layoutNumber}`,
+        name: getCategoryVariantTitle(content, componentVariant),
+        componentVariant,
+      };
+    },
+  );
+};
 
 export const hasCategoryContent = (category: string) =>
   Boolean(categoryContent.categories[category]);
 
 export const getTemplateIdsForCategory = (category: string) =>
-  categoryContent.categories[category]?.templates ?? [];
+  Object.keys(
+    categoryContent.categories[category]?.templateComponents ?? {},
+  );
 
 export const getTemplatesForCategory = (category: string) => {
-  const templateIds = getTemplateIdsForCategory(category);
+  const categoryRecord = categoryContent.categories[category];
 
-  return builderTemplates.filter((template) =>
-    templateIds.includes(template.id),
+  if (!categoryRecord) return [];
+
+  return Object.entries(categoryRecord.templateComponents).map(
+    ([id, components]) => {
+      const bannerComponent = components.Banner;
+      const bannerSection = categoryRecord.sections.Banner;
+      const bannerVariants =
+        isRecord(bannerSection) && isRecord(bannerSection.variants)
+          ? bannerSection.variants
+          : {};
+      const bannerData =
+        bannerComponent && isRecord(bannerVariants[bannerComponent])
+          ? bannerVariants[bannerComponent]
+          : {};
+      const bannerSlides = Array.isArray(bannerData.bannerSlides)
+        ? bannerData.bannerSlides
+        : [];
+      const firstSlide = isRecord(bannerSlides[0]) ? bannerSlides[0] : {};
+      const image =
+        (typeof bannerData.backgroundImage === "string" &&
+          bannerData.backgroundImage) ||
+        (typeof firstSlide.image === "string" && firstSlide.image) ||
+        "/bg1.jpg";
+
+      return {
+        id,
+        title: getCategoryVariantTitle(
+          bannerData,
+          bannerComponent ?? `${category} ${id}`,
+        ),
+        image,
+        componentCount: Object.values(components).filter(
+          (component) => component !== null,
+        ).length,
+      };
+    },
   );
+};
+
+export const getTemplateComponentVariant = (
+  category: string,
+  templateId: string,
+  sectionType: string,
+): string | null => {
+  const sectionKey = sectionType === "MarqueeSlide" ? "Marquee" : sectionType;
+  const templateComponents =
+    categoryContent.categories[category]?.templateComponents?.[templateId];
+
+  return templateComponents?.[sectionKey] ?? null;
+};
+
+const getTemplateDataVariant = (
+  sectionType: string,
+  componentVariant: string,
+) => {
+  const match = componentVariant.match(/(\d+)$/);
+
+  return match ? `${sectionType}-${match[1]}` : `${sectionType}-1`;
 };
 
 export const addableSectionCards = [
@@ -122,7 +237,7 @@ const applyBannerVariantDefaults = (
   if (variant === "Banner-1") {
     return {
       ...data,
-      bannerBackgroundMode: "image",
+      bannerBackgroundMode: data.bannerBackgroundMode ?? "image",
       backgroundImage: sourceImage,
     };
   }
@@ -130,7 +245,7 @@ const applyBannerVariantDefaults = (
   if (variant === "Banner-2") {
     return {
       ...data,
-      bannerBackgroundMode: "video",
+      bannerBackgroundMode: data.bannerBackgroundMode ?? "video",
       backgroundVideo: sourceVideo,
       backgroundImage: sourceImage,
     };
@@ -173,12 +288,24 @@ const mergeCategoryData = (
   section: SectionItem,
   category: string,
 ): SectionItem => {
+  const categorySectionType =
+    section.type === "MarqueeSlide" ? "Marquee" : section.type;
+  const categorySection =
+    categoryContent.categories[category]?.sections?.[categorySectionType] ?? {};
+  const nestedVariants = isRecord(categorySection.variants)
+    ? categorySection.variants
+    : undefined;
+  const categorySectionData = Object.fromEntries(
+    Object.entries(categorySection).filter(
+      ([key]) => key !== "variants",
+    ),
+  );
   const sectionContent = {
     ...categoryContent.common[section.type],
-    ...categoryContent.categories[category]?.sections?.[section.type],
+    ...categorySectionData,
   };
 
-  if (!Object.keys(sectionContent).length) {
+  if (!Object.keys(sectionContent).length && !nestedVariants) {
     const emptyData = Object.fromEntries(
       Object.keys(section.data).map((variant) => [variant, {} as SectionData]),
     );
@@ -186,13 +313,40 @@ const mergeCategoryData = (
     return { ...section, data: emptyData };
   }
 
+  const categoryVariantKeys = nestedVariants
+    ? Object.keys(nestedVariants).map((categoryVariant, index) => {
+        const match = categoryVariant.match(/(\d+)$/);
+        const layoutNumber = match ? Number(match[1]) : index + 1;
+
+        return `${section.type}-${layoutNumber}`;
+      })
+    : [];
+  const availableDataVariants = Array.from(
+    new Set([...Object.keys(section.data), ...categoryVariantKeys]),
+  );
   const nextData = Object.fromEntries(
-    Object.keys(section.data).map((variant) => [
-      variant,
-      section.type === "Banner"
-        ? applyBannerVariantDefaults(variant, { ...sectionContent })
-        : { ...sectionContent },
-    ]),
+    availableDataVariants.map((variant) => {
+      const categoryVariant = getCategorySectionVariant(
+        category,
+        section.type,
+        variant,
+      );
+      const variantContent =
+        nestedVariants && isRecord(nestedVariants[categoryVariant])
+          ? nestedVariants[categoryVariant]
+          : {};
+      const mergedContent = {
+        ...sectionContent,
+        ...variantContent,
+      };
+
+      return [
+        variant,
+        section.type === "Banner"
+          ? applyBannerVariantDefaults(variant, mergedContent)
+          : mergedContent,
+      ];
+    }),
   );
 
   return { ...section, data: nextData };
@@ -508,56 +662,42 @@ export const createCustomPageSection = (
   };
 };
 
-export const getBuilderTemplate = (templateId?: string | null) =>
-  builderTemplates.find((template) => template.id === templateId) ??
-  builderTemplates[0];
-
-export const getTemplateVariables = (templateId?: string | null) => {
-  const template = getBuilderTemplate(templateId);
-  const variables = template.variables ?? builderTemplates[0]?.variables ?? {};
-
-  return Object.fromEntries(
-    Object.entries(variables).filter(
-      (entry): entry is [string, string] => typeof entry[1] === "string",
-    ),
-  );
-};
-
 export const buildSelectedConfig = (
   templateId?: string | null,
   category: string = "Realestate",
 ): SelectedConfig => {
-  const builderTemplate = getBuilderTemplate(templateId);
+  const templateIds = getTemplateIdsForCategory(category);
+  const selectedTemplateId =
+    (templateId && templateIds.includes(templateId) && templateId) ||
+    templateIds[0] ||
+    "template-1";
+  const templateComponents =
+    categoryContent.categories[category]?.templateComponents?.[
+      selectedTemplateId
+    ] ?? {};
   const baseSections = cloneSections(selectedConfig.sections);
-  const missingSections = Object.entries(builderTemplate.sectionVariants)
-    .filter(
-      ([sectionType]) =>
-        !baseSections.some((section) => section.type === sectionType),
-    )
-    .map(([sectionType, variant]) => ({
-      type: sectionType,
-      variant,
-      data: createDefaultSectionData(sectionType),
-    }));
-  const footerIndex = baseSections.findIndex(
-    (section) => section.type === "Footer",
-  );
-  const templateSections =
-    footerIndex === -1
-      ? [...baseSections, ...missingSections]
-      : [
-          ...baseSections.slice(0, footerIndex),
-          ...missingSections,
-          ...baseSections.slice(footerIndex),
-        ];
-  const sections = templateSections.map((section) => {
-    const variant = builderTemplate.sectionVariants[section.type] ?? section.variant;
+  const sections = Object.entries(templateComponents).flatMap(
+    ([componentSectionType, componentVariant]) => {
+      if (componentVariant === null) return [];
 
-    return mergeCategoryData({ ...section, variant }, category);
-  });
+      const sectionType =
+        componentSectionType === "Marquee"
+          ? "MarqueeSlide"
+          : componentSectionType;
+      const section =
+        baseSections.find((item) => item.type === sectionType) ?? {
+          type: sectionType,
+          variant: `${sectionType}-1`,
+          data: createDefaultSectionData(sectionType),
+        };
+      const variant = getTemplateDataVariant(sectionType, componentVariant);
+
+      return [mergeCategoryData({ ...section, variant }, category)];
+    },
+  );
 
   return {
-    templateId: builderTemplate.id,
+    templateId: selectedTemplateId,
     sections,
   };
 };

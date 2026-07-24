@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ArrowUp, MessageCircle, Phone } from "lucide-react";
 import {
@@ -11,9 +11,8 @@ import {
   createCustomPageSection,
   createGalleryPageSection,
   createServicePageSection,
-  getTemplateVariables,
 } from "./src/data/templateFlow";
-import { sectionRegistry } from "./src/lib/sectionRegistry";
+import { getSectionComponent } from "./src/lib/sectionRegistry";
 
 import EditableSection from "./src/components/builder/EditableSection";
 import EditSectionModal from "./src/components/builder/EditSectionModal";
@@ -308,7 +307,6 @@ function EditorLayoutPage() {
     () => buildSelectedConfig(templateId, category),
     [templateId, category],
   );
-  const templateVariables = getTemplateVariables(initialConfig.templateId);
 
   useEffect(() => {
     setCurrentPage("Home");
@@ -323,9 +321,6 @@ function EditorLayoutPage() {
 
     if (!Array.isArray(categoryPageLinks) || !categoryPageLinks.length) return;
 
-    // Initialize navigation when the selected template changes. Do not depend on
-    // pageLinks here: editor changes (including dropdown children) must not be
-    // overwritten by the template defaults on the next render.
     setPageLinks(categoryPageLinks);
   }, [initialConfig.sections, setPageLinks]);
 
@@ -333,7 +328,6 @@ function EditorLayoutPage() {
     <EditorPage
       key={`${templateId}-${category}`}
       initialSections={initialConfig.sections}
-      templateVariables={templateVariables}
       category={category}
       page={page}
       templateId={templateId}
@@ -344,14 +338,12 @@ function EditorLayoutPage() {
 
 function EditorPage({
   initialSections,
-  templateVariables,
   category,
   page,
   templateId,
   pageLinks,
 }: {
   initialSections: SectionItem[];
-  templateVariables: Record<string, string>;
   category: string;
   page: string;
   templateId: string;
@@ -547,19 +539,18 @@ function EditorPage({
       }),
     );
     setInlineUpdateToast(
-      `${formatSectionName(sectionType)} ${
-        mediaType === "video" ? "Video" : "Image"
+      `${formatSectionName(sectionType)} ${mediaType === "video" ? "Video" : "Image"
       } - Updated`,
     );
   };
 
   const deleteSection = (sectionId: string) => {
-  setSections((prevSections) =>
-    prevSections.filter((section) => (section.id ?? section.type) !== sectionId)
-  );
+    setSections((prevSections) =>
+      prevSections.filter((section) => (section.id ?? section.type) !== sectionId)
+    );
 
-  setEditingSection(null);
-};
+    setEditingSection(null);
+  };
 
   const addSectionAfter = (afterSectionId: string, sectionType: string) => {
     const nextSection = createAddableSection(sectionType, category);
@@ -655,7 +646,6 @@ function EditorPage({
         category,
         pageLinks,
         sections: syncedSections,
-        templateVariables,
       };
 
       try {
@@ -723,7 +713,7 @@ function EditorPage({
         handlePublishRequest,
       );
     };
-  }, [category, pageLinks, syncedSections, templateId, templateVariables]);
+  }, [category, pageLinks, syncedSections, templateId]);
 
   const editingSectionItem = syncedSections.find(
     (section) => (section.id ?? section.type) === editingSection,
@@ -733,7 +723,7 @@ function EditorPage({
   );
   const footerVariantData = footerSection
     ? footerSection.data?.[footerSection.variant] ??
-      footerSection.data?.["Footer-1"]
+    footerSection.data?.["Footer-1"]
     : undefined;
   const footerData = isRecord(footerVariantData)
     ? (footerVariantData as SectionData)
@@ -745,10 +735,10 @@ function EditorPage({
   const visibleSections =
     currentPageSlug && currentPageSlug !== "home"
       ? syncedSections.filter(
-          (section) =>
-            pageShellSectionTypes.includes(section.type) ||
-            section.page?.toLowerCase() === currentPageSlug,
-        )
+        (section) =>
+          pageShellSectionTypes.includes(section.type) ||
+          section.page?.toLowerCase() === currentPageSlug,
+      )
       : syncedSections.filter((section) => !section.page);
   const scrollToTopbar = () => {
     const scrollContainer = document.querySelector<HTMLElement>(
@@ -764,10 +754,7 @@ function EditorPage({
   };
 
   return (
-    <main
-      className="editor-smooth-surface w-full max-w-full overflow-x-hidden [overflow-wrap:anywhere]"
-      style={templateVariables as React.CSSProperties}
-    >
+    <main className="editor-smooth-surface w-full max-w-full overflow-x-hidden [overflow-wrap:anywhere]">
       {visibleSections.map((section) => {
         const sectionId = section.id ?? section.type;
         const sectionIndex = visibleSections.findIndex(
@@ -783,7 +770,11 @@ function EditorPage({
           Boolean(nextSection) &&
           !isLockedSection(section) &&
           !isLockedSection(nextSection);
-        const Component = sectionRegistry[section.variant];
+        const Component = getSectionComponent(
+          category,
+          section.type,
+          section.variant,
+        );
         const defaultVariant = `${section.type}-1`;
         const variantData =
           section.data?.[section.variant] ?? section.data?.[defaultVariant];
@@ -841,6 +832,7 @@ function EditorPage({
       {editingSectionItem && (
         <EditSectionModal
           key={editingSectionItem.id ?? editingSectionItem.type}
+          category={category}
           sectionId={editingSectionItem.id ?? editingSectionItem.type}
           sectionType={editingSectionItem.type}
           sections={syncedSections}

@@ -1,194 +1,25 @@
 {
-  "templates": [
-    {
-      "id": "template-1",
-      "numericId": 1,
-      "title": "Classic Image",
-      "type": "Single Page Website",
-      "image": "/haelli.png",
-      "previewimage": "/haellipreview.png",
-      "preview_description": "Header 1 with image banner, about layout 1, product carousel, and footer.",
-      "prebuilt_pages": 6,
-      "sectionVariants": {
-        "Topbar": "Topbar-1",
-        "Header": "Header-1",
-        "Banner": "Banner-1",
-        "About": "About-1",
-        "Product": "Product-1",
-        "WhyChooseUs": "WhyChooseUs-1",
-        "Gallery": "Gallery-1",
-        "FormDetail": "FormDetail-1",
-        "FAQ": "FAQ-1",
-        "Testimonial": "Testimonial-1",
-        "Footer": "Footer-1"
-      },
-      "variables": {
-        "--primary-bg": "#00cadd",
-        "--primary-text": "#ffffff",
-        "--secondary-bg": "#ffffff",
-        "--secondary-text": "#000000",
-        "--header-bg": "#245c6e",
-        "--header-text": "#ffffff",
-        "--hero-bg": "#000000",
-        "--hero-title": "#ffffff",
-        "--primary-pretitle-text": "#ffffff",
-        "--primary-title-text": "#ffffff",
-        "--primary-subtitle-text": "#ffffff",
-        "--secondary-pretitle-text": "#ffffff",
-        "--secondary-title-text": "#ffffff",
-        "--secondary-subtitle-text": "#ffffff",
-        "--primary-link-bg": "#ffffff",
-        "--primary-link-color": "#000000",
-        "--secondary-link-bg": "#00cadd",
-        "--secondary-link-color": "#ffffff",
-        "--text-white": "white",
-        "--blue-bg": "#0668ff",
-        "--lightcream-bg": "#fbfaf6"
-      }
-    },
-    {
-      "id": "template-2",
-      "numericId": 2,
-      "title": "Video Lead",
-      "type": "Multiple Pages Website",
-      "image": "/shaye.png",
-      "previewimage": "/shayepreview.png",
-      "preview_description": "Header 2 with video banner, about layout 2, product cards, and footer.",
-      "prebuilt_pages": 8,
-      "sectionVariants": {
-        "Topbar": "Topbar-2",
-        "Header": "Header-2",
-        "Banner": "Banner-2",
-        "About": "About-2",
-        "Product": "Product-2",
-        "WhyChooseUs": "WhyChooseUs-2",
-        "Gallery": "Gallery-2",
-        "FormDetail": "FormDetail-2",
-        "FAQ": "FAQ-2",
-        "Testimonial": "Testimonial-2",
-        "Footer": "Footer-1"
-      },
-      "variables": {
-        "--header-bg": "#111827",
-        "--header-text": "#ffffff",
-        "--hero-bg": "#020617",
-        "--hero-title": "#f8fafc",
-        "--primary-link-bg": "#ffffff",
-        "--primary-link-color": "#000000",
-        "--blue-bg": "#2563eb",
-        "--lightcream-bg": "#fbfaf6"
-      }
-    },
-    {
-      "id": "template-3",
-      "numericId": 3,
-      "title": "Slider Showcase",
-      "type": "Single Page Website",
-      "image": "/stylam.png",
-      "previewimage": "/stylampreview.png",
-      "preview_description": "Header 2 with image slider banner, about layout 2, product grid, and footer.",
-      "prebuilt_pages": 5,
-      "sectionVariants": {
-        "Topbar": "Topbar-1",
-        "Header": "Header-2",
-        "Banner": "Banner-3",
-        "About": "About-2",
-        "Product": "Product-3",
-        "WhyChooseUs": "WhyChooseUs-3",
-        "Gallery": "Gallery-3",
-        "FormDetail": "FormDetail-3",
-        "FAQ": "FAQ-3",
-        "Testimonial": "Testimonial-3",
-        "Footer": "Footer-1"
-      },
-      "variables": {
-        "--header-bg": "#0f766e",
-        "--header-text": "#ffffff",
-        "--hero-bg": "#042f2e",
-        "--hero-title": "#ffffff",
-        "--primary-link-bg": "#ffffff",
-        "--primary-link-color": "#0f172a",
-        "--blue-bg": "#0f766e",
-        "--lightcream-bg": "#f8fafc"
-      }
-    },
-    {
-      "id": "template-4",
-      "numericId": 4,
-      "title": "Motion Slider",
-      "type": "Multiple Pages Website",
-      "image": "/blackbay.png",
-      "previewimage": "/blackbaypreview.png",
-      "preview_description": "Header 1 with video slider banner, about layout 1, product cards, and footer.",
-      "prebuilt_pages": 7,
-      "sectionVariants": {
-        "Topbar": "Topbar-2",
-        "Header": "Header-1",
-        "Banner": "Banner-4",
-        "About": "About-1",
-        "Product": "Product-2",
-        "WhyChooseUs": "WhyChooseUs-4",
-        "Gallery": "Gallery-4",
-        "FormDetail": "FormDetail-4",
-        "FAQ": "FAQ-4",
-        "Testimonial": "Testimonial-1",
-        "Footer": "Footer-1"
-      },
-      "variables": {
-        "--header-bg": "#1f2937",
-        "--header-text": "#ffffff",
-        "--hero-bg": "#111827",
-        "--hero-title": "#ffffff",
-        "--primary-link-bg": "#facc15",
-        "--primary-link-color": "#111827",
-        "--blue-bg": "#1d4ed8",
-        "--lightcream-bg": "#fff7ed"
-      }
-    },
-    {
-      "id": "template-5",
-      "numericId": 5,
-      "title": "Editorial Blocks",
-      "type": "Single Page Website",
-      "image": "/stylampreview.png",
-      "previewimage": "/stylampreview.png",
-      "preview_description": "Header 2 with image banner, editorial about layout, product carousel, and footer.",
-      "prebuilt_pages": 4,
-      "sectionVariants": {
-        "Topbar": "Topbar-1",
-        "Header": "Header-2",
-        "Banner": "Banner-1",
-        "About": "About-2",
-        "Product": "Product-1",
-        "WhyChooseUs": "WhyChooseUs-1",
-        "Gallery": "Gallery-1",
-        "FormDetail": "FormDetail-1",
-        "FAQ": "FAQ-1",
-        "Testimonial": "Testimonial-1",
-        "Footer": "Footer-1"
-      },
-      "variables": {
-        "--header-bg": "#334155",
-        "--header-text": "#ffffff",
-        "--hero-bg": "#1e293b",
-        "--hero-title": "#ffffff",
-        "--primary-link-bg": "#ffffff",
-        "--primary-link-color": "#1e293b",
-        "--blue-bg": "#475569",
-        "--lightcream-bg": "#f8fafc"
-      }
-    }
-  ],
   "common": {
     "Topbar": {
-      "text": ["Fast setup, editable sections, category-ready media"],
+      "text": [
+        "Fast setup, editable sections, category-ready media"
+      ],
       "phone": "+91 98765 43210",
       "email": "hello@example.com",
       "location": "India",
       "socialLinks": [
-        { "label": "facebook", "href": "#" },
-        { "label": "twitter", "href": "#" },
-        { "label": "linkedin", "href": "#" }
+        {
+          "label": "facebook",
+          "href": "#"
+        },
+        {
+          "label": "twitter",
+          "href": "#"
+        },
+        {
+          "label": "linkedin",
+          "href": "#"
+        }
       ]
     },
     "Footer": {
@@ -199,20 +30,47 @@
         {
           "title": "Pages",
           "links": [
-            { "label": "Home", "href": "#" },
-            { "label": "About", "href": "#about" },
-            { "label": "Service", "href": "#service" },
-            { "label": "Gallery", "href": "#gallery" },
-            { "label": "Contact", "href": "#contact" }
+            {
+              "label": "Home",
+              "href": "#"
+            },
+            {
+              "label": "About",
+              "href": "#about"
+            },
+            {
+              "label": "Service",
+              "href": "#service"
+            },
+            {
+              "label": "Gallery",
+              "href": "#gallery"
+            },
+            {
+              "label": "Contact",
+              "href": "#contact"
+            }
           ]
         },
         {
           "title": "Sections",
           "links": [
-            { "label": "Listings", "href": "#" },
-            { "label": "Services", "href": "#" },
-            { "label": "Programs", "href": "#" },
-            { "label": "FAQ", "href": "#faq" }
+            {
+              "label": "Listings",
+              "href": "#"
+            },
+            {
+              "label": "Services",
+              "href": "#"
+            },
+            {
+              "label": "Programs",
+              "href": "#"
+            },
+            {
+              "label": "FAQ",
+              "href": "#faq"
+            }
           ]
         }
       ],
@@ -222,8 +80,14 @@
         "phone": "+91 98765 43210"
       },
       "footerLegalLinks": [
-        { "label": "Privacy Policy", "href": "#privacy" },
-        { "label": "Terms", "href": "#terms" }
+        {
+          "label": "Privacy Policy",
+          "href": "#privacy"
+        },
+        {
+          "label": "Terms",
+          "href": "#terms"
+        }
       ],
       "whatsappLink": "https://api.whatsapp.com/send?phone=962786336414",
       "callLink": "tel:+919876543210",
@@ -266,8 +130,14 @@
           "productInfoTitle": "Planning",
           "productInfoDesc": "Clarify goals, audience needs, and the right structure before visitors take action.",
           "productFeatures": [
-            { "label": "Strategy", "price": "01" },
-            { "label": "Content", "price": "02" }
+            {
+              "label": "Strategy",
+              "price": "01"
+            },
+            {
+              "label": "Content",
+              "price": "02"
+            }
           ],
           "productTotalPrice": "Service",
           "productShippingText": "Editable"
@@ -280,8 +150,14 @@
           "productInfoTitle": "Execution",
           "productInfoDesc": "Present offers, proof, and conversion paths through clean editable sections.",
           "productFeatures": [
-            { "label": "Design", "price": "01" },
-            { "label": "Build", "price": "02" }
+            {
+              "label": "Design",
+              "price": "01"
+            },
+            {
+              "label": "Build",
+              "price": "02"
+            }
           ],
           "productTotalPrice": "Service",
           "productShippingText": "Editable"
@@ -294,8 +170,14 @@
           "productInfoTitle": "Support",
           "productInfoDesc": "Keep enquiries, updates, and follow-up simple for both visitors and your team.",
           "productFeatures": [
-            { "label": "Follow up", "price": "01" },
-            { "label": "Updates", "price": "02" }
+            {
+              "label": "Follow up",
+              "price": "01"
+            },
+            {
+              "label": "Updates",
+              "price": "02"
+            }
           ],
           "productTotalPrice": "Service",
           "productShippingText": "Editable"
@@ -308,8 +190,14 @@
           "productInfoTitle": "Growth",
           "productInfoDesc": "Improve page content and calls to action as new visitor needs become clear.",
           "productFeatures": [
-            { "label": "Review", "price": "01" },
-            { "label": "Improve", "price": "02" }
+            {
+              "label": "Review",
+              "price": "01"
+            },
+            {
+              "label": "Improve",
+              "price": "02"
+            }
           ],
           "productTotalPrice": "Service",
           "productShippingText": "Editable"
@@ -352,10 +240,26 @@
       },
       "formSubmitLabel": "Send message",
       "formFields": [
-        { "label": "Name", "type": "text", "placeholder": "Your name" },
-        { "label": "Email", "type": "email", "placeholder": "you@example.com" },
-        { "label": "Phone", "type": "tel", "placeholder": "Your phone number" },
-        { "label": "Message", "type": "textarea", "placeholder": "Tell us what you need" }
+        {
+          "label": "Name",
+          "type": "text",
+          "placeholder": "Your name"
+        },
+        {
+          "label": "Email",
+          "type": "email",
+          "placeholder": "you@example.com"
+        },
+        {
+          "label": "Phone",
+          "type": "tel",
+          "placeholder": "Your phone number"
+        },
+        {
+          "label": "Message",
+          "type": "textarea",
+          "placeholder": "Tell us what you need"
+        }
       ]
     },
     "Testimonial": {
@@ -410,450 +314,3463 @@
   },
   "categories": {
     "Realestate": {
-      "templates": ["template-1", "template-2", "template-3", "template-4", "template-5"],
+      "templateComponents": {
+        "template-1": {
+          "Topbar": "RealEstateTopbar1",
+          "Header": "RealEstateHeader1",
+          "Banner": "RealEstateBanner1",
+          "About": "RealEstateAbout1",
+          "Product": "RealEstateProduct1",
+          "WhyChooseUs": "RealEstateWhyChooseUs1",
+          "Gallery": "RealEstateGallery1",
+          "FormDetail": "RealEstateFormDetail1",
+          "FAQ": "RealEstateFAQ1",
+          "Testimonial": "RealEstateTestimonial1",
+          "Footer": "RealEstateFooter1"
+        },
+        "template-2": {
+          "Topbar": "RealEstateTopbar2",
+          "Header": "RealEstateHeader2",
+          "Banner": "RealEstateBanner2",
+          "About": "RealEstateAbout2",
+          "Product": "RealEstateProduct2",
+          "WhyChooseUs": "RealEstateWhyChooseUs2",
+          "Gallery": "RealEstateGallery2",
+          "FormDetail": "RealEstateFormDetail2",
+          "FAQ": "RealEstateFAQ2",
+          "Testimonial": "RealEstateTestimonial2",
+          "Footer": "RealEstateFooter2"
+        }
+      },
       "sections": {
         "Header": {
-          "logo": "PrimeHomes",
-          "menu": [
-            { "label": "Home", "href": "#" },
-            { "label": "About", "href": "#" },
-            { "label": "Service", "href": "#service" },
-            { "label": "Gallery", "href": "#gallery" },
-            { "label": "Contact", "href": "#" }
-          ],
-          "buttons": [
-            { "label": "Book Visit", "href": "#", "variant": "primary" },
-            { "label": "Call Agent", "href": "#", "variant": "secondary" }
-          ]
+          "variants": {
+            "RealEstateHeader1": {
+              "logo": "PrimeHomes",
+              "menu": [
+                {
+                  "label": "Home",
+                  "href": "#"
+                },
+                {
+                  "label": "About",
+                  "href": "#"
+                },
+                {
+                  "label": "Service",
+                  "href": "#service"
+                },
+                {
+                  "label": "Gallery",
+                  "href": "#gallery"
+                },
+                {
+                  "label": "Contact",
+                  "href": "#"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Book Visit",
+                  "href": "#",
+                  "variant": "primary"
+                },
+                {
+                  "label": "Call Agent",
+                  "href": "#",
+                  "variant": "secondary"
+                }
+              ]
+            },
+            "RealEstateHeader2": {
+              "logo": "PrimeHomes Signature",
+              "menu": [
+                {
+                  "label": "Home",
+                  "href": "#"
+                },
+                {
+                  "label": "About",
+                  "href": "#"
+                },
+                {
+                  "label": "Service",
+                  "href": "#service"
+                },
+                {
+                  "label": "Gallery",
+                  "href": "#gallery"
+                },
+                {
+                  "label": "Contact",
+                  "href": "#"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Book Visit",
+                  "href": "#",
+                  "variant": "primary"
+                },
+                {
+                  "label": "Call Agent",
+                  "href": "#",
+                  "variant": "secondary"
+                }
+              ]
+            }
+          }
         },
         "Banner": {
-          "backgroundImage": "/categories/realestate/bg1.jpg",
-          "backgroundImageTitle": "Modern property exterior",
-          "backgroundVideo": "/categories/realestate/video.mp4",
-          "bannerHeight": 70,
-          "pretitle": "Premium real estate advisory",
-          "title": "Find a home that fits your next chapter.",
-          "desc": "Browse curated apartments, villas, and investment properties with transparent pricing, verified documents, and guided site visits.",
-          "buttons": [{ "label": "Explore listings", "href": "#", "variant": "primary" }],
-          "bannerSlides": [
-            {
-              "image": "/categories/realestate/bg1.jpg",
-              "video": "/categories/realestate/video.mp4",
-              "alt": "Modern apartment living room",
-              "title": "Move into verified homes faster",
-              "desc": "Shortlist ready-to-visit properties with trusted local guidance.",
-              "button": { "label": "View homes", "href": "#", "variant": "primary" }
+          "variants": {
+            "RealEstateBanner1": {
+              "backgroundImage": "/categories/realestate/bg1.jpg",
+              "backgroundImageTitle": "Modern property exterior",
+              "backgroundVideo": "/categories/realestate/video.mp4",
+              "bannerHeight": 70,
+              "pretitle": "Premium real estate advisory",
+              "title": "Find a home that fits your next chapter.",
+              "desc": "Browse curated apartments, villas, and investment properties with transparent pricing, verified documents, and guided site visits.",
+              "buttons": [
+                {
+                  "label": "Explore listings",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ],
+              "bannerSlides": [
+                {
+                  "image": "/categories/realestate/bg1.jpg",
+                  "video": "/categories/realestate/video.mp4",
+                  "alt": "Modern apartment living room",
+                  "title": "Move into verified homes faster",
+                  "desc": "Shortlist ready-to-visit properties with trusted local guidance.",
+                  "button": {
+                    "label": "View homes",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                },
+                {
+                  "image": "/categories/realestate/bg2.jpg",
+                  "video": "/categories/realestate/video.mp4",
+                  "alt": "Luxury residential building",
+                  "title": "Invest in high-growth locations",
+                  "desc": "Compare neighborhoods, amenities, pricing, and rental potential.",
+                  "button": {
+                    "label": "Compare areas",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                }
+              ]
             },
-            {
-              "image": "/categories/realestate/bg2.jpg",
-              "video": "/categories/realestate/video.mp4",
-              "alt": "Luxury residential building",
-              "title": "Invest in high-growth locations",
-              "desc": "Compare neighborhoods, amenities, pricing, and rental potential.",
-              "button": { "label": "Compare areas", "href": "#", "variant": "primary" }
+            "RealEstateBanner2": {
+              "backgroundImage": "/categories/realestate/bg2.jpg",
+              "backgroundImageTitle": "Luxury property exterior",
+              "backgroundVideo": "/categories/realestate/video.mp4",
+              "bannerHeight": 70,
+              "pretitle": "Exclusive property collection",
+              "title": "Discover distinctive homes in the right locations.",
+              "desc": "Explore a considered portfolio of residences, investment opportunities, and distinctive addresses selected around your ambitions.",
+              "buttons": [
+                {
+                  "label": "Explore the collection",
+                  "href": "#properties",
+                  "variant": "primary"
+                },
+                {
+                  "label": "Speak with an advisor",
+                  "href": "#contact",
+                  "variant": "secondary"
+                }
+              ],
+              "bannerSlides": [
+                {
+                  "image": "/categories/realestate/bg1.jpg",
+                  "video": "/categories/realestate/video.mp4",
+                  "alt": "Modern apartment living room",
+                  "title": "Move into verified homes faster",
+                  "desc": "Shortlist ready-to-visit properties with trusted local guidance.",
+                  "button": {
+                    "label": "View homes",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                },
+                {
+                  "image": "/categories/realestate/bg2.jpg",
+                  "video": "/categories/realestate/video.mp4",
+                  "alt": "Luxury residential building",
+                  "title": "Invest in high-growth locations",
+                  "desc": "Compare neighborhoods, amenities, pricing, and rental potential.",
+                  "button": {
+                    "label": "Compare areas",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                }
+              ]
             }
-          ]
+          }
         },
         "About": {
-          "pretitle": "Why buyers trust us",
-          "title": "Real estate guidance from search to keys.",
-          "subtitle": "Verified homes, smarter visits, clearer decisions",
-          "desc": "We help families and investors shortlist the right properties using neighborhood insight, pricing context, and documentation checks.",
-          "desc2": "From first call to final paperwork, our advisors keep every step simple, transparent, and focused on your goals.",
-          "backgroundImage": "/categories/realestate/bg2.jpg",
-          "backgroundImageTitle": "Premium property lounge",
-          "sideImage": "/categories/realestate/bg1.jpg",
-          "sideImageTitle": "Luxury residence interior",
-          "philosophyTitle": "Our Promise",
-          "philosophyDesc": "Real options, clear numbers, and reliable local support.",
-          "buttons": [{ "label": "Meet our advisors", "href": "#", "variant": "primary" }]
+          "variants": {
+            "RealEstateAbout1": {
+              "pretitle": "Why buyers trust us",
+              "title": "Real estate guidance from search to keys.",
+              "subtitle": "Verified homes, smarter visits, clearer decisions",
+              "desc": "We help families and investors shortlist the right properties using neighborhood insight, pricing context, and documentation checks.",
+              "desc2": "From first call to final paperwork, our advisors keep every step simple, transparent, and focused on your goals.",
+              "backgroundImage": "/categories/realestate/bg2.jpg",
+              "backgroundImageTitle": "Premium property lounge",
+              "sideImage": "/categories/realestate/bg1.jpg",
+              "sideImageTitle": "Luxury residence interior",
+              "philosophyTitle": "Our Promise",
+              "philosophyDesc": "Real options, clear numbers, and reliable local support.",
+              "buttons": [
+                {
+                  "label": "Meet our advisors",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
+            },
+            "RealEstateAbout2": {
+              "pretitle": "Why buyers trust us",
+              "title": "Local property expertise for confident decisions.",
+              "subtitle": "Verified homes, smarter visits, clearer decisions",
+              "desc": "We help families and investors shortlist the right properties using neighborhood insight, pricing context, and documentation checks.",
+              "desc2": "From first call to final paperwork, our advisors keep every step simple, transparent, and focused on your goals.",
+              "backgroundImage": "/categories/realestate/bg2.jpg",
+              "backgroundImageTitle": "Premium property lounge",
+              "sideImage": "/categories/realestate/bg1.jpg",
+              "sideImageTitle": "Luxury residence interior",
+              "philosophyTitle": "Our Promise",
+              "philosophyDesc": "Real options, clear numbers, and reliable local support.",
+              "buttons": [
+                {
+                  "label": "Meet our advisors",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
+            }
+          }
         },
         "Product": {
-          "productSectionTitle": "Featured Properties",
-          "productTitle": "Signature Residences",
-          "productSubtitle": "Ready for site visits this week",
-          "productInfoTitle": "Prime City Homes",
-          "productInfoDesc": "Handpicked residences with strong amenities, smart layouts, and verified ownership documents.",
-          "productFeatures": [
-            { "label": "Verified documents", "price": "Included" },
-            { "label": "Site visit", "price": "Free" },
-            { "label": "Loan support", "price": "Available" }
-          ],
-          "productTotalPrice": "From Rs. 1.25 Cr",
-          "productShippingText": "Site visits available today",
-          "productSlides": [
-            {
-              "image": "/categories/realestate/bg1.jpg",
-              "alt": "Skyline apartment",
-              "productTitle": "Skyline Residences",
-              "productSubtitle": "3 BHK Apartment",
-              "productInfoTitle": "High-floor city home",
-              "productInfoDesc": "Open views, clubhouse access, and fast metro connectivity.",
+          "variants": {
+            "RealEstateProduct1": {
+              "productSectionTitle": "Featured Properties",
+              "productTitle": "Signature Residences",
+              "productSubtitle": "Ready for site visits this week",
+              "productInfoTitle": "Prime City Homes",
+              "productInfoDesc": "Handpicked residences with strong amenities, smart layouts, and verified ownership documents.",
               "productFeatures": [
-                { "label": "Bedrooms", "price": "3" },
-                { "label": "Area", "price": "1850 sq.ft" }
+                {
+                  "label": "Verified documents",
+                  "price": "Included"
+                },
+                {
+                  "label": "Site visit",
+                  "price": "Free"
+                },
+                {
+                  "label": "Loan support",
+                  "price": "Available"
+                }
               ],
-              "productTotalPrice": "Rs. 1.25 Cr",
-              "productShippingText": "Ready for visit",
-              "button": { "label": "View details", "href": "#", "variant": "primary" }
-            }
-          ],
-          "productItems": [
-            {
-              "title": "Skyline Residences",
-              "category": "3 BHK Apartment",
-              "desc": "High-floor homes with open views, clubhouse access, and quick metro connectivity.",
-              "image": "/categories/realestate/bg1.jpg",
-              "alt": "Skyline apartment"
+              "productTotalPrice": "From Rs. 1.25 Cr",
+              "productShippingText": "Site visits available today",
+              "productSlides": [
+                {
+                  "image": "/categories/realestate/bg1.jpg",
+                  "alt": "Skyline apartment",
+                  "productTitle": "Skyline Residences",
+                  "productSubtitle": "3 BHK Apartment",
+                  "productInfoTitle": "High-floor city home",
+                  "productInfoDesc": "Open views, clubhouse access, and fast metro connectivity.",
+                  "productFeatures": [
+                    {
+                      "label": "Bedrooms",
+                      "price": "3"
+                    },
+                    {
+                      "label": "Area",
+                      "price": "1850 sq.ft"
+                    }
+                  ],
+                  "productTotalPrice": "Rs. 1.25 Cr",
+                  "productShippingText": "Ready for visit",
+                  "button": {
+                    "label": "View details",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                }
+              ],
+              "productItems": [
+                {
+                  "title": "Skyline Residences",
+                  "category": "3 BHK Apartment",
+                  "desc": "High-floor homes with open views, clubhouse access, and quick metro connectivity.",
+                  "image": "/categories/realestate/bg1.jpg",
+                  "alt": "Skyline apartment"
+                },
+                {
+                  "title": "Green Villa Enclave",
+                  "category": "Independent Villa",
+                  "desc": "Private garden, premium finishes, and a quiet gated community address.",
+                  "image": "/categories/realestate/bg2.jpg",
+                  "alt": "Luxury villa"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Take the virtual walkthrough",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
             },
-            {
-              "title": "Green Villa Enclave",
-              "category": "Independent Villa",
-              "desc": "Private garden, premium finishes, and a quiet gated community address.",
-              "image": "/categories/realestate/bg2.jpg",
-              "alt": "Luxury villa"
+            "RealEstateProduct2": {
+              "productSectionTitle": "Handpicked Luxury Homes",
+              "productTitle": "Signature Residences",
+              "productSubtitle": "Ready for site visits this week",
+              "productInfoTitle": "Prime City Homes",
+              "productInfoDesc": "Handpicked residences with strong amenities, smart layouts, and verified ownership documents.",
+              "productFeatures": [
+                {
+                  "label": "Verified documents",
+                  "price": "Included"
+                },
+                {
+                  "label": "Site visit",
+                  "price": "Free"
+                },
+                {
+                  "label": "Loan support",
+                  "price": "Available"
+                }
+              ],
+              "productTotalPrice": "From Rs. 1.25 Cr",
+              "productShippingText": "Site visits available today",
+              "productSlides": [
+                {
+                  "image": "/categories/realestate/bg1.jpg",
+                  "alt": "Skyline apartment",
+                  "productTitle": "Skyline Residences",
+                  "productSubtitle": "3 BHK Apartment",
+                  "productInfoTitle": "High-floor city home",
+                  "productInfoDesc": "Open views, clubhouse access, and fast metro connectivity.",
+                  "productFeatures": [
+                    {
+                      "label": "Bedrooms",
+                      "price": "3"
+                    },
+                    {
+                      "label": "Area",
+                      "price": "1850 sq.ft"
+                    }
+                  ],
+                  "productTotalPrice": "Rs. 1.25 Cr",
+                  "productShippingText": "Ready for visit",
+                  "button": {
+                    "label": "View details",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                }
+              ],
+              "productItems": [
+                {
+                  "title": "Skyline Residences",
+                  "category": "3 BHK Apartment",
+                  "desc": "High-floor homes with open views, clubhouse access, and quick metro connectivity.",
+                  "image": "/categories/realestate/bg1.jpg",
+                  "alt": "Skyline apartment"
+                },
+                {
+                  "title": "Green Villa Enclave",
+                  "category": "Independent Villa",
+                  "desc": "Private garden, premium finishes, and a quiet gated community address.",
+                  "image": "/categories/realestate/bg2.jpg",
+                  "alt": "Luxury villa"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Take the virtual walkthrough",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
             }
-          ],
-          "buttons": [{ "label": "Take the virtual walkthrough", "href": "#", "variant": "primary" }]
+          }
         },
         "WhyChooseUs": {
-          "pretitle": "Why choose PrimeHomes",
-          "title": "Property decisions with clearer proof.",
-          "desc": "Help buyers compare real options, verified documents, and guided site visits.",
-          "whyChooseUsItems": [
-            { "title": "Verified listings", "desc": "Every featured property includes basic document and visit checks.", "stat": "01" },
-            { "title": "Local advisors", "desc": "Neighborhood guidance helps buyers compare price, location, and lifestyle.", "stat": "02" },
-            { "title": "Simple visits", "desc": "Site visits and follow-ups are handled with clear next steps.", "stat": "03" }
-          ]
+          "variants": {
+            "RealEstateWhyChooseUs1": {
+              "pretitle": "Why choose PrimeHomes",
+              "title": "Property decisions with clearer proof.",
+              "desc": "Help buyers compare real options, verified documents, and guided site visits.",
+              "whyChooseUsItems": [
+                {
+                  "title": "Verified listings",
+                  "desc": "Every featured property includes basic document and visit checks.",
+                  "stat": "01"
+                },
+                {
+                  "title": "Local advisors",
+                  "desc": "Neighborhood guidance helps buyers compare price, location, and lifestyle.",
+                  "stat": "02"
+                },
+                {
+                  "title": "Simple visits",
+                  "desc": "Site visits and follow-ups are handled with clear next steps.",
+                  "stat": "03"
+                }
+              ]
+            },
+            "RealEstateWhyChooseUs2": {
+              "pretitle": "Why choose PrimeHomes",
+              "title": "A more personal way to find your property.",
+              "desc": "Help buyers compare real options, verified documents, and guided site visits.",
+              "whyChooseUsItems": [
+                {
+                  "title": "Verified listings",
+                  "desc": "Every featured property includes basic document and visit checks.",
+                  "stat": "01"
+                },
+                {
+                  "title": "Local advisors",
+                  "desc": "Neighborhood guidance helps buyers compare price, location, and lifestyle.",
+                  "stat": "02"
+                },
+                {
+                  "title": "Simple visits",
+                  "desc": "Site visits and follow-ups are handled with clear next steps.",
+                  "stat": "03"
+                }
+              ]
+            }
+          }
         },
         "Gallery": {
-          "pretitle": "Property gallery",
-          "title": "Homes, interiors, and location views.",
-          "desc": "Show category-specific property visuals in every gallery layout.",
-          "galleryItems": [
-            { "image": "/categories/realestate/bg1.jpg", "alt": "Premium apartment", "title": "Apartment view" },
-            { "image": "/categories/realestate/bg2.jpg", "alt": "Luxury residence", "title": "Residence exterior" },
-            { "image": "/categories/realestate/bg1.jpg", "alt": "Modern home", "title": "Living space" },
-            { "image": "/categories/realestate/bg2.jpg", "alt": "Property detail", "title": "Premium detail" }
-          ]
+          "variants": {
+            "RealEstateGallery1": {
+              "pretitle": "Property gallery",
+              "title": "Homes, interiors, and location views.",
+              "desc": "Show category-specific property visuals in every gallery layout.",
+              "galleryItems": [
+                {
+                  "image": "/categories/realestate/bg1.jpg",
+                  "alt": "Premium apartment",
+                  "title": "Apartment view"
+                },
+                {
+                  "image": "/categories/realestate/bg2.jpg",
+                  "alt": "Luxury residence",
+                  "title": "Residence exterior"
+                },
+                {
+                  "image": "/categories/realestate/bg1.jpg",
+                  "alt": "Modern home",
+                  "title": "Living space"
+                },
+                {
+                  "image": "/categories/realestate/bg2.jpg",
+                  "alt": "Property detail",
+                  "title": "Premium detail"
+                }
+              ]
+            },
+            "RealEstateGallery2": {
+              "pretitle": "Property gallery",
+              "title": "A closer look at our signature properties.",
+              "desc": "Show category-specific property visuals in every gallery layout.",
+              "galleryItems": [
+                {
+                  "image": "/categories/realestate/bg1.jpg",
+                  "alt": "Premium apartment",
+                  "title": "Apartment view"
+                },
+                {
+                  "image": "/categories/realestate/bg2.jpg",
+                  "alt": "Luxury residence",
+                  "title": "Residence exterior"
+                },
+                {
+                  "image": "/categories/realestate/bg1.jpg",
+                  "alt": "Modern home",
+                  "title": "Living space"
+                },
+                {
+                  "image": "/categories/realestate/bg2.jpg",
+                  "alt": "Property detail",
+                  "title": "Premium detail"
+                }
+              ]
+            }
+          }
         },
         "FormDetail": {
-          "pretitle": "Book a visit",
-          "title": "Tell us what kind of home you need.",
-          "desc": "Share your budget, location, and timeline so an advisor can respond.",
-          "backgroundImage": "/categories/realestate/bg1.jpg",
-          "backgroundImageTitle": "Property enquiry visual",
-          "formSubmitLabel": "Request property help",
-          "formFields": [
-            { "label": "Name", "type": "text", "placeholder": "Your name" },
-            { "label": "Phone", "type": "tel", "placeholder": "Your phone number" },
-            { "label": "Requirement", "type": "textarea", "placeholder": "Location, budget, property type" }
-          ]
+          "variants": {
+            "RealEstateFormDetail1": {
+              "pretitle": "Book a visit",
+              "title": "Tell us what kind of home you need.",
+              "desc": "Share your budget, location, and timeline so an advisor can respond.",
+              "backgroundImage": "/categories/realestate/bg1.jpg",
+              "backgroundImageTitle": "Property enquiry visual",
+              "formSubmitLabel": "Request property help",
+              "formFields": [
+                {
+                  "label": "Name",
+                  "type": "text",
+                  "placeholder": "Your name"
+                },
+                {
+                  "label": "Phone",
+                  "type": "tel",
+                  "placeholder": "Your phone number"
+                },
+                {
+                  "label": "Requirement",
+                  "type": "textarea",
+                  "placeholder": "Location, budget, property type"
+                }
+              ]
+            },
+            "RealEstateFormDetail2": {
+              "pretitle": "Book a visit",
+              "title": "Schedule a private property consultation.",
+              "desc": "Share your budget, location, and timeline so an advisor can respond.",
+              "backgroundImage": "/categories/realestate/bg1.jpg",
+              "backgroundImageTitle": "Property enquiry visual",
+              "formSubmitLabel": "Request property help",
+              "formFields": [
+                {
+                  "label": "Name",
+                  "type": "text",
+                  "placeholder": "Your name"
+                },
+                {
+                  "label": "Phone",
+                  "type": "tel",
+                  "placeholder": "Your phone number"
+                },
+                {
+                  "label": "Requirement",
+                  "type": "textarea",
+                  "placeholder": "Location, budget, property type"
+                }
+              ]
+            }
+          }
         },
         "FAQ": {
-          "pretitle": "Property FAQ",
-          "title": "Questions buyers often ask.",
-          "faqItems": [
-            { "question": "Can I book a site visit?", "answer": "Yes, share your preferred date and our advisor will coordinate the visit." },
-            { "question": "Are documents verified?", "answer": "Featured listings include basic ownership and documentation checks." },
-            { "question": "Do you help with loans?", "answer": "Loan and legal support can be coordinated after property shortlisting." }
-          ]
+          "variants": {
+            "RealEstateFAQ1": {
+              "pretitle": "Property FAQ",
+              "title": "Questions buyers often ask.",
+              "faqItems": [
+                {
+                  "question": "Can I book a site visit?",
+                  "answer": "Yes, share your preferred date and our advisor will coordinate the visit."
+                },
+                {
+                  "question": "Are documents verified?",
+                  "answer": "Featured listings include basic ownership and documentation checks."
+                },
+                {
+                  "question": "Do you help with loans?",
+                  "answer": "Loan and legal support can be coordinated after property shortlisting."
+                }
+              ]
+            },
+            "RealEstateFAQ2": {
+              "pretitle": "Property FAQ",
+              "title": "Helpful answers for your property journey.",
+              "faqItems": [
+                {
+                  "question": "Can I book a site visit?",
+                  "answer": "Yes, share your preferred date and our advisor will coordinate the visit."
+                },
+                {
+                  "question": "Are documents verified?",
+                  "answer": "Featured listings include basic ownership and documentation checks."
+                },
+                {
+                  "question": "Do you help with loans?",
+                  "answer": "Loan and legal support can be coordinated after property shortlisting."
+                }
+              ]
+            }
+          }
+        },
+        "Topbar": {
+          "variants": {
+            "RealEstateTopbar1": {
+              "text": [
+                "Fast setup, editable sections, category-ready media"
+              ],
+              "phone": "+91 98765 43210",
+              "email": "hello@example.com",
+              "location": "India",
+              "socialLinks": [
+                {
+                  "label": "facebook",
+                  "href": "#"
+                },
+                {
+                  "label": "twitter",
+                  "href": "#"
+                },
+                {
+                  "label": "linkedin",
+                  "href": "#"
+                }
+              ]
+            },
+            "RealEstateTopbar2": {
+              "text": [
+                "New premium listings added every week"
+              ],
+              "phone": "+91 98765 43210",
+              "email": "hello@example.com",
+              "location": "India",
+              "socialLinks": [
+                {
+                  "label": "facebook",
+                  "href": "#"
+                },
+                {
+                  "label": "twitter",
+                  "href": "#"
+                },
+                {
+                  "label": "linkedin",
+                  "href": "#"
+                }
+              ]
+            }
+          }
+        },
+        "Testimonial": {
+          "variants": {
+            "RealEstateTestimonial1": {
+              "pretitle": "Our clients",
+              "title": "Trusted by people who care about results.",
+              "desc": "Use real customer feedback to build trust with new visitors.",
+              "testimonialItems": [
+                {
+                  "name": "Aarav Mehta",
+                  "role": "Founder, Studio North",
+                  "quote": "The site made our work easier to understand and brought in better leads within the first week.",
+                  "image": "/bg1.jpg",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Neha Kapoor",
+                  "role": "Marketing Lead",
+                  "quote": "Clean sections, fast pages, and the editor keeps the content simple for our whole team.",
+                  "image": "/bg2.jpg",
+                  "rating": "4.9"
+                },
+                {
+                  "name": "Rahul Verma",
+                  "role": "Operations Head",
+                  "quote": "We finally have a website that looks premium and still feels practical to update.",
+                  "image": "/blackbay.png",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Isha Malhotra",
+                  "role": "Creative Director",
+                  "quote": "The layouts gave our brand a sharper story and made every service easier to browse.",
+                  "image": "/shaye.png",
+                  "rating": "4.8"
+                },
+                {
+                  "name": "Kabir Anand",
+                  "role": "Product Manager",
+                  "quote": "We could test different sections quickly without losing the polished look of the page.",
+                  "image": "/stylam.png",
+                  "rating": "4.7"
+                },
+                {
+                  "name": "Sara Khan",
+                  "role": "Business Owner",
+                  "quote": "Visitors understand what we offer faster, and enquiries feel more relevant now.",
+                  "image": "/prod2.jpg",
+                  "rating": "5.0"
+                }
+              ]
+            },
+            "RealEstateTestimonial2": {
+              "pretitle": "Our clients",
+              "title": "Home buyers share their PrimeHomes experience.",
+              "desc": "Use real customer feedback to build trust with new visitors.",
+              "testimonialItems": [
+                {
+                  "name": "Aarav Mehta",
+                  "role": "Founder, Studio North",
+                  "quote": "The site made our work easier to understand and brought in better leads within the first week.",
+                  "image": "/bg1.jpg",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Neha Kapoor",
+                  "role": "Marketing Lead",
+                  "quote": "Clean sections, fast pages, and the editor keeps the content simple for our whole team.",
+                  "image": "/bg2.jpg",
+                  "rating": "4.9"
+                },
+                {
+                  "name": "Rahul Verma",
+                  "role": "Operations Head",
+                  "quote": "We finally have a website that looks premium and still feels practical to update.",
+                  "image": "/blackbay.png",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Isha Malhotra",
+                  "role": "Creative Director",
+                  "quote": "The layouts gave our brand a sharper story and made every service easier to browse.",
+                  "image": "/shaye.png",
+                  "rating": "4.8"
+                },
+                {
+                  "name": "Kabir Anand",
+                  "role": "Product Manager",
+                  "quote": "We could test different sections quickly without losing the polished look of the page.",
+                  "image": "/stylam.png",
+                  "rating": "4.7"
+                },
+                {
+                  "name": "Sara Khan",
+                  "role": "Business Owner",
+                  "quote": "Visitors understand what we offer faster, and enquiries feel more relevant now.",
+                  "image": "/prod2.jpg",
+                  "rating": "5.0"
+                }
+              ]
+            }
+          }
+        },
+        "Footer": {
+          "variants": {
+            "RealEstateFooter1": {
+              "logoImage": "/etacard.png",
+              "logoImageTitle": "ETA Card logo",
+              "desc": "Editable website content powered by one category and template JSON file.",
+              "footerColumns": [
+                {
+                  "title": "Pages",
+                  "links": [
+                    {
+                      "label": "Home",
+                      "href": "#"
+                    },
+                    {
+                      "label": "About",
+                      "href": "#about"
+                    },
+                    {
+                      "label": "Service",
+                      "href": "#service"
+                    },
+                    {
+                      "label": "Gallery",
+                      "href": "#gallery"
+                    },
+                    {
+                      "label": "Contact",
+                      "href": "#contact"
+                    }
+                  ]
+                },
+                {
+                  "title": "Sections",
+                  "links": [
+                    {
+                      "label": "Listings",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Services",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Programs",
+                      "href": "#"
+                    },
+                    {
+                      "label": "FAQ",
+                      "href": "#faq"
+                    }
+                  ]
+                }
+              ],
+              "footerContact": {
+                "location": "India",
+                "email": "hello@example.com",
+                "phone": "+91 98765 43210"
+              },
+              "footerLegalLinks": [
+                {
+                  "label": "Privacy Policy",
+                  "href": "#privacy"
+                },
+                {
+                  "label": "Terms",
+                  "href": "#terms"
+                }
+              ],
+              "whatsappLink": "https://api.whatsapp.com/send?phone=962786336414",
+              "callLink": "tel:+919876543210",
+              "copyrightText": "Copyright 2026. All rights reserved."
+            },
+            "RealEstateFooter2": {
+              "logoImage": "/etacard.png",
+              "logoImageTitle": "PrimeHomes Signature logo",
+              "desc": "Editable website content powered by one category and template JSON file.",
+              "footerColumns": [
+                {
+                  "title": "Pages",
+                  "links": [
+                    {
+                      "label": "Home",
+                      "href": "#"
+                    },
+                    {
+                      "label": "About",
+                      "href": "#about"
+                    },
+                    {
+                      "label": "Service",
+                      "href": "#service"
+                    },
+                    {
+                      "label": "Gallery",
+                      "href": "#gallery"
+                    },
+                    {
+                      "label": "Contact",
+                      "href": "#contact"
+                    }
+                  ]
+                },
+                {
+                  "title": "Sections",
+                  "links": [
+                    {
+                      "label": "Listings",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Services",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Programs",
+                      "href": "#"
+                    },
+                    {
+                      "label": "FAQ",
+                      "href": "#faq"
+                    }
+                  ]
+                }
+              ],
+              "footerContact": {
+                "location": "India",
+                "email": "hello@example.com",
+                "phone": "+91 98765 43210"
+              },
+              "footerLegalLinks": [
+                {
+                  "label": "Privacy Policy",
+                  "href": "#privacy"
+                },
+                {
+                  "label": "Terms",
+                  "href": "#terms"
+                }
+              ],
+              "whatsappLink": "https://api.whatsapp.com/send?phone=962786336414",
+              "callLink": "tel:+919876543210",
+              "copyrightText": "Copyright 2026. All rights reserved."
+            }
+          }
         }
       }
     },
     "Business": {
-      "templates": ["template-1", "template-2", "template-3", "template-4", "template-5"],
+      "templateComponents": {
+        "template-1": {
+          "Topbar": null,
+          "Header": "BusinessHeader1",
+          "Banner": "BusinessBanner1",
+          "Marquee": "BusinessMarquee1",
+          "Product": "BusinessProduct1",
+          "Stats":"BusinessStats1",
+          "WhyChooseUs": "BusinessWhyChooseUs1",
+          "Gallery": "BusinessGallery1",
+          "FormDetail": "BusinessFormDetail1",
+          "FAQ": "BusinessFAQ1",
+          "Testimonial": "BusinessTestimonial1",
+          "Footer": "BusinessFooter1"
+        },
+        "template-2": {
+          "Topbar": "BusinessTopbar2",
+          "Header": "BusinessHeader2",
+          "Banner": "BusinessBanner2",
+          "Marquee": "BusinessMarquee2",
+          "About": "BusinessAbout2",
+          "Product": "BusinessProduct2",
+          "WhyChooseUs": "BusinessWhyChooseUs2",
+          "Gallery": "BusinessGallery2",
+          "FormDetail": "BusinessFormDetail2",
+          "FAQ": "BusinessFAQ2",
+          "Testimonial": "BusinessTestimonial2",
+          "Footer": "BusinessFooter2"
+        }
+      },
       "sections": {
         "Header": {
-          "logo": "LaunchCo",
-          "menu": [
-            { "label": "Home", "href": "#" },
-            { "label": "About", "href": "#" },
-            { "label": "Service", "href": "#service" },
-            { "label": "Gallery", "href": "#gallery" },
-            { "label": "Contact", "href": "#" }
-          ],
-          "buttons": [
-            { "label": "Start Project", "href": "#", "variant": "primary" },
-            { "label": "Call Us", "href": "#", "variant": "secondary" }
-          ]
+          "variants": {
+            "BusinessHeader1": {
+              "logoImage": "/categories/business/template1/app_logo.png",
+              "logo": "Gen-z",
+              "menu": [
+                {
+                  "label": "Home",
+                  "href": "/"
+                },
+                {
+                  "label": "About",
+                  "href": "/about"
+                },
+                {
+                  "label": "Collection",
+                  "href": "/collection"
+                },
+                {
+                  "label": "Contact Us",
+                  "href": "/contact"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Shop The Collection",
+                  "href": "/collection",
+                  "variant": "primary"
+                }
+              ]
+            },
+            "BusinessHeader2": {
+              "logo": "LaunchCo Advisory",
+              "menu": [
+                {
+                  "label": "Home",
+                  "href": "#"
+                },
+                {
+                  "label": "About",
+                  "href": "#"
+                },
+                {
+                  "label": "Service",
+                  "href": "#service"
+                },
+                {
+                  "label": "Gallery",
+                  "href": "#gallery"
+                },
+                {
+                  "label": "Contact",
+                  "href": "#"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Start Project",
+                  "href": "#",
+                  "variant": "primary"
+                },
+                {
+                  "label": "Call Us",
+                  "href": "#",
+                  "variant": "secondary"
+                }
+              ]
+            }
+          }
         },
         "Banner": {
-          "backgroundImage": "/categories/business/blackbay.png",
-          "backgroundImageTitle": "Business workspace",
-          "backgroundVideo": "/categories/business/video.mp4",
-          "bannerHeight": 70,
-          "pretitle": "Modern business websites",
-          "title": "Launch a sharper website for your company.",
-          "desc": "Present services, credibility, and calls to action through modular sections your team can edit.",
-          "buttons": [{ "label": "Start project", "href": "#", "variant": "primary" }],
-          "bannerSlides": [
-            {
-              "image": "/categories/business/blackbay.png",
-              "video": "/categories/business/video.mp4",
-              "alt": "Business website",
-              "title": "Clear service pages",
-              "desc": "Explain your services with strong sections and simple editing.",
-              "button": { "label": "View services", "href": "#", "variant": "primary" }
+          "variants": {
+            "BusinessBanner1": {
+              "backgroundImage": "/categories/business/template1/bg.png",
+              "backgroundImageTitle": "Summer Collection Campaign",
+              "bannerHeight": 100,
+              "pretitle": "The New Season",
+              "title": "Elevate Your Everyday Aesthetic.",
+              "desc": "Discover the latest collection featuring bold silhouettes and premium sustainable fabrics.",
+              "buttons": [
+                {
+                  "label": "Shop Collection",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ],
+              "bannerSlides": [
+                {
+                  "image": "/categories/business/blackbay.png",
+                  "video": "/categories/business/video.mp4",
+                  "alt": "Business website",
+                  "title": "Clear service pages",
+                  "desc": "Explain your services with strong sections and simple editing.",
+                  "button": {
+                    "label": "View services",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                },
+                {
+                  "image": "/categories/business/bg1.jpg",
+                  "video": "/categories/business/video.mp4",
+                  "alt": "Business operations",
+                  "title": "Proof-led company pages",
+                  "desc": "Show results, offers, and conversion paths in one place.",
+                  "button": {
+                    "label": "See work",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                }
+              ]
             },
-            {
-              "image": "/categories/business/bg1.jpg",
-              "video": "/categories/business/video.mp4",
-              "alt": "Business operations",
-              "title": "Proof-led company pages",
-              "desc": "Show results, offers, and conversion paths in one place.",
-              "button": { "label": "See work", "href": "#", "variant": "primary" }
+            "BusinessBanner2": {
+              "backgroundImage": "/categories/business/bg2.jpg",
+              "backgroundImageTitle": "Business growth team",
+              "backgroundVideo": "/categories/business/video.mp4",
+              "bannerBackgroundMode": "video",
+              "bannerHeight": 80,
+              "badge": "Built to perform",
+              "decorativeNumber": "02",
+              "pretitle": "Build your business presence",
+              "title": "Turn ambitious business ideas into measurable growth.",
+              "desc": "Showcase your expertise, services, results, and customer success through a modern business experience.",
+              "buttons": [
+                {
+                  "label": "Start building",
+                  "href": "#start",
+                  "variant": "primary"
+                },
+                {
+                  "label": "View services",
+                  "href": "#service",
+                  "variant": "secondary"
+                }
+              ],
+              "bannerSlides": [
+                {
+                  "image": "/categories/business/bg2.jpg",
+                  "video": "/categories/business/video.mp4",
+                  "alt": "Business growth strategy",
+                  "title": "Designed for growth",
+                  "desc": "Present your company as a credible and modern business.",
+                  "button": {
+                    "label": "Start building",
+                    "href": "#start",
+                    "variant": "primary"
+                  }
+                },
+                {
+                  "image": "/categories/business/blackbay.png",
+                  "video": "/categories/business/video.mp4",
+                  "alt": "Modern business workspace",
+                  "title": "Built around your services",
+                  "desc": "Explain your offers with clear layouts and conversion paths.",
+                  "button": {
+                    "label": "Explore services",
+                    "href": "#service",
+                    "variant": "secondary"
+                  }
+                }
+              ]
             }
-          ]
+          }
+        },
+        "Marquee": {
+          "variants": {
+            "BusinessMarquee1": {
+              "text": [
+                "NIKE",
+                "ADDIDAS",
+                "RED-TAPE",
+                "ALLEN-SOLLY",
+                "PUMA · ZUDIO · BEWAKOF"
+              ]
+            },
+            "BusinessMarquee2": {
+              "text": [
+                "STRATEGY",
+                "OPERATIONS",
+                "MARKETING",
+                "TECHNOLOGY",
+                "GROWTH · INSIGHT · IMPACT"
+              ]
+            }
+          }
         },
         "About": {
-          "pretitle": "About the company",
-          "title": "A business website built around trust.",
-          "subtitle": "Services, proof, and fast lead capture",
-          "desc": "Show what your business does, why customers choose you, and how visitors can get in touch.",
-          "desc2": "The content is business-specific while template designs can change component by component.",
-          "backgroundImage": "/categories/business/blackbay.png",
-          "backgroundImageTitle": "Business office",
-          "sideImage": "/categories/business/bg2.jpg",
-          "sideImageTitle": "Business design",
-          "philosophyTitle": "How We Work",
-          "philosophyDesc": "Clear messaging, strong sections, and fast editing for teams.",
-          "buttons": [{ "label": "Get consultation", "href": "#", "variant": "primary" }]
+          "variants": {
+            "BusinessAbout1": {
+              "pretitle": "About the company",
+              "title": "A business website built around trust.",
+              "subtitle": "Services, proof, and fast lead capture",
+              "desc": "Show what your business does, why customers choose you, and how visitors can get in touch.",
+              "desc2": "The content is business-specific while template designs can change component by component.",
+              "backgroundImage": "/categories/business/blackbay.png",
+              "backgroundImageTitle": "Business office",
+              "sideImage": "/categories/business/bg2.jpg",
+              "sideImageTitle": "Business design",
+              "philosophyTitle": "How We Work",
+              "philosophyDesc": "Clear messaging, strong sections, and fast editing for teams.",
+              "buttons": [
+                {
+                  "label": "Get consultation",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
+            },
+            "BusinessAbout2": {
+              "pretitle": "About the company",
+              "title": "Practical strategy for the next stage of growth.",
+              "subtitle": "Services, proof, and fast lead capture",
+              "desc": "Show what your business does, why customers choose you, and how visitors can get in touch.",
+              "desc2": "The content is business-specific while template designs can change component by component.",
+              "backgroundImage": "/categories/business/blackbay.png",
+              "backgroundImageTitle": "Business office",
+              "sideImage": "/categories/business/bg2.jpg",
+              "sideImageTitle": "Business design",
+              "philosophyTitle": "How We Work",
+              "philosophyDesc": "Clear messaging, strong sections, and fast editing for teams.",
+              "buttons": [
+                {
+                  "label": "Get consultation",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
+            }
+          }
         },
         "Product": {
-          "productSectionTitle": "Core Services",
-          "productTitle": "Business Growth Services",
-          "productSubtitle": "Ready to customize",
-          "productInfoTitle": "Everything your company needs online",
-          "productInfoDesc": "Use service cards to explain offers, packages, capabilities, or featured work.",
-          "productFeatures": [
-            { "label": "Strategy", "price": "Included" },
-            { "label": "Website", "price": "Included" },
-            { "label": "SEO", "price": "Optional" }
-          ],
-          "productTotalPrice": "Custom",
-          "productShippingText": "Fast setup available",
-          "productSlides": [
-            {
-              "image": "/categories/business/bg1.jpg",
-              "alt": "Consulting",
-              "productTitle": "Consulting",
-              "productSubtitle": "Growth Planning",
-              "productInfoTitle": "Clear strategy",
-              "productInfoDesc": "A focused service block for your leading offer.",
+          "variants": {
+            "BusinessProduct1": {
+              "pretitle": "BANQUET ·",
+              "title": "Dressed for the table, remembered for the",
+              "highlightedText": "room.",
+              "productInfoDesc": "Each piece is made to order in our Shanghai atelier, with a fitting consultation included.",
+              "productItems": [
+                {
+                  "category": "BANQUET",
+                  "title": "Pomegranate Dupioni",
+                  "desc": "Pure dupioni silk · Hand-embroidered collar",
+                  "image": "/categories/business/template1/polo.png"
+                },
+                {
+                  "category": "BANQUET",
+                  "title": "Midnight Charmeuse",
+                  "desc": "Silk charmeuse · Gold piping · Side slit",
+                  "image": "/categories/business/template1/7.jfif"
+                },
+                {
+                  "category": "BANQUET",
+                  "title": "Jade Jacquard",
+                  "desc": "Silk jacquard · Phoenix motif · Qing-era pattern",
+                  "image": "/categories/business/template1/8.jfif"
+                },
+                {
+                  "category": "BANQUET",
+                  "title": "Ivory Shantung",
+                  "desc": "Shantung silk · Vermillion piping · Classic silhouette",
+                  "image": "/categories/business/template1/9.jfif"
+                }
+              ]
+            },
+            "BusinessProduct2": {
+              "productSectionTitle": "Growth Advisory Services",
+              "productTitle": "Business Growth Services",
+              "productSubtitle": "Ready to customize",
+              "productInfoTitle": "Everything your company needs online",
+              "productInfoDesc": "Use service cards to explain offers, packages, capabilities, or featured work.",
               "productFeatures": [
-                { "label": "Audit", "price": "Included" },
-                { "label": "Plan", "price": "Included" }
+                {
+                  "label": "Strategy",
+                  "price": "Included"
+                },
+                {
+                  "label": "Website",
+                  "price": "Included"
+                },
+                {
+                  "label": "SEO",
+                  "price": "Optional"
+                }
               ],
               "productTotalPrice": "Custom",
               "productShippingText": "Fast setup available",
-              "button": { "label": "Talk to us", "href": "#", "variant": "primary" }
+              "productSlides": [
+                {
+                  "image": "/categories/business/bg1.jpg",
+                  "alt": "Consulting",
+                  "productTitle": "Consulting",
+                  "productSubtitle": "Growth Planning",
+                  "productInfoTitle": "Clear strategy",
+                  "productInfoDesc": "A focused service block for your leading offer.",
+                  "productFeatures": [
+                    {
+                      "label": "Audit",
+                      "price": "Included"
+                    },
+                    {
+                      "label": "Plan",
+                      "price": "Included"
+                    }
+                  ],
+                  "productTotalPrice": "Custom",
+                  "productShippingText": "Fast setup available",
+                  "button": {
+                    "label": "Talk to us",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                }
+              ],
+              "productItems": [
+                {
+                  "title": "Consulting",
+                  "category": "Service",
+                  "desc": "A focused service block for your leading business offer.",
+                  "image": "/categories/business/bg1.jpg",
+                  "alt": "Business consulting"
+                },
+                {
+                  "title": "Operations",
+                  "category": "Service",
+                  "desc": "Show the process and support your customers can expect.",
+                  "image": "/categories/business/bg2.jpg",
+                  "alt": "Business operations"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Talk to us",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
             }
-          ],
-          "productItems": [
+          }
+        },
+        "Stats":{
+          "variants":{
+            "BusinessStats1":{
+               "pretitle": "शिल्प कौशल · CRAFTMANSHIP",
+          "title": "Fourteen hours of finishing. One button at a time.",
+          "desc": "Every knot button is hand-formed from the same bolt of silk as the garment itself. Our master button-maker, Wu Lifen, has been making them since 1982. There is no machine that does what her hands do.",
+          "stats": [
             {
-              "title": "Consulting",
-              "category": "Service",
-              "desc": "A focused service block for your leading business offer.",
-              "image": "/categories/business/bg1.jpg",
-              "alt": "Business consulting"
+              "value": "14h",
+              "label": "PER GARMENT"
             },
             {
-              "title": "Operations",
-              "category": "Service",
-              "desc": "Show the process and support your customers can expect.",
-              "image": "/categories/business/bg2.jpg",
-              "alt": "Business operations"
+              "value": "12",
+              "label": "KNOT BUTTONS"
+            },
+            {
+              "value": "3rd",
+              "label": "GENERATION"
             }
           ],
-          "buttons": [{ "label": "Talk to us", "href": "#", "variant": "primary" }]
+          "backgroundImage": "/categories/business/template1/stats-banner.jpg",
+          "backgroundImageTitle": "Hand-finished silk garment craftsmanship"
+            }
+          }
         },
         "WhyChooseUs": {
-          "pretitle": "Why choose LaunchCo",
-          "title": "Business pages built for trust and leads.",
-          "desc": "Explain your offer clearly and guide visitors toward action.",
-          "whyChooseUsItems": [
-            { "title": "Sharp positioning", "desc": "Clear service messaging for customers who need quick answers.", "stat": "01" },
-            { "title": "Conversion flow", "desc": "Sections are arranged around proof, offers, and enquiries.", "stat": "02" },
-            { "title": "Fast editing", "desc": "Teams can update service content without rebuilding the design.", "stat": "03" }
-          ]
+          "variants": {
+            "BusinessWhyChooseUs1": {
+              "pretitle": "Why choose LaunchCo",
+              "title": "Business pages built for trust and leads.",
+              "desc": "Explain your offer clearly and guide visitors toward action.",
+              "whyChooseUsItems": [
+                {
+                  "title": "Sharp positioning",
+                  "desc": "Clear service messaging for customers who need quick answers.",
+                  "stat": "01"
+                },
+                {
+                  "title": "Conversion flow",
+                  "desc": "Sections are arranged around proof, offers, and enquiries.",
+                  "stat": "02"
+                },
+                {
+                  "title": "Fast editing",
+                  "desc": "Teams can update service content without rebuilding the design.",
+                  "stat": "03"
+                }
+              ]
+            },
+            "BusinessWhyChooseUs2": {
+              "pretitle": "Why choose LaunchCo",
+              "title": "Experienced partners for complex business challenges.",
+              "desc": "Explain your offer clearly and guide visitors toward action.",
+              "whyChooseUsItems": [
+                {
+                  "title": "Sharp positioning",
+                  "desc": "Clear service messaging for customers who need quick answers.",
+                  "stat": "01"
+                },
+                {
+                  "title": "Conversion flow",
+                  "desc": "Sections are arranged around proof, offers, and enquiries.",
+                  "stat": "02"
+                },
+                {
+                  "title": "Fast editing",
+                  "desc": "Teams can update service content without rebuilding the design.",
+                  "stat": "03"
+                }
+              ]
+            }
+          }
         },
         "Gallery": {
-          "pretitle": "Work gallery",
-          "title": "Show your team, work, and process.",
-          "desc": "Business visuals stay inside the business category folder.",
-          "galleryItems": [
-            { "image": "/categories/business/blackbay.png", "alt": "Business workspace", "title": "Workspace" },
-            { "image": "/categories/business/bg1.jpg", "alt": "Consulting", "title": "Consulting" },
-            { "image": "/categories/business/bg2.jpg", "alt": "Operations", "title": "Operations" },
-            { "image": "/categories/business/blackbay.png", "alt": "Team work", "title": "Team" }
-          ]
+          "variants": {
+            "BusinessGallery1": {
+              "pretitle": "Work gallery",
+              "title": "Show your team, work, and process.",
+              "desc": "Business visuals stay inside the business category folder.",
+              "galleryItems": [
+                {
+                  "image": "/categories/business/blackbay.png",
+                  "alt": "Business workspace",
+                  "title": "Workspace"
+                },
+                {
+                  "image": "/categories/business/bg1.jpg",
+                  "alt": "Consulting",
+                  "title": "Consulting"
+                },
+                {
+                  "image": "/categories/business/bg2.jpg",
+                  "alt": "Operations",
+                  "title": "Operations"
+                },
+                {
+                  "image": "/categories/business/blackbay.png",
+                  "alt": "Team work",
+                  "title": "Team"
+                }
+              ]
+            },
+            "BusinessGallery2": {
+              "pretitle": "Work gallery",
+              "title": "Ideas, collaboration, and outcomes in action.",
+              "desc": "Business visuals stay inside the business category folder.",
+              "galleryItems": [
+                {
+                  "image": "/categories/business/blackbay.png",
+                  "alt": "Business workspace",
+                  "title": "Workspace"
+                },
+                {
+                  "image": "/categories/business/bg1.jpg",
+                  "alt": "Consulting",
+                  "title": "Consulting"
+                },
+                {
+                  "image": "/categories/business/bg2.jpg",
+                  "alt": "Operations",
+                  "title": "Operations"
+                },
+                {
+                  "image": "/categories/business/blackbay.png",
+                  "alt": "Team work",
+                  "title": "Team"
+                }
+              ]
+            }
+          }
         },
         "FormDetail": {
-          "pretitle": "Start a project",
-          "title": "Tell us about your business goal.",
-          "desc": "Capture business enquiries with fields that match service-led websites.",
-          "backgroundImage": "/categories/business/blackbay.png",
-          "backgroundImageTitle": "Business enquiry visual",
-          "formSubmitLabel": "Send project details",
-          "formFields": [
-            { "label": "Name", "type": "text", "placeholder": "Your name" },
-            { "label": "Work email", "type": "email", "placeholder": "you@company.com" },
-            { "label": "Project details", "type": "textarea", "placeholder": "Services, goals, timeline" }
-          ]
+          "variants": {
+            "BusinessFormDetail1": {
+              "pretitle": "Start a project",
+              "title": "Tell us about your business goal.",
+              "desc": "Capture business enquiries with fields that match service-led websites.",
+              "backgroundImage": "/categories/business/blackbay.png",
+              "backgroundImageTitle": "Business enquiry visual",
+              "formSubmitLabel": "Send project details",
+              "formFields": [
+                {
+                  "label": "Name",
+                  "type": "text",
+                  "placeholder": "Your name"
+                },
+                {
+                  "label": "Work email",
+                  "type": "email",
+                  "placeholder": "you@company.com"
+                },
+                {
+                  "label": "Project details",
+                  "type": "textarea",
+                  "placeholder": "Services, goals, timeline"
+                }
+              ]
+            },
+            "BusinessFormDetail2": {
+              "pretitle": "Start a project",
+              "title": "Book a focused business strategy session.",
+              "desc": "Capture business enquiries with fields that match service-led websites.",
+              "backgroundImage": "/categories/business/blackbay.png",
+              "backgroundImageTitle": "Business enquiry visual",
+              "formSubmitLabel": "Send project details",
+              "formFields": [
+                {
+                  "label": "Name",
+                  "type": "text",
+                  "placeholder": "Your name"
+                },
+                {
+                  "label": "Work email",
+                  "type": "email",
+                  "placeholder": "you@company.com"
+                },
+                {
+                  "label": "Project details",
+                  "type": "textarea",
+                  "placeholder": "Services, goals, timeline"
+                }
+              ]
+            }
+          }
         },
         "FAQ": {
-          "pretitle": "Business FAQ",
-          "title": "Common questions before starting.",
-          "faqItems": [
-            { "question": "Can this show services?", "answer": "Yes, service cards and sections can be customized for your company." },
-            { "question": "Can we change content later?", "answer": "Yes, the editor is built around reusable section data." },
-            { "question": "Is this useful for lead generation?", "answer": "Yes, forms, CTAs, and proof sections are designed for enquiries." }
-          ]
+          "variants": {
+            "BusinessFAQ1": {
+              "pretitle": "Business FAQ",
+              "title": "Common questions before starting.",
+              "faqItems": [
+                {
+                  "question": "Can this show services?",
+                  "answer": "Yes, service cards and sections can be customized for your company."
+                },
+                {
+                  "question": "Can we change content later?",
+                  "answer": "Yes, the editor is built around reusable section data."
+                },
+                {
+                  "question": "Is this useful for lead generation?",
+                  "answer": "Yes, forms, CTAs, and proof sections are designed for enquiries."
+                }
+              ]
+            },
+            "BusinessFAQ2": {
+              "pretitle": "Business FAQ",
+              "title": "What to know before working with our advisors.",
+              "faqItems": [
+                {
+                  "question": "Can this show services?",
+                  "answer": "Yes, service cards and sections can be customized for your company."
+                },
+                {
+                  "question": "Can we change content later?",
+                  "answer": "Yes, the editor is built around reusable section data."
+                },
+                {
+                  "question": "Is this useful for lead generation?",
+                  "answer": "Yes, forms, CTAs, and proof sections are designed for enquiries."
+                }
+              ]
+            }
+          }
+        },
+        "Topbar": {
+          "variants": {
+            "BusinessTopbar1": {
+              "text": [
+                "Fast setup, editable sections, category-ready media"
+              ],
+              "phone": "+91 98765 43210",
+              "email": "hello@example.com",
+              "location": "India",
+              "socialLinks": [
+                {
+                  "label": "facebook",
+                  "href": "#"
+                },
+                {
+                  "label": "twitter",
+                  "href": "#"
+                },
+                {
+                  "label": "linkedin",
+                  "href": "#"
+                }
+              ]
+            },
+            "BusinessTopbar2": {
+              "text": [
+                "Helping ambitious companies move forward"
+              ],
+              "phone": "+91 98765 43210",
+              "email": "hello@example.com",
+              "location": "India",
+              "socialLinks": [
+                {
+                  "label": "facebook",
+                  "href": "#"
+                },
+                {
+                  "label": "twitter",
+                  "href": "#"
+                },
+                {
+                  "label": "linkedin",
+                  "href": "#"
+                }
+              ]
+            }
+          }
+        },
+        "Testimonial": {
+          "variants": {
+            "BusinessTestimonial1": {
+              "pretitle": "Our clients",
+              "title": "Trusted by people who care about results.",
+              "desc": "Use real customer feedback to build trust with new visitors.",
+              "testimonialItems": [
+                {
+                  "name": "Aarav Mehta",
+                  "role": "Founder, Studio North",
+                  "quote": "The site made our work easier to understand and brought in better leads within the first week.",
+                  "image": "/bg1.jpg",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Neha Kapoor",
+                  "role": "Marketing Lead",
+                  "quote": "Clean sections, fast pages, and the editor keeps the content simple for our whole team.",
+                  "image": "/bg2.jpg",
+                  "rating": "4.9"
+                },
+                {
+                  "name": "Rahul Verma",
+                  "role": "Operations Head",
+                  "quote": "We finally have a website that looks premium and still feels practical to update.",
+                  "image": "/blackbay.png",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Isha Malhotra",
+                  "role": "Creative Director",
+                  "quote": "The layouts gave our brand a sharper story and made every service easier to browse.",
+                  "image": "/shaye.png",
+                  "rating": "4.8"
+                },
+                {
+                  "name": "Kabir Anand",
+                  "role": "Product Manager",
+                  "quote": "We could test different sections quickly without losing the polished look of the page.",
+                  "image": "/stylam.png",
+                  "rating": "4.7"
+                },
+                {
+                  "name": "Sara Khan",
+                  "role": "Business Owner",
+                  "quote": "Visitors understand what we offer faster, and enquiries feel more relevant now.",
+                  "image": "/prod2.jpg",
+                  "rating": "5.0"
+                }
+              ]
+            },
+            "BusinessTestimonial2": {
+              "pretitle": "Our clients",
+              "title": "Business leaders on the value we delivered.",
+              "desc": "Use real customer feedback to build trust with new visitors.",
+              "testimonialItems": [
+                {
+                  "name": "Aarav Mehta",
+                  "role": "Founder, Studio North",
+                  "quote": "The site made our work easier to understand and brought in better leads within the first week.",
+                  "image": "/bg1.jpg",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Neha Kapoor",
+                  "role": "Marketing Lead",
+                  "quote": "Clean sections, fast pages, and the editor keeps the content simple for our whole team.",
+                  "image": "/bg2.jpg",
+                  "rating": "4.9"
+                },
+                {
+                  "name": "Rahul Verma",
+                  "role": "Operations Head",
+                  "quote": "We finally have a website that looks premium and still feels practical to update.",
+                  "image": "/blackbay.png",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Isha Malhotra",
+                  "role": "Creative Director",
+                  "quote": "The layouts gave our brand a sharper story and made every service easier to browse.",
+                  "image": "/shaye.png",
+                  "rating": "4.8"
+                },
+                {
+                  "name": "Kabir Anand",
+                  "role": "Product Manager",
+                  "quote": "We could test different sections quickly without losing the polished look of the page.",
+                  "image": "/stylam.png",
+                  "rating": "4.7"
+                },
+                {
+                  "name": "Sara Khan",
+                  "role": "Business Owner",
+                  "quote": "Visitors understand what we offer faster, and enquiries feel more relevant now.",
+                  "image": "/prod2.jpg",
+                  "rating": "5.0"
+                }
+              ]
+            }
+          }
+        },
+        "Footer": {
+          "variants": {
+            "BusinessFooter1": {
+              "logoImage": "/etacard.png",
+              "logoImageTitle": "ETA Card logo",
+              "desc": "Editable website content powered by one category and template JSON file.",
+              "footerColumns": [
+                {
+                  "title": "Pages",
+                  "links": [
+                    {
+                      "label": "Home",
+                      "href": "#"
+                    },
+                    {
+                      "label": "About",
+                      "href": "#about"
+                    },
+                    {
+                      "label": "Service",
+                      "href": "#service"
+                    },
+                    {
+                      "label": "Gallery",
+                      "href": "#gallery"
+                    },
+                    {
+                      "label": "Contact",
+                      "href": "#contact"
+                    }
+                  ]
+                },
+                {
+                  "title": "Sections",
+                  "links": [
+                    {
+                      "label": "Listings",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Services",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Programs",
+                      "href": "#"
+                    },
+                    {
+                      "label": "FAQ",
+                      "href": "#faq"
+                    }
+                  ]
+                }
+              ],
+              "footerContact": {
+                "location": "India",
+                "email": "hello@example.com",
+                "phone": "+91 98765 43210"
+              },
+              "footerLegalLinks": [
+                {
+                  "label": "Privacy Policy",
+                  "href": "#privacy"
+                },
+                {
+                  "label": "Terms",
+                  "href": "#terms"
+                }
+              ],
+              "whatsappLink": "https://api.whatsapp.com/send?phone=962786336414",
+              "callLink": "tel:+919876543210",
+              "copyrightText": "Copyright 2026. All rights reserved."
+            },
+            "BusinessFooter2": {
+              "logoImage": "/etacard.png",
+              "logoImageTitle": "LaunchCo Advisory logo",
+              "desc": "Editable website content powered by one category and template JSON file.",
+              "footerColumns": [
+                {
+                  "title": "Pages",
+                  "links": [
+                    {
+                      "label": "Home",
+                      "href": "#"
+                    },
+                    {
+                      "label": "About",
+                      "href": "#about"
+                    },
+                    {
+                      "label": "Service",
+                      "href": "#service"
+                    },
+                    {
+                      "label": "Gallery",
+                      "href": "#gallery"
+                    },
+                    {
+                      "label": "Contact",
+                      "href": "#contact"
+                    }
+                  ]
+                },
+                {
+                  "title": "Sections",
+                  "links": [
+                    {
+                      "label": "Listings",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Services",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Programs",
+                      "href": "#"
+                    },
+                    {
+                      "label": "FAQ",
+                      "href": "#faq"
+                    }
+                  ]
+                }
+              ],
+              "footerContact": {
+                "location": "India",
+                "email": "hello@example.com",
+                "phone": "+91 98765 43210"
+              },
+              "footerLegalLinks": [
+                {
+                  "label": "Privacy Policy",
+                  "href": "#privacy"
+                },
+                {
+                  "label": "Terms",
+                  "href": "#terms"
+                }
+              ],
+              "whatsappLink": "https://api.whatsapp.com/send?phone=962786336414",
+              "callLink": "tel:+919876543210",
+              "copyrightText": "Copyright 2026. All rights reserved."
+            }
+          }
         }
       }
     },
     "School": {
-      "templates": ["template-1","template-2", "template-3", "template-4", "template-5"],
+      "templateComponents": {
+        "template-1": {
+          "Topbar": "SchoolTopbar1",
+          "Header": "SchoolHeader1",
+          "Banner": "SchoolBanner1",
+          "About": "SchoolAbout1",
+          "Product": "SchoolProduct1",
+          "WhyChooseUs": "SchoolWhyChooseUs1",
+          "Gallery": "SchoolGallery1",
+          "FormDetail": "SchoolFormDetail1",
+          "FAQ": "SchoolFAQ1",
+          "Testimonial": "SchoolTestimonial1",
+          "Footer": "SchoolFooter1"
+        },
+        "template-2": {
+          "Topbar": "SchoolTopbar2",
+          "Header": "SchoolHeader2",
+          "Banner": "SchoolBanner2",
+          "About": "SchoolAbout2",
+          "Product": "SchoolProduct2",
+          "WhyChooseUs": "SchoolWhyChooseUs2",
+          "Gallery": "SchoolGallery2",
+          "FormDetail": "SchoolFormDetail2",
+          "FAQ": "SchoolFAQ2",
+          "Testimonial": "SchoolTestimonial2",
+          "Footer": "SchoolFooter2"
+        }
+      },
       "sections": {
         "Header": {
-          "logo": "BrightSchool",
-          "menu": [
-            { "label": "Home", "href": "#" },
-            { "label": "About", "href": "#" },
-            { "label": "Service", "href": "#service" },
-            { "label": "Gallery", "href": "#gallery" },
-            { "label": "Contact", "href": "#" }
-          ],
-          "buttons": [
-            { "label": "Apply Now", "href": "#", "variant": "primary" },
-            { "label": "Visit Campus", "href": "#", "variant": "secondary" }
-          ]
+          "variants": {
+            "SchoolHeader1": {
+              "logo": "BrightSchool",
+              "menu": [
+                {
+                  "label": "Home",
+                  "href": "#"
+                },
+                {
+                  "label": "About",
+                  "href": "#"
+                },
+                {
+                  "label": "Service",
+                  "href": "#service"
+                },
+                {
+                  "label": "Gallery",
+                  "href": "#gallery"
+                },
+                {
+                  "label": "Contact",
+                  "href": "#"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Apply Now",
+                  "href": "#",
+                  "variant": "primary"
+                },
+                {
+                  "label": "Visit Campus",
+                  "href": "#",
+                  "variant": "secondary"
+                }
+              ]
+            },
+            "SchoolHeader2": {
+              "logo": "BrightSchool Academy",
+              "menu": [
+                {
+                  "label": "Home",
+                  "href": "#"
+                },
+                {
+                  "label": "About",
+                  "href": "#"
+                },
+                {
+                  "label": "Service",
+                  "href": "#service"
+                },
+                {
+                  "label": "Gallery",
+                  "href": "#gallery"
+                },
+                {
+                  "label": "Contact",
+                  "href": "#"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Apply Now",
+                  "href": "#",
+                  "variant": "primary"
+                },
+                {
+                  "label": "Visit Campus",
+                  "href": "#",
+                  "variant": "secondary"
+                }
+              ]
+            }
+          }
         },
         "Banner": {
-          "backgroundImage": "/categories/school/bg22.jpg",
-          "backgroundImageTitle": "School campus",
-          "backgroundVideo": "/categories/school/video.mp4",
-          "bannerHeight": 70,
-          "pretitle": "Future-ready learning",
-          "title": "A school where curiosity becomes confidence.",
-          "desc": "Share admissions, academics, activities, and parent trust through a flexible website your team can edit.",
-          "buttons": [{ "label": "Explore admissions", "href": "#", "variant": "primary" }],
-          "bannerSlides": [
-            {
-              "image": "/categories/school/bg11.jpg",
-              "video": "/categories/school/video.mp4",
-              "alt": "Students learning together",
-              "title": "Learning that feels alive",
-              "desc": "Highlight classrooms, activities, and student stories with editable slides.",
-              "button": { "label": "View programs", "href": "#", "variant": "primary" }
+          "variants": {
+            "SchoolBanner1": {
+              "backgroundImage": "/categories/school/bg22.jpg",
+              "backgroundImageTitle": "School campus",
+              "backgroundVideo": "/categories/school/video.mp4",
+              "bannerHeight": 70,
+              "pretitle": "Future-ready learning",
+              "title": "A school where curiosity becomes confidence.",
+              "desc": "Share admissions, academics, activities, and parent trust through a flexible website your team can edit.",
+              "buttons": [
+                {
+                  "label": "Explore admissions",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ],
+              "bannerSlides": [
+                {
+                  "image": "/categories/school/bg11.jpg",
+                  "video": "/categories/school/video.mp4",
+                  "alt": "Students learning together",
+                  "title": "Learning that feels alive",
+                  "desc": "Highlight classrooms, activities, and student stories with editable slides.",
+                  "button": {
+                    "label": "View programs",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                },
+                {
+                  "image": "/categories/school/bg22.jpg",
+                  "video": "/categories/school/video.mp4",
+                  "alt": "Student activities",
+                  "title": "Academics, arts, and sports",
+                  "desc": "Present a complete school experience with reusable website sections.",
+                  "button": {
+                    "label": "Discover more",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                },
+                {
+                  "image": "/categories/school/bg33.png",
+                  "video": "/categories/school/video.mp4",
+                  "alt": "Student activities",
+                  "title": "Academics, arts, and sports that extend our outh",
+                  "desc": "Present a complete school experience with reusable website sections.",
+                  "button": {
+                    "label": "Discover more",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                }
+              ]
             },
-            {
-              "image": "/categories/school/bg22.jpg",
-              "video": "/categories/school/video.mp4",
-              "alt": "Student activities",
-              "title": "Academics, arts, and sports",
-              "desc": "Present a complete school experience with reusable website sections.",
-              "button": { "label": "Discover more", "href": "#", "variant": "primary" }
-            },
-            {
-              "image": "/categories/school/bg33.png",
-              "video": "/categories/school/video.mp4",
-              "alt": "Student activities",
-              "title": "Academics, arts, and sports that extend our outh",
-              "desc": "Present a complete school experience with reusable website sections.",
-              "button": { "label": "Discover more", "href": "#", "variant": "primary" }
+            "SchoolBanner2": {
+              "backgroundImage": "/categories/school/bg33.png",
+              "backgroundImageTitle": "Students learning together",
+              "backgroundVideo": "/categories/school/video.mp4",
+              "bannerHeight": 70,
+              "pretitle": "Admissions now open",
+              "title": "Where curious minds grow with confidence.",
+              "desc": "Discover a joyful learning community where strong academics, creativity, and thoughtful guidance help young people thrive.",
+              "buttons": [
+                {
+                  "label": "Plan a school visit",
+                  "href": "#visit",
+                  "variant": "primary"
+                },
+                {
+                  "label": "View programs",
+                  "href": "#programs",
+                  "variant": "secondary"
+                }
+              ],
+              "bannerSlides": [
+                {
+                  "image": "/categories/school/bg11.jpg",
+                  "video": "/categories/school/video.mp4",
+                  "alt": "Students learning together",
+                  "title": "Learning that feels alive",
+                  "desc": "Highlight classrooms, activities, and student stories with editable slides.",
+                  "button": {
+                    "label": "View programs",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                },
+                {
+                  "image": "/categories/school/bg22.jpg",
+                  "video": "/categories/school/video.mp4",
+                  "alt": "Student activities",
+                  "title": "Academics, arts, and sports",
+                  "desc": "Present a complete school experience with reusable website sections.",
+                  "button": {
+                    "label": "Discover more",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                },
+                {
+                  "image": "/categories/school/bg33.png",
+                  "video": "/categories/school/video.mp4",
+                  "alt": "Student activities",
+                  "title": "Academics, arts, and sports that extend our outh",
+                  "desc": "Present a complete school experience with reusable website sections.",
+                  "button": {
+                    "label": "Discover more",
+                    "href": "#",
+                    "variant": "primary"
+                  }
+                }
+              ]
             }
-          ]
+          }
         },
         "About": {
-          "pretitle": "About our school",
-          "title": "Strong academics with thoughtful student care.",
-          "subtitle": "A balanced environment for learning and growth",
-          "desc": "We help students build strong fundamentals, creative confidence, and real-world curiosity through guided learning.",
-          "desc2": "Parents get clear communication, structured programs, and a school community focused on every child.",
-          "backgroundImage": "/categories/school/bg11.jpg",
-          "backgroundImageTitle": "School classroom",
-          "sideImage": "/categories/school/bg22.jpg",
-          "sideImageTitle": "Students activity",
-          "philosophyTitle": "Our Approach",
-          "philosophyDesc": "Learning works best when students feel seen, supported, and challenged at the right pace.",
-          "buttons": [{ "label": "Meet our teachers", "href": "#", "variant": "primary" }]
+          "variants": {
+            "SchoolAbout1": {
+              "pretitle": "About our school",
+              "title": "Strong academics with thoughtful student care.",
+              "subtitle": "A balanced environment for learning and growth",
+              "desc": "We help students build strong fundamentals, creative confidence, and real-world curiosity through guided learning.",
+              "desc2": "Parents get clear communication, structured programs, and a school community focused on every child.",
+              "backgroundImage": "/categories/school/bg11.jpg",
+              "backgroundImageTitle": "School classroom",
+              "sideImage": "/categories/school/bg22.jpg",
+              "sideImageTitle": "Students activity",
+              "philosophyTitle": "Our Approach",
+              "philosophyDesc": "Learning works best when students feel seen, supported, and challenged at the right pace.",
+              "buttons": [
+                {
+                  "label": "Meet our teachers",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
+            },
+            "SchoolAbout2": {
+              "pretitle": "About our school",
+              "title": "A caring community built around every learner.",
+              "subtitle": "A balanced environment for learning and growth",
+              "desc": "We help students build strong fundamentals, creative confidence, and real-world curiosity through guided learning.",
+              "desc2": "Parents get clear communication, structured programs, and a school community focused on every child.",
+              "backgroundImage": "/categories/school/bg11.jpg",
+              "backgroundImageTitle": "School classroom",
+              "sideImage": "/categories/school/bg22.jpg",
+              "sideImageTitle": "Students activity",
+              "philosophyTitle": "Our Approach",
+              "philosophyDesc": "Learning works best when students feel seen, supported, and challenged at the right pace.",
+              "buttons": [
+                {
+                  "label": "Meet our teachers",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
+            }
+          }
         },
         "Product": {
-          "productSectionTitle": "School Programs",
-          "productTitle": "Academic Pathways",
-          "productSubtitle": "Admissions open",
-          "productInfoTitle": "Programs for every stage",
-          "productInfoDesc": "Present classes, activities, facilities, and admission highlights with reusable cards.",
-          "productFeatures": [
-            { "label": "Primary", "price": "I-V" },
-            { "label": "Middle", "price": "VI-VIII" },
-            { "label": "Senior", "price": "IX-XII" }
-          ],
-          "productTotalPrice": "Admissions Open",
-          "productShippingText": "Campus tours available",
-          "productItems": [ 
-            {
-              "title": "Primary School",
-              "category": "Classes I-V",
-              "desc": "Foundational learning with language, numeracy, activities, and creative confidence.",
-              "image": "/categories/school/bg11.jpg",
-              "alt": "Primary school"
+          "variants": {
+            "SchoolProduct1": {
+              "productSectionTitle": "School Programs",
+              "productTitle": "Academic Pathways",
+              "productSubtitle": "Admissions open",
+              "productInfoTitle": "Programs for every stage",
+              "productInfoDesc": "Present classes, activities, facilities, and admission highlights with reusable cards.",
+              "productFeatures": [
+                {
+                  "label": "Primary",
+                  "price": "I-V"
+                },
+                {
+                  "label": "Middle",
+                  "price": "VI-VIII"
+                },
+                {
+                  "label": "Senior",
+                  "price": "IX-XII"
+                }
+              ],
+              "productTotalPrice": "Admissions Open",
+              "productShippingText": "Campus tours available",
+              "productItems": [
+                {
+                  "title": "Primary School",
+                  "category": "Classes I-V",
+                  "desc": "Foundational learning with language, numeracy, activities, and creative confidence.",
+                  "image": "/categories/school/bg11.jpg",
+                  "alt": "Primary school"
+                },
+                {
+                  "title": "Senior School",
+                  "category": "Classes IX-XII",
+                  "desc": "Exam readiness, mentoring, and future planning for senior students.",
+                  "image": "/categories/school/bg22.jpg",
+                  "alt": "Senior school"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Book campus tour",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
             },
-            {
-              "title": "Senior School",
-              "category": "Classes IX-XII",
-              "desc": "Exam readiness, mentoring, and future planning for senior students.",
-              "image": "/categories/school/bg22.jpg",
-              "alt": "Senior school"
+            "SchoolProduct2": {
+              "productSectionTitle": "Enrichment and Learning Programs",
+              "productTitle": "Academic Pathways",
+              "productSubtitle": "Admissions open",
+              "productInfoTitle": "Programs for every stage",
+              "productInfoDesc": "Present classes, activities, facilities, and admission highlights with reusable cards.",
+              "productFeatures": [
+                {
+                  "label": "Primary",
+                  "price": "I-V"
+                },
+                {
+                  "label": "Middle",
+                  "price": "VI-VIII"
+                },
+                {
+                  "label": "Senior",
+                  "price": "IX-XII"
+                }
+              ],
+              "productTotalPrice": "Admissions Open",
+              "productShippingText": "Campus tours available",
+              "productItems": [
+                {
+                  "title": "Primary School",
+                  "category": "Classes I-V",
+                  "desc": "Foundational learning with language, numeracy, activities, and creative confidence.",
+                  "image": "/categories/school/bg11.jpg",
+                  "alt": "Primary school"
+                },
+                {
+                  "title": "Senior School",
+                  "category": "Classes IX-XII",
+                  "desc": "Exam readiness, mentoring, and future planning for senior students.",
+                  "image": "/categories/school/bg22.jpg",
+                  "alt": "Senior school"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Book campus tour",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
             }
-          ],
-          "buttons": [{ "label": "Book campus tour", "href": "#", "variant": "primary" }]
+          }
         },
         "WhyChooseUs": {
-          "pretitle": "Why choose BrightSchool",
-          "title": "A school experience parents can trust.",
-          "desc": "Use this section to explain care, academics, activities, and communication.",
-          "whyChooseUsItems": [
-            { "title": "Balanced learning", "desc": "Academics, activities, and values are presented together.", "stat": "01" },
-            { "title": "Parent clarity", "desc": "Admissions, programs, and contact steps stay easy to find.", "stat": "02" },
-            { "title": "Student growth", "desc": "Show the environment, teachers, and programs that support students.", "stat": "03" }
-          ]
+          "variants": {
+            "SchoolWhyChooseUs1": {
+              "pretitle": "Why choose BrightSchool",
+              "title": "A school experience parents can trust.",
+              "desc": "Use this section to explain care, academics, activities, and communication.",
+              "whyChooseUsItems": [
+                {
+                  "title": "Balanced learning",
+                  "desc": "Academics, activities, and values are presented together.",
+                  "stat": "01"
+                },
+                {
+                  "title": "Parent clarity",
+                  "desc": "Admissions, programs, and contact steps stay easy to find.",
+                  "stat": "02"
+                },
+                {
+                  "title": "Student growth",
+                  "desc": "Show the environment, teachers, and programs that support students.",
+                  "stat": "03"
+                }
+              ]
+            },
+            "SchoolWhyChooseUs2": {
+              "pretitle": "Why choose BrightSchool",
+              "title": "Learning, wellbeing, and opportunity in balance.",
+              "desc": "Use this section to explain care, academics, activities, and communication.",
+              "whyChooseUsItems": [
+                {
+                  "title": "Balanced learning",
+                  "desc": "Academics, activities, and values are presented together.",
+                  "stat": "01"
+                },
+                {
+                  "title": "Parent clarity",
+                  "desc": "Admissions, programs, and contact steps stay easy to find.",
+                  "stat": "02"
+                },
+                {
+                  "title": "Student growth",
+                  "desc": "Show the environment, teachers, and programs that support students.",
+                  "stat": "03"
+                }
+              ]
+            }
+          }
         },
         "Gallery": {
-          "pretitle": "Campus gallery",
-          "title": "Classrooms, campus, and student life.",
-          "desc": "School visuals always come from the school category folder.",
-          "galleryItems": [
-            { "image": "/categories/school/bg11.jpg", "alt": "Students learning", "title": "Classroom" },
-            { "image": "/categories/school/bg22.jpg", "alt": "School campus", "title": "Campus" },
-            { "image": "/categories/school/bg33.png", "alt": "Student activities", "title": "Activities" },
-            { "image": "/categories/school/bg11.jpg", "alt": "Learning space", "title": "Learning" }
-          ]
+          "variants": {
+            "SchoolGallery1": {
+              "pretitle": "Campus gallery",
+              "title": "Classrooms, campus, and student life.",
+              "desc": "School visuals always come from the school category folder.",
+              "galleryItems": [
+                {
+                  "image": "/categories/school/bg11.jpg",
+                  "alt": "Students learning",
+                  "title": "Classroom"
+                },
+                {
+                  "image": "/categories/school/bg22.jpg",
+                  "alt": "School campus",
+                  "title": "Campus"
+                },
+                {
+                  "image": "/categories/school/bg33.png",
+                  "alt": "Student activities",
+                  "title": "Activities"
+                },
+                {
+                  "image": "/categories/school/bg11.jpg",
+                  "alt": "Learning space",
+                  "title": "Learning"
+                }
+              ]
+            },
+            "SchoolGallery2": {
+              "pretitle": "Campus gallery",
+              "title": "Everyday moments from life at BrightSchool.",
+              "desc": "School visuals always come from the school category folder.",
+              "galleryItems": [
+                {
+                  "image": "/categories/school/bg11.jpg",
+                  "alt": "Students learning",
+                  "title": "Classroom"
+                },
+                {
+                  "image": "/categories/school/bg22.jpg",
+                  "alt": "School campus",
+                  "title": "Campus"
+                },
+                {
+                  "image": "/categories/school/bg33.png",
+                  "alt": "Student activities",
+                  "title": "Activities"
+                },
+                {
+                  "image": "/categories/school/bg11.jpg",
+                  "alt": "Learning space",
+                  "title": "Learning"
+                }
+              ]
+            }
+          }
         },
         "FormDetail": {
-          "pretitle": "Admissions enquiry",
-          "title": "Ask about admissions and campus visits.",
-          "desc": "Parents can enquire about classes, tours, and the admission process.",
-          "backgroundImage": "/categories/school/bg33.png",
-          "backgroundImageTitle": "School admission visual",
-          "formSubmitLabel": "Send admission enquiry",
-          "formFields": [
-            { "label": "Parent name", "type": "text", "placeholder": "Parent name" },
-            { "label": "Phone", "type": "tel", "placeholder": "Phone number" },
-            { "label": "Admission details", "type": "textarea", "placeholder": "Class, session, questions" }
-          ]
+          "variants": {
+            "SchoolFormDetail1": {
+              "pretitle": "Admissions enquiry",
+              "title": "Ask about admissions and campus visits.",
+              "desc": "Parents can enquire about classes, tours, and the admission process.",
+              "backgroundImage": "/categories/school/bg33.png",
+              "backgroundImageTitle": "School admission visual",
+              "formSubmitLabel": "Send admission enquiry",
+              "formFields": [
+                {
+                  "label": "Parent name",
+                  "type": "text",
+                  "placeholder": "Parent name"
+                },
+                {
+                  "label": "Phone",
+                  "type": "tel",
+                  "placeholder": "Phone number"
+                },
+                {
+                  "label": "Admission details",
+                  "type": "textarea",
+                  "placeholder": "Class, session, questions"
+                }
+              ]
+            },
+            "SchoolFormDetail2": {
+              "pretitle": "Admissions enquiry",
+              "title": "Plan your family's visit to our campus.",
+              "desc": "Parents can enquire about classes, tours, and the admission process.",
+              "backgroundImage": "/categories/school/bg33.png",
+              "backgroundImageTitle": "School admission visual",
+              "formSubmitLabel": "Send admission enquiry",
+              "formFields": [
+                {
+                  "label": "Parent name",
+                  "type": "text",
+                  "placeholder": "Parent name"
+                },
+                {
+                  "label": "Phone",
+                  "type": "tel",
+                  "placeholder": "Phone number"
+                },
+                {
+                  "label": "Admission details",
+                  "type": "textarea",
+                  "placeholder": "Class, session, questions"
+                }
+              ]
+            }
+          }
         },
         "FAQ": {
-          "pretitle": "School FAQ",
-          "title": "Admissions questions answered.",
-          "faqItems": [
-            { "question": "Are admissions open?", "answer": "Yes, admission enquiries can be submitted through the form section." },
-            { "question": "Can parents visit campus?", "answer": "Campus tours can be scheduled based on available slots." },
-            { "question": "Which classes are available?", "answer": "Program cards can show primary, middle, and senior school details." }
-          ]
-         }
+          "variants": {
+            "SchoolFAQ1": {
+              "pretitle": "School FAQ",
+              "title": "Admissions questions answered.",
+              "faqItems": [
+                {
+                  "question": "Are admissions open?",
+                  "answer": "Yes, admission enquiries can be submitted through the form section."
+                },
+                {
+                  "question": "Can parents visit campus?",
+                  "answer": "Campus tours can be scheduled based on available slots."
+                },
+                {
+                  "question": "Which classes are available?",
+                  "answer": "Program cards can show primary, middle, and senior school details."
+                }
+              ]
+            },
+            "SchoolFAQ2": {
+              "pretitle": "School FAQ",
+              "title": "Answers for families joining our community.",
+              "faqItems": [
+                {
+                  "question": "Are admissions open?",
+                  "answer": "Yes, admission enquiries can be submitted through the form section."
+                },
+                {
+                  "question": "Can parents visit campus?",
+                  "answer": "Campus tours can be scheduled based on available slots."
+                },
+                {
+                  "question": "Which classes are available?",
+                  "answer": "Program cards can show primary, middle, and senior school details."
+                }
+              ]
+            }
+          }
+        },
+        "Topbar": {
+          "variants": {
+            "SchoolTopbar1": {
+              "text": [
+                "Fast setup, editable sections, category-ready media"
+              ],
+              "phone": "+91 98765 43210",
+              "email": "hello@example.com",
+              "location": "India",
+              "socialLinks": [
+                {
+                  "label": "facebook",
+                  "href": "#"
+                },
+                {
+                  "label": "twitter",
+                  "href": "#"
+                },
+                {
+                  "label": "linkedin",
+                  "href": "#"
+                }
+              ]
+            },
+            "SchoolTopbar2": {
+              "text": [
+                "Campus tours available for prospective families"
+              ],
+              "phone": "+91 98765 43210",
+              "email": "hello@example.com",
+              "location": "India",
+              "socialLinks": [
+                {
+                  "label": "facebook",
+                  "href": "#"
+                },
+                {
+                  "label": "twitter",
+                  "href": "#"
+                },
+                {
+                  "label": "linkedin",
+                  "href": "#"
+                }
+              ]
+            }
+          }
+        },
+        "Testimonial": {
+          "variants": {
+            "SchoolTestimonial1": {
+              "pretitle": "Our clients",
+              "title": "Trusted by people who care about results.",
+              "desc": "Use real customer feedback to build trust with new visitors.",
+              "testimonialItems": [
+                {
+                  "name": "Aarav Mehta",
+                  "role": "Founder, Studio North",
+                  "quote": "The site made our work easier to understand and brought in better leads within the first week.",
+                  "image": "/bg1.jpg",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Neha Kapoor",
+                  "role": "Marketing Lead",
+                  "quote": "Clean sections, fast pages, and the editor keeps the content simple for our whole team.",
+                  "image": "/bg2.jpg",
+                  "rating": "4.9"
+                },
+                {
+                  "name": "Rahul Verma",
+                  "role": "Operations Head",
+                  "quote": "We finally have a website that looks premium and still feels practical to update.",
+                  "image": "/blackbay.png",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Isha Malhotra",
+                  "role": "Creative Director",
+                  "quote": "The layouts gave our brand a sharper story and made every service easier to browse.",
+                  "image": "/shaye.png",
+                  "rating": "4.8"
+                },
+                {
+                  "name": "Kabir Anand",
+                  "role": "Product Manager",
+                  "quote": "We could test different sections quickly without losing the polished look of the page.",
+                  "image": "/stylam.png",
+                  "rating": "4.7"
+                },
+                {
+                  "name": "Sara Khan",
+                  "role": "Business Owner",
+                  "quote": "Visitors understand what we offer faster, and enquiries feel more relevant now.",
+                  "image": "/prod2.jpg",
+                  "rating": "5.0"
+                }
+              ]
+            },
+            "SchoolTestimonial2": {
+              "pretitle": "Our clients",
+              "title": "What parents and students say about our school.",
+              "desc": "Use real customer feedback to build trust with new visitors.",
+              "testimonialItems": [
+                {
+                  "name": "Aarav Mehta",
+                  "role": "Founder, Studio North",
+                  "quote": "The site made our work easier to understand and brought in better leads within the first week.",
+                  "image": "/bg1.jpg",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Neha Kapoor",
+                  "role": "Marketing Lead",
+                  "quote": "Clean sections, fast pages, and the editor keeps the content simple for our whole team.",
+                  "image": "/bg2.jpg",
+                  "rating": "4.9"
+                },
+                {
+                  "name": "Rahul Verma",
+                  "role": "Operations Head",
+                  "quote": "We finally have a website that looks premium and still feels practical to update.",
+                  "image": "/blackbay.png",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Isha Malhotra",
+                  "role": "Creative Director",
+                  "quote": "The layouts gave our brand a sharper story and made every service easier to browse.",
+                  "image": "/shaye.png",
+                  "rating": "4.8"
+                },
+                {
+                  "name": "Kabir Anand",
+                  "role": "Product Manager",
+                  "quote": "We could test different sections quickly without losing the polished look of the page.",
+                  "image": "/stylam.png",
+                  "rating": "4.7"
+                },
+                {
+                  "name": "Sara Khan",
+                  "role": "Business Owner",
+                  "quote": "Visitors understand what we offer faster, and enquiries feel more relevant now.",
+                  "image": "/prod2.jpg",
+                  "rating": "5.0"
+                }
+              ]
+            }
+          }
+        },
+        "Footer": {
+          "variants": {
+            "SchoolFooter1": {
+              "logoImage": "/etacard.png",
+              "logoImageTitle": "ETA Card logo",
+              "desc": "Editable website content powered by one category and template JSON file.",
+              "footerColumns": [
+                {
+                  "title": "Pages",
+                  "links": [
+                    {
+                      "label": "Home",
+                      "href": "#"
+                    },
+                    {
+                      "label": "About",
+                      "href": "#about"
+                    },
+                    {
+                      "label": "Service",
+                      "href": "#service"
+                    },
+                    {
+                      "label": "Gallery",
+                      "href": "#gallery"
+                    },
+                    {
+                      "label": "Contact",
+                      "href": "#contact"
+                    }
+                  ]
+                },
+                {
+                  "title": "Sections",
+                  "links": [
+                    {
+                      "label": "Listings",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Services",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Programs",
+                      "href": "#"
+                    },
+                    {
+                      "label": "FAQ",
+                      "href": "#faq"
+                    }
+                  ]
+                }
+              ],
+              "footerContact": {
+                "location": "India",
+                "email": "hello@example.com",
+                "phone": "+91 98765 43210"
+              },
+              "footerLegalLinks": [
+                {
+                  "label": "Privacy Policy",
+                  "href": "#privacy"
+                },
+                {
+                  "label": "Terms",
+                  "href": "#terms"
+                }
+              ],
+              "whatsappLink": "https://api.whatsapp.com/send?phone=962786336414",
+              "callLink": "tel:+919876543210",
+              "copyrightText": "Copyright 2026. All rights reserved."
+            },
+            "SchoolFooter2": {
+              "logoImage": "/etacard.png",
+              "logoImageTitle": "BrightSchool Academy logo",
+              "desc": "Editable website content powered by one category and template JSON file.",
+              "footerColumns": [
+                {
+                  "title": "Pages",
+                  "links": [
+                    {
+                      "label": "Home",
+                      "href": "#"
+                    },
+                    {
+                      "label": "About",
+                      "href": "#about"
+                    },
+                    {
+                      "label": "Service",
+                      "href": "#service"
+                    },
+                    {
+                      "label": "Gallery",
+                      "href": "#gallery"
+                    },
+                    {
+                      "label": "Contact",
+                      "href": "#contact"
+                    }
+                  ]
+                },
+                {
+                  "title": "Sections",
+                  "links": [
+                    {
+                      "label": "Listings",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Services",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Programs",
+                      "href": "#"
+                    },
+                    {
+                      "label": "FAQ",
+                      "href": "#faq"
+                    }
+                  ]
+                }
+              ],
+              "footerContact": {
+                "location": "India",
+                "email": "hello@example.com",
+                "phone": "+91 98765 43210"
+              },
+              "footerLegalLinks": [
+                {
+                  "label": "Privacy Policy",
+                  "href": "#privacy"
+                },
+                {
+                  "label": "Terms",
+                  "href": "#terms"
+                }
+              ],
+              "whatsappLink": "https://api.whatsapp.com/send?phone=962786336414",
+              "callLink": "tel:+919876543210",
+              "copyrightText": "Copyright 2026. All rights reserved."
+            }
+          }
+        }
+      }
+    },
+    "Ecommerce": {
+      "templateComponents": {
+        "template-1": {
+          "Topbar": "EcommerceTopbar1",
+          "Header": "EcommerceHeader1",
+          "Banner": "EcommerceBanner1",
+          "Marquee": "EcommerceMarquee1",
+          "About": "EcommerceAbout1",
+          "Product": "EcommerceProduct1",
+          "WhyChooseUs": "EcommerceWhyChooseUs1",
+          "Gallery": "EcommerceGallery1",
+          "FormDetail": "EcommerceFormDetail1",
+          "FAQ": "EcommerceFAQ1",
+          "Testimonial": "EcommerceTestimonial1",
+          "Footer": "EcommerceFooter1"
+        },
+        "template-2": {
+          "Topbar": "EcommerceTopbar2",
+          "Header": "EcommerceHeader2",
+          "Banner": "EcommerceBanner2",
+          "Marquee": "EcommerceMarquee2",
+          "About": "EcommerceAbout2",
+          "Product": "EcommerceProduct2",
+          "WhyChooseUs": "EcommerceWhyChooseUs2",
+          "Gallery": "EcommerceGallery2",
+          "FormDetail": "EcommerceFormDetail2",
+          "FAQ": "EcommerceFAQ2",
+          "Testimonial": "EcommerceTestimonial2",
+          "Footer": "EcommerceFooter2"
+        }
+      },
+      "sections": {
+        "Header": {
+          "variants": {
+            "EcommerceHeader1": {
+              "logo": "BrightSchool",
+              "menu": [
+                {
+                  "label": "Home",
+                  "href": "#"
+                },
+                {
+                  "label": "About",
+                  "href": "#"
+                },
+                {
+                  "label": "Service",
+                  "href": "#service"
+                },
+                {
+                  "label": "Gallery",
+                  "href": "#gallery"
+                },
+                {
+                  "label": "Contact",
+                  "href": "#"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Apply Now",
+                  "href": "#",
+                  "variant": "primary"
+                },
+                {
+                  "label": "Visit Campus",
+                  "href": "#",
+                  "variant": "secondary"
+                }
+              ]
+            },
+            "EcommerceHeader2": {
+              "logo": "Modern Market",
+              "menu": [
+                {
+                  "label": "Home",
+                  "href": "#"
+                },
+                {
+                  "label": "About",
+                  "href": "#"
+                },
+                {
+                  "label": "Service",
+                  "href": "#service"
+                },
+                {
+                  "label": "Gallery",
+                  "href": "#gallery"
+                },
+                {
+                  "label": "Contact",
+                  "href": "#"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Apply Now",
+                  "href": "#",
+                  "variant": "primary"
+                },
+                {
+                  "label": "Visit Campus",
+                  "href": "#",
+                  "variant": "secondary"
+                }
+              ]
+            }
+          }
+        },
+        "Banner": {
+          "variants": {
+            "EcommerceBanner1": {
+              "backgroundImage": "/categories/ecommerce/bg.png",
+              "backgroundImageTitle": "Summer Collection Campaign",
+              "bannerHeight": 100,
+              "pretitle": "The New Season",
+              "title": "Elevate Your Everyday Aesthetic.",
+              "desc": "Discover the latest collection featuring bold silhouettes and premium sustainable fabrics.",
+              "buttons": [
+                {
+                  "label": "Shop Collection",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
+            },
+            "EcommerceBanner2": {
+              "backgroundImage": "/categories/ecommerce/bg.png",
+              "backgroundImageTitle": "Summer Collection Campaign",
+              "bannerHeight": 100,
+              "pretitle": "The new edit",
+              "title": "Fresh arrivals chosen for effortless everyday style.",
+              "desc": "Meet a refined collection of everyday pieces where thoughtful materials, clean form, and lasting quality come together.",
+              "buttons": [
+                {
+                  "label": "Shop new arrivals",
+                  "href": "#new",
+                  "variant": "primary"
+                },
+                {
+                  "label": "Explore collections",
+                  "href": "#collections",
+                  "variant": "secondary"
+                }
+              ]
+            }
+          }
+        },
+        "Marquee": {
+          "variants": {
+            "EcommerceMarquee1": {
+              "text": [
+                "NIKE",
+                "ADDIDAS",
+                "RED-TAPE",
+                "ALLEN-SOLLY",
+                "PUMA · ZUDIO · BEWAKOF"
+              ]
+            },
+            "EcommerceMarquee2": {
+              "text": [
+                "NEW ARRIVALS",
+                "BEST SELLERS",
+                "LIMITED EDITS",
+                "EVERYDAY ESSENTIALS",
+                "STYLE · QUALITY · DELIVERY"
+              ]
+            }
+          }
+        },
+        "About": {
+          "variants": {
+            "EcommerceAbout1": {
+              "pretitle": "About our school",
+              "title": "Strong academics with thoughtful student care.",
+              "subtitle": "A balanced environment for learning and growth",
+              "desc": "We help students build strong fundamentals, creative confidence, and real-world curiosity through guided learning.",
+              "desc2": "Parents get clear communication, structured programs, and a school community focused on every child.",
+              "backgroundImage": "/categories/school/bg11.jpg",
+              "backgroundImageTitle": "School classroom",
+              "sideImage": "/categories/school/bg22.jpg",
+              "sideImageTitle": "Students activity",
+              "philosophyTitle": "Our Approach",
+              "philosophyDesc": "Learning works best when students feel seen, supported, and challenged at the right pace.",
+              "buttons": [
+                {
+                  "label": "Meet our teachers",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
+            },
+            "EcommerceAbout2": {
+              "pretitle": "Our collection",
+              "title": "Considered products for modern everyday living.",
+              "subtitle": "Useful design, lasting quality, effortless style",
+              "desc": "We select versatile pieces that combine thoughtful details, reliable materials, and a fresh point of view.",
+              "desc2": "Parents get clear communication, structured programs, and a school community focused on every child.",
+              "backgroundImage": "/categories/school/bg11.jpg",
+              "backgroundImageTitle": "School classroom",
+              "sideImage": "/categories/school/bg22.jpg",
+              "sideImageTitle": "Students activity",
+              "philosophyTitle": "Our Approach",
+              "philosophyDesc": "Learning works best when students feel seen, supported, and challenged at the right pace.",
+              "buttons": [
+                {
+                  "label": "Meet our teachers",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
+            }
+          }
+        },
+        "Product": {
+          "variants": {
+            "EcommerceProduct1": {
+              "productSectionTitle": "School Programs",
+              "productTitle": "Academic Pathways",
+              "productSubtitle": "Admissions open",
+              "productInfoTitle": "Programs for every stage",
+              "productInfoDesc": "Present classes, activities, facilities, and admission highlights with reusable cards.",
+              "productFeatures": [
+                {
+                  "label": "Primary",
+                  "price": "I-V"
+                },
+                {
+                  "label": "Middle",
+                  "price": "VI-VIII"
+                },
+                {
+                  "label": "Senior",
+                  "price": "IX-XII"
+                }
+              ],
+              "productTotalPrice": "Admissions Open",
+              "productShippingText": "Campus tours available",
+              "productItems": [
+                {
+                  "title": "Primary School",
+                  "category": "Classes I-V",
+                  "desc": "Foundational learning with language, numeracy, activities, and creative confidence.",
+                  "image": "/categories/school/bg11.jpg",
+                  "alt": "Primary school"
+                },
+                {
+                  "title": "Senior School",
+                  "category": "Classes IX-XII",
+                  "desc": "Exam readiness, mentoring, and future planning for senior students.",
+                  "image": "/categories/school/bg22.jpg",
+                  "alt": "Senior school"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Book campus tour",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
+            },
+            "EcommerceProduct2": {
+              "productSectionTitle": "Trending Collections",
+              "productTitle": "The Modern Essentials Edit",
+              "productSubtitle": "New season arrivals",
+              "productInfoTitle": "Customer favorites, thoughtfully selected",
+              "productInfoDesc": "Present classes, activities, facilities, and admission highlights with reusable cards.",
+              "productFeatures": [
+                {
+                  "label": "Primary",
+                  "price": "I-V"
+                },
+                {
+                  "label": "Middle",
+                  "price": "VI-VIII"
+                },
+                {
+                  "label": "Senior",
+                  "price": "IX-XII"
+                }
+              ],
+              "productTotalPrice": "Admissions Open",
+              "productShippingText": "Campus tours available",
+              "productItems": [
+                {
+                  "title": "Primary School",
+                  "category": "Classes I-V",
+                  "desc": "Foundational learning with language, numeracy, activities, and creative confidence.",
+                  "image": "/categories/school/bg11.jpg",
+                  "alt": "Primary school"
+                },
+                {
+                  "title": "Senior School",
+                  "category": "Classes IX-XII",
+                  "desc": "Exam readiness, mentoring, and future planning for senior students.",
+                  "image": "/categories/school/bg22.jpg",
+                  "alt": "Senior school"
+                }
+              ],
+              "buttons": [
+                {
+                  "label": "Book campus tour",
+                  "href": "#",
+                  "variant": "primary"
+                }
+              ]
+            }
+          }
+        },
+        "WhyChooseUs": {
+          "variants": {
+            "EcommerceWhyChooseUs1": {
+              "pretitle": "Why choose BrightSchool",
+              "title": "A school experience parents can trust.",
+              "desc": "Use this section to explain care, academics, activities, and communication.",
+              "whyChooseUsItems": [
+                {
+                  "title": "Balanced learning",
+                  "desc": "Academics, activities, and values are presented together.",
+                  "stat": "01"
+                },
+                {
+                  "title": "Parent clarity",
+                  "desc": "Admissions, programs, and contact steps stay easy to find.",
+                  "stat": "02"
+                },
+                {
+                  "title": "Student growth",
+                  "desc": "Show the environment, teachers, and programs that support students.",
+                  "stat": "03"
+                }
+              ]
+            },
+            "EcommerceWhyChooseUs2": {
+              "pretitle": "Why shop with us",
+              "title": "Better products and a simpler shopping experience.",
+              "desc": "Discover thoughtfully selected products, responsive support, and dependable delivery.",
+              "whyChooseUsItems": [
+                {
+                  "title": "Balanced learning",
+                  "desc": "Academics, activities, and values are presented together.",
+                  "stat": "01"
+                },
+                {
+                  "title": "Parent clarity",
+                  "desc": "Admissions, programs, and contact steps stay easy to find.",
+                  "stat": "02"
+                },
+                {
+                  "title": "Student growth",
+                  "desc": "Show the environment, teachers, and programs that support students.",
+                  "stat": "03"
+                }
+              ]
+            }
+          }
+        },
+        "Gallery": {
+          "variants": {
+            "EcommerceGallery1": {
+              "pretitle": "Campus gallery",
+              "title": "Classrooms, campus, and student life.",
+              "desc": "School visuals always come from the school category folder.",
+              "galleryItems": [
+                {
+                  "image": "/categories/school/bg11.jpg",
+                  "alt": "Students learning",
+                  "title": "Classroom"
+                },
+                {
+                  "image": "/categories/school/bg22.jpg",
+                  "alt": "School campus",
+                  "title": "Campus"
+                },
+                {
+                  "image": "/categories/school/bg33.png",
+                  "alt": "Student activities",
+                  "title": "Activities"
+                },
+                {
+                  "image": "/categories/school/bg11.jpg",
+                  "alt": "Learning space",
+                  "title": "Learning"
+                }
+              ]
+            },
+            "EcommerceGallery2": {
+              "pretitle": "Shop the look",
+              "title": "Fresh inspiration from our latest collection.",
+              "desc": "Explore product combinations, seasonal favorites, and details from the ecommerce collection.",
+              "galleryItems": [
+                {
+                  "image": "/categories/school/bg11.jpg",
+                  "alt": "Students learning",
+                  "title": "Classroom"
+                },
+                {
+                  "image": "/categories/school/bg22.jpg",
+                  "alt": "School campus",
+                  "title": "Campus"
+                },
+                {
+                  "image": "/categories/school/bg33.png",
+                  "alt": "Student activities",
+                  "title": "Activities"
+                },
+                {
+                  "image": "/categories/school/bg11.jpg",
+                  "alt": "Learning space",
+                  "title": "Learning"
+                }
+              ]
+            }
+          }
+        },
+        "FormDetail": {
+          "variants": {
+            "EcommerceFormDetail1": {
+              "pretitle": "Admissions enquiry",
+              "title": "Ask about admissions and campus visits.",
+              "desc": "Parents can enquire about classes, tours, and the admission process.",
+              "backgroundImage": "/categories/school/bg33.png",
+              "backgroundImageTitle": "School admission visual",
+              "formSubmitLabel": "Send admission enquiry",
+              "formFields": [
+                {
+                  "label": "Parent name",
+                  "type": "text",
+                  "placeholder": "Parent name"
+                },
+                {
+                  "label": "Phone",
+                  "type": "tel",
+                  "placeholder": "Phone number"
+                },
+                {
+                  "label": "Admission details",
+                  "type": "textarea",
+                  "placeholder": "Class, session, questions"
+                }
+              ]
+            },
+            "EcommerceFormDetail2": {
+              "pretitle": "Personal shopping help",
+              "title": "Need help finding the right product?",
+              "desc": "Tell us what you are looking for and our team will recommend suitable options.",
+              "backgroundImage": "/categories/school/bg33.png",
+              "backgroundImageTitle": "School admission visual",
+              "formSubmitLabel": "Send admission enquiry",
+              "formFields": [
+                {
+                  "label": "Parent name",
+                  "type": "text",
+                  "placeholder": "Parent name"
+                },
+                {
+                  "label": "Phone",
+                  "type": "tel",
+                  "placeholder": "Phone number"
+                },
+                {
+                  "label": "Admission details",
+                  "type": "textarea",
+                  "placeholder": "Class, session, questions"
+                }
+              ]
+            }
+          }
+        },
+        "FAQ": {
+          "variants": {
+            "EcommerceFAQ1": {
+              "pretitle": "School FAQ",
+              "title": "Admissions questions answered.",
+              "faqItems": [
+                {
+                  "question": "Are admissions open?",
+                  "answer": "Yes, admission enquiries can be submitted through the form section."
+                },
+                {
+                  "question": "Can parents visit campus?",
+                  "answer": "Campus tours can be scheduled based on available slots."
+                },
+                {
+                  "question": "Which classes are available?",
+                  "answer": "Program cards can show primary, middle, and senior school details."
+                }
+              ]
+            },
+            "EcommerceFAQ2": {
+              "pretitle": "Shopping FAQ",
+              "title": "Orders, delivery, and returns made clear.",
+              "faqItems": [
+                {
+                  "question": "Are admissions open?",
+                  "answer": "Yes, admission enquiries can be submitted through the form section."
+                },
+                {
+                  "question": "Can parents visit campus?",
+                  "answer": "Campus tours can be scheduled based on available slots."
+                },
+                {
+                  "question": "Which classes are available?",
+                  "answer": "Program cards can show primary, middle, and senior school details."
+                }
+              ]
+            }
+          }
+        },
+        "Topbar": {
+          "variants": {
+            "EcommerceTopbar1": {
+              "text": [
+                "Fast setup, editable sections, category-ready media"
+              ],
+              "phone": "+91 98765 43210",
+              "email": "hello@example.com",
+              "location": "India",
+              "socialLinks": [
+                {
+                  "label": "facebook",
+                  "href": "#"
+                },
+                {
+                  "label": "twitter",
+                  "href": "#"
+                },
+                {
+                  "label": "linkedin",
+                  "href": "#"
+                }
+              ]
+            },
+            "EcommerceTopbar2": {
+              "text": [
+                "Complimentary shipping on qualifying orders"
+              ],
+              "phone": "+91 98765 43210",
+              "email": "hello@example.com",
+              "location": "India",
+              "socialLinks": [
+                {
+                  "label": "facebook",
+                  "href": "#"
+                },
+                {
+                  "label": "twitter",
+                  "href": "#"
+                },
+                {
+                  "label": "linkedin",
+                  "href": "#"
+                }
+              ]
+            }
+          }
+        },
+        "Testimonial": {
+          "variants": {
+            "EcommerceTestimonial1": {
+              "pretitle": "Our clients",
+              "title": "Trusted by people who care about results.",
+              "desc": "Use real customer feedback to build trust with new visitors.",
+              "testimonialItems": [
+                {
+                  "name": "Aarav Mehta",
+                  "role": "Founder, Studio North",
+                  "quote": "The site made our work easier to understand and brought in better leads within the first week.",
+                  "image": "/bg1.jpg",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Neha Kapoor",
+                  "role": "Marketing Lead",
+                  "quote": "Clean sections, fast pages, and the editor keeps the content simple for our whole team.",
+                  "image": "/bg2.jpg",
+                  "rating": "4.9"
+                },
+                {
+                  "name": "Rahul Verma",
+                  "role": "Operations Head",
+                  "quote": "We finally have a website that looks premium and still feels practical to update.",
+                  "image": "/blackbay.png",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Isha Malhotra",
+                  "role": "Creative Director",
+                  "quote": "The layouts gave our brand a sharper story and made every service easier to browse.",
+                  "image": "/shaye.png",
+                  "rating": "4.8"
+                },
+                {
+                  "name": "Kabir Anand",
+                  "role": "Product Manager",
+                  "quote": "We could test different sections quickly without losing the polished look of the page.",
+                  "image": "/stylam.png",
+                  "rating": "4.7"
+                },
+                {
+                  "name": "Sara Khan",
+                  "role": "Business Owner",
+                  "quote": "Visitors understand what we offer faster, and enquiries feel more relevant now.",
+                  "image": "/prod2.jpg",
+                  "rating": "5.0"
+                }
+              ]
+            },
+            "EcommerceTestimonial2": {
+              "pretitle": "Our clients",
+              "title": "Why customers return to shop with us.",
+              "desc": "Use real customer feedback to build trust with new visitors.",
+              "testimonialItems": [
+                {
+                  "name": "Aarav Mehta",
+                  "role": "Founder, Studio North",
+                  "quote": "The site made our work easier to understand and brought in better leads within the first week.",
+                  "image": "/bg1.jpg",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Neha Kapoor",
+                  "role": "Marketing Lead",
+                  "quote": "Clean sections, fast pages, and the editor keeps the content simple for our whole team.",
+                  "image": "/bg2.jpg",
+                  "rating": "4.9"
+                },
+                {
+                  "name": "Rahul Verma",
+                  "role": "Operations Head",
+                  "quote": "We finally have a website that looks premium and still feels practical to update.",
+                  "image": "/blackbay.png",
+                  "rating": "5.0"
+                },
+                {
+                  "name": "Isha Malhotra",
+                  "role": "Creative Director",
+                  "quote": "The layouts gave our brand a sharper story and made every service easier to browse.",
+                  "image": "/shaye.png",
+                  "rating": "4.8"
+                },
+                {
+                  "name": "Kabir Anand",
+                  "role": "Product Manager",
+                  "quote": "We could test different sections quickly without losing the polished look of the page.",
+                  "image": "/stylam.png",
+                  "rating": "4.7"
+                },
+                {
+                  "name": "Sara Khan",
+                  "role": "Business Owner",
+                  "quote": "Visitors understand what we offer faster, and enquiries feel more relevant now.",
+                  "image": "/prod2.jpg",
+                  "rating": "5.0"
+                }
+              ]
+            }
+          }
+        },
+        "Footer": {
+          "variants": {
+            "EcommerceFooter1": {
+              "logoImage": "/etacard.png",
+              "logoImageTitle": "ETA Card logo",
+              "desc": "Editable website content powered by one category and template JSON file.",
+              "footerColumns": [
+                {
+                  "title": "Pages",
+                  "links": [
+                    {
+                      "label": "Home",
+                      "href": "#"
+                    },
+                    {
+                      "label": "About",
+                      "href": "#about"
+                    },
+                    {
+                      "label": "Service",
+                      "href": "#service"
+                    },
+                    {
+                      "label": "Gallery",
+                      "href": "#gallery"
+                    },
+                    {
+                      "label": "Contact",
+                      "href": "#contact"
+                    }
+                  ]
+                },
+                {
+                  "title": "Sections",
+                  "links": [
+                    {
+                      "label": "Listings",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Services",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Programs",
+                      "href": "#"
+                    },
+                    {
+                      "label": "FAQ",
+                      "href": "#faq"
+                    }
+                  ]
+                }
+              ],
+              "footerContact": {
+                "location": "India",
+                "email": "hello@example.com",
+                "phone": "+91 98765 43210"
+              },
+              "footerLegalLinks": [
+                {
+                  "label": "Privacy Policy",
+                  "href": "#privacy"
+                },
+                {
+                  "label": "Terms",
+                  "href": "#terms"
+                }
+              ],
+              "whatsappLink": "https://api.whatsapp.com/send?phone=962786336414",
+              "callLink": "tel:+919876543210",
+              "copyrightText": "Copyright 2026. All rights reserved."
+            },
+            "EcommerceFooter2": {
+              "logoImage": "/etacard.png",
+              "logoImageTitle": "Modern Market logo",
+              "desc": "Editable website content powered by one category and template JSON file.",
+              "footerColumns": [
+                {
+                  "title": "Pages",
+                  "links": [
+                    {
+                      "label": "Home",
+                      "href": "#"
+                    },
+                    {
+                      "label": "About",
+                      "href": "#about"
+                    },
+                    {
+                      "label": "Service",
+                      "href": "#service"
+                    },
+                    {
+                      "label": "Gallery",
+                      "href": "#gallery"
+                    },
+                    {
+                      "label": "Contact",
+                      "href": "#contact"
+                    }
+                  ]
+                },
+                {
+                  "title": "Sections",
+                  "links": [
+                    {
+                      "label": "Listings",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Services",
+                      "href": "#"
+                    },
+                    {
+                      "label": "Programs",
+                      "href": "#"
+                    },
+                    {
+                      "label": "FAQ",
+                      "href": "#faq"
+                    }
+                  ]
+                }
+              ],
+              "footerContact": {
+                "location": "India",
+                "email": "hello@example.com",
+                "phone": "+91 98765 43210"
+              },
+              "footerLegalLinks": [
+                {
+                  "label": "Privacy Policy",
+                  "href": "#privacy"
+                },
+                {
+                  "label": "Terms",
+                  "href": "#terms"
+                }
+              ],
+              "whatsappLink": "https://api.whatsapp.com/send?phone=962786336414",
+              "callLink": "tel:+919876543210",
+              "copyrightText": "Copyright 2026. All rights reserved."
+            }
+          }
+        }
       }
     }
   }

@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useRef, useState } from "react";
+import { createElement, ReactNode, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Edit, Plus, Trash, X, Play } from "lucide-react";
 import { usePreview } from "../context/PreviewContext";
@@ -8,7 +8,7 @@ import {
   addableSectionCards,
   createAddableSection,
 } from "../../data/templateFlow";
-import { sectionRegistry } from "../../lib/sectionRegistry";
+import { getSectionComponent } from "../../lib/sectionRegistry";
 
 const TOOLBAR_WIDTH = 400;
 const TOOLBAR_HEIGHT = 64;
@@ -492,7 +492,11 @@ function AddComponentCard({
 }) {
   const previewSection = createAddableSection(type, "Realestate");
   const Component = previewSection
-    ? sectionRegistry[previewSection.variant]
+    ? getSectionComponent(
+        "Realestate",
+        previewSection.type,
+        previewSection.variant,
+      )
     : null;
   const defaultVariant = previewSection
     ? `${previewSection.type}-1`
@@ -508,7 +512,7 @@ function AddComponentCard({
       <div className="aspect-[16/9] overflow-hidden rounded-[28px] border-[5px] border-[#202020] bg-white transition group-hover:-translate-y-1 group-hover:bg-white/60">
         {Component ? (
           <div className="h-[520px] w-[1200px] origin-top-left scale-[0.28] bg-white">
-            <Component data={data} />
+            {createElement(Component, { data })}
           </div>
         ) : (
           <div className="flex h-full items-center justify-center text-sm font-semibold text-slate-700">
